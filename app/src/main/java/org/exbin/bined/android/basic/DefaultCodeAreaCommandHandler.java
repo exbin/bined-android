@@ -15,6 +15,10 @@
  */
 package org.exbin.bined.android.basic;
 
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 import android.view.KeyEvent;
 
 import java.awt.Toolkit;
@@ -25,6 +29,7 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.security.IdentityScope;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Nonnull;
@@ -57,70 +62,55 @@ import org.exbin.utils.binary_data.EditableBinaryData;
 /**
  * Default hexadecimal editor command handler.
  *
- * @version 0.2.0 2018/05/03
+ * @version 0.2.0 2018/05/08
  * @author ExBin Project (http://exbin.org)
  */
 public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
 
     public static final int NO_MODIFIER = 0;
-    public static final String FALLBACK_CLIPBOARD = "clipboard";
-
-    private final int metaMask;
 
     @Nonnull
     private final CodeArea codeArea;
     private final boolean codeTypeSupported;
     private final boolean viewModeSupported;
 
-    private Clipboard clipboard;
+    private ClipboardManager clipboard;
     private boolean canPaste = false;
-    private DataFlavor binaryDataFlavor;
+//    private Handler binaryDataFlavor;
     private CodeAreaUtils.ClipboardData currentClipboardData = null;
 
-    public DefaultCodeAreaCommandHandler(@Nonnull CodeArea codeArea) {
+    public DefaultCodeAreaCommandHandler(Context context, @Nonnull CodeArea codeArea) {
         this.codeArea = codeArea;
         CodeAreaWorker worker = codeArea.getWorker();
         codeTypeSupported = worker instanceof CodeTypeCapable;
         viewModeSupported = worker instanceof ViewModeCapable;
 
-        int metaMaskInit;
-        try {
-            metaMaskInit = java.awt.Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-        } catch (java.awt.HeadlessException ex) {
-            metaMaskInit = java.awt.Event.CTRL_MASK;
-        }
-        this.metaMask = metaMaskInit;
+        clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
 
-        try {
-            clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        } catch (java.awt.HeadlessException ex) {
-            // Create clipboard if system one not available
-            clipboard = new Clipboard(FALLBACK_CLIPBOARD);
-        }
-        try {
-            clipboard.addFlavorListener((FlavorEvent e) -> {
-                updateCanPaste();
-            });
-            try {
-                binaryDataFlavor = new DataFlavor(CodeAreaUtils.MIME_CLIPBOARD_BINARY);
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(DefaultCodeAreaCommandHandler.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            updateCanPaste();
-        } catch (IllegalStateException ex) {
-            canPaste = false;
-        } catch (java.awt.HeadlessException ex) {
-            Logger.getLogger(DefaultCodeAreaCommandHandler.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+//            clipboard.addFlavorListener((FlavorEvent e) -> {
+//                updateCanPaste();
+//            });
+//            try {
+//                binaryDataFlavor = new DataFlavor(CodeAreaUtils.MIME_CLIPBOARD_BINARY);
+//            } catch (ClassNotFoundException ex) {
+//                Logger.getLogger(DefaultCodeAreaCommandHandler.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//            updateCanPaste();
+//        } catch (IllegalStateException ex) {
+//            canPaste = false;
+//        } catch (java.awt.HeadlessException ex) {
+//            Logger.getLogger(DefaultCodeAreaCommandHandler.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
 
     @Nonnull
-    public static CodeAreaCommandHandler.CodeAreaCommandHandlerFactory createDefaultCodeAreaCommandHandlerFactory() {
+    public static CodeAreaCommandHandler.CodeAreaCommandHandlerFactory createDefaultCodeAreaCommandHandlerFactory(final Context context) {
         return new CodeAreaCommandHandlerFactory() {
             @Nonnull
             @Override
             public CodeAreaCommandHandler createCommandHandler(@Nonnull CodeArea codeArea) {
-                return new DefaultCodeAreaCommandHandler(codeArea);
+                return new DefaultCodeAreaCommandHandler(context, codeArea);
             }
         };
     }

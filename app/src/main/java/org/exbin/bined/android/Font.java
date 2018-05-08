@@ -16,21 +16,32 @@
 package org.exbin.bined.android;
 
 import android.graphics.Canvas;
+import android.graphics.Paint;
 
 import javax.annotation.Nonnull;
 
 /**
  * Font definition.
  *
- * @version 0.2.0 2018/05/03
+ * @version 0.2.0 2018/05/08
  * @author ExBin Project (http://exbin.org)
  */
 public class Font {
 
     private int fontFlags;
 
-    public static Font fromCanvas(@Nonnull Canvas canvas)
+    public static Font fromPaint(@Nonnull Paint paint)
     {
+        Font font = new Font();
+        font.setFontFlags(paint.getFlags());
+        return font;
+    }
 
+    public int getFontFlags() {
+        return fontFlags;
+    }
+
+    public void setFontFlags(int fontFlags) {
+        this.fontFlags = fontFlags;
     }
 }

@@ -15,28 +15,13 @@
  */
 package org.exbin.bined.android.basic;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.Stroke;
-import java.awt.event.AdjustmentEvent;
-import java.awt.event.AdjustmentListener;
+import android.graphics.Canvas;
+
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.util.Arrays;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.swing.JPanel;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
-import javax.swing.UIManager;
 import org.exbin.bined.BasicCodeAreaSection;
 import org.exbin.bined.BasicCodeAreaZone;
 import org.exbin.bined.CaretPosition;
@@ -47,6 +32,7 @@ import org.exbin.bined.CodeCharactersCase;
 import org.exbin.bined.CodeType;
 import org.exbin.bined.EditationMode;
 import org.exbin.bined.SelectionRange;
+import org.exbin.bined.android.Font;
 import org.exbin.bined.capability.CaretCapable;
 import org.exbin.bined.capability.CharsetCapable;
 import org.exbin.bined.capability.CodeCharactersCaseCapable;
@@ -55,21 +41,21 @@ import org.exbin.bined.capability.EditationModeCapable;
 import org.exbin.bined.capability.RowWrappingCapable;
 import org.exbin.bined.capability.SelectionCapable;
 import org.exbin.bined.capability.ViewModeCapable;
-import org.exbin.bined.swing.CodeArea;
-import org.exbin.bined.swing.CodeAreaPainter;
-import org.exbin.bined.swing.CodeAreaSwingUtils;
-import org.exbin.bined.swing.CodeAreaWorker;
-import org.exbin.bined.swing.MovementDirection;
-import org.exbin.bined.swing.ScrollingDirection;
-import org.exbin.bined.swing.capability.BackgroundPaintCapable;
-import org.exbin.bined.swing.capability.FontCapable;
-import org.exbin.bined.swing.capability.ScrollingCapable;
+import org.exbin.bined.android.CodeArea;
+import org.exbin.bined.android.CodeAreaPainter;
+import org.exbin.bined.android.CodeAreaSwingUtils;
+import org.exbin.bined.android.CodeAreaWorker;
+import org.exbin.bined.android.MovementDirection;
+import org.exbin.bined.android.ScrollingDirection;
+import org.exbin.bined.android.capability.BackgroundPaintCapable;
+import org.exbin.bined.android.capability.FontCapable;
+import org.exbin.bined.android.capability.ScrollingCapable;
 import org.exbin.utils.binary_data.BinaryData;
 
 /**
  * Code area component default painter.
  *
- * @version 0.2.0 2018/04/20
+ * @version 0.2.0 2018/05/08
  * @author ExBin Project (http://exbin.org)
  */
 public class DefaultCodeAreaPainter implements CodeAreaPainter {
@@ -78,11 +64,6 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
     protected final CodeAreaWorker worker;
     private boolean initialized = false;
     private boolean fontChanged = false;
-
-    @Nonnull
-    private final JPanel dataView;
-    @Nonnull
-    private final JScrollPane scrollPanel;
 
     private CodeAreaViewMode viewMode;
     private final CodeAreaCaretPosition caretPosition = new CodeAreaCaretPosition();
@@ -287,7 +268,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
         rowCharacters = new char[charactersPerRow];
     }
 
-    public void resetFont(@Nonnull Graphics g) {
+    public void resetFont(@Nonnull Canvas g) {
         if (font == null) {
             reset();
         }
@@ -317,7 +298,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
         initialized = true;
     }
 
-    public void dataViewScrolled(@Nonnull Graphics g) {
+    public void dataViewScrolled(@Nonnull Canvas g) {
         if (!isInitialized()) {
             return;
         }
@@ -416,7 +397,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
     }
 
     @Override
-    public void paintComponent(@Nonnull Graphics g) {
+    public void paintComponent(@Nonnull Canvas g) {
         if (!initialized) {
             reset();
         }
@@ -432,7 +413,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
         paintCounter++;
     }
 
-    public void paintOutsiteArea(@Nonnull Graphics g) {
+    public void paintOutsiteArea(@Nonnull Canvas g) {
         g.setColor(colors.background);
         g.fillRect(0, 0, componentWidth, headerAreaHeight);
 
@@ -448,7 +429,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
         }
     }
 
-    public void paintHeader(@Nonnull Graphics g) {
+    public void paintHeader(@Nonnull Canvas g) {
         Rectangle clipBounds = g.getClipBounds();
         Rectangle headerArea = new Rectangle(rowPositionAreaWidth, 0, componentWidth - rowPositionAreaWidth - getVerticalScrollBarSize(), headerAreaHeight);
         g.setClip(clipBounds != null ? headerArea.intersection(clipBounds) : headerArea);
@@ -578,7 +559,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
         g.setClip(clipBounds);
     }
 
-    public void paintRowPosition(@Nonnull Graphics g) {
+    public void paintRowPosition(@Nonnull Canvas g) {
         Rectangle clipBounds = g.getClipBounds();
         Rectangle rowPositionsArea = new Rectangle(0, headerAreaHeight, rowPositionAreaWidth, componentHeight - headerAreaHeight - getHorizontalScrollBarSize());
         g.setClip(clipBounds != null ? rowPositionsArea.intersection(clipBounds) : rowPositionsArea);
@@ -634,7 +615,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
     }
 
     @Override
-    public void paintMainArea(@Nonnull Graphics g) {
+    public void paintMainArea(@Nonnull Canvas g) {
         if (!initialized) {
             reset();
         }
@@ -673,7 +654,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
      *
      * @param g graphics
      */
-    public void paintBackground(@Nonnull Graphics g) {
+    public void paintBackground(@Nonnull Canvas g) {
         int rowPositionX = rowPositionAreaWidth;
         g.setColor(colors.background);
         if (backgroundPaintMode != BasicBackgroundPaintMode.TRANSPARENT) {
@@ -696,7 +677,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
         }
     }
 
-    public void paintRows(@Nonnull Graphics g) {
+    public void paintRows(@Nonnull Canvas g) {
         long dataPosition = scrollPosition.getScrollRowPosition() * bytesPerRow;
         int rowPositionX = rowPositionAreaWidth - scrollPosition.getScrollCharPosition() * characterWidth - scrollPosition.getScrollCharOffset();
         int rowPositionY = headerAreaHeight;
@@ -781,7 +762,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
      * @param rowPositionX row position X
      * @param rowPositionY row position Y
      */
-    public void paintRowBackground(@Nonnull Graphics g, long rowDataPosition, int rowPositionX, int rowPositionY) {
+    public void paintRowBackground(@Nonnull Canvas g, long rowDataPosition, int rowPositionX, int rowPositionY) {
         int renderOffset = visibleCharStart;
         Color renderColor = null;
         for (int charOnRow = visibleCharStart; charOnRow < visibleCharEnd; charOnRow++) {
@@ -947,7 +928,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
      * @param rowPositionX row position X
      * @param rowPositionY row position Y
      */
-    public void paintRowText(@Nonnull Graphics g, long rowDataPosition, int rowPositionX, int rowPositionY) {
+    public void paintRowText(@Nonnull Canvas g, long rowDataPosition, int rowPositionX, int rowPositionY) {
         int positionY = rowPositionY + rowHeight - subFontSpace;
 
         Color lastColor = null;
@@ -1058,7 +1039,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
     }
 
     @Override
-    public void paintCursor(@Nonnull Graphics g) {
+    public void paintCursor(@Nonnull Canvas g) {
         if (!worker.getCodeArea().hasFocus()) {
             return;
         }
@@ -1547,12 +1528,12 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
      * @param positionX X position of drawing area start
      * @param positionY Y position of drawing area start
      */
-    protected void drawCenteredChar(@Nonnull Graphics g, char[] drawnChars, int charOffset, int charWidthSpace, int positionX, int positionY) {
+    protected void drawCenteredChar(@Nonnull Canvas g, char[] drawnChars, int charOffset, int charWidthSpace, int positionX, int positionY) {
         int charWidth = fontMetrics.charWidth(drawnChars[charOffset]);
         drawShiftedChar(g, drawnChars, charOffset, charWidthSpace, positionX + ((charWidthSpace + 1 - charWidth) >> 1), positionY);
     }
 
-    protected void drawShiftedChar(@Nonnull Graphics g, char[] drawnChars, int charOffset, int charWidthSpace, int positionX, int positionY) {
+    protected void drawShiftedChar(@Nonnull Canvas g, char[] drawnChars, int charOffset, int charWidthSpace, int positionX, int positionY) {
         g.drawChars(drawnChars, charOffset, 1, positionX, positionY);
     }
 
@@ -1592,7 +1573,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
      *
      * Doesn't include character at offset end.
      */
-    private void renderCharSequence(@Nonnull Graphics g, int startOffset, int endOffset, int rowPositionX, int positionY) {
+    private void renderCharSequence(@Nonnull Canvas g, int startOffset, int endOffset, int rowPositionX, int positionY) {
         g.drawChars(rowCharacters, startOffset, endOffset - startOffset, rowPositionX + startOffset * characterWidth, positionY);
     }
 
@@ -1601,7 +1582,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
      *
      * Doesn't include character at offset end.
      */
-    private void renderBackgroundSequence(@Nonnull Graphics g, int startOffset, int endOffset, int rowPositionX, int positionY) {
+    private void renderBackgroundSequence(@Nonnull Canvas g, int startOffset, int endOffset, int rowPositionX, int positionY) {
         g.fillRect(rowPositionX + startOffset * characterWidth, positionY, (endOffset - startOffset) * characterWidth, rowHeight);
     }
 
@@ -1784,18 +1765,18 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
 
     private static class Colors {
 
-        Color foreground;
-        Color background;
-        Color selectionForeground;
-        Color selectionBackground;
-        Color selectionMirrorForeground;
-        Color selectionMirrorBackground;
-        Color cursor;
-        Color negativeCursor;
-        Color cursorMirror;
-        Color negativeCursorMirror;
-        Color decorationLine;
-        Color stripes;
+        int foreground;
+        int background;
+        int selectionForeground;
+        int selectionBackground;
+        int selectionMirrorForeground;
+        int selectionMirrorBackground;
+        int cursor;
+        int negativeCursor;
+        int cursorMirror;
+        int negativeCursorMirror;
+        int decorationLine;
+        int stripes;
     }
 
     /**

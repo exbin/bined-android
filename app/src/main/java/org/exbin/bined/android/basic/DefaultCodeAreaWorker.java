@@ -493,9 +493,9 @@ public class DefaultCodeAreaWorker implements CodeAreaWorker, SelectionCapable, 
         boolean changed = editationMode != this.editationMode;
         this.editationMode = editationMode;
         if (changed) {
-            editationModeChangedListeners.forEach((listener) -> {
+            for (EditationModeChangedListener listener : editationModeChangedListeners) {
                 listener.editationModeChanged(editationMode);
-            });
+            }
             caret.resetBlink();
             repaint();
         }

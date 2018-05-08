@@ -15,25 +15,20 @@
  */
 package org.exbin.bined.android;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
+import android.support.v4.graphics.ColorUtils;
+import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.View;
 
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.swing.JComponent;
-import javax.swing.UIManager;
 import org.exbin.bined.CodeAreaControl;
 import org.exbin.bined.DataChangedListener;
 import org.exbin.bined.capability.SelectionCapable;
@@ -45,7 +40,7 @@ import org.exbin.utils.binary_data.BinaryData;
 /**
  * Hexadecimal viewer/editor component.
  *
- * @version 0.2.0 2018/05/03
+ * @version 0.2.0 2018/05/08
  * @author ExBin Project (http://exbin.org)
  */
 public class CodeArea extends View implements CodeAreaControl {
@@ -63,8 +58,8 @@ public class CodeArea extends View implements CodeAreaControl {
     /**
      * Creates new instance with default command handler and painter.
      */
-    public CodeArea() {
-        this(null, null);
+    public CodeArea(Context context, AttributeSet attrs) {
+        this(context, attrs, null, null);
     }
 
     /**
@@ -74,8 +69,8 @@ public class CodeArea extends View implements CodeAreaControl {
      * @param workerFactory code area worker or null for default worker
      * @param commandHandlerFactory command handler or null for default handler
      */
-    public CodeArea(@Nullable CodeAreaWorker.CodeAreaWorkerFactory workerFactory, @Nullable CodeAreaCommandHandler.CodeAreaCommandHandlerFactory commandHandlerFactory) {
-        super();
+    public CodeArea(Context context, AttributeSet attrs, @Nullable CodeAreaWorker.CodeAreaWorkerFactory workerFactory, @Nullable CodeAreaCommandHandler.CodeAreaCommandHandlerFactory commandHandlerFactory) {
+        super(context, attrs);
         this.worker = workerFactory == null ? new DefaultCodeAreaWorker(this) : workerFactory.createWorker(this);
         this.commandHandler = commandHandlerFactory == null ? new DefaultCodeAreaCommandHandler(this) : commandHandlerFactory.createCommandHandler(this);
         init();
@@ -83,47 +78,9 @@ public class CodeArea extends View implements CodeAreaControl {
 
     private void init() {
         // TODO: Use swing color instead
-        setBackground(Color.WHITE);
+//        setBackgroundColor(ColorUtils.WHITE);
         setFocusable(true);
-        setFocusTraversalKeysEnabled(false);
-        registerControlListeners();
-    }
-
-    private void registerControlListeners() {
-        addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(@Nonnull ComponentEvent event) {
-                // TODO reset layout instead
-                resetPainter();
-            }
-        });
-
-        addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyTyped(@Nonnull KeyEvent keyEvent) {
-                commandHandler.keyTyped(keyEvent);
-            }
-
-            @Override
-            public void keyPressed(@Nonnull KeyEvent keyEvent) {
-                commandHandler.keyPressed(keyEvent);
-            }
-        });
-
-        addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(@Nonnull FocusEvent e) {
-                repaint();
-            }
-
-            @Override
-            public void focusLost(@Nonnull FocusEvent e) {
-                repaint();
-            }
-        });
-        UIManager.addPropertyChangeListener((@Nonnull PropertyChangeEvent evt) -> {
-            worker.rebuildColors();
-        });
+//        setFocusTraversalKeysEnabled(false);
     }
 
     @Nonnull
@@ -132,7 +89,7 @@ public class CodeArea extends View implements CodeAreaControl {
     }
 
     public void setWorker(@Nonnull CodeAreaWorker worker) {
-        Objects.requireNonNull(worker, "Worker cannot be null");
+        if (worker == null) throw new NullPointerException("Worker cannot be null");
 
         this.worker = worker;
     }
@@ -154,9 +111,38 @@ public class CodeArea extends View implements CodeAreaControl {
         }
 
         if (!worker.isInitialized()) {
-            ((FontCapable) worker).setFont(getFont());
+            ((FontCapable) worker).setFont(Font.fromPaint(new Paint()));
         }
         worker.paintComponent(g);
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        // TODO reset layout instead
+        resetPainter();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent keyEvent) {
+        commandHandler.keyTyped(keyEvent);
+        return super.onKeyDown(keyCode, keyEvent);
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent keyEvent) {
+        commandHandler.keyPressed(keyEvent);
+        return super.onKeyUp(keyCode, keyEvent);
+    }
+
+    @Override
+    protected void onFocusChanged(boolean gainFocus, int direction, @android.support.annotation.Nullable Rect previouslyFocusedRect) {
+        super.onFocusChanged(gainFocus, direction, previouslyFocusedRect);
+        repaint();
+    }
+
+    public void repaint() {
+
     }
 
     @Override
