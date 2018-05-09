@@ -15,11 +15,12 @@
  */
 package org.exbin.bined.android.basic;
 
-import java.awt.Font;
+import android.graphics.Canvas;
+import android.support.annotation.NonNull;
+
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.exbin.bined.BasicCodeAreaSection;
@@ -36,6 +37,7 @@ import org.exbin.bined.ScrollBarVisibility;
 import org.exbin.bined.ScrollingListener;
 import org.exbin.bined.SelectionChangedListener;
 import org.exbin.bined.SelectionRange;
+import org.exbin.bined.android.Font;
 import org.exbin.bined.capability.CaretCapable;
 import org.exbin.bined.capability.CharsetCapable;
 import org.exbin.bined.capability.ClipboardCapable;
@@ -57,7 +59,7 @@ import org.exbin.bined.android.capability.ScrollingCapable;
 /**
  * Code area component default worker.
  *
- * @version 0.2.0 2018/05/03
+ * @version 0.2.0 2018/05/08
  * @author ExBin Project (http://exbin.org)
  */
 public class DefaultCodeAreaWorker implements CodeAreaWorker, SelectionCapable, CaretCapable, ScrollingCapable, ViewModeCapable,
@@ -141,7 +143,7 @@ public class DefaultCodeAreaWorker implements CodeAreaWorker, SelectionCapable, 
     }
 
     public void setPainter(@Nonnull CodeAreaPainter painter) {
-        Objects.requireNonNull(painter, "Painter cannot be null");
+        if (painter == null) throw new NullPointerException("Painter cannot be null");
 
         this.painter = painter;
         repaint();
@@ -211,6 +213,7 @@ public class DefaultCodeAreaWorker implements CodeAreaWorker, SelectionCapable, 
         return painter.getMouseCursorShape(positionX, positionY);
     }
 
+    @NonNull
     @Override
     public BasicCodeAreaZone getPositionZone(int positionX, int positionY) {
         return painter.getPositionZone(positionX, positionY);
@@ -436,7 +439,7 @@ public class DefaultCodeAreaWorker implements CodeAreaWorker, SelectionCapable, 
 
     @Override
     public void setSelection(@Nonnull SelectionRange selection) {
-        Objects.requireNonNull(painter, "Selection cannot be null");
+        if (selection == null) throw new NullPointerException("Selection cannot be null");
 
         this.selection.setSelection(selection);
         notifySelectionChanged();
@@ -470,7 +473,7 @@ public class DefaultCodeAreaWorker implements CodeAreaWorker, SelectionCapable, 
 
     @Override
     public void setCharset(@Nonnull Charset charset) {
-        Objects.requireNonNull(charset, "Charset cannot be null");
+        if (charset == null) throw new NullPointerException("Charset cannot be null");
 
         this.charset = charset;
         painter.reset();
@@ -557,23 +560,23 @@ public class DefaultCodeAreaWorker implements CodeAreaWorker, SelectionCapable, 
     }
 
     public void notifySelectionChanged() {
-        selectionChangedListeners.forEach((selectionChangedListener) -> {
-            selectionChangedListener.selectionChanged(selection);
-        });
+        for (SelectionChangedListener listener : selectionChangedListeners) {
+            listener.selectionChanged(selection);
+        }
     }
 
     @Override
     public void notifyCaretMoved() {
-        caretMovedListeners.forEach((caretMovedListener) -> {
-            caretMovedListener.caretMoved(caret.getCaretPosition());
-        });
+        for (CaretMovedListener listener: caretMovedListeners) {
+            listener.caretMoved(caret.getCaretPosition());
+        }
     }
 
     @Override
     public void notifyScrolled() {
-        scrollingListeners.forEach((scrollingListener) -> {
-            scrollingListener.scrolled();
-        });
+        for (ScrollingListener listener : scrollingListeners) {
+            listener.scrolled();
+        }
     }
 
     @Override

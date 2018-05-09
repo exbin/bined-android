@@ -15,15 +15,7 @@
  */
 package org.exbin.bined.android.basic;
 
-import java.awt.Cursor;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 import javax.annotation.Nonnull;
-import javax.swing.JScrollPane;
 import org.exbin.bined.capability.CaretCapable;
 import org.exbin.bined.android.CodeArea;
 import org.exbin.bined.android.CodeAreaCommandHandler;

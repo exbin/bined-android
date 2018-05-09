@@ -17,19 +17,11 @@ package org.exbin.bined.android.basic;
 
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.os.Handler;
-import android.os.Message;
 import android.view.KeyEvent;
 
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.FlavorEvent;
-import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
-import java.security.IdentityScope;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Nonnull;
@@ -86,6 +78,12 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
         viewModeSupported = worker instanceof ViewModeCapable;
 
         clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        clipboard.addPrimaryClipChangedListener(new ClipboardManager.OnPrimaryClipChangedListener() {
+            @Override
+            public void onPrimaryClipChanged() {
+                updateCanPaste();
+            }
+        });
 
 //        try {
 //            clipboard.addFlavorListener((FlavorEvent e) -> {
@@ -131,50 +129,50 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
                 move(keyEvent.getModifiers(), MovementDirection.LEFT);
                 undoSequenceBreak();
                 revealCursor();
-                keyEvent.consume();
+//                keyEvent.consume();
                 break;
             }
             case KeyEvent.KEYCODE_DPAD_RIGHT: {
                 move(keyEvent.getModifiers(), MovementDirection.RIGHT);
                 undoSequenceBreak();
                 revealCursor();
-                keyEvent.consume();
+//                keyEvent.consume();
                 break;
             }
             case KeyEvent.KEYCODE_DPAD_UP: {
                 move(keyEvent.getModifiers(), MovementDirection.UP);
                 undoSequenceBreak();
                 revealCursor();
-                keyEvent.consume();
+//                keyEvent.consume();
                 break;
             }
             case KeyEvent.KEYCODE_DPAD_DOWN: {
                 move(keyEvent.getModifiers(), MovementDirection.DOWN);
                 undoSequenceBreak();
                 revealCursor();
-                keyEvent.consume();
+//                keyEvent.consume();
                 break;
             }
-            case KeyEvent.VK_HOME: {
-                if ((keyEvent.getModifiers() & KeyEvent.CTRL_DOWN_MASK) > 0) {
+            case KeyEvent.KEYCODE_MOVE_HOME: {
+                if ((keyEvent.getModifiers() & KeyEvent.META_CTRL_MASK) > 0) {
                     move(keyEvent.getModifiers(), MovementDirection.DOC_START);
                 } else {
                     move(keyEvent.getModifiers(), MovementDirection.ROW_START);
                 }
                 undoSequenceBreak();
                 revealCursor();
-                keyEvent.consume();
+//                keyEvent.consume();
                 break;
             }
-            case KeyEvent.VK_END: {
-                if ((keyEvent.getModifiers() & KeyEvent.CTRL_DOWN_MASK) > 0) {
+            case KeyEvent.KEYCODE_MOVE_END: {
+                if ((keyEvent.getModifiers() & KeyEvent.META_CTRL_MASK) > 0) {
                     move(keyEvent.getModifiers(), MovementDirection.DOC_END);
                 } else {
                     move(keyEvent.getModifiers(), MovementDirection.ROW_END);
                 }
                 undoSequenceBreak();
                 revealCursor();
-                keyEvent.consume();
+//                keyEvent.consume();
                 break;
             }
             case KeyEvent.KEYCODE_PAGE_UP: {
@@ -182,14 +180,14 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
                 move(keyEvent.getModifiers(), MovementDirection.PAGE_UP);
                 undoSequenceBreak();
                 revealCursor();
-                keyEvent.consume();
+//                keyEvent.consume();
                 break;
             }
             case KeyEvent.KEYCODE_PAGE_DOWN: {
                 scroll(ScrollingDirection.PAGE_DOWN);
                 move(keyEvent.getModifiers(), MovementDirection.PAGE_DOWN);
                 undoSequenceBreak();
-                keyEvent.consume();
+//                keyEvent.consume();
                 break;
             }
             case KeyEvent.KEYCODE_INSERT: {
@@ -197,12 +195,12 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
                 switch (editationMode) {
                     case INSERT: {
                         ((EditationModeCapable) codeArea.getWorker()).setEditationMode(EditationMode.OVERWRITE);
-                        keyEvent.consume();
+//                        keyEvent.consume();
                         break;
                     }
                     case OVERWRITE: {
                         ((EditationModeCapable) codeArea.getWorker()).setEditationMode(EditationMode.INSERT);
-                        keyEvent.consume();
+//                        keyEvent.consume();
                         break;
                     }
                 }
@@ -213,37 +211,37 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
                     move(keyEvent.getModifiers(), MovementDirection.SWITCH_SECTION);
                     undoSequenceBreak();
                     revealCursor();
-                    keyEvent.consume();
+//                    keyEvent.consume();
                 }
                 break;
             }
             case KeyEvent.KEYCODE_DEL: {
                 deletePressed();
-                keyEvent.consume();
+//                keyEvent.consume();
                 break;
             }
             case KeyEvent.KEYCODE_BACK: {
                 backSpacePressed();
-                keyEvent.consume();
+//                keyEvent.consume();
                 break;
             }
             default: {
                 if (((ClipboardCapable) codeArea.getWorker()).isHandleClipboard()) {
-                    if ((keyEvent.getModifiers() & metaMask) > 0 && keyEvent.getKeyCode() == KeyEvent.KEYCODE_C) {
+                    if ((keyEvent.getModifiers() & KeyEvent.META_CTRL_MASK) > 0 && keyEvent.getKeyCode() == KeyEvent.KEYCODE_C) {
                         copy();
-                        keyEvent.consume();
+//                        keyEvent.consume();
                         break;
-                    } else if ((keyEvent.getModifiers() & metaMask) > 0 && keyEvent.getKeyCode() == KeyEvent.KEYCODE_X) {
+                    } else if ((keyEvent.getModifiers() & KeyEvent.META_CTRL_MASK) > 0 && keyEvent.getKeyCode() == KeyEvent.KEYCODE_X) {
                         cut();
-                        keyEvent.consume();
+//                        keyEvent.consume();
                         break;
-                    } else if ((keyEvent.getModifiers() & metaMask) > 0 && keyEvent.getKeyCode() == KeyEvent.KEYCODE_V) {
+                    } else if ((keyEvent.getModifiers() & KeyEvent.META_CTRL_MASK) > 0 && keyEvent.getKeyCode() == KeyEvent.KEYCODE_V) {
                         paste();
-                        keyEvent.consume();
+//                        keyEvent.consume();
                         break;
-                    } else if ((keyEvent.getModifiers() & metaMask) > 0 && keyEvent.getKeyCode() == KeyEvent.KEYCODE_A) {
+                    } else if ((keyEvent.getModifiers() & KeyEvent.META_CTRL_MASK) > 0 && keyEvent.getKeyCode() == KeyEvent.KEYCODE_A) {
                         codeArea.selectAll();
-                        keyEvent.consume();
+//                        keyEvent.consume();
                         break;
                     }
                 }
@@ -255,7 +253,7 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
     public void keyTyped(@Nonnull KeyEvent keyEvent) {
         char keyValue = keyEvent.getKeyChar();
         // TODO Add support for high unicode codes
-        if (keyValue == KeyEvent.CHAR_UNDEFINED) {
+        if (keyValue == KeyEvent.KEYCODE_UNKNOWN) {
             return;
         }
         if (!((EditationModeCapable) codeArea.getWorker()).isEditable()) {
@@ -489,7 +487,7 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
         clearClipboardData();
         try {
             currentClipboardData = content;
-            clipboard.setContents(content, content);
+            clipboard.setPrimaryClip(content);
         } catch (IllegalStateException ex) {
             // Clipboard not available - ignore and clear
             clearClipboardData();
@@ -686,7 +684,7 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
     }
 
     private void updateCanPaste() {
-        canPaste = CodeAreaUtils.canPaste(clipboard, binaryDataFlavor);
+        canPaste = clipboard.hasPrimaryClip(); // CodeAreaUtils.canPaste(clipboard, binaryDataFlavor);
     }
 
     @Override
@@ -708,7 +706,7 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
         CaretPosition movePosition = codeArea.getWorker().computeMovePosition(caretPosition, direction);
         if (!caretPosition.equals(movePosition)) {
             caret.setCaretPosition(movePosition);
-            updateSelection((modifiers & KeyEvent.SHIFT_DOWN_MASK) > 0, movePosition);
+            updateSelection((modifiers & KeyEvent.META_SHIFT_MASK) > 0, movePosition);
             notifyCaretMoved();
         }
     }

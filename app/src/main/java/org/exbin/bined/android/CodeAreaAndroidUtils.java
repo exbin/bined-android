@@ -26,7 +26,7 @@ import javax.annotation.Nullable;
  * @version 0.2.0 2018/05/03
  * @author ExBin Project (http://exbin.org)
  */
-public class CodeAreaSwingUtils {
+public class CodeAreaAndroidUtils {
 
     public static final int MIN_MONOSPACE_CODE_POINT = 0x1F;
     public static final int MAX_MONOSPACE_CODE_POINT = 0x1C3;
@@ -36,7 +36,7 @@ public class CodeAreaSwingUtils {
 
     public static int MAX_COMPONENT_VALUE = 255;
 
-    private CodeAreaSwingUtils() {
+    private CodeAreaAndroidUtils() {
     }
 
     /**
@@ -52,7 +52,7 @@ public class CodeAreaSwingUtils {
                 && character != EXCEPTION1_CODE_POINT && character != EXCEPTION2_CODE_POINT);
     }
 
-    public static boolean areSameColors(@Nullable Color color, @Nullable Color comparedColor) {
+    public static boolean areSameColors(@Nullable Integer color, @Nullable Integer comparedColor) {
         return (color == null && comparedColor == null) || (color != null && color.equals(comparedColor));
     }
 

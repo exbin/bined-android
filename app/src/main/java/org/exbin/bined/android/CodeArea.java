@@ -19,7 +19,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.support.v4.graphics.ColorUtils;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.View;
@@ -72,7 +71,7 @@ public class CodeArea extends View implements CodeAreaControl {
     public CodeArea(Context context, AttributeSet attrs, @Nullable CodeAreaWorker.CodeAreaWorkerFactory workerFactory, @Nullable CodeAreaCommandHandler.CodeAreaCommandHandlerFactory commandHandlerFactory) {
         super(context, attrs);
         this.worker = workerFactory == null ? new DefaultCodeAreaWorker(this) : workerFactory.createWorker(this);
-        this.commandHandler = commandHandlerFactory == null ? new DefaultCodeAreaCommandHandler(this) : commandHandlerFactory.createCommandHandler(this);
+        this.commandHandler = commandHandlerFactory == null ? new DefaultCodeAreaCommandHandler(context, this) : commandHandlerFactory.createCommandHandler(this);
         init();
     }
 
@@ -142,7 +141,7 @@ public class CodeArea extends View implements CodeAreaControl {
     }
 
     public void repaint() {
-
+        invalidate();
     }
 
     @Override
@@ -203,7 +202,7 @@ public class CodeArea extends View implements CodeAreaControl {
     public void setContentData(@Nullable BinaryData contentData) {
         this.contentData = contentData;
         notifyDataChanged();
-        invalidate();
+        repaint();
     }
 
     public long getDataSize() {

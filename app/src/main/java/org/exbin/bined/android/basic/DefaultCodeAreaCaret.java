@@ -15,10 +15,8 @@
  */
 package org.exbin.bined.android.basic;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Objects;
 import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -31,7 +29,7 @@ import org.exbin.bined.android.CodeArea;
 /**
  * Default implementation of code area caret.
  *
- * @version 0.2.0 2018/02/14
+ * @version 0.2.0 2018/05/09
  * @author ExBin Project (http://exbin.org)
  */
 public class DefaultCodeAreaCaret implements CodeAreaCaret {
@@ -51,7 +49,7 @@ public class DefaultCodeAreaCaret implements CodeAreaCaret {
     private CursorRenderingMode renderingMode = CursorRenderingMode.NEGATIVE;
 
     public DefaultCodeAreaCaret(@Nonnull CodeArea codeArea) {
-        Objects.requireNonNull(codeArea, "Code area cannot be null");
+        if (codeArea == null) throw new NullPointerException("Code area cannot be null");
 
         this.codeArea = codeArea;
         privateSetBlinkRate(DEFAULT_BLINK_RATE);
@@ -78,7 +76,8 @@ public class DefaultCodeAreaCaret implements CodeAreaCaret {
     public void resetBlink() {
         if (blinkTimer != null) {
             cursorVisible = true;
-            blinkTimer.restart();
+            blinkTimer.cancel();
+            blinkTimer.scheduleAtFixedRate(new Blink(), blinkRate, blinkRate);
         }
     }
 
@@ -163,7 +162,7 @@ public class DefaultCodeAreaCaret implements CodeAreaCaret {
     }
 
     public void setRenderingMode(@Nonnull CursorRenderingMode renderingMode) {
-        Objects.requireNonNull(renderingMode, "Cursor rendering mode cannot be null");
+        if (renderingMode == null) throw new NullPointerException("Cursor rendering mode cannot be null");
 
         this.renderingMode = renderingMode;
         notifyCaredChanged();
@@ -177,25 +176,25 @@ public class DefaultCodeAreaCaret implements CodeAreaCaret {
         this.blinkRate = blinkRate;
         if (blinkTimer != null) {
             if (blinkRate == 0) {
-                blinkTimer.stop();
+                blinkTimer.cancel();
                 blinkTimer = null;
                 cursorVisible = true;
                 notifyCaredChanged();
             } else {
-                blinkTimer.setDelay(blinkRate);
-                blinkTimer.setInitialDelay(blinkRate);
+                blinkTimer.cancel();
+                blinkTimer = new Timer();
+                blinkTimer.scheduleAtFixedRate(new Blink(), blinkRate, blinkRate);
             }
         } else if (blinkRate > 0) {
-            blinkTimer = new javax.swing.Timer(blinkRate, new Blink());
-            blinkTimer.setRepeats(true);
-            blinkTimer.start();
+            blinkTimer = new Timer();
+            blinkTimer.scheduleAtFixedRate(new Blink(), blinkRate, blinkRate);
         }
     }
 
-    private class Blink implements ActionListener {
+    private class Blink extends TimerTask {
 
         @Override
-        public void actionPerformed(ActionEvent e) {
+        public void run() {
             cursorVisible = !cursorVisible;
             notifyCaredChanged();
         }
