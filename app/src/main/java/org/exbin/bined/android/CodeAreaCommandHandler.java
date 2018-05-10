@@ -44,7 +44,7 @@ public interface CodeAreaCommandHandler {
      *
      * @param keyEvent key event
      */
-    void keyTyped(@Nonnull KeyEvent keyEvent);
+    void keyTyped(int keyCode, @Nonnull KeyEvent keyEvent);
 
     /**
      * Backspace key was pressed.

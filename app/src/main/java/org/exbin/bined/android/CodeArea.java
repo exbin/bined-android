@@ -116,6 +116,11 @@ public class CodeArea extends View implements CodeAreaControl {
     }
 
     @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
+
+    @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         // TODO reset layout instead
@@ -124,7 +129,7 @@ public class CodeArea extends View implements CodeAreaControl {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent keyEvent) {
-        commandHandler.keyTyped(keyEvent);
+        commandHandler.keyTyped(keyCode, keyEvent);
         return super.onKeyDown(keyCode, keyEvent);
     }
 

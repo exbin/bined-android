@@ -16,6 +16,7 @@
 package org.exbin.bined.android;
 
 import android.graphics.Color;
+import android.graphics.Rect;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -80,5 +81,18 @@ public class CodeAreaAndroidUtils {
     public static int computeGrayColor(@Nonnull int color) {
         int grayLevel = (Color.red(color) + Color.green(color) + Color.blue(color)) / 3;
         return Color.rgb(grayLevel, grayLevel, grayLevel);
+    }
+
+    public static Rect computeIntersection(Rect rect1, Rect rect2) {
+        if (rect1 == null || rect2 == null)
+            return null;
+        if (rect2.left > rect1.right || rect2.right < rect1.left || rect2.top > rect1.bottom || rect2.bottom < rect1.top)
+            return null;
+
+        int left = Math.max(rect1.left, rect2.left);
+        int top = Math.max(rect1.top, rect2.top);
+        int right = Math.min(rect1.right, rect2.right);
+        int bottom = Math.min(rect1.bottom, rect2.bottom);
+        return new Rect(left, top, right, bottom);
     }
 }
