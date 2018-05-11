@@ -76,9 +76,14 @@ public class DefaultCodeAreaCaret implements CodeAreaCaret {
     public void resetBlink() {
         if (blinkTimer != null) {
             cursorVisible = true;
-            blinkTimer.cancel();
-            blinkTimer.scheduleAtFixedRate(new Blink(), blinkRate, blinkRate);
+            resetTimer();
         }
+    }
+
+    public synchronized void resetTimer() {
+        blinkTimer.cancel();
+        blinkTimer = new Timer();
+        blinkTimer.scheduleAtFixedRate(new Blink(), blinkRate, blinkRate);
     }
 
     private void notifyCaredChanged() {
@@ -168,7 +173,7 @@ public class DefaultCodeAreaCaret implements CodeAreaCaret {
         notifyCaredChanged();
     }
 
-    private void privateSetBlinkRate(int blinkRate) {
+    private synchronized void privateSetBlinkRate(int blinkRate) {
         if (blinkRate < 0) {
             throw new IllegalArgumentException("Blink rate cannot be negative");
         }
@@ -203,14 +208,14 @@ public class DefaultCodeAreaCaret implements CodeAreaCaret {
     /**
      * Enumeration of supported cursor shapes.
      */
-    public static enum CursorShape {
+    public enum CursorShape {
         INSERT, OVERWRITE, MIRROR
     }
 
     /**
      * Method for rendering cursor into CodeArea component.
      */
-    public static enum CursorRenderingMode {
+    public enum CursorRenderingMode {
         /**
          * Cursor is just painted.
          */

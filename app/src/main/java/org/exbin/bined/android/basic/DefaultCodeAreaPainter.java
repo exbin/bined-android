@@ -24,11 +24,6 @@ import android.support.constraint.solver.widgets.Rectangle;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetEncoder;
-import java.util.Arrays;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import org.exbin.bined.BasicCodeAreaSection;
 import org.exbin.bined.BasicCodeAreaZone;
 import org.exbin.bined.CaretPosition;
@@ -39,7 +34,16 @@ import org.exbin.bined.CodeCharactersCase;
 import org.exbin.bined.CodeType;
 import org.exbin.bined.EditationMode;
 import org.exbin.bined.SelectionRange;
+import org.exbin.bined.android.CodeArea;
+import org.exbin.bined.android.CodeAreaAndroidUtils;
+import org.exbin.bined.android.CodeAreaPainter;
+import org.exbin.bined.android.CodeAreaWorker;
 import org.exbin.bined.android.Font;
+import org.exbin.bined.android.MovementDirection;
+import org.exbin.bined.android.ScrollingDirection;
+import org.exbin.bined.android.capability.BackgroundPaintCapable;
+import org.exbin.bined.android.capability.FontCapable;
+import org.exbin.bined.android.capability.ScrollingCapable;
 import org.exbin.bined.capability.CaretCapable;
 import org.exbin.bined.capability.CharsetCapable;
 import org.exbin.bined.capability.CodeCharactersCaseCapable;
@@ -48,16 +52,14 @@ import org.exbin.bined.capability.EditationModeCapable;
 import org.exbin.bined.capability.RowWrappingCapable;
 import org.exbin.bined.capability.SelectionCapable;
 import org.exbin.bined.capability.ViewModeCapable;
-import org.exbin.bined.android.CodeArea;
-import org.exbin.bined.android.CodeAreaPainter;
-import org.exbin.bined.android.CodeAreaAndroidUtils;
-import org.exbin.bined.android.CodeAreaWorker;
-import org.exbin.bined.android.MovementDirection;
-import org.exbin.bined.android.ScrollingDirection;
-import org.exbin.bined.android.capability.BackgroundPaintCapable;
-import org.exbin.bined.android.capability.FontCapable;
-import org.exbin.bined.android.capability.ScrollingCapable;
 import org.exbin.utils.binary_data.BinaryData;
+
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
+import java.util.Arrays;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Code area component default painter.
@@ -271,7 +273,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
         rowCharacters = new char[charactersPerRow];
     }
 
-    public void resetFont(@Nonnull Canvas g) {
+    public void resetFontMetrics() {
         if (font == null) {
             reset();
         }
@@ -282,6 +284,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
 
         font = ((FontCapable) worker).getFont();
         fontMetrics = new Paint(); // g.getFontMetrics(font);
+        fontMetrics.setTextSize(30);
         /**
          * Use small 'w' character to guess normal font width.
          */
@@ -296,6 +299,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
         rowHeight = fontSize + subFontSpace;
 
         rowPositionLength = getRowPositionLength();
+        resetLayout();
         resetSizes();
         resetCharPositions();
         initialized = true;
@@ -409,14 +413,15 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
             reset();
         }
         if (font == null) {
-            resetFont(g);
+            resetFontMetrics();
+            fontChanged = false;
         }
 
         paintOutsiteArea(g);
         paintHeader(g);
         paintRowPosition(g);
         paintMainArea(g);
-//        scrollPanel.paintComponents(g);
+        dataView.invalidate();
         paintCounter++;
     }
 
@@ -437,6 +442,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
     }
 
     public void paintHeader(@Nonnull Canvas g) {
+        g.save();
         Rect clipBounds = g.getClipBounds();
         Rect headerArea = new Rect(rowPositionAreaWidth, 0, componentWidth - getVerticalScrollBarSize(), headerAreaHeight);
         g.clipRect(clipBounds != null ? CodeAreaAndroidUtils.computeIntersection(headerArea, clipBounds) : headerArea);
@@ -563,12 +569,13 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
             }
         }
 
-        g.clipRect(clipBounds);
+        g.restore();
     }
 
     public void paintRowPosition(@Nonnull Canvas g) {
+        g.save();
         Rect clipBounds = g.getClipBounds();
-        Rect rowPositionsArea = new Rect(0, headerAreaHeight, rowPositionAreaWidth, componentHeight - headerAreaHeight - getHorizontalScrollBarSize());
+        Rect rowPositionsArea = new Rect(0, headerAreaHeight, rowPositionAreaWidth - 1, componentHeight - getHorizontalScrollBarSize() - 1);
         g.clipRect(clipBounds != null ? CodeAreaAndroidUtils.computeIntersection(rowPositionsArea, clipBounds) : rowPositionsArea);
 
         fontMetrics.setColor(colors.background);
@@ -583,7 +590,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
                     break;
                 }
 
-                g.drawRect(0, stripePositionY, rowPositionAreaWidth, rowHeight, fontMetrics);
+                g.drawRect(0, stripePositionY, rowPositionAreaWidth, stripePositionY + rowHeight, fontMetrics);
                 stripePositionY += rowHeight * 2;
                 dataPosition += bytesPerRow * 2;
             }
@@ -618,7 +625,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
         }
         g.drawLine(dataViewX, dataViewY - 1, dataViewX + dataViewWidth, dataViewY - 1, fontMetrics);
 
-        g.clipRect(clipBounds);
+        g.restore();
     }
 
     @Override
@@ -627,10 +634,11 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
             reset();
         }
         if (fontChanged) {
-            resetFont(g);
+            resetFontMetrics();
             fontChanged = false;
         }
 
+        g.save();
         Rect clipBounds = g.getClipBounds();
         Rect mainArea = getMainAreaRect();
         g.clipRect(clipBounds != null ? CodeAreaAndroidUtils.computeIntersection(mainArea, clipBounds) : mainArea);
@@ -643,14 +651,15 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
         }
 
         paintRows(g);
-        g.clipRect(clipBounds);
+        g.restore();
+
         paintCursor(g);
 
         // TODO: Remove later
         int x = componentWidth - rowPositionAreaWidth - 220;
         int y = componentHeight - headerAreaHeight - 20;
         fontMetrics.setColor(Color.YELLOW);
-        g.drawRect(x, y, 200, 16, fontMetrics);
+        g.drawRect(x, y, x + 200, y + 16, fontMetrics);
         fontMetrics.setColor(Color.BLACK);
         char[] headerCode = (String.valueOf(scrollPosition.getScrollCharPosition()) + "+" + String.valueOf(scrollPosition.getScrollCharOffset()) + " : " + String.valueOf(scrollPosition.getScrollRowPosition()) + "+" + String.valueOf(scrollPosition.getScrollRowOffset()) + " P: " + String.valueOf(paintCounter)).toCharArray();
         g.drawText(headerCode, 0, headerCode.length, x, y + rowHeight, fontMetrics);
@@ -665,7 +674,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
         int rowPositionX = rowPositionAreaWidth;
         fontMetrics.setColor(colors.background);
         if (backgroundPaintMode != BasicBackgroundPaintMode.TRANSPARENT) {
-            g.drawRect(rowPositionX, headerAreaHeight, dataViewWidth, dataViewHeight, fontMetrics);
+            g.drawRect(rowPositionX, headerAreaHeight, rowPositionX + dataViewWidth, headerAreaHeight + dataViewHeight, fontMetrics);
         }
 
         if (backgroundPaintMode == BasicBackgroundPaintMode.STRIPED) {
@@ -677,7 +686,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
                     break;
                 }
 
-                g.drawRect(rowPositionX, stripePositionY, dataViewWidth, rowHeight, fontMetrics);
+                g.drawRect(rowPositionX, stripePositionY, rowPositionX + dataViewWidth, stripePositionY + rowHeight, fontMetrics);
                 stripePositionY += rowHeight * 2;
                 dataPosition += bytesPerRow * 2;
             }
@@ -1047,9 +1056,9 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
 
     @Override
     public void paintCursor(@Nonnull Canvas g) {
-        if (!worker.getCodeArea().hasFocus()) {
-            return;
-        }
+//        if (!worker.getCodeArea().hasFocus()) {
+//            return;
+//        }
 
         DefaultCodeAreaCaret caret = (DefaultCodeAreaCaret) ((CaretCapable) worker).getCaret();
         Rect cursorRect = getPositionRect(caret.getDataPosition(), caret.getCodeOffset(), caret.getSection());
@@ -1057,6 +1066,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
             return;
         }
 
+        g.save();
         Rect clipBounds = g.getClipBounds();
         Rect mainAreaRect = getMainAreaRect();
         Rect intersection = CodeAreaAndroidUtils.computeIntersection(mainAreaRect, cursorRect);
@@ -1154,23 +1164,23 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
             }
         }
 
-        // Paint mirror cursor
-        if (viewMode == CodeAreaViewMode.DUAL && showMirrorCursor) {
-            Rect mirrorCursorRect = getMirrorCursorRect(caret.getDataPosition(), caret.getSection());
-            if (mirrorCursorRect != null) {
-                intersection = CodeAreaAndroidUtils.computeIntersection(mainAreaRect, mirrorCursorRect);
-                boolean mirrorCursorVisible = !intersection.isEmpty();
-                if (mirrorCursorVisible) {
-                    g.clipRect(intersection);
-                    fontMetrics.setColor(colors.cursor);
-//                    Graphics2D g2d = (Graphics2D) g.create();
-//                    Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{2}, 0);
-//                    g2d.setStroke(dashed);
-                    g.drawRect(mirrorCursorRect.left, mirrorCursorRect.top, mirrorCursorRect.right - 1, mirrorCursorRect.bottom - 1, fontMetrics);
-                }
-            }
-        }
-        g.clipRect(clipBounds);
+//        // Paint mirror cursor
+//        if (viewMode == CodeAreaViewMode.DUAL && showMirrorCursor) {
+//            Rect mirrorCursorRect = getMirrorCursorRect(caret.getDataPosition(), caret.getSection());
+//            if (mirrorCursorRect != null) {
+//                intersection = CodeAreaAndroidUtils.computeIntersection(mainAreaRect, mirrorCursorRect);
+//                boolean mirrorCursorVisible = !intersection.isEmpty();
+//                if (mirrorCursorVisible) {
+//                    g.clipRect(intersection);
+//                    fontMetrics.setColor(colors.cursor);
+////                    Graphics2D g2d = (Graphics2D) g.create();
+////                    Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{2}, 0);
+////                    g2d.setStroke(dashed);
+//                    g.drawRect(mirrorCursorRect.left, mirrorCursorRect.top, mirrorCursorRect.right - 1, mirrorCursorRect.bottom - 1, fontMetrics);
+//                }
+//            }
+//        }
+        g.restore();
     }
 
     @Nonnull
@@ -1590,7 +1600,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
      * Doesn't include character at offset end.
      */
     private void renderBackgroundSequence(@Nonnull Canvas g, int startOffset, int endOffset, int rowPositionX, int positionY) {
-        g.drawRect(rowPositionX + startOffset * characterWidth, positionY, (endOffset - startOffset) * characterWidth, rowHeight, fontMetrics);
+        g.drawRect(rowPositionX + startOffset * characterWidth, positionY, rowPositionX + endOffset * characterWidth, positionY + rowHeight, fontMetrics);
     }
 
     private int computeRowsPerRectangle() {

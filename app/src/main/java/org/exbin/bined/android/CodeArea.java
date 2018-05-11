@@ -79,6 +79,7 @@ public class CodeArea extends View implements CodeAreaControl {
         // TODO: Use swing color instead
 //        setBackgroundColor(ColorUtils.WHITE);
         setFocusable(true);
+//        setSystemUiVisibility(getSystemUiVisibility() | View.FOCUSABLE);
 //        setFocusTraversalKeysEnabled(false);
     }
 
