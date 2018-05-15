@@ -17,6 +17,7 @@ package org.exbin.bined.android.basic;
 
 import android.graphics.Canvas;
 import android.support.annotation.NonNull;
+import android.view.MotionEvent;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -157,6 +158,14 @@ public class DefaultCodeAreaWorker implements CodeAreaWorker, SelectionCapable, 
     @Override
     public void paintComponent(@Nonnull Canvas g) {
         painter.paintComponent(g);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        codeArea.getCommandHandler().moveCaret((int) event.getX(), (int) event.getY(), false);
+        ((CaretCapable) codeArea.getWorker()).revealCursor();
+
+        return true;
     }
 
     @Nonnull

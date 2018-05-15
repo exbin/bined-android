@@ -17,11 +17,12 @@ package org.exbin.bined.android;
 
 import android.graphics.Canvas;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import org.exbin.bined.BasicCodeAreaZone;
 import org.exbin.bined.CaretPosition;
 import org.exbin.bined.android.basic.CodeAreaScrollPosition;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Hexadecimal editor painter interface.

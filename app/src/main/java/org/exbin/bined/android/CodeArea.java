@@ -21,6 +21,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -144,6 +145,11 @@ public class CodeArea extends View implements CodeAreaControl {
     protected void onFocusChanged(boolean gainFocus, int direction, @android.support.annotation.Nullable Rect previouslyFocusedRect) {
         super.onFocusChanged(gainFocus, direction, previouslyFocusedRect);
         repaint();
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return worker.onTouchEvent(event);
     }
 
     public void repaint() {

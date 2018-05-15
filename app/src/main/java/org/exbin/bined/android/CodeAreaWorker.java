@@ -16,6 +16,7 @@
 package org.exbin.bined.android;
 
 import android.graphics.Canvas;
+import android.view.MotionEvent;
 
 import javax.annotation.Nonnull;
 import org.exbin.bined.CaretPosition;
@@ -69,6 +70,8 @@ public interface CodeAreaWorker {
      */
     @Nonnull
     CaretPosition computeMovePosition(@Nonnull CaretPosition position, @Nonnull MovementDirection direction);
+
+    boolean onTouchEvent(MotionEvent event);
 
     interface CodeAreaWorkerFactory {
 

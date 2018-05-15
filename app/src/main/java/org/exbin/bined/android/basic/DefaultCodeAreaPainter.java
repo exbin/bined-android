@@ -152,6 +152,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
         this.worker = worker;
         CodeArea codeArea = worker.getCodeArea();
         dataView = new View(codeArea.getContext());
+        dataView.setBackgroundColor(Color.GREEN);
 
         dataView.setScrollContainer(true);
 //        JScrollBar verticalScrollBar = scrollPanel.getVerticalScrollBar();
@@ -369,6 +370,12 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
         scrollPanelHeight = componentHeight - headerAreaHeight;
         dataViewWidth = scrollPanelWidth - getVerticalScrollBarSize();
         dataViewHeight = scrollPanelHeight - getHorizontalScrollBarSize();
+
+        dataView.setX(headerAreaHeight);
+        dataView.setY(headerAreaHeight);
+        dataView.setMinimumWidth(dataViewWidth);
+        dataView.setMinimumHeight(dataViewHeight);
+        dataView.invalidate();
     }
 
     private void resetColors() {
@@ -659,7 +666,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
         int x = componentWidth - rowPositionAreaWidth - 220;
         int y = componentHeight - headerAreaHeight - 20;
         fontMetrics.setColor(Color.YELLOW);
-        g.drawRect(x, y, x + 200, y + 16, fontMetrics);
+        g.drawRect(x, y, x + 200, y + rowHeight, fontMetrics);
         fontMetrics.setColor(Color.BLACK);
         char[] headerCode = (String.valueOf(scrollPosition.getScrollCharPosition()) + "+" + String.valueOf(scrollPosition.getScrollCharOffset()) + " : " + String.valueOf(scrollPosition.getScrollRowPosition()) + "+" + String.valueOf(scrollPosition.getScrollRowOffset()) + " P: " + String.valueOf(paintCounter)).toCharArray();
         g.drawText(headerCode, 0, headerCode.length, x, y + rowHeight, fontMetrics);
