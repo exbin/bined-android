@@ -3,8 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="org.exbin.bined.editor.android.MainActivity">
     <item
+        android:id="@+id/action_open"
+        android:title="@string/action_open" />
+    <item
+        android:id="@+id/action_save"
+        android:title="@string/action_save" />
+    <item
+        android:id="@+id/action_exit"
+        android:title="@string/action_exit" />
+    <item
+        android:id="@+id/action_options"
+        android:title="@string/action_options" />
+    <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+        android:title="@string/action_settings" />
 </menu>
