@@ -16,13 +16,17 @@ import com.rustamg.filedialogs.OpenFileDialog;
 import com.rustamg.filedialogs.SaveFileDialog;
 
 import org.exbin.bined.android.CodeArea;
+import org.exbin.utils.binary_data.BinaryData;
 import org.exbin.utils.binary_data.ByteArrayEditableData;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.annotation.Nonnull;
 
 public class MainActivity extends AppCompatActivity implements FileDialog.OnFileSelectedListener {
 
@@ -30,13 +34,15 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
     private CodeArea codeArea;
 
-    private boolean storagePermissionGranted;
+    private boolean storageReadPermissionGranted;
+    private boolean storageWritePermissionGranted;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        this.storagePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+        this.storageReadPermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+        this.storageWritePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -78,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
         switch (item.getItemId()) {
             case R.id.action_open: {
-                if (storagePermissionGranted) {
+                if (storageReadPermissionGranted) {
                     OpenFileDialog dialog = new OpenFileDialog();
                     dialog.setStyle(DialogFragment.STYLE_NO_TITLE, R.style.AppTheme);
                     dialog.show(getSupportFragmentManager(), OpenFileDialog.class.getName());
@@ -90,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             }
 
             case R.id.action_save: {
-                if (storagePermissionGranted) {
+                if (storageWritePermissionGranted) {
                     FileDialog dialog = new SaveFileDialog();
                     dialog.setStyle(DialogFragment.STYLE_NO_TITLE, R.style.AppTheme);
                     dialog.show(getSupportFragmentManager(), SaveFileDialog.class.getName());
@@ -128,19 +134,27 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
 
     @Override
-    public void onFileSelected(FileDialog dialog, File file) {
+    public void onFileSelected(@Nonnull FileDialog dialog, @Nonnull File file) {
         if (dialog instanceof OpenFileDialog) {
             ByteArrayEditableData fileData = new ByteArrayEditableData();
             try {
                 FileInputStream fileInputStream = new FileInputStream(file);
                 fileData.loadFromStream(fileInputStream);
+                fileInputStream.close();
             } catch (IOException ex) {
                 Logger.getLogger(MainActivity.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             codeArea.setContentData(fileData);
         } else {
-
+            BinaryData contentData = codeArea.getContentData();
+            try {
+                FileOutputStream fileOutputStream = new FileOutputStream(file);
+                contentData.saveToStream(fileOutputStream);
+                fileOutputStream.close();
+            } catch (IOException ex) {
+                Logger.getLogger(MainActivity.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 }
