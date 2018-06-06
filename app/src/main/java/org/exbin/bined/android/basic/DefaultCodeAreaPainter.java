@@ -23,6 +23,8 @@ import android.graphics.Rect;
 import android.support.constraint.solver.widgets.Rectangle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.HorizontalScrollView;
+import android.widget.RelativeLayout;
 
 import org.exbin.bined.BasicCodeAreaSection;
 import org.exbin.bined.BasicCodeAreaZone;
@@ -64,7 +66,7 @@ import javax.annotation.Nullable;
 /**
  * Code area component default painter.
  *
- * @version 0.2.0 2018/05/08
+ * @version 0.2.0 2018/06/06
  * @author ExBin Project (http://exbin.org)
  */
 public class DefaultCodeAreaPainter implements CodeAreaPainter {
@@ -74,6 +76,8 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
     private boolean initialized = false;
     private boolean fontChanged = false;
 
+    @Nonnull
+    private final HorizontalScrollView scrollPanel;
     @Nonnull
     private final View dataView;
 
@@ -151,10 +155,25 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
     public DefaultCodeAreaPainter(@Nonnull CodeAreaWorker worker) {
         this.worker = worker;
         CodeArea codeArea = worker.getCodeArea();
-        dataView = new View(codeArea.getContext());
-        dataView.setBackgroundColor(Color.GREEN);
+        scrollPanel = new HorizontalScrollView(codeArea.getContext());
+        scrollPanel.setHorizontalScrollBarEnabled(true);
+        scrollPanel.setVerticalScrollBarEnabled(true);
 
-        dataView.setScrollContainer(true);
+        RelativeLayout.LayoutParams wrapLayout = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT);
+        ((ViewGroup) codeArea).addView(scrollPanel, wrapLayout);
+
+        dataView = new View(codeArea.getContext()) {
+            @Override
+            protected void onDraw(Canvas canvas) {
+                super.onDraw(canvas);
+                paintMainArea(canvas);
+            }
+        };
+        scrollPanel.addView(dataView);
+
+        scrollPanel.setScrollContainer(true);
 //        JScrollBar verticalScrollBar = scrollPanel.getVerticalScrollBar();
 //        verticalScrollBar.setIgnoreRepaint(true);
 //        verticalScrollBar.addAdjustmentListener(new VerticalAdjustmentListener());
@@ -341,16 +360,17 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
                 documentDataHeight = (int) (rowsPerData * rowHeight);
             }
 
-            dataView.setMinimumWidth(documentDataWidth);
-            dataView.setMinimumHeight(documentDataHeight);
+            dataView.layout(0, 0, documentDataWidth, documentDataHeight);
+//            dataView.setMinimumWidth(documentDataWidth);
+//            dataView.setMinimumHeight(documentDataHeight);
         }
 
         // TODO on resize only
         Rect scrollPanelRectangle = getScrollPanelRectangle();
         ViewGroup.MarginLayoutParams layoutParams = new ViewGroup.MarginLayoutParams(scrollPanelRectangle.width(), scrollPanelRectangle.height());
         layoutParams.setMargins(scrollPanelRectangle.left, scrollPanelRectangle.top, 0, 0);
-        dataView.setLayoutParams(layoutParams);
-        dataView.invalidate();
+        scrollPanel.setLayoutParams(layoutParams);
+        scrollPanel.invalidate();
     }
 
     private void resetSizes() {
@@ -371,11 +391,12 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
         dataViewWidth = scrollPanelWidth - getVerticalScrollBarSize();
         dataViewHeight = scrollPanelHeight - getHorizontalScrollBarSize();
 
-        dataView.setX(headerAreaHeight);
-        dataView.setY(headerAreaHeight);
-        dataView.setMinimumWidth(dataViewWidth);
-        dataView.setMinimumHeight(dataViewHeight);
-        dataView.invalidate();
+//        dataView.setX(headerAreaHeight);
+//        dataView.setY(headerAreaHeight);
+//        dataView.setMinimumWidth(dataViewWidth);
+//        dataView.setMinimumHeight(dataViewHeight);
+//        dataView.invalidate();
+        scrollPanel.layout(rowPositionAreaWidth, headerAreaHeight, rowPositionAreaWidth + dataViewWidth - 20, headerAreaHeight + dataViewHeight - 20);
     }
 
     private void resetColors() {
@@ -427,7 +448,8 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
         paintOutsiteArea(g);
         paintHeader(g);
         paintRowPosition(g);
-        paintMainArea(g);
+//        paintMainArea(g);
+        scrollPanel.invalidate();
         dataView.invalidate();
         paintCounter++;
     }
