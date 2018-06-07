@@ -23,8 +23,9 @@ import android.graphics.Rect;
 import android.support.constraint.solver.widgets.Rectangle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.HorizontalScrollView;
 import android.widget.RelativeLayout;
+
+import com.examples.customtouch.widget.TwoDimensionScrollView;
 
 import org.exbin.bined.BasicCodeAreaSection;
 import org.exbin.bined.BasicCodeAreaZone;
@@ -77,7 +78,9 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
     private boolean fontChanged = false;
 
     @Nonnull
-    private final HorizontalScrollView scrollPanel;
+    private final TwoDimensionScrollView scrollPanel;
+//    @Nonnull
+//    private final ScrollView scrollPanel2;
     @Nonnull
     private final View dataView;
 
@@ -155,10 +158,16 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
     public DefaultCodeAreaPainter(@Nonnull CodeAreaWorker worker) {
         this.worker = worker;
         CodeArea codeArea = worker.getCodeArea();
-        scrollPanel = new HorizontalScrollView(codeArea.getContext());
-        scrollPanel.setHorizontalScrollBarEnabled(true);
-        scrollPanel.setVerticalScrollBarEnabled(true);
+        scrollPanel = new TwoDimensionScrollView(codeArea.getContext());
+//        scrollPanel2 = new HorizontalScrollView(codeArea.getContext());
+//        scrollPanel.setHorizontalScrollBarEnabled(true);
+//        scrollPanel.setVerticalScrollBarEnabled(true);
 
+//        RelativeLayout.LayoutParams wrapLayout2 = new RelativeLayout.LayoutParams(
+//                RelativeLayout.LayoutParams.MATCH_PARENT,
+//                RelativeLayout.LayoutParams.WRAP_CONTENT);
+//        scrollPanel.addView(scrollPanel2, wrapLayout2);
+//
         RelativeLayout.LayoutParams wrapLayout = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -1676,6 +1685,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
 
     @Override
     public void updateScrollBars() {
+
 //        JScrollBar verticalScrollBar = scrollPanel.getVerticalScrollBar();
 //        JScrollBar horizontalScrollBar = scrollPanel.getHorizontalScrollBar();
 //
