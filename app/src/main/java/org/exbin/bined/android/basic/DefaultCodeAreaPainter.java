@@ -67,7 +67,7 @@ import javax.annotation.Nullable;
 /**
  * Code area component default painter.
  *
- * @version 0.2.0 2018/06/06
+ * @version 0.2.0 2018/06/08
  * @author ExBin Project (http://exbin.org)
  */
 public class DefaultCodeAreaPainter implements CodeAreaPainter {
@@ -79,8 +79,6 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
 
     @Nonnull
     private final TwoDimensionScrollView scrollPanel;
-//    @Nonnull
-//    private final ScrollView scrollPanel2;
     @Nonnull
     private final View dataView;
 
@@ -155,23 +153,68 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
     private boolean monospaceFont;
     private int characterWidth;
 
-    public DefaultCodeAreaPainter(@Nonnull CodeAreaWorker worker) {
+    public DefaultCodeAreaPainter(@Nonnull final CodeAreaWorker worker) {
         this.worker = worker;
         CodeArea codeArea = worker.getCodeArea();
-        scrollPanel = new TwoDimensionScrollView(codeArea.getContext());
-//        scrollPanel2 = new HorizontalScrollView(codeArea.getContext());
-//        scrollPanel.setHorizontalScrollBarEnabled(true);
-//        scrollPanel.setVerticalScrollBarEnabled(true);
+        scrollPanel = new TwoDimensionScrollView(codeArea.getContext()) {
+            @Override
+            protected void onScrollChanged(int horizontal, int vertical, int oldHorizontal, int oldVertical) {
+                super.onScrollChanged(horizontal, vertical, oldHorizontal, oldVertical);
 
-//        RelativeLayout.LayoutParams wrapLayout2 = new RelativeLayout.LayoutParams(
-//                RelativeLayout.LayoutParams.MATCH_PARENT,
-//                RelativeLayout.LayoutParams.WRAP_CONTENT);
-//        scrollPanel.addView(scrollPanel2, wrapLayout2);
-//
+                int horizontalPoints = (int) (scrollPanel.getScrollX() / getScaleX());
+                if (horizontalScrollUnit == HorizontalScrollUnit.CHARACTER) {
+                    scrollPosition.setScrollCharPosition(horizontalPoints);
+                } else {
+                    if (characterWidth == 0) {
+                        scrollPosition.setScrollCharPosition(0);
+                        scrollPosition.setScrollCharOffset(0);
+                    } else if (horizontalScrollUnit == HorizontalScrollUnit.CHARACTER) {
+                        scrollPosition.setScrollCharPosition(horizontalPoints / characterWidth);
+                        scrollPosition.setScrollCharOffset(0);
+                    } else {
+                        scrollPosition.setScrollCharPosition(horizontalPoints / characterWidth);
+                        scrollPosition.setScrollCharOffset(horizontalPoints % characterWidth);
+                    }
+                }
+
+                if (scrollBarVerticalScale == ScrollBarVerticalScale.SCALED) {
+                    // TODO
+                    int maxValue = Integer.MAX_VALUE; // - scrollPanel.getVerticalScrollBar().getVisibleAmount();
+                    long rowsPerDocument = (dataSize / bytesPerRow) - computeRowsPerRectangle() + 1;
+                    long targetRow;
+                    if (vertical > 0 && rowsPerDocument > maxValue / vertical) {
+                        targetRow = vertical * (rowsPerDocument / maxValue);
+                        long rest = rowsPerDocument % maxValue;
+                        targetRow += (rest * vertical) / maxValue;
+                    } else {
+                        targetRow = (vertical * rowsPerDocument) / Integer.MAX_VALUE;
+                    }
+                    scrollPosition.setScrollRowPosition(targetRow);
+                    if (verticalScrollUnit != VerticalScrollUnit.ROW) {
+                        scrollPosition.setScrollRowOffset(0);
+                    }
+                } else {
+                    if (rowHeight == 0) {
+                        scrollPosition.setScrollRowPosition(0);
+                        scrollPosition.setScrollRowOffset(0);
+                    } else if (verticalScrollUnit == VerticalScrollUnit.ROW) {
+                        scrollPosition.setScrollRowPosition(vertical / rowHeight);
+                        scrollPosition.setScrollRowOffset(0);
+                    } else {
+                        scrollPosition.setScrollRowPosition(vertical / rowHeight);
+                        scrollPosition.setScrollRowOffset(vertical % rowHeight);
+                    }
+                }
+
+                ((ScrollingCapable) worker).setScrollPosition(scrollPosition);
+                notifyScrolled();
+                worker.getCodeArea().repaint();
+            }
+        };
         RelativeLayout.LayoutParams wrapLayout = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT);
-        ((ViewGroup) codeArea).addView(scrollPanel, wrapLayout);
+        codeArea.addView(scrollPanel, wrapLayout);
 
         dataView = new View(codeArea.getContext()) {
             @Override
@@ -393,8 +436,8 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
         componentWidth = worker.getCodeArea().getWidth();
         componentHeight = worker.getCodeArea().getHeight();
         rowPositionAreaWidth = characterWidth * (rowPositionLength + 1);
-        dataViewX = rowPositionAreaWidth;
-        dataViewY = headerAreaHeight;
+        dataViewX = 0; //rowPositionAreaWidth;
+        dataViewY = 0; //headerAreaHeight;
         scrollPanelWidth = componentWidth - rowPositionAreaWidth;
         scrollPanelHeight = componentHeight - headerAreaHeight;
         dataViewWidth = scrollPanelWidth - getVerticalScrollBarSize();
@@ -694,8 +737,8 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
         paintCursor(g);
 
         // TODO: Remove later
-        int x = componentWidth - rowPositionAreaWidth - 220;
-        int y = componentHeight - headerAreaHeight - 20;
+        int x = componentWidth - dataViewX - 220;
+        int y = componentHeight - dataViewY - 20;
         fontMetrics.setColor(Color.YELLOW);
         g.drawRect(x, y, x + 200, y + rowHeight, fontMetrics);
         fontMetrics.setColor(Color.BLACK);
@@ -709,7 +752,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
      * @param g graphics
      */
     public void paintBackground(@Nonnull Canvas g) {
-        int rowPositionX = rowPositionAreaWidth;
+        int rowPositionX = dataViewX;
         fontMetrics.setColor(colors.background);
         if (backgroundPaintMode != BasicBackgroundPaintMode.TRANSPARENT) {
             g.drawRect(rowPositionX, headerAreaHeight, rowPositionX + dataViewWidth, headerAreaHeight + dataViewHeight, fontMetrics);
@@ -733,8 +776,8 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
 
     public void paintRows(@Nonnull Canvas g) {
         long dataPosition = scrollPosition.getScrollRowPosition() * bytesPerRow;
-        int rowPositionX = rowPositionAreaWidth - scrollPosition.getScrollCharPosition() * characterWidth - scrollPosition.getScrollCharOffset();
-        int rowPositionY = headerAreaHeight;
+        int rowPositionX = dataViewX - scrollPosition.getScrollCharPosition() * characterWidth - scrollPosition.getScrollCharOffset();
+        int rowPositionY = dataViewY;
         fontMetrics.setColor(colors.foreground);
         for (int row = 0; row <= rowsPerRect; row++) {
             prepareRowData(dataPosition);
@@ -1713,7 +1756,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
 
     @Nonnull
     private Rect getMainAreaRect() {
-        return new Rect(rowPositionAreaWidth, headerAreaHeight, componentWidth - getVerticalScrollBarSize(), componentHeight - getHorizontalScrollBarSize());
+        return new Rect(0, 0, componentWidth - getVerticalScrollBarSize(), componentHeight - getHorizontalScrollBarSize());
     }
 
     private int getHorizontalScrollBarSize() {
