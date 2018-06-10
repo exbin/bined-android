@@ -98,6 +98,8 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
     private int componentHeight;
     private int dataViewX;
     private int dataViewY;
+    private int dataViewOffsetX;
+    private int dataViewOffsetY;
     private int scrollPanelWidth;
     private int scrollPanelHeight;
     private int dataViewWidth;
@@ -161,19 +163,18 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
             protected void onScrollChanged(int horizontal, int vertical, int oldHorizontal, int oldVertical) {
                 super.onScrollChanged(horizontal, vertical, oldHorizontal, oldVertical);
 
-                int horizontalPoints = (int) (scrollPanel.getScrollX() / getScaleX());
                 if (horizontalScrollUnit == HorizontalScrollUnit.CHARACTER) {
-                    scrollPosition.setScrollCharPosition(horizontalPoints);
+                    scrollPosition.setScrollCharPosition(horizontal);
                 } else {
                     if (characterWidth == 0) {
                         scrollPosition.setScrollCharPosition(0);
                         scrollPosition.setScrollCharOffset(0);
                     } else if (horizontalScrollUnit == HorizontalScrollUnit.CHARACTER) {
-                        scrollPosition.setScrollCharPosition(horizontalPoints / characterWidth);
+                        scrollPosition.setScrollCharPosition(horizontal / characterWidth);
                         scrollPosition.setScrollCharOffset(0);
                     } else {
-                        scrollPosition.setScrollCharPosition(horizontalPoints / characterWidth);
-                        scrollPosition.setScrollCharOffset(horizontalPoints % characterWidth);
+                        scrollPosition.setScrollCharPosition(horizontal / characterWidth);
+                        scrollPosition.setScrollCharOffset(horizontal % characterWidth);
                     }
                 }
 
@@ -205,6 +206,9 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
                         scrollPosition.setScrollRowOffset(vertical % rowHeight);
                     }
                 }
+
+                dataViewOffsetX = horizontal;
+                dataViewOffsetY = vertical;
 
                 ((ScrollingCapable) worker).setScrollPosition(scrollPosition);
                 notifyScrolled();
@@ -722,17 +726,17 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
         g.save();
         Rect clipBounds = g.getClipBounds();
         Rect mainArea = getMainAreaRect();
-        g.clipRect(clipBounds != null ? CodeAreaAndroidUtils.computeIntersection(mainArea, clipBounds) : mainArea);
+//        g.clipRect(clipBounds != null ? CodeAreaAndroidUtils.computeIntersection(mainArea, clipBounds) : mainArea);
         paintBackground(g);
 
         fontMetrics.setColor(colors.decorationLine);
         int lineX = dataViewX + previewRelativeX - scrollPosition.getScrollCharPosition() * characterWidth - scrollPosition.getScrollCharOffset() - characterWidth / 2;
         if (lineX >= dataViewX) {
-            g.drawLine(lineX, dataViewY, lineX, dataViewY + dataViewHeight, fontMetrics);
+            g.drawLine(dataViewOffsetX + lineX, dataViewOffsetY + dataViewY, dataViewOffsetX + lineX, dataViewOffsetY + dataViewY + dataViewHeight, fontMetrics);
         }
 
         paintRows(g);
-        g.restore();
+//        g.restore();
 
         paintCursor(g);
 
@@ -740,10 +744,10 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
         int x = componentWidth - dataViewX - 220;
         int y = componentHeight - dataViewY - 20;
         fontMetrics.setColor(Color.YELLOW);
-        g.drawRect(x, y, x + 200, y + rowHeight, fontMetrics);
+        g.drawRect(dataViewOffsetX + x, dataViewOffsetY + y, dataViewOffsetX + x + 200, dataViewOffsetY + y + rowHeight, fontMetrics);
         fontMetrics.setColor(Color.BLACK);
         char[] headerCode = (String.valueOf(scrollPosition.getScrollCharPosition()) + "+" + String.valueOf(scrollPosition.getScrollCharOffset()) + " : " + String.valueOf(scrollPosition.getScrollRowPosition()) + "+" + String.valueOf(scrollPosition.getScrollRowOffset()) + " P: " + String.valueOf(paintCounter)).toCharArray();
-        g.drawText(headerCode, 0, headerCode.length, x, y + rowHeight, fontMetrics);
+        g.drawText(headerCode, 0, headerCode.length, dataViewOffsetX + x, dataViewOffsetY + y + rowHeight, fontMetrics);
     }
 
     /**
@@ -755,7 +759,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
         int rowPositionX = dataViewX;
         fontMetrics.setColor(colors.background);
         if (backgroundPaintMode != BasicBackgroundPaintMode.TRANSPARENT) {
-            g.drawRect(rowPositionX, headerAreaHeight, rowPositionX + dataViewWidth, headerAreaHeight + dataViewHeight, fontMetrics);
+            g.drawRect(dataViewOffsetX + rowPositionX, dataViewOffsetY + headerAreaHeight, dataViewOffsetX + rowPositionX + dataViewWidth, dataViewOffsetY + headerAreaHeight + dataViewHeight, fontMetrics);
         }
 
         if (backgroundPaintMode == BasicBackgroundPaintMode.STRIPED) {
@@ -767,7 +771,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
                     break;
                 }
 
-                g.drawRect(rowPositionX, stripePositionY, rowPositionX + dataViewWidth, stripePositionY + rowHeight, fontMetrics);
+                g.drawRect(dataViewOffsetX + rowPositionX, dataViewOffsetY + stripePositionY, dataViewOffsetX + rowPositionX + dataViewWidth, dataViewOffsetY + stripePositionY + rowHeight, fontMetrics);
                 stripePositionY += rowHeight * 2;
                 dataPosition += bytesPerRow * 2;
             }
@@ -881,7 +885,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
             if (sequenceBreak) {
                 if (renderOffset < charOnRow) {
                     if (renderColor != null) {
-                        renderBackgroundSequence(g, renderOffset, charOnRow, rowPositionX, rowPositionY);
+                        renderBackgroundSequence(g, dataViewOffsetX + renderOffset, dataViewOffsetY + charOnRow, dataViewOffsetX + rowPositionX, dataViewOffsetY + rowPositionY);
                     }
                 }
 
@@ -898,7 +902,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
 
         if (renderOffset < charactersPerRow) {
             if (renderColor != null) {
-                renderBackgroundSequence(g, renderOffset, charactersPerRow, rowPositionX, rowPositionY);
+                renderBackgroundSequence(g, dataViewOffsetX + renderOffset, dataViewOffsetY + charactersPerRow, dataViewOffsetX + rowPositionX, dataViewOffsetY + rowPositionY);
             }
         }
     }
@@ -1088,7 +1092,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
                 }
 
                 if (charOnRow > renderOffset) {
-                    renderCharSequence(g, renderOffset, charOnRow, rowPositionX, positionY);
+                    renderCharSequence(g, renderOffset, charOnRow, dataViewOffsetX + rowPositionX, dataViewOffsetY + positionY);
                 }
 
                 renderColor = color;
@@ -1100,7 +1104,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
                 if (!nativeWidth) {
                     renderOffset = charOnRow + 1;
                     int positionX = rowPositionX + charOnRow * characterWidth + ((characterWidth + 1 - currentCharWidth) >> 1);
-                    drawShiftedChar(g, rowCharacters, charOnRow, characterWidth, positionX, positionY);
+                    drawShiftedChar(g, rowCharacters, charOnRow, characterWidth, dataViewOffsetX + positionX, dataViewOffsetY + positionY);
                 } else {
                     renderOffset = charOnRow;
                 }
@@ -1112,7 +1116,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
                 fontMetrics.setColor(renderColor);
             }
 
-            renderCharSequence(g, renderOffset, charactersPerRow, rowPositionX, positionY);
+            renderCharSequence(g, renderOffset, charactersPerRow, dataViewOffsetX + rowPositionX, dataViewOffsetY + positionY);
         }
     }
 
