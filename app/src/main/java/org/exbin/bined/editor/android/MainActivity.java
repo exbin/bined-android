@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     private static final String EXAMPLE_FILE_PATH = "/org/exbin/bined/android/example/resources/lorem_1.txt";
 
     private CodeArea codeArea;
+    private static ByteArrayEditableData fileData = null;
 
     private boolean storageReadPermissionGranted;
     private boolean storageWritePermissionGranted;
@@ -58,14 +59,18 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
         codeArea = findViewById(R.id.codeArea);
 
-        ByteArrayEditableData basicData = new ByteArrayEditableData();
-        try {
-            basicData.loadFromStream(MainActivity.class.getResourceAsStream(EXAMPLE_FILE_PATH));
-        } catch (IOException ex) {
-            Logger.getLogger(MainActivity.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        if (fileData != null) {
+            codeArea.setContentData(fileData);
+        } else {
+            ByteArrayEditableData basicData = new ByteArrayEditableData();
+            try {
+                basicData.loadFromStream(MainActivity.class.getResourceAsStream(EXAMPLE_FILE_PATH));
+            } catch (IOException ex) {
+                Logger.getLogger(MainActivity.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
-        codeArea.setContentData(basicData);
+            codeArea.setContentData(basicData);
+        }
     }
 
     @Override
@@ -136,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     @Override
     public void onFileSelected(@Nonnull FileDialog dialog, @Nonnull File file) {
         if (dialog instanceof OpenFileDialog) {
-            ByteArrayEditableData fileData = new ByteArrayEditableData();
+            fileData = new ByteArrayEditableData();
             try {
                 FileInputStream fileInputStream = new FileInputStream(file);
                 fileData.loadFromStream(fileInputStream);

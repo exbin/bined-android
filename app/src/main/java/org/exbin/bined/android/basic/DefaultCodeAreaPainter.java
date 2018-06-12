@@ -545,7 +545,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
 
         if (viewMode != CodeAreaViewMode.TEXT_PREVIEW) {
             int charactersPerCodeArea = computeFirstCodeCharacterPos(bytesPerRow);
-            int headerX = dataViewX - scrollPosition.getScrollCharPosition() * characterWidth - scrollPosition.getScrollCharOffset();
+            int headerX = rowPositionAreaWidth - scrollPosition.getScrollCharPosition() * characterWidth - scrollPosition.getScrollCharOffset();
             int headerY = rowHeight - subFontSpace;
 
             int visibleHeaderCharStart = (scrollPosition.getScrollCharPosition() * characterWidth + scrollPosition.getScrollCharOffset()) / characterWidth;
@@ -764,7 +764,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
 
         if (backgroundPaintMode == BasicBackgroundPaintMode.STRIPED) {
             long dataPosition = scrollPosition.getScrollRowPosition() * bytesPerRow;
-            int stripePositionY = headerAreaHeight + (int) ((scrollPosition.getScrollRowPosition() & 1) > 0 ? 0 : rowHeight);
+            int stripePositionY = headerAreaHeight + (int) ((scrollPosition.getScrollRowPosition() & 1) > 0 ? rowHeight : 0);
             fontMetrics.setColor(colors.stripes);
             for (int row = 0; row <= rowsPerRect / 2; row++) {
                 if (dataPosition >= dataSize) {
@@ -1151,11 +1151,18 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
             return;
         }
 
+        Rect scrolledCursorRect = new Rect(cursorRect.left + dataViewOffsetX, cursorRect.top + dataViewOffsetY, cursorRect.right + dataViewOffsetX, cursorRect.bottom + dataViewOffsetY);
+
         g.save();
         Rect clipBounds = g.getClipBounds();
         Rect mainAreaRect = getMainAreaRect();
-        Rect intersection = CodeAreaAndroidUtils.computeIntersection(mainAreaRect, cursorRect);
-        boolean cursorVisible = caret.isCursorVisible() && !intersection.isEmpty();
+        mainAreaRect.left += dataViewOffsetX;
+        mainAreaRect.right += dataViewOffsetX;
+        mainAreaRect.bottom += dataViewOffsetY;
+        mainAreaRect.top += dataViewOffsetY;
+
+        Rect intersection = CodeAreaAndroidUtils.computeIntersection(mainAreaRect, scrolledCursorRect);
+        boolean cursorVisible = caret.isCursorVisible() && intersection != null && !intersection.isEmpty();
 
         if (cursorVisible) {
             g.clipRect(intersection);
@@ -1174,7 +1181,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
                     break;
                 }
                 case NEGATIVE: {
-                    g.drawRect(cursorRect, fontMetrics);
+                    g.drawRect(scrolledCursorRect, fontMetrics);
                     fontMetrics.setColor(colors.negativeCursor);
                     BinaryData codeAreaData = worker.getCodeArea().getContentData();
                     int row = (cursorRect.top + scrollPosition.getScrollRowOffset() - dataViewY) / rowHeight;
@@ -1220,7 +1227,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
 //                        if (characterRenderingMode == CharacterRenderingMode.LINE_AT_ONCE) {
 //                            g.drawChars(previewChars, 0, 1, posX, posY);
 //                        } else {
-                        drawCenteredChar(g, previewChars, 0, characterWidth, posX, posY);
+                        drawCenteredChar(g, previewChars, 0, characterWidth, dataViewOffsetX +posX, dataViewOffsetY +posY);
 //                        }
                     } else {
                         int charPos = (scrolledX - dataViewX) / characterWidth;
@@ -1239,7 +1246,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
 //                        if (characterRenderingMode == CharacterRenderingMode.LINE_AT_ONCE) {
 //                            g.drawChars(lineChars, charsOffset, 1, posX + (charsOffset * characterWidth), posY);
 //                        } else {
-                        drawCenteredChar(g, rowChars, charsOffset, characterWidth, posX + (charsOffset * characterWidth), posY);
+                        drawCenteredChar(g, rowChars, charsOffset, characterWidth, dataViewOffsetX + posX + (charsOffset * characterWidth), dataViewOffsetY +posY);
 //                        }
                     }
                     break;
