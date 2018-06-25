@@ -23,6 +23,7 @@ import javax.annotation.Nullable;
 import org.exbin.bined.CaretPosition;
 import org.exbin.bined.CodeAreaCaret;
 import org.exbin.bined.CodeAreaCaretPosition;
+import org.exbin.bined.CodeAreaUtils;
 import org.exbin.bined.capability.CaretCapable;
 import org.exbin.bined.android.CodeArea;
 
@@ -49,7 +50,7 @@ public class DefaultCodeAreaCaret implements CodeAreaCaret {
     private CursorRenderingMode renderingMode = CursorRenderingMode.NEGATIVE;
 
     public DefaultCodeAreaCaret(@Nonnull CodeArea codeArea) {
-        if (codeArea == null) throw new NullPointerException("Code area cannot be null");
+        CodeAreaUtils.requireNonNull(codeArea);
 
         this.codeArea = codeArea;
         privateSetBlinkRate(DEFAULT_BLINK_RATE);
@@ -167,7 +168,7 @@ public class DefaultCodeAreaCaret implements CodeAreaCaret {
     }
 
     public void setRenderingMode(@Nonnull CursorRenderingMode renderingMode) {
-        if (renderingMode == null) throw new NullPointerException("Cursor rendering mode cannot be null");
+        CodeAreaUtils.requireNonNull(renderingMode);
 
         this.renderingMode = renderingMode;
         notifyCaredChanged();

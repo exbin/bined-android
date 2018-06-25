@@ -54,12 +54,20 @@ public interface CodeAreaWorker {
     /**
      * Rebuilds colors after UIManager change.
      */
-    void rebuildColors();
+    void resetColors();
 
     /**
      * Resets painter state for new painting.
      */
     void reset();
+
+    /**
+     * Requests update of the component layout.
+     *
+     * Notifies worker, that change of parameters will affect layout and it
+     * should be recomputed and updated if necessary.
+     */
+    void updateLayout();
 
     /**
      * Computes position for movement action.

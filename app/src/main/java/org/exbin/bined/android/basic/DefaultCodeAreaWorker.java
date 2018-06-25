@@ -29,6 +29,7 @@ import org.exbin.bined.BasicCodeAreaZone;
 import org.exbin.bined.CaretMovedListener;
 import org.exbin.bined.CaretPosition;
 import org.exbin.bined.CodeAreaCaretPosition;
+import org.exbin.bined.CodeAreaUtils;
 import org.exbin.bined.CodeAreaViewMode;
 import org.exbin.bined.CodeCharactersCase;
 import org.exbin.bined.CodeType;
@@ -60,7 +61,7 @@ import org.exbin.bined.android.capability.ScrollingCapable;
 /**
  * Code area component default worker.
  *
- * @version 0.2.0 2018/05/08
+ * @version 0.2.0 2018/06/24
  * @author ExBin Project (http://exbin.org)
  */
 public class DefaultCodeAreaWorker implements CodeAreaWorker, SelectionCapable, CaretCapable, ScrollingCapable, ViewModeCapable,
@@ -98,6 +99,7 @@ public class DefaultCodeAreaWorker implements CodeAreaWorker, SelectionCapable, 
     private CodeCharactersCase codeCharactersCase = CodeCharactersCase.UPPER;
     private boolean showMirrorCursor = true;
     private boolean lineWrapping = false;
+    private int wrappingBytesGroupSize = 0;
     private int maxBytesPerLine = 16;
 
     @Nonnull
@@ -144,7 +146,7 @@ public class DefaultCodeAreaWorker implements CodeAreaWorker, SelectionCapable, 
     }
 
     public void setPainter(@Nonnull CodeAreaPainter painter) {
-        if (painter == null) throw new NullPointerException("Painter cannot be null");
+        CodeAreaUtils.requireNonNull(painter);
 
         this.painter = painter;
         repaint();
@@ -241,7 +243,7 @@ public class DefaultCodeAreaWorker implements CodeAreaWorker, SelectionCapable, 
     }
 
     @Override
-    public void rebuildColors() {
+    public void resetColors() {
     }
 
     @Nonnull
@@ -430,6 +432,11 @@ public class DefaultCodeAreaWorker implements CodeAreaWorker, SelectionCapable, 
         painter.reset();
     }
 
+    @Override
+    public void updateLayout() {
+        painter.updateLayout();
+    }
+
     private void repaint() {
         codeArea.resetPainter();
         codeArea.repaint();
@@ -448,7 +455,7 @@ public class DefaultCodeAreaWorker implements CodeAreaWorker, SelectionCapable, 
 
     @Override
     public void setSelection(@Nonnull SelectionRange selection) {
-        if (selection == null) throw new NullPointerException("Selection cannot be null");
+        CodeAreaUtils.requireNonNull(selection);
 
         this.selection.setSelection(selection);
         notifySelectionChanged();
@@ -482,7 +489,7 @@ public class DefaultCodeAreaWorker implements CodeAreaWorker, SelectionCapable, 
 
     @Override
     public void setCharset(@Nonnull Charset charset) {
-        if (charset == null) throw new NullPointerException("Charset cannot be null");
+        CodeAreaUtils.requireNonNull(charset);
 
         this.charset = charset;
         painter.reset();
@@ -556,6 +563,18 @@ public class DefaultCodeAreaWorker implements CodeAreaWorker, SelectionCapable, 
     @Override
     public void setLineWrapping(boolean lineWrapping) {
         this.lineWrapping = lineWrapping;
+        updateLayout();
+    }
+
+    @Override
+    public int getWrappingBytesGroupSize() {
+        return wrappingBytesGroupSize;
+    }
+
+    @Override
+    public void setWrappingBytesGroupSize(int wrappingBytesGroupSize) {
+        this.wrappingBytesGroupSize = wrappingBytesGroupSize;
+        updateLayout();
     }
 
     @Override

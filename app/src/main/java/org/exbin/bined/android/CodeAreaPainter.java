@@ -27,8 +27,8 @@ import javax.annotation.Nullable;
 /**
  * Hexadecimal editor painter interface.
  *
- * @version 0.2.0 2018/05/03
  * @author ExBin Project (http://exbin.org)
+ * @version 0.2.0 2018/06/24
  */
 public interface CodeAreaPainter {
 
@@ -71,9 +71,14 @@ public interface CodeAreaPainter {
     void resetFont();
 
     /**
+     * Rebuilds colors after UIManager change.
+     */
+    void resetColors();
+
+    /**
      * Resets painter layout state for new painting.
      */
-    void resetLayout();
+    void updateLayout();
 
     /**
      * Returns type of cursor for given painter relative position.
@@ -110,7 +115,7 @@ public interface CodeAreaPainter {
     /**
      * Returns scroll position so that provided caret position is visible in
      * scrolled area.
-     *
+     * <p>
      * Performs minimal scrolling and tries to preserve current vertical /
      * horizontal scrolling if possible. If given position cannot be fully
      * shown, top left corner is preferred.
@@ -125,7 +130,7 @@ public interface CodeAreaPainter {
     /**
      * Returns scroll position so that provided caret position is visible in the
      * center of the scrolled area.
-     *
+     * <p>
      * Attempts to center as much as possible while preserving scrolling limits.
      *
      * @param caretPosition caret position
@@ -138,7 +143,7 @@ public interface CodeAreaPainter {
     /**
      * Computes position for movement action.
      *
-     * @param position source position
+     * @param position  source position
      * @param direction movement direction
      * @return target position
      */
@@ -149,7 +154,7 @@ public interface CodeAreaPainter {
      * Computes scrolling position for given shift action.
      *
      * @param startPosition start position
-     * @param direction scrolling direction
+     * @param direction     scrolling direction
      * @return target position
      */
     @Nonnull

@@ -255,7 +255,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
     public void reset() {
         resetColors();
         resetFont();
-        resetLayout();
+        updateLayout();
     }
 
     @Override
@@ -264,7 +264,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
     }
 
     @Override
-    public void resetLayout() {
+    public void updateLayout() {
         resetSizes();
 
         viewMode = ((ViewModeCapable) worker).getViewMode();
@@ -375,7 +375,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
         rowHeight = fontSize + subFontSpace;
 
         rowPositionLength = getRowPositionLength();
-        resetLayout();
+        updateLayout();
         resetSizes();
         resetCharPositions();
         initialized = true;
@@ -455,7 +455,8 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
         scrollPanel.layout(rowPositionAreaWidth, headerAreaHeight, rowPositionAreaWidth + dataViewWidth - 20, headerAreaHeight + dataViewHeight - 20);
     }
 
-    private void resetColors() {
+    @Override
+    public void resetColors() {
         CodeArea codeArea = worker.getCodeArea();
 //        colors.foreground = codeArea.getForeground();
 //        if (colors.foreground == null) {

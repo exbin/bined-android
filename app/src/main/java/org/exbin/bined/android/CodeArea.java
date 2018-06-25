@@ -32,6 +32,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.exbin.bined.CodeAreaControl;
+import org.exbin.bined.CodeAreaUtils;
 import org.exbin.bined.DataChangedListener;
 import org.exbin.bined.capability.SelectionCapable;
 import org.exbin.bined.android.basic.DefaultCodeAreaCommandHandler;
@@ -101,7 +102,7 @@ public class CodeArea extends ViewGroup implements CodeAreaControl {
     }
 
     public void setWorker(@Nonnull CodeAreaWorker worker) {
-        if (worker == null) throw new NullPointerException("Worker cannot be null");
+        CodeAreaUtils.requireNonNull(worker);
 
         this.worker = worker;
     }

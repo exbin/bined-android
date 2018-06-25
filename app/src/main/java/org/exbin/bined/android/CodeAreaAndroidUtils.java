@@ -22,10 +22,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Hexadecimal editor component swing utilities.
+ * Hexadecimal editor component android utilities.
  *
- * @version 0.2.0 2018/05/03
  * @author ExBin Project (http://exbin.org)
+ * @version 0.2.0 2018/06/24
  */
 public class CodeAreaAndroidUtils {
 
@@ -66,7 +66,7 @@ public class CodeAreaAndroidUtils {
     }
 
     public static int computeOddColorComponent(int colorComponent) {
-        return colorComponent + (colorComponent > 64 ? - 16 : 16);
+        return colorComponent + (colorComponent > 64 ? -16 : 16);
     }
 
     @Nonnull
