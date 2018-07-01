@@ -15,6 +15,7 @@
  */
 package org.exbin.bined.android;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -125,8 +126,14 @@ public class CodeArea extends ViewGroup implements CodeAreaControl {
     }
 
     public void repaint() {
-        invalidate();
-        primaryView.invalidate();
+        Activity activity = (Activity) getContext();
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                invalidate();
+                primaryView.invalidate();
+            }
+        });
     }
 
     @Override

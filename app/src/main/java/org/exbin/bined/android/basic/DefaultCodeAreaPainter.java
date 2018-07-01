@@ -67,7 +67,7 @@ import javax.annotation.Nullable;
 /**
  * Code area component default painter.
  *
- * @version 0.2.0 2018/06/08
+ * @version 0.2.0 2018/06/30
  * @author ExBin Project (http://exbin.org)
  */
 public class DefaultCodeAreaPainter implements CodeAreaPainter {
@@ -76,11 +76,12 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
     protected final CodeAreaWorker worker;
     private boolean initialized = false;
     private boolean fontChanged = false;
+    private volatile ScrollingState scrollingState = ScrollingState.NO_SCROLLING;
 
     @Nonnull
-    private final TwoDimensionScrollView scrollPanel;
-    @Nonnull
     private final View dataView;
+    @Nonnull
+    private final TwoDimensionScrollView scrollPanel;
 
     private CodeAreaViewMode viewMode;
     private final CodeAreaCaretPosition caretPosition = new CodeAreaCaretPosition();
@@ -89,7 +90,9 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
     @Nonnull
     private ScrollBarVerticalScale scrollBarVerticalScale = ScrollBarVerticalScale.NORMAL;
 
+    @Nullable
     private VerticalScrollUnit verticalScrollUnit;
+    @Nullable
     private HorizontalScrollUnit horizontalScrollUnit;
     private final Colors colors = new Colors();
     private long dataSize;
@@ -111,13 +114,18 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
     private int rowHeight;
     private int rowsPerPage;
     private int rowsPerRect;
+    private long rowsPerDocument;
     private int bytesPerRow;
     private int charactersPerPage;
     private int charactersPerRect;
     private int charactersPerRow;
+    @Nullable
     private CodeType codeType;
+    @Nullable
     private CodeCharactersCase hexCharactersCase;
+    @Nullable
     private EditationMode editationMode;
+    @Nullable
     private BasicBackgroundPaintMode backgroundPaintMode;
     private boolean showMirrorCursor;
 
@@ -723,6 +731,8 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
             resetFontMetrics();
             fontChanged = false;
         }
+        if (scrollingState == ScrollingState.SCROLLING_BY_SCROLLBAR)
+            return;
 
         g.save();
         Rect clipBounds = g.getClipBounds();
@@ -742,10 +752,10 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
         paintCursor(g);
 
         // TODO: Remove later
-        int x = componentWidth - dataViewX - 220;
-        int y = componentHeight - dataViewY - 20;
+        int x = componentWidth - dataViewX - 500;
+        int y = componentHeight - dataViewY - 200;
         fontMetrics.setColor(Color.YELLOW);
-        g.drawRect(dataViewOffsetX + x, dataViewOffsetY + y, dataViewOffsetX + x + 200, dataViewOffsetY + y + rowHeight, fontMetrics);
+        g.drawRect(dataViewOffsetX + x, dataViewOffsetY + y, dataViewOffsetX + x + 400, dataViewOffsetY + y + rowHeight, fontMetrics);
         fontMetrics.setColor(Color.BLACK);
         char[] headerCode = (String.valueOf(scrollPosition.getScrollCharPosition()) + "+" + String.valueOf(scrollPosition.getScrollCharOffset()) + " : " + String.valueOf(scrollPosition.getScrollRowPosition()) + "+" + String.valueOf(scrollPosition.getScrollRowOffset()) + " P: " + String.valueOf(paintCounter)).toCharArray();
         g.drawText(headerCode, 0, headerCode.length, dataViewOffsetX + x, dataViewOffsetY + y + rowHeight, fontMetrics);
@@ -1904,5 +1914,11 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
          * Height is more than available range and scaled.
          */
         SCALED
+    }
+
+    protected enum ScrollingState {
+        NO_SCROLLING,
+        SCROLLING_BY_SCROLLBAR,
+        SCROLLING_BY_MOVEMENT
     }
 }

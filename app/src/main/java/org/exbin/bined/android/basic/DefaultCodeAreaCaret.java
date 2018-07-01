@@ -15,6 +15,8 @@
  */
 package org.exbin.bined.android.basic;
 
+import android.app.Activity;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
