@@ -13,21 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.bined.android.basic;
+package org.exbin.bined.android.capability;
+
+import javax.annotation.Nonnull;
+import org.exbin.bined.capability.CodeAreaCapability;
+import org.exbin.bined.android.basic.BasicCodeAreaColors;
 
 /**
- * Enumeration of horizontal scrolling unit sizes.
+ * Support for basic set of colors.
  *
- * @version 0.2.0 2017/10/31
- * @author ExBin Project (http://exbin.org)
+ * @version 0.2.0 2018/09/06
+ * @author ExBin Project (https://exbin.org)
  */
-public enum HorizontalScrollUnit {
-    /**
-     * Scroll per whole character.
-     */
-    CHARACTER,
-    /**
-     * Scroll per pixel.
-     */
-    PIXEL
+public interface BasicColorsCapable {
+
+    @Nonnull
+    BasicCodeAreaColors getBasicColors();
+
+    void setBasicColors(@Nonnull BasicCodeAreaColors colors);
+
+    public static class BasicColorsCapability implements CodeAreaCapability {
+
+    }
 }

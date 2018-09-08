@@ -16,13 +16,14 @@
 package org.exbin.bined.android.capability;
 
 import javax.annotation.Nonnull;
-import org.exbin.bined.capability.WorkerCapability;
-import org.exbin.bined.android.basic.BasicBackgroundPaintMode;
+
+import org.exbin.bined.basic.BasicBackgroundPaintMode;
+import org.exbin.bined.capability.CodeAreaCapability;
 
 /**
  * Support for background paint mode capability.
  *
- * @version 0.2.0 2018/03/18
+ * @version 0.2.0 2018/09/07
  * @author ExBin Project (http://exbin.org)
  */
 public interface BackgroundPaintCapable {
@@ -32,7 +33,7 @@ public interface BackgroundPaintCapable {
 
     void setBackgroundPaintMode(@Nonnull BasicBackgroundPaintMode borderPaintMode);
 
-    public static class BackgroundPaintCapability implements WorkerCapability {
+    public static class BackgroundPaintCapability implements CodeAreaCapability {
 
     }
 }

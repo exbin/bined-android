@@ -19,7 +19,12 @@ import android.graphics.Canvas;
 
 import org.exbin.bined.BasicCodeAreaZone;
 import org.exbin.bined.CaretPosition;
-import org.exbin.bined.android.basic.CodeAreaScrollPosition;
+import org.exbin.bined.PositionOverflowMode;
+import org.exbin.bined.android.basic.BasicCodeAreaColors;
+import org.exbin.bined.basic.CodeAreaScrollPosition;
+import org.exbin.bined.basic.MovementDirection;
+import org.exbin.bined.basic.PositionScrollVisibility;
+import org.exbin.bined.basic.ScrollingDirection;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -28,7 +33,7 @@ import javax.annotation.Nullable;
  * Hexadecimal editor painter interface.
  *
  * @author ExBin Project (http://exbin.org)
- * @version 0.2.0 2018/06/24
+ * @version 0.2.0 2018/09/08
  */
 public interface CodeAreaPainter {
 
@@ -105,12 +110,16 @@ public interface CodeAreaPainter {
      *
      * @param positionX component relative position X
      * @param positionY component relative position Y
+     * @param overflowMode overflow mode
      * @return closest caret position
      */
     @Nonnull
-    CaretPosition mousePositionToClosestCaretPosition(int positionX, int positionY);
+    CaretPosition mousePositionToClosestCaretPosition(int positionX, int positionY, @Nonnull PositionOverflowMode overflowMode);
 
     void updateScrollBars();
+
+    @Nonnull
+    PositionScrollVisibility computePositionScrollVisibility(@Nonnull CaretPosition caretPosition);
 
     /**
      * Returns scroll position so that provided caret position is visible in
@@ -159,4 +168,9 @@ public interface CodeAreaPainter {
      */
     @Nonnull
     CodeAreaScrollPosition computeScrolling(@Nonnull CodeAreaScrollPosition startPosition, @Nonnull ScrollingDirection direction);
+
+    @Nonnull
+    BasicCodeAreaColors getBasicColors();
+
+    void setBasicColors(@Nonnull BasicCodeAreaColors colors);
 }

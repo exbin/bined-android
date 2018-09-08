@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
 /**
  * Interface for code area data manipulation.
  *
- * @version 0.2.0 2018/05/03
+ * @version 0.2.0 2018/09/08
  * @author ExBin Project (http://exbin.org)
  */
 public interface CodeAreaCommandHandler {
@@ -124,9 +124,13 @@ public interface CodeAreaCommandHandler {
         HORIZONTAL, VERTICAL
     }
 
+    enum SelectingMode {
+        NONE, SELECTING
+    }
+
     interface CodeAreaCommandHandlerFactory {
 
         @Nonnull
-        CodeAreaCommandHandler createCommandHandler(@Nonnull CodeArea codeArea);
+        CodeAreaCommandHandler createCommandHandler(@Nonnull CodeAreaCore codeArea);
     }
 }

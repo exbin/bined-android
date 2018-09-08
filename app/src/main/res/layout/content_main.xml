@@ -8,7 +8,7 @@
     tools:context=".MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <org.exbin.bined.android.CodeArea
+    <org.exbin.bined.android.basic.CodeArea
         android:id="@+id/codeArea"
         android:layout_width="0dp"
         android:layout_height="0dp"

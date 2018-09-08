@@ -15,24 +15,22 @@
  */
 package org.exbin.bined.android.basic;
 
-import android.app.Activity;
+import org.exbin.bined.CaretPosition;
+import org.exbin.bined.CodeAreaCaret;
+import org.exbin.bined.CodeAreaCaretPosition;
+import org.exbin.bined.CodeAreaUtils;
+import org.exbin.bined.capability.CaretCapable;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import org.exbin.bined.CaretPosition;
-import org.exbin.bined.CodeAreaCaret;
-import org.exbin.bined.CodeAreaCaretPosition;
-import org.exbin.bined.CodeAreaUtils;
-import org.exbin.bined.capability.CaretCapable;
-import org.exbin.bined.android.CodeArea;
 
 /**
  * Default implementation of code area caret.
  *
- * @version 0.2.0 2018/05/09
+ * @version 0.2.0 2018/09/07
  * @author ExBin Project (http://exbin.org)
  */
 public class DefaultCodeAreaCaret implements CodeAreaCaret {
@@ -91,7 +89,7 @@ public class DefaultCodeAreaCaret implements CodeAreaCaret {
 
     private void notifyCaredChanged() {
         // TODO limit to cursor repaint
-        ((CaretCapable) codeArea.getWorker()).notifyCaretChanged();
+        ((CaretCapable) codeArea).notifyCaretChanged();
     }
 
     @Override

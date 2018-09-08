@@ -18,7 +18,6 @@ package org.exbin.bined.android;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
@@ -27,36 +26,33 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import org.exbin.bined.CodeAreaControl;
+import org.exbin.bined.DataChangedListener;
+import org.exbin.bined.android.basic.DefaultCodeAreaCommandHandler;
+import org.exbin.bined.capability.ScrollingCapable;
+import org.exbin.bined.capability.SelectionCapable;
+import org.exbin.utils.binary_data.BinaryData;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import org.exbin.bined.CodeAreaControl;
-import org.exbin.bined.CodeAreaUtils;
-import org.exbin.bined.DataChangedListener;
-import org.exbin.bined.capability.SelectionCapable;
-import org.exbin.bined.android.basic.DefaultCodeAreaCommandHandler;
-import org.exbin.bined.android.basic.DefaultCodeAreaWorker;
-import org.exbin.bined.android.capability.FontCapable;
-import org.exbin.utils.binary_data.BinaryData;
 
 /**
  * Hexadecimal viewer/editor component.
  *
- * @version 0.2.0 2018/05/08
- * @author ExBin Project (http://exbin.org)
+ * @version 0.2.0 2018/09/08
+ * @author ExBin Project (https://exbin.org)
  */
-public class CodeArea extends ViewGroup implements CodeAreaControl {
+public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl {
 
     @Nullable
     private BinaryData contentData;
 
     @Nonnull
-    private final PrimaryView primaryView;
+    protected final PrimaryView primaryView;
 
-    @Nonnull
-    private CodeAreaWorker worker;
     @Nonnull
     private CodeAreaCommandHandler commandHandler;
 
@@ -65,20 +61,17 @@ public class CodeArea extends ViewGroup implements CodeAreaControl {
     /**
      * Creates new instance with default command handler and painter.
      */
-    public CodeArea(Context context, AttributeSet attrs) {
-        this(context, attrs, null, null);
+    public CodeAreaCore(@Nonnull Context context, AttributeSet attrs) {
+        this(context, attrs, null);
     }
 
     /**
-     * Creates new instance with provided command handler and worker factory
-     * methods.
+     * Creates new instance with provided command handler factory method.
      *
-     * @param workerFactory code area worker or null for default worker
      * @param commandHandlerFactory command handler or null for default handler
      */
-    public CodeArea(Context context, AttributeSet attrs, @Nullable CodeAreaWorker.CodeAreaWorkerFactory workerFactory, @Nullable CodeAreaCommandHandler.CodeAreaCommandHandlerFactory commandHandlerFactory) {
+    public CodeAreaCore(@Nonnull Context context, AttributeSet attrs, @Nullable CodeAreaCommandHandler.CodeAreaCommandHandlerFactory commandHandlerFactory) {
         super(context, attrs);
-        this.worker = workerFactory == null ? new DefaultCodeAreaWorker(this) : workerFactory.createWorker(this);
         this.commandHandler = commandHandlerFactory == null ? new DefaultCodeAreaCommandHandler(context, this) : commandHandlerFactory.createCommandHandler(this);
         init();
 
@@ -98,42 +91,12 @@ public class CodeArea extends ViewGroup implements CodeAreaControl {
     }
 
     @Nonnull
-    public CodeAreaWorker getWorker() {
-        return worker;
-    }
-
-    public void setWorker(@Nonnull CodeAreaWorker worker) {
-        CodeAreaUtils.requireNonNull(worker);
-
-        this.worker = worker;
-    }
-
-    @Nonnull
     public CodeAreaCommandHandler getCommandHandler() {
         return commandHandler;
     }
 
     public void setCommandHandler(@Nonnull CodeAreaCommandHandler commandHandler) {
         this.commandHandler = commandHandler;
-    }
-
-    @Override
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        if (changed) {
-            primaryView.layout(left, top, right, bottom);
-            worker.reset();
-        }
-    }
-
-    public void repaint() {
-        Activity activity = (Activity) getContext();
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                invalidate();
-                primaryView.invalidate();
-            }
-        });
     }
 
     @Override
@@ -183,10 +146,15 @@ public class CodeArea extends ViewGroup implements CodeAreaControl {
 
     @Override
     public boolean hasSelection() {
-        return ((SelectionCapable) worker).hasSelection();
+        if (this instanceof SelectionCapable) {
+            return ((SelectionCapable) this).hasSelection();
+        }
+
+        return false;
     }
 
     @Nullable
+    @Override
     public BinaryData getContentData() {
         return contentData;
     }
@@ -197,6 +165,7 @@ public class CodeArea extends ViewGroup implements CodeAreaControl {
         repaint();
     }
 
+    @Override
     public long getDataSize() {
         return contentData == null ? 0 : contentData.getDataSize();
     }
@@ -220,41 +189,60 @@ public class CodeArea extends ViewGroup implements CodeAreaControl {
         dataChangedListeners.remove(dataChangedListener);
     }
 
-    public void resetPainter() {
-        worker.reset();
+    @Override
+    protected void onDraw(@Nullable Canvas g) {
+        super.onDraw(g);
     }
 
+    public void repaint() {
+        Activity activity = (Activity) getContext();
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                invalidate();
+                primaryView.invalidate();
+            }
+        });
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        if (changed) {
+            primaryView.layout(left, top, right, bottom);
+            resetPainter();
+        }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        commandHandler.moveCaret((int) event.getX(), (int) event.getY(), false);
+        ((ScrollingCapable) this).revealCursor();
+
+        return true;
+    }
+
+    public abstract void resetPainter();
+
+    public abstract void updateLayout();
+
     private class PrimaryView extends View {
+
         /**
          * Creates new instance with default command handler and painter.
          */
         public PrimaryView(Context context, AttributeSet attrs) {
-            this(context, attrs, null, null);
+            this(context, attrs, null);
         }
 
         /**
-         * Creates new instance with provided command handler and worker factory
+         * Creates new instance with provided command handler and codeArea factory
          * methods.
          *
-         * @param workerFactory code area worker or null for default worker
          * @param commandHandlerFactory command handler or null for default handler
          */
-        public PrimaryView(Context context, AttributeSet attrs, @Nullable CodeAreaWorker.CodeAreaWorkerFactory workerFactory, @Nullable CodeAreaCommandHandler.CodeAreaCommandHandlerFactory commandHandlerFactory) {
+        public PrimaryView(Context context, AttributeSet attrs, @Nullable CodeAreaCommandHandler.CodeAreaCommandHandlerFactory commandHandlerFactory) {
             super(context, attrs);
             setFocusable(true);
-        }
-
-        @Override
-        protected void onDraw(@Nullable Canvas g) {
-            super.onDraw(g);
-            if (g == null) {
-                return;
-            }
-
-            if (!worker.isInitialized()) {
-                ((FontCapable) worker).setFont(Font.fromPaint(new Paint()));
-            }
-            worker.paintComponent(g);
         }
 
         @Override
@@ -289,7 +277,7 @@ public class CodeArea extends ViewGroup implements CodeAreaControl {
 
         @Override
         public boolean onTouchEvent(MotionEvent event) {
-            worker.onTouchEvent(event);
+            CodeAreaCore.this.onTouchEvent(event);
             return false;
         }
     }
