@@ -41,6 +41,7 @@ import org.exbin.bined.android.CodeAreaCommandHandler;
 import org.exbin.bined.android.CodeAreaCore;
 import org.exbin.bined.android.CodeAreaPainter;
 import org.exbin.bined.android.Font;
+import org.exbin.bined.android.capability.FontCapable;
 import org.exbin.bined.basic.BasicBackgroundPaintMode;
 import org.exbin.bined.basic.CodeAreaScrollPosition;
 import org.exbin.bined.basic.HorizontalScrollUnit;
@@ -149,6 +150,14 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
 
         this.painter = painter;
         repaint();
+    }
+
+    @Override
+    public void paintView(@Nonnull Canvas g) {
+        if (!isInitialized()) {
+            ((FontCapable) this).setCodeFont(Font.fromPaint(new Paint()));
+        }
+        paintComponent(g);
     }
 
     @Override

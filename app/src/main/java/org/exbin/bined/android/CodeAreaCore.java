@@ -189,11 +189,6 @@ public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl 
         dataChangedListeners.remove(dataChangedListener);
     }
 
-    @Override
-    protected void onDraw(@Nullable Canvas g) {
-        super.onDraw(g);
-    }
-
     public void repaint() {
         Activity activity = (Activity) getContext();
         activity.runOnUiThread(new Runnable() {
@@ -225,6 +220,8 @@ public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl 
 
     public abstract void updateLayout();
 
+    public abstract void paintView(@Nonnull Canvas g);
+
     private class PrimaryView extends View {
 
         /**
@@ -243,6 +240,16 @@ public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl 
         public PrimaryView(Context context, AttributeSet attrs, @Nullable CodeAreaCommandHandler.CodeAreaCommandHandlerFactory commandHandlerFactory) {
             super(context, attrs);
             setFocusable(true);
+        }
+
+        @Override
+        protected void onDraw(@Nullable Canvas g) {
+            super.onDraw(g);
+            if (g == null) {
+                return;
+            }
+
+            paintView(g);
         }
 
         @Override

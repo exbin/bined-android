@@ -90,8 +90,10 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
     @Nonnull
     private final TwoDimensionScrollView scrollPanel;
 
-    int dataViewOffsetX = 0;
-    int dataViewOffsetY = 0;
+    private int dataViewOffsetX = 0;
+    private int dataViewOffsetY = 0;
+    private int scrollOffsetX = 0;
+    private int scrollOffsetY = 0;
 
     @Nonnull
     private final BasicCodeAreaMetrics metrics = new BasicCodeAreaMetrics();
@@ -149,8 +151,10 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
                 long rowsPerDocumentToLastPage = structure.getRowsPerDocument() - dimensions.getRowsPerRect();
                 scrolling.updateVerticalScrollBarValue(vertical, metrics.getRowHeight(), maxValue, rowsPerDocumentToLastPage);
 
-                dataViewOffsetX = horizontal;
-                dataViewOffsetY = vertical;
+                scrollOffsetX = horizontal;
+                scrollOffsetY = vertical;
+                dataViewOffsetX = scrollOffsetX - dimensions.getDataViewX();
+                dataViewOffsetY = scrollOffsetY - dimensions.getDataViewY();
 
                 ((ScrollingCapable) codeArea).setScrollPosition(scrolling.getScrollPosition());
                 notifyScrolled();
@@ -217,11 +221,14 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
         int verticalScrollBarSize = getVerticalScrollBarSize();
         int horizontalScrollBarSize = getHorizontalScrollBarSize();
         dimensions.recomputeSizes(metrics, codeArea.getWidth(), codeArea.getHeight(), rowPositionLength, verticalScrollBarSize, horizontalScrollBarSize);
+        dataViewOffsetX = scrollOffsetX - dimensions.getDataViewX();
+        dataViewOffsetY = scrollOffsetY - dimensions.getDataViewY();
+
         scrollPanel.layout(
                 dimensions.getRowPositionAreaWidth(),
                 dimensions.getHeaderAreaHeight(),
-                dimensions.getRowPositionAreaWidth() + dimensions.getDataViewWidth() - 20,
-                dimensions.getHeaderAreaHeight() + dimensions.getDataViewHeight() - 20);
+                dimensions.getRowPositionAreaWidth() + dimensions.getDataViewWidth(),
+                dimensions.getHeaderAreaHeight() + dimensions.getDataViewHeight());
         int charactersPerPage = dimensions.getCharactersPerPage();
 
         structure.updateCache(codeArea, charactersPerPage);
@@ -274,6 +281,9 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
         int verticalScrollBarSize = getVerticalScrollBarSize();
         int horizontalScrollBarSize = getHorizontalScrollBarSize();
         dimensions.recomputeSizes(metrics, codeArea.getWidth(), codeArea.getHeight(), rowPositionLength, verticalScrollBarSize, horizontalScrollBarSize);
+        dataViewOffsetX = scrollOffsetX - dimensions.getDataViewX();
+        dataViewOffsetY = scrollOffsetY - dimensions.getDataViewY();
+
         resetCharPositions();
         initialized = true;
     }
@@ -302,6 +312,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
         if (rowHeight > 0 && characterWidth > 0) {
             int documentDataWidth = structure.getCharactersPerRow() * characterWidth;
             long rowsPerData = (structure.getDataSize() / structure.getBytesPerRow()) + 1;
+            scrolling.updateCache(codeArea);
 
             int documentDataHeight;
             if (rowsPerData > Integer.MAX_VALUE / rowHeight) {
@@ -388,6 +399,9 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
         if (!initialized) {
             reset();
         }
+
+        updateCache();
+
         if (font == null) {
             fontChanged();
             fontChanged = false;
@@ -552,7 +566,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
         CodeAreaScrollPosition scrollPosition = scrolling.getScrollPosition();
         if (backgroundPaintMode == BasicBackgroundPaintMode.STRIPED) {
             long dataPosition = scrollPosition.getRowPosition() * bytesPerRow;
-            int stripePositionY = headerAreaHeight + ((scrollPosition.getRowPosition() & 1) > 0 ? 0 : rowHeight);
+            int stripePositionY = headerAreaHeight - scrollPosition.getRowOffset() + ((scrollPosition.getRowPosition() & 1) > 0 ? 0 : rowHeight);
             paint.setColor(colors.getStripes());
             for (int row = 0; row <= rowsPerRect / 2; row++) {
                 if (dataPosition >= dataSize) {
@@ -626,7 +640,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
         }
 
         paintRows(g);
-//        g.restore();
+        g.restore();
 
         paintCursor(g);
 
@@ -664,7 +678,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
 
         if (backgroundPaintMode == BasicBackgroundPaintMode.STRIPED) {
             long dataPosition = scrollPosition.getRowPosition() * bytesPerRow;
-            int stripePositionY = headerAreaHeight + (int) ((scrollPosition.getRowPosition() & 1) > 0 ? rowHeight : 0);
+            int stripePositionY = headerAreaHeight - scrollPosition.getRowOffset() + (int) ((scrollPosition.getRowPosition() & 1) > 0 ? 0 : rowHeight);
             paint.setColor(colors.getStripes());
             for (int row = 0; row <= rowsPerRect / 2; row++) {
                 if (dataPosition >= dataSize) {
@@ -688,7 +702,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter {
         CodeAreaScrollPosition scrollPosition = scrolling.getScrollPosition();
         long dataPosition = scrollPosition.getRowPosition() * bytesPerRow;
         int rowPositionX = dataViewX - scrollPosition.getCharPosition() * characterWidth - scrollPosition.getCharOffset();
-        int rowPositionY = dataViewY;
+        int rowPositionY = dataViewY - scrollPosition.getRowOffset();
         paint.setColor(colors.getForeground());
         for (int row = 0; row <= rowsPerRect; row++) {
             prepareRowData(dataPosition);

@@ -84,23 +84,23 @@ public class BasicCodeAreaDimensions {
         boolean availableHeight = dataViewY + horizontalScrollBarSize <= componentHeight;
 
         if (availableWidth && availableHeight) {
-            mainAreaRect.set(rowPositionAreaWidth, dataViewY, componentWidth - rowPositionAreaWidth - getVerticalScrollBarSize(), componentHeight - dataViewY - getHorizontalScrollBarSize());
+            modifyRect(mainAreaRect, rowPositionAreaWidth, dataViewY, componentWidth - rowPositionAreaWidth - getVerticalScrollBarSize(), componentHeight - dataViewY - getHorizontalScrollBarSize());
         } else {
-            mainAreaRect.set(0, 0, 0, 0);
+            mainAreaRect.setEmpty();
         }
         if (availableWidth) {
-            headerAreaRect.set(rowPositionAreaWidth, 0, componentWidth - rowPositionAreaWidth - getVerticalScrollBarSize(), headerAreaHeight);
+            modifyRect(headerAreaRect, rowPositionAreaWidth, 0, componentWidth - rowPositionAreaWidth - getVerticalScrollBarSize(), headerAreaHeight);
         } else {
-            headerAreaRect.set(0, 0, 0, 0);
+            headerAreaRect.setEmpty();
         }
         if (availableHeight) {
-            rowPositionAreaRect.set(0, dataViewY, rowPositionAreaWidth, componentHeight - dataViewY - getHorizontalScrollBarSize());
+            modifyRect(rowPositionAreaRect, 0, dataViewY, rowPositionAreaWidth, componentHeight - dataViewY - getHorizontalScrollBarSize());
         } else {
-            rowPositionAreaRect.set(0, 0, 0, 0);
+            rowPositionAreaRect.setEmpty();
         }
 
-        scrollPanelRect.set(dataViewX, dataViewY, scrollPanelWidth, scrollPanelHeight);
-        dataViewRect.set(dataViewX, dataViewY, dataViewWidth >= 0 ? dataViewWidth : 0, dataViewHeight >= 0 ? dataViewHeight : 0);
+        modifyRect(scrollPanelRect, dataViewX, dataViewY, scrollPanelWidth, scrollPanelHeight);
+        modifyRect(dataViewRect, dataViewX, dataViewY, dataViewWidth >= 0 ? dataViewWidth : 0, dataViewHeight >= 0 ? dataViewHeight : 0);
     }
 
     public BasicCodeAreaZone getPositionZone(int positionX, int positionY) {
@@ -246,5 +246,9 @@ public class BasicCodeAreaDimensions {
     private int computeRowsPerPage(@Nonnull BasicCodeAreaMetrics metrics) {
         int rowHeight = metrics.getRowHeight();
         return rowHeight == 0 ? 0 : dataViewHeight / rowHeight;
+    }
+
+    private static void modifyRect(@Nonnull Rect rect, int x, int y, int width, int height) {
+        rect.set(x, y, x + width, y + height);
     }
 }
