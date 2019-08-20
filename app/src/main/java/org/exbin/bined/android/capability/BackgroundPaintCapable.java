@@ -15,10 +15,9 @@
  */
 package org.exbin.bined.android.capability;
 
-import javax.annotation.Nonnull;
-
 import org.exbin.bined.basic.BasicBackgroundPaintMode;
-import org.exbin.bined.capability.CodeAreaCapability;
+
+import javax.annotation.Nonnull;
 
 /**
  * Support for background paint mode capability.
@@ -32,8 +31,4 @@ public interface BackgroundPaintCapable {
     BasicBackgroundPaintMode getBackgroundPaintMode();
 
     void setBackgroundPaintMode(@Nonnull BasicBackgroundPaintMode borderPaintMode);
-
-    public static class BackgroundPaintCapability implements CodeAreaCapability {
-
-    }
 }

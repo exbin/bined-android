@@ -38,13 +38,15 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Hexadecimal viewer/editor component.
  *
- * @version 0.2.0 2018/09/08
+ * @version 0.2.0 2018/12/24
  * @author ExBin Project (https://exbin.org)
  */
+@ParametersAreNonnullByDefault
 public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl {
 
     @Nullable
@@ -61,7 +63,7 @@ public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl 
     /**
      * Creates new instance with default command handler and painter.
      */
-    public CodeAreaCore(@Nonnull Context context, AttributeSet attrs) {
+    public CodeAreaCore(Context context, AttributeSet attrs) {
         this(context, attrs, null);
     }
 
@@ -70,7 +72,7 @@ public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl 
      *
      * @param commandHandlerFactory command handler or null for default handler
      */
-    public CodeAreaCore(@Nonnull Context context, AttributeSet attrs, @Nullable CodeAreaCommandHandler.CodeAreaCommandHandlerFactory commandHandlerFactory) {
+    public CodeAreaCore(Context context, AttributeSet attrs, @Nullable CodeAreaCommandHandler.CodeAreaCommandHandlerFactory commandHandlerFactory) {
         super(context, attrs);
         this.commandHandler = commandHandlerFactory == null ? new DefaultCodeAreaCommandHandler(context, this) : commandHandlerFactory.createCommandHandler(this);
         init();
@@ -181,11 +183,11 @@ public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl 
         }
     }
 
-    public void addDataChangedListener(@Nonnull DataChangedListener dataChangedListener) {
+    public void addDataChangedListener(DataChangedListener dataChangedListener) {
         dataChangedListeners.add(dataChangedListener);
     }
 
-    public void removeDataChangedListener(@Nonnull DataChangedListener dataChangedListener) {
+    public void removeDataChangedListener(DataChangedListener dataChangedListener) {
         dataChangedListeners.remove(dataChangedListener);
     }
 
@@ -210,7 +212,7 @@ public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl 
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        commandHandler.moveCaret((int) event.getX(), (int) event.getY(), false);
+        commandHandler.moveCaret((int) event.getX(), (int) event.getY(), CodeAreaCommandHandler.SelectingMode.NONE);
         ((ScrollingCapable) this).revealCursor();
 
         return true;
@@ -220,7 +222,7 @@ public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl 
 
     public abstract void updateLayout();
 
-    public abstract void paintView(@Nonnull Canvas g);
+    public abstract void paintView(Canvas g);
 
     private class PrimaryView extends View {
 

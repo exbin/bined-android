@@ -15,10 +15,12 @@
  */
 package org.exbin.bined.android.basic;
 
-import org.exbin.bined.CaretPosition;
+import org.exbin.bined.BasicCodeAreaSection;
 import org.exbin.bined.CodeAreaCaret;
 import org.exbin.bined.CodeAreaCaretPosition;
+import org.exbin.bined.CodeAreaSection;
 import org.exbin.bined.CodeAreaUtils;
+import org.exbin.bined.DefaultCodeAreaCaretPosition;
 import org.exbin.bined.capability.CaretCapable;
 
 import java.util.Timer;
@@ -26,6 +28,7 @@ import java.util.TimerTask;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Default implementation of code area caret.
@@ -33,6 +36,7 @@ import javax.annotation.Nullable;
  * @version 0.2.0 2018/09/07
  * @author ExBin Project (http://exbin.org)
  */
+@ParametersAreNonnullByDefault
 public class DefaultCodeAreaCaret implements CodeAreaCaret {
 
     private static final int DOUBLE_CURSOR_WIDTH = 2;
@@ -40,7 +44,7 @@ public class DefaultCodeAreaCaret implements CodeAreaCaret {
 
     @Nonnull
     private final CodeArea codeArea;
-    private final CodeAreaCaretPosition caretPosition = new CodeAreaCaretPosition();
+    private final DefaultCodeAreaCaretPosition caretPosition = new DefaultCodeAreaCaretPosition();
 
     private int blinkRate = 0;
     private Timer blinkTimer = null;
@@ -49,14 +53,14 @@ public class DefaultCodeAreaCaret implements CodeAreaCaret {
     @Nonnull
     private CursorRenderingMode renderingMode = CursorRenderingMode.NEGATIVE;
 
-    public DefaultCodeAreaCaret(@Nonnull CodeArea codeArea) {
+    public DefaultCodeAreaCaret(CodeArea codeArea) {
         CodeAreaUtils.requireNonNull(codeArea);
 
         this.codeArea = codeArea;
         privateSetBlinkRate(DEFAULT_BLINK_RATE);
     }
 
-    public static int getCursorThickness(@Nonnull CursorShape cursorShape, int characterWidth, int lineHeight) {
+    public static int getCursorThickness(CursorShape cursorShape, int characterWidth, int lineHeight) {
         switch (cursorShape) {
             case INSERT:
                 return DOUBLE_CURSOR_WIDTH;
@@ -70,7 +74,7 @@ public class DefaultCodeAreaCaret implements CodeAreaCaret {
 
     @Nonnull
     @Override
-    public CaretPosition getCaretPosition() {
+    public CodeAreaCaretPosition getCaretPosition() {
         return caretPosition;
     }
 
@@ -93,11 +97,11 @@ public class DefaultCodeAreaCaret implements CodeAreaCaret {
     }
 
     @Override
-    public void setCaretPosition(@Nullable CaretPosition caretPosition) {
+    public void setCaretPosition(@Nullable CodeAreaCaretPosition caretPosition) {
         if (caretPosition != null) {
             this.caretPosition.setPosition(caretPosition);
         } else {
-            this.caretPosition.clear();
+            this.caretPosition.reset();
         }
         resetBlink();
     }
@@ -116,7 +120,7 @@ public class DefaultCodeAreaCaret implements CodeAreaCaret {
         resetBlink();
     }
 
-    public void setCaretPosition(long dataPosition, int codeOffset, int section) {
+    public void setCaretPosition(long dataPosition, int codeOffset, CodeAreaSection section) {
         caretPosition.setDataPosition(dataPosition);
         caretPosition.setCodeOffset(codeOffset);
         caretPosition.setSection(section);
@@ -141,11 +145,12 @@ public class DefaultCodeAreaCaret implements CodeAreaCaret {
         resetBlink();
     }
 
-    public int getSection() {
-        return caretPosition.getSection();
+    public CodeAreaSection getSection() {
+        CodeAreaSection section = caretPosition.getSection();
+        return section == null ? BasicCodeAreaSection.CODE_MATRIX : section;
     }
 
-    public void setSection(int section) {
+    public void setSection(CodeAreaSection section) {
         caretPosition.setSection(section);
         resetBlink();
     }
@@ -167,7 +172,7 @@ public class DefaultCodeAreaCaret implements CodeAreaCaret {
         return renderingMode;
     }
 
-    public void setRenderingMode(@Nonnull CursorRenderingMode renderingMode) {
+    public void setRenderingMode(CursorRenderingMode renderingMode) {
         CodeAreaUtils.requireNonNull(renderingMode);
 
         this.renderingMode = renderingMode;

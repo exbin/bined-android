@@ -15,115 +15,167 @@
  */
 package org.exbin.bined.android.basic;
 
-import javax.annotation.Nonnull;
 import org.exbin.bined.CodeAreaViewMode;
+import org.exbin.bined.basic.BasicCodeAreaLayout;
+import org.exbin.bined.basic.BasicCodeAreaScrolling;
 import org.exbin.bined.basic.BasicCodeAreaStructure;
-import org.exbin.bined.basic.CodeAreaScrollPosition;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Basic code area component characters visibility in scroll window.
  *
- * @version 0.2.0 2017/08/28
+ * @version 0.2.0 2019/08/18
  * @author ExBin Project (https://exbin.org)
  */
+@ParametersAreNonnullByDefault
 public class BasicCodeAreaVisibility {
 
-    private int previewRelativeX;
-    private int visibleCharStart;
-    private int visibleCharEnd;
-    private int visibleMatrixCharEnd;
-    private int visiblePreviewStart;
-    private int visiblePreviewEnd;
-    private int visibleCodeStart;
-    private int visibleCodeEnd;
-    private int visibleMatrixCodeEnd;
+    private int splitLinePos;
 
-    public void recomputeCharPositions(@Nonnull BasicCodeAreaMetrics metrics, @Nonnull BasicCodeAreaStructure structure, @Nonnull BasicCodeAreaDimensions dimensions, @Nonnull CodeAreaScrollPosition scrollPosition) {
-        int dataViewWidth = dimensions.getDataViewWidth();
-        int previewCharPos = structure.getPreviewCharPos();
+    private int skipToCode;
+    private int skipToChar;
+    private int skipToPreview;
+    private int skipRestFromCode;
+    private int skipRestFromChar;
+    private int skipRestFromPreview;
+
+    private boolean codeSectionVisible;
+    private boolean previewSectionVisible;
+
+    private int charactersPerCodeSection;
+    private int codeLastCharPos;
+    private int previewCharPos;
+    private int previewRelativeX;
+
+    public void recomputeCharPositions(BasicCodeAreaMetrics metrics, BasicCodeAreaStructure structure, BasicCodeAreaDimensions dimensions, BasicCodeAreaLayout layout, BasicCodeAreaScrolling scrolling) {
+        int bytesPerRow = structure.getBytesPerRow();
         int characterWidth = metrics.getCharacterWidth();
+        int charsPerByte = structure.getCodeType().getMaxDigitsForByte() + 1;
         previewRelativeX = previewCharPos * characterWidth;
 
         CodeAreaViewMode viewMode = structure.getViewMode();
-        int charactersPerCodeSection = structure.getCharactersPerCodeSection();
-        int bytesPerRow = structure.getBytesPerRow();
-        if (viewMode == CodeAreaViewMode.DUAL || viewMode == CodeAreaViewMode.CODE_MATRIX) {
-            visibleCharStart = (scrollPosition.getCharPosition() * characterWidth + scrollPosition.getCharOffset()) / characterWidth;
-            if (visibleCharStart < 0) {
-                visibleCharStart = 0;
-            }
-            visibleCharEnd = ((scrollPosition.getCharPosition() + dimensions.getCharactersPerRect()) * characterWidth + scrollPosition.getCharOffset()) / characterWidth;
-            if (visibleCharEnd > structure.getCharactersPerRow()) {
-                visibleCharEnd = structure.getCharactersPerRow();
-            }
-            visibleMatrixCharEnd = (dataViewWidth + (scrollPosition.getCharPosition() + charactersPerCodeSection) * characterWidth + scrollPosition.getCharOffset()) / characterWidth;
-            if (visibleMatrixCharEnd > charactersPerCodeSection) {
-                visibleMatrixCharEnd = charactersPerCodeSection;
-            }
-            visibleCodeStart = structure.computePositionByte(visibleCharStart);
-            visibleCodeEnd = structure.computePositionByte(visibleCharEnd - 1) + 1;
-            visibleMatrixCodeEnd = structure.computePositionByte(visibleMatrixCharEnd - 1) + 1;
+
+        int invisibleFromLeftX = scrolling.getHorizontalScrollX(characterWidth);
+        int invisibleFromRightX = invisibleFromLeftX + dimensions.getDataViewWidth();
+
+        charactersPerCodeSection = layout.computeFirstCodeCharacterPos(structure, bytesPerRow);
+
+        // Compute first and last visible character of the code area
+        if (viewMode != CodeAreaViewMode.TEXT_PREVIEW) {
+            codeLastCharPos = bytesPerRow * charsPerByte - 1;
         } else {
-            visibleCharStart = 0;
-            visibleCharEnd = -1;
-            visibleCodeStart = 0;
-            visibleCodeEnd = -1;
+            codeLastCharPos = 0;
+        }
+
+        if (viewMode == CodeAreaViewMode.DUAL) {
+            previewCharPos = bytesPerRow * charsPerByte;
+        } else {
+            previewCharPos = 0;
+        }
+
+        skipToCode = 0;
+        skipToChar = 0;
+        skipToPreview = 0;
+        skipRestFromCode = -1;
+        skipRestFromChar = -1;
+        skipRestFromPreview = -1;
+        codeSectionVisible = viewMode != CodeAreaViewMode.TEXT_PREVIEW;
+        previewSectionVisible = viewMode != CodeAreaViewMode.CODE_MATRIX;
+
+        if (viewMode == CodeAreaViewMode.DUAL || viewMode == CodeAreaViewMode.CODE_MATRIX) {
+            skipToChar = invisibleFromLeftX / characterWidth;
+            if (skipToChar < 0) {
+                skipToChar = 0;
+            }
+            skipRestFromChar = (invisibleFromRightX + characterWidth - 1) / characterWidth;
+            if (skipRestFromChar > structure.getCharactersPerRow()) {
+                skipRestFromChar = structure.getCharactersPerRow();
+            }
+            skipToCode = structure.computePositionByte(skipToChar);
+            skipRestFromCode = structure.computePositionByte(skipRestFromChar - 1) + 1;
+            if (skipRestFromCode > bytesPerRow) {
+                skipRestFromCode = bytesPerRow;
+            }
         }
 
         if (viewMode == CodeAreaViewMode.DUAL || viewMode == CodeAreaViewMode.TEXT_PREVIEW) {
-            visiblePreviewStart = (scrollPosition.getCharPosition() * characterWidth + scrollPosition.getCharOffset()) / characterWidth - previewCharPos;
-            if (visiblePreviewStart < 0) {
-                visiblePreviewStart = 0;
+            skipToPreview = invisibleFromLeftX / characterWidth - previewCharPos;
+            if (skipToPreview < 0) {
+                skipToPreview = 0;
             }
-            if (visibleCodeEnd < 0) {
-                visibleCharStart = visiblePreviewStart + previewCharPos;
+            if (skipToPreview > 0) {
+                skipToChar = skipToPreview + previewCharPos;
             }
-            visiblePreviewEnd = (dataViewWidth + (scrollPosition.getCharPosition() + 1) * characterWidth + scrollPosition.getCharOffset()) / characterWidth - previewCharPos;
-            if (visiblePreviewEnd > bytesPerRow) {
-                visiblePreviewEnd = bytesPerRow;
+            skipRestFromPreview = (invisibleFromRightX + characterWidth - 1) / characterWidth - previewCharPos;
+            if (skipRestFromPreview > bytesPerRow) {
+                skipRestFromPreview = bytesPerRow;
             }
-            if (visiblePreviewEnd >= 0) {
-                visibleCharEnd = visiblePreviewEnd + previewCharPos;
+            if (skipRestFromPreview >= 0) {
+                skipRestFromChar = skipRestFromPreview + previewCharPos;
             }
-        } else {
-            visiblePreviewStart = 0;
-            visiblePreviewEnd = -1;
         }
+    }
+
+    /**
+     * Returns pixel position of slit line relative to data view or 0 if not in
+     * use.
+     *
+     * @return x-position or 0
+     */
+    public int getSplitLinePos() {
+        return splitLinePos;
+    }
+
+    public int getSkipToCode() {
+        return skipToCode;
+    }
+
+    public int getSkipToChar() {
+        return skipToChar;
+    }
+
+    public int getSkipToPreview() {
+        return skipToPreview;
+    }
+
+    public int getSkipRestFromCode() {
+        return skipRestFromCode;
+    }
+
+    public int getSkipRestFromChar() {
+        return skipRestFromChar;
+    }
+
+    public int getSkipRestFromPreview() {
+        return skipRestFromPreview;
+    }
+
+    public boolean isCodeSectionVisible() {
+        return codeSectionVisible;
+    }
+
+    public boolean isPreviewSectionVisible() {
+        return previewSectionVisible;
+    }
+
+    public int getMaxRowDataChars() {
+        return skipRestFromChar - skipToChar;
+    }
+
+    public int getCharactersPerCodeSection() {
+        return charactersPerCodeSection;
+    }
+
+    public int getCodeLastCharPos() {
+        return codeLastCharPos;
+    }
+
+    public int getPreviewCharPos() {
+        return previewCharPos;
     }
 
     public int getPreviewRelativeX() {
         return previewRelativeX;
-    }
-
-    public int getVisibleCharStart() {
-        return visibleCharStart;
-    }
-
-    public int getVisibleCharEnd() {
-        return visibleCharEnd;
-    }
-
-    public int getVisibleMatrixCharEnd() {
-        return visibleMatrixCharEnd;
-    }
-
-    public int getVisiblePreviewStart() {
-        return visiblePreviewStart;
-    }
-
-    public int getVisiblePreviewEnd() {
-        return visiblePreviewEnd;
-    }
-
-    public int getVisibleCodeStart() {
-        return visibleCodeStart;
-    }
-
-    public int getVisibleCodeEnd() {
-        return visibleCodeEnd;
-    }
-
-    public int getVisibleMatrixCodeEnd() {
-        return visibleMatrixCodeEnd;
     }
 }

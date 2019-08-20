@@ -15,6 +15,7 @@
  */
 package org.exbin.bined.android.basic;
 
+import org.exbin.bined.capability.BasicScrollingCapable;
 import org.exbin.bined.capability.CaretCapable;
 import org.exbin.bined.capability.CharsetCapable;
 import org.exbin.bined.capability.ClipboardCapable;
@@ -32,10 +33,10 @@ import org.exbin.bined.android.capability.FontCapable;
 /**
  * Code area component default interface.
  *
- * @version 0.2.0 2018/09/01
+ * @version 0.2.0 2019/08/17
  * @author ExBin Project (https://exbin.org)
  */
-public interface DefaultCodeArea extends SelectionCapable, CaretCapable, ScrollingCapable, ViewModeCapable,
+public interface DefaultCodeArea extends SelectionCapable, CaretCapable, BasicScrollingCapable, ScrollingCapable, ViewModeCapable,
         CodeTypeCapable, EditationModeCapable, CharsetCapable, CodeCharactersCaseCapable, FontCapable,
         BackgroundPaintCapable, RowWrappingCapable, ClipboardCapable, BasicColorsCapable {
 }

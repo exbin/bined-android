@@ -36,6 +36,7 @@ public class CodeAreaAndroidUtils {
     public static final int EXCEPTION2_CODE_POINT = 0x9e;
 
     public static int MAX_COMPONENT_VALUE = 255;
+    public static final String DEFAULT_ENCODING = "UTF-8";
 
     private CodeAreaAndroidUtils() {
     }

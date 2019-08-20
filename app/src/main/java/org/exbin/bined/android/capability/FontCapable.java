@@ -15,10 +15,10 @@
  */
 package org.exbin.bined.android.capability;
 
-import javax.annotation.Nonnull;
-
 import org.exbin.bined.android.Font;
-import org.exbin.bined.capability.CodeAreaCapability;
+
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Support for font capability.
@@ -26,14 +26,11 @@ import org.exbin.bined.capability.CodeAreaCapability;
  * @version 0.2.0 2018/09/08
  * @author ExBin Project (http://exbin.org)
  */
+@ParametersAreNonnullByDefault
 public interface FontCapable {
 
     @Nonnull
     Font getCodeFont();
 
-    void setCodeFont(@Nonnull Font font);
-
-    public static class FontCapability implements CodeAreaCapability {
-
-    }
+    void setCodeFont(Font font);
 }

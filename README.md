@@ -1,7 +1,7 @@
-BinEd Hexadecimal Editor
-========================
+BinEd Binary/Hexadecimal Editor
+===============================
 
-Hexadecimal viewer/editor for Android written in Java.
+Binary/hexadecimal viewer/editor for Android written in Java.
 
 Homepage: http://bined.exbin.org/android  
 
@@ -22,7 +22,7 @@ UNDER DEVELOPMENT
 - TODO: Support for undo/redo
 - TODO: Support for charset/encoding selection
 - TODO: Codes can be also binary, octal or decimal
-- TODO: Searching for text / hexadecimal code with matching highlighting
+- TODO: Searching for text / hexadecimal code with found matches highlighting
 - TODO: Support for huge files
 - TODO: Delta mode - Only changes are stored in memory
 

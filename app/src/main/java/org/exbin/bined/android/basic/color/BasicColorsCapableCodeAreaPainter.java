@@ -13,23 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.bined.android.capability;
+package org.exbin.bined.android.basic.color;
 
-import org.exbin.bined.android.basic.color.BasicCodeAreaColorsProfile;
-
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
- * Support for basic set of colors.
+ * Capability of painter to handle basic colors setting.
  *
- * @version 0.2.0 2018/12/24
+ * @version 0.2.0 2019/08/17
  * @author ExBin Project (https://exbin.org)
  */
 @ParametersAreNonnullByDefault
-public interface BasicColorsCapable {
+public interface BasicColorsCapableCodeAreaPainter {
 
-    @Nullable
+    @Nonnull
     BasicCodeAreaColorsProfile getBasicColors();
 
     void setBasicColors(BasicCodeAreaColorsProfile colors);
