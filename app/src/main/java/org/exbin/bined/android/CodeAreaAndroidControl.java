@@ -18,6 +18,7 @@ package org.exbin.bined.android;
 import android.graphics.Canvas;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Code area swing control.
@@ -25,6 +26,7 @@ import javax.annotation.Nonnull;
  * @version 0.2.0 2018/09/07
  * @author ExBin Project (https://exbin.org)
  */
+@ParametersAreNonnullByDefault
 public interface CodeAreaAndroidControl {
 
     /**

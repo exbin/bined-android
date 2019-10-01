@@ -21,6 +21,8 @@ import android.view.MenuItem;
 
 import java.util.List;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
  * handset devices, settings are presented as a single list. On tablets,
@@ -32,6 +34,7 @@ import java.util.List;
  * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
  * API Guide</a> for more information on developing a Settings UI.
  */
+@ParametersAreNonnullByDefault
 public class SettingsActivity extends PreferenceActivity {
 
     /**

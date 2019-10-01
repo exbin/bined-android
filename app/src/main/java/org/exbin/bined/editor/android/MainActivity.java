@@ -27,7 +27,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+@ParametersAreNonnullByDefault
 public class MainActivity extends AppCompatActivity implements FileDialog.OnFileSelectedListener {
 
     private static final String EXAMPLE_FILE_PATH = "/org/exbin/bined/android/example/resources/lorem_1.txt";
@@ -39,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     private boolean storageWritePermissionGranted;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.storageReadPermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
@@ -139,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
 
     @Override
-    public void onFileSelected(@Nonnull FileDialog dialog, @Nonnull File file) {
+    public void onFileSelected(FileDialog dialog, File file) {
         if (dialog instanceof OpenFileDialog) {
             fileData = new ByteArrayEditableData();
             try {

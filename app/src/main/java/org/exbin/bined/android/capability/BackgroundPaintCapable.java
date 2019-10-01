@@ -18,6 +18,7 @@ package org.exbin.bined.android.capability;
 import org.exbin.bined.basic.BasicBackgroundPaintMode;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Support for background paint mode capability.
@@ -25,10 +26,11 @@ import javax.annotation.Nonnull;
  * @version 0.2.0 2018/09/07
  * @author ExBin Project (http://exbin.org)
  */
+@ParametersAreNonnullByDefault
 public interface BackgroundPaintCapable {
 
     @Nonnull
     BasicBackgroundPaintMode getBackgroundPaintMode();
 
-    void setBackgroundPaintMode(@Nonnull BasicBackgroundPaintMode borderPaintMode);
+    void setBackgroundPaintMode(BasicBackgroundPaintMode borderPaintMode);
 }

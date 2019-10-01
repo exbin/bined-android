@@ -23,6 +23,7 @@ import org.exbin.bined.color.CodeAreaBasicColors;
 import org.exbin.bined.color.CodeAreaColorType;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Basic code area set of colors.
@@ -30,6 +31,7 @@ import javax.annotation.Nullable;
  * @version 0.2.0 2019/08/18
  * @author ExBin Project (https://exbin.org)
  */
+@ParametersAreNonnullByDefault
 public class BasicCodeAreaColorsProfile implements CodeAreaColorsProfile {
 
     @Nullable

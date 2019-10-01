@@ -19,6 +19,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Font definition.
@@ -26,11 +27,12 @@ import javax.annotation.Nonnull;
  * @version 0.2.0 2018/05/08
  * @author ExBin Project (http://exbin.org)
  */
+@ParametersAreNonnullByDefault
 public class Font {
 
     private int fontFlags;
 
-    public static Font fromPaint(@Nonnull Paint paint)
+    public static Font fromPaint(Paint paint)
     {
         Font font = new Font();
         font.setFontFlags(paint.getFlags());

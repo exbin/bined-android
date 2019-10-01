@@ -97,7 +97,7 @@ public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl 
         return commandHandler;
     }
 
-    public void setCommandHandler(@Nonnull CodeAreaCommandHandler commandHandler) {
+    public void setCommandHandler(CodeAreaCommandHandler commandHandler) {
         this.commandHandler = commandHandler;
     }
 

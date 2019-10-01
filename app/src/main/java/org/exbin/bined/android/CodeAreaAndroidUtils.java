@@ -20,6 +20,7 @@ import android.graphics.Rect;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Hexadecimal editor component android utilities.
@@ -27,6 +28,7 @@ import javax.annotation.Nullable;
  * @author ExBin Project (http://exbin.org)
  * @version 0.2.0 2018/06/24
  */
+@ParametersAreNonnullByDefault
 public class CodeAreaAndroidUtils {
 
     public static final int MIN_MONOSPACE_CODE_POINT = 0x1F;
@@ -58,8 +60,7 @@ public class CodeAreaAndroidUtils {
         return (color == null && comparedColor == null) || (color != null && color.equals(comparedColor));
     }
 
-    @Nonnull
-    public static int createOddColor(@Nonnull int color) {
+    public static int createOddColor(int color) {
         return Color.rgb(
                 computeOddColorComponent(Color.red(color)),
                 computeOddColorComponent(Color.green(color)),
@@ -70,21 +71,20 @@ public class CodeAreaAndroidUtils {
         return colorComponent + (colorComponent > 64 ? -16 : 16);
     }
 
-    @Nonnull
-    public static int createNegativeColor(@Nonnull int color) {
+    public static int createNegativeColor(int color) {
         return Color.rgb(
                 MAX_COMPONENT_VALUE - Color.red(color),
                 MAX_COMPONENT_VALUE - Color.green(color),
                 MAX_COMPONENT_VALUE - Color.blue(color));
     }
 
-    @Nonnull
-    public static int computeGrayColor(@Nonnull int color) {
+    public static int computeGrayColor(int color) {
         int grayLevel = (Color.red(color) + Color.green(color) + Color.blue(color)) / 3;
         return Color.rgb(grayLevel, grayLevel, grayLevel);
     }
 
-    public static Rect computeIntersection(Rect rect1, Rect rect2) {
+    @Nullable
+    public static Rect computeIntersection(@Nullable Rect rect1, @Nullable Rect rect2) {
         if (rect1 == null || rect2 == null)
             return null;
         if (rect2.left > rect1.right || rect2.right < rect1.left || rect2.top > rect1.bottom || rect2.bottom < rect1.top)

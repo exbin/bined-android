@@ -54,9 +54,7 @@ public class DefaultCodeAreaCaret implements CodeAreaCaret {
     private CursorRenderingMode renderingMode = CursorRenderingMode.NEGATIVE;
 
     public DefaultCodeAreaCaret(CodeArea codeArea) {
-        CodeAreaUtils.requireNonNull(codeArea);
-
-        this.codeArea = codeArea;
+        this.codeArea = CodeAreaUtils.requireNonNull(codeArea);
         privateSetBlinkRate(DEFAULT_BLINK_RATE);
     }
 

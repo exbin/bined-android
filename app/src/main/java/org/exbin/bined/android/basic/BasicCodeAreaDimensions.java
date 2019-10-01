@@ -25,7 +25,7 @@ import org.exbin.bined.BasicCodeAreaZone;
 /**
  * Basic code area component dimensions.
  *
- * @version 0.2.0 2019/08/19
+ * @version 0.2.0 2019/10/01
  * @author ExBin Project (https://exbin.org)
  */
 @ParametersAreNonnullByDefault
@@ -50,20 +50,22 @@ public class BasicCodeAreaDimensions {
     private int charactersPerRect;
 
     @Nonnull
-    private final Rect componentRect = new Rect();
+    private final Rect componentRectangle = new Rect();
     @Nonnull
-    private final Rect mainAreaRect = new Rect();
+    private final Rect mainAreaRectangle = new Rect();
     @Nonnull
-    private final Rect headerAreaRect = new Rect();
+    private final Rect headerAreaRectangle = new Rect();
     @Nonnull
-    private final Rect rowPositionAreaRect = new Rect();
+    private final Rect rowPositionAreaRectangle = new Rect();
     @Nonnull
-    private final Rect scrollPanelRect = new Rect();
+    private final Rect scrollPanelRectangle = new Rect();
     @Nonnull
-    private final Rect dataViewRect = new Rect();
+    private final Rect dataViewRectangle = new Rect();
+    @Nonnull
+    private final Rect dataViewInnerRectangle = new Rect();
 
     public void recomputeSizes(BasicCodeAreaMetrics metrics, int componentX, int componentY, int componentWidth, int componentHeight, int rowPositionLength, int verticalScrollBarSize, int horizontalScrollBarSize) {
-        modifyRect(componentRect, componentX, componentY, componentWidth, componentHeight);
+        modifyRect(componentRectangle, componentX, componentY, componentWidth, componentHeight);
         this.verticalScrollBarSize = verticalScrollBarSize;
         this.horizontalScrollBarSize = horizontalScrollBarSize;
         rowPositionAreaWidth = metrics.getCharacterWidth() * (rowPositionLength + 1);
@@ -86,23 +88,24 @@ public class BasicCodeAreaDimensions {
         boolean availableHeight = dataViewY + horizontalScrollBarSize <= componentHeight;
 
         if (availableWidth && availableHeight) {
-            modifyRect(mainAreaRect, componentX + rowPositionAreaWidth, dataViewY, componentWidth - rowPositionAreaWidth - getVerticalScrollBarSize(), componentHeight - dataViewY - getHorizontalScrollBarSize());
+            modifyRect(mainAreaRectangle, componentX + rowPositionAreaWidth, dataViewY, componentWidth - rowPositionAreaWidth - getVerticalScrollBarSize(), componentHeight - dataViewY - getHorizontalScrollBarSize());
         } else {
-            mainAreaRect.setEmpty();
+            mainAreaRectangle.setEmpty();
         }
         if (availableWidth) {
-            modifyRect(headerAreaRect, componentX + rowPositionAreaWidth, componentY, componentWidth - rowPositionAreaWidth - getVerticalScrollBarSize(), headerAreaHeight);
+            modifyRect(headerAreaRectangle, componentX + rowPositionAreaWidth, componentY, componentWidth - rowPositionAreaWidth - getVerticalScrollBarSize(), headerAreaHeight);
         } else {
-            headerAreaRect.setEmpty();
+            headerAreaRectangle.setEmpty();
         }
         if (availableHeight) {
-            modifyRect(rowPositionAreaRect, componentX, dataViewY, rowPositionAreaWidth, componentHeight - dataViewY - getHorizontalScrollBarSize());
+            modifyRect(rowPositionAreaRectangle, componentX, dataViewY, rowPositionAreaWidth, componentHeight - dataViewY - getHorizontalScrollBarSize());
         } else {
-            rowPositionAreaRect.setEmpty();
+            rowPositionAreaRectangle.setEmpty();
         }
 
-        modifyRect(scrollPanelRect, dataViewX, dataViewY, scrollPanelWidth, scrollPanelHeight);
-        modifyRect(dataViewRect, dataViewX, dataViewY, dataViewWidth >= 0 ? dataViewWidth : 0, dataViewHeight >= 0 ? dataViewHeight : 0);
+        modifyRect(scrollPanelRectangle, dataViewX, dataViewY, scrollPanelWidth, scrollPanelHeight);
+        modifyRect(dataViewRectangle, dataViewX, dataViewY, dataViewWidth >= 0 ? dataViewWidth : 0, dataViewHeight >= 0 ? dataViewHeight : 0);
+        modifyRect(dataViewInnerRectangle, 0, 0, dataViewWidth >= 0 ? dataViewWidth : 0, dataViewHeight >= 0 ? dataViewHeight : 0);
     }
 
     @Nonnull
@@ -223,31 +226,38 @@ public class BasicCodeAreaDimensions {
     }
 
     @Nonnull
-    public Rect getComponentRect() {
-        return componentRect;
+    public Rect getComponentRectangle() {
+        return componentRectangle;
     }
 
     @Nonnull
-    public Rect getMainAreaRect() {
-        return mainAreaRect;
+    public Rect getMainAreaRectangle() {
+        return mainAreaRectangle;
     }
 
     @Nonnull
-    public Rect getScrollPanelRect() {
-        return scrollPanelRect;
+    public Rect getScrollPanelRectangle() {
+        return scrollPanelRectangle;
     }
 
     @Nonnull
-    public Rect getDataViewRect() {
-        return dataViewRect;
+    public Rect getDataViewRectangle() {
+        return dataViewRectangle;
     }
 
-    public Rect getHeaderAreaRect() {
-        return headerAreaRect;
+    @Nonnull
+    public Rect getDataViewInnerRectangle() {
+        return dataViewInnerRectangle;
     }
 
-    public Rect getRowPositionAreaRect() {
-        return rowPositionAreaRect;
+    @Nonnull
+    public Rect getHeaderAreaRectangle() {
+        return headerAreaRectangle;
+    }
+
+    @Nonnull
+    public Rect getRowPositionAreaRectangle() {
+        return rowPositionAreaRectangle;
     }
 
     private static void modifyRect(Rect rect, int x, int y, int width, int height) {
