@@ -110,7 +110,7 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
     @Nonnull
     private ScrollBarVisibility verticalScrollBarVisibility = ScrollBarVisibility.IF_NEEDED;
     @Nonnull
-    private VerticalScrollUnit verticalScrollUnit = VerticalScrollUnit.ROW;
+    private VerticalScrollUnit verticalScrollUnit = VerticalScrollUnit.PIXEL;
     @Nonnull
     private ScrollBarVisibility horizontalScrollBarVisibility = ScrollBarVisibility.IF_NEEDED;
     @Nonnull

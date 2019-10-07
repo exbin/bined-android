@@ -173,8 +173,8 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
 
                 scrollOffsetX = horizontal;
                 scrollOffsetY = vertical;
-                dataViewOffsetX = scrollOffsetX - dimensions.getDataViewX();
-                dataViewOffsetY = scrollOffsetY - dimensions.getDataViewY();
+                dataViewOffsetX = scrollOffsetX - dimensions.getScrollPanelX();
+                dataViewOffsetY = scrollOffsetY - dimensions.getScrollPanelY();
 
                 ((ScrollingCapable) codeArea).setScrollPosition(scrolling.getScrollPosition());
                 notifyScrolled();
@@ -264,8 +264,8 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
     public void recomputeLayout() {
         rowPositionLength = getRowPositionLength();
         recomputeDimensions();
-        dataViewOffsetX = scrollOffsetX - dimensions.getDataViewX();
-        dataViewOffsetY = scrollOffsetY - dimensions.getDataViewY();
+        dataViewOffsetX = scrollOffsetX - dimensions.getScrollPanelX();
+        dataViewOffsetY = scrollOffsetY - dimensions.getScrollPanelY();
 
         scrollPanel.layout(
                 dimensions.getRowPositionAreaWidth(),
@@ -406,7 +406,8 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
             recomputeDimensions();
             scrollPanelRect = dimensions.getScrollPanelRectangle();
             // dataView.layout(scrollPanelRect.left, scrollPanelRect.top, scrollPanelRect.right, scrollPanelRect.bottom);
-            dataView.layout(0, 0, scrollPanelRect.width(), scrollPanelRect.height());
+            // dataView.layout(0, 0, scrollPanelRect.width(), scrollPanelRect.height());
+            dataView.layout(0, 0, documentDataWidth, documentDataHeight);
             dataView.setMinimumWidth(documentDataWidth);
             dataView.setMinimumHeight(documentDataHeight);
         }
@@ -499,7 +500,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
 
         int characterWidth = metrics.getCharacterWidth();
         int rowHeight = metrics.getRowHeight();
-        int dataViewX = dimensions.getDataViewX();
+        int dataViewX = dimensions.getScrollPanelX();
 //        int headerAreaHeight = dimensions.getHeaderAreaHeight();
 //        int componentWidth = dimensions.getComponentWidth();
 
@@ -569,7 +570,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
 
         // Decoration lines
         paint.setColor(colorsProfile.getDecorationLine());
-        g.drawRect(headerArea.left, headerArea.top + headerArea.height() - 1, headerArea.left + headerArea.width(), headerArea.top + headerArea.height() - 1, paint);
+        g.drawLine(headerArea.left, headerArea.top + headerArea.height() - 1, headerArea.left + headerArea.width(), headerArea.top + headerArea.height() - 1, paint);
         int lineX = dataViewX + visibility.getPreviewRelativeX() - scrollPosition.getCharPosition() * characterWidth - scrollPosition.getCharOffset() - characterWidth / 2;
         if (lineX >= dataViewX) {
             g.drawLine(lineX, headerArea.top, lineX, headerArea.top + headerArea.height(), paint);
@@ -728,8 +729,8 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         int bytesPerRow = structure.getBytesPerRow();
         int characterWidth = metrics.getCharacterWidth();
         int rowHeight = metrics.getRowHeight();
-        int dataViewX = dimensions.getDataViewX();
-        int dataViewY = dimensions.getDataViewY();
+        int dataViewX = dimensions.getScrollPanelX();
+        int dataViewY = dimensions.getScrollPanelY();
         int rowsPerRect = dimensions.getRowsPerRect();
         CodeAreaScrollPosition scrollPosition = scrolling.getScrollPosition();
         long dataPosition = scrollPosition.getRowPosition() * bytesPerRow;
@@ -1181,8 +1182,8 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
                 int rowHeight = metrics.getRowHeight();
                 int maxBytesPerChar = metrics.getMaxBytesPerChar();
                 int subFontSpace = metrics.getSubFontSpace();
-                int dataViewX = dimensions.getDataViewX();
-                int dataViewY = dimensions.getDataViewY();
+                int dataViewX = dimensions.getScrollPanelX();
+                int dataViewY = dimensions.getScrollPanelY();
                 int previewRelativeX = visibility.getPreviewRelativeX();
 
                 CodeAreaViewMode viewMode = structure.getViewMode();
@@ -1403,12 +1404,16 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
 
     @Override
     public int getMouseCursorShape(int positionX, int positionY) {
-//        if (positionX >= dataViewX && positionX < dataViewX + scrollPanelWidth
-//                && positionY >= dataViewY && positionY < dataViewY + scrollPanelHeight) {
-//            return Cursor.TEXT_CURSOR;
-//        }
-//
-        return 0; //Cursor.DEFAULT_CURSOR;
+        int dataViewX = dimensions.getScrollPanelX();
+        int dataViewY = dimensions.getScrollPanelY();
+        int scrollPanelWidth = dimensions.getScrollPanelWidth();
+        int scrollPanelHeight = dimensions.getScrollPanelHeight();
+        if (positionX >= dataViewX && positionX < dataViewX + scrollPanelWidth
+                && positionY >= dataViewY && positionY < dataViewY + scrollPanelHeight) {
+            return 1; // Cursor.TEXT_CURSOR;
+        }
+
+        return 0; // Cursor.DEFAULT_CURSOR;
     }
 
     @Nonnull
@@ -1550,8 +1555,26 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
 
     @Override
     public void updateScrollBars() {
+        int characterWidth = metrics.getCharacterWidth();
+        int rowHeight = metrics.getRowHeight();
+        long rowsPerDocument = structure.getRowsPerDocument();
+        recomputeScrollState();
 
-//        JScrollBar verticalScrollBar = scrollPanel.getVerticalScrollBar();
+        adjusting = true;
+        int verticalScrollBar = scrollPanel.getVerticalScrollbarPosition();
+        // scrollPanel.setVerticalScrollBarEnabled(CodeAreaAndroidUtils.getVerticalScrollBarPolicy(scrolling.getVerticalScrollBarVisibility()));
+        // int horizontalScrollBar = scrollPanel.getHorizontalScrollBar();
+        // scrollPanel.setHorizontalScrollBarPolicy(CodeAreaAndroidUtils.getHorizontalScrollBarPolicy(scrolling.getHorizontalScrollBarVisibility()));
+
+        int verticalScrollValue = scrolling.getVerticalScrollValue(rowHeight, rowsPerDocument);
+        scrollPanel.setVerticalScrollbarPosition(verticalScrollValue);
+
+        int horizontalScrollValue = scrolling.getHorizontalScrollValue(characterWidth);
+        // scrollPanel.setHorizontalScrollBar.setValue(horizontalScrollValue);
+
+        adjusting = false;
+
+        //        JScrollBar verticalScrollBar = scrollPanel.getVerticalScrollBar();
 //        JScrollBar horizontalScrollBar = scrollPanel.getHorizontalScrollBar();
 //
 //        if (scrollBarVerticalScale == ScrollBarVerticalScale.SCALED) {
