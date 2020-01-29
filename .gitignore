@@ -11,3 +11,4 @@
 .externalNativeBuild
 *~
 /resources/private/
+/.nb-gradle/

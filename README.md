@@ -1,5 +1,5 @@
-BinEd Binary/Hexadecimal Editor
-===============================
+BinEd - Binary/Hexadecimal Editor
+=================================
 
 Binary/hexadecimal viewer/editor for Android written in Java.
 
@@ -15,16 +15,16 @@ Features
 
 UNDER DEVELOPMENT  
 
-- TODO: Data as hexadecimal codes and text preview
-- TODO: Insert and overwrite edit modes
-- TODO: Support for selection and clipboard actions
-- TODO: Support for showing unprintable/whitespace characters
-- TODO: Support for undo/redo
-- TODO: Support for charset/encoding selection
-- TODO: Codes can be also binary, octal or decimal
-- TODO: Searching for text / hexadecimal code with found matches highlighting
-- TODO: Support for huge files
-- TODO: Delta mode - Only changes are stored in memory
+  * TODO: Data as hexadecimal codes and text preview
+  * TODO: Insert and overwrite edit modes
+  * TODO: Support for selection and clipboard actions
+  * TODO: Support for showing unprintable/whitespace characters
+  * TODO: Support for undo/redo
+  * TODO: Support for charset/encoding selection
+  * TODO: Codes can be also binary, octal or decimal
+  * TODO: Searching for text / hexadecimal code with found matches highlighting
+  * TODO: Support for huge files
+  * TODO: Delta mode - Only changes are stored in memory
 
 Compiling
 ---------
