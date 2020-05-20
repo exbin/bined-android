@@ -3,7 +3,7 @@ BinEd - Binary/Hexadecimal Editor
 
 Binary/hexadecimal viewer/editor for Android written in Java.
 
-Homepage: http://bined.exbin.org/android  
+Homepage: https://bined.exbin.org/android  
 
 Screenshot
 ----------
