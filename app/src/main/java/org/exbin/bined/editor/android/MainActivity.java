@@ -2,6 +2,7 @@ package org.exbin.bined.editor.android;
 
 import android.Manifest;
 import android.app.DialogFragment;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -121,9 +122,13 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
                 return true;
             }
 
-            case R.id.action_settings:
+            case R.id.action_settings: {
                 // User chose the "Settings" item, show the app settings UI...
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
+
                 return true;
+            }
 
 //            case R.id.action_favorite:
 //                // User chose the "Favorite" action, mark the current item

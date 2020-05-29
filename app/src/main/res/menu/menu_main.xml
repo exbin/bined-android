@@ -9,13 +9,12 @@
         android:id="@+id/action_save"
         android:title="@string/action_save" />
     <item
+        android:id="@+id/action_settings"
+        android:title="@string/action_settings" />
+    <item
+        android:id="@+id/action_about"
+        android:title="@string/action_about" />
+    <item
         android:id="@+id/action_exit"
         android:title="@string/action_exit" />
-    <item
-        android:id="@+id/action_options"
-        android:title="@string/action_options" />
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings" />
 </menu>

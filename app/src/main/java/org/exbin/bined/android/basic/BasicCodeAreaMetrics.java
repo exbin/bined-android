@@ -56,7 +56,7 @@ public class BasicCodeAreaMetrics {
              */
             characterWidth = (int) fontMetrics.measureText("w");
             int fontSize = (int) fontMetrics.getTextSize();
-            subFontSpace = rowHeight - fontSize;
+            subFontSpace = rowHeight - fontSize + 4;
 
             /*
              * Compare it to small 'i' to detect if font is monospaced.
