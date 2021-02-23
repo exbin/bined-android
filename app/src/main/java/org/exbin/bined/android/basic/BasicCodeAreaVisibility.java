@@ -15,7 +15,7 @@
  */
 package org.exbin.bined.android.basic;
 
-import org.exbin.bined.CodeAreaViewMode;
+import org.exbin.bined.basic.CodeAreaViewMode;
 import org.exbin.bined.basic.BasicCodeAreaLayout;
 import org.exbin.bined.basic.BasicCodeAreaScrolling;
 import org.exbin.bined.basic.BasicCodeAreaStructure;

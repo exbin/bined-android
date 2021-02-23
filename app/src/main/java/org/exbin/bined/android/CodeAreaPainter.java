@@ -17,9 +17,9 @@ package org.exbin.bined.android;
 
 import android.graphics.Canvas;
 
-import org.exbin.bined.BasicCodeAreaZone;
+import org.exbin.bined.basic.BasicCodeAreaZone;
+import org.exbin.bined.CaretOverlapMode;
 import org.exbin.bined.CodeAreaCaretPosition;
-import org.exbin.bined.PositionOverflowMode;
 import org.exbin.bined.basic.CodeAreaScrollPosition;
 import org.exbin.bined.basic.MovementDirection;
 import org.exbin.bined.basic.PositionScrollVisibility;
@@ -135,7 +135,7 @@ public interface CodeAreaPainter {
      * @return closest caret position
      */
     @Nonnull
-    CodeAreaCaretPosition mousePositionToClosestCaretPosition(int positionX, int positionY, PositionOverflowMode overflowMode);
+    CodeAreaCaretPosition mousePositionToClosestCaretPosition(int positionX, int positionY, CaretOverlapMode overflowMode);
 
     void updateScrollBars();
 
@@ -154,7 +154,6 @@ public interface CodeAreaPainter {
      * @return scroll position or null if caret position is already visible /
      * scrolled to the best fit
      */
-    @Nullable
     CodeAreaScrollPosition computeRevealScrollPosition(CodeAreaCaretPosition caretPosition);
 
     /**

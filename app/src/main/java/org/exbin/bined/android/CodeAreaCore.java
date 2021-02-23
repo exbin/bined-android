@@ -31,7 +31,7 @@ import org.exbin.bined.DataChangedListener;
 import org.exbin.bined.android.basic.DefaultCodeAreaCommandHandler;
 import org.exbin.bined.capability.ScrollingCapable;
 import org.exbin.bined.capability.SelectionCapable;
-import org.exbin.utils.binary_data.BinaryData;
+import org.exbin.auxiliary.paged_data.BinaryData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -106,7 +106,6 @@ public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl 
         commandHandler.copy();
     }
 
-    @Override
     public void copyAsCode() {
         commandHandler.copyAsCode();
     }
@@ -121,7 +120,6 @@ public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl 
         commandHandler.paste();
     }
 
-    @Override
     public void pasteFromCode() {
         commandHandler.pasteFromCode();
     }

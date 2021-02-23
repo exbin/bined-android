@@ -20,20 +20,22 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 
-import org.exbin.bined.BasicCodeAreaSection;
-import org.exbin.bined.BasicCodeAreaZone;
+import org.exbin.bined.CaretOverlapMode;
+import org.exbin.bined.ClipboardHandlingMode;
+import org.exbin.bined.RowWrappingMode;
+import org.exbin.bined.basic.BasicCodeAreaSection;
+import org.exbin.bined.basic.BasicCodeAreaZone;
 import org.exbin.bined.CaretMovedListener;
 import org.exbin.bined.CodeAreaCaretPosition;
 import org.exbin.bined.CodeAreaSection;
 import org.exbin.bined.CodeAreaUtils;
-import org.exbin.bined.CodeAreaViewMode;
+import org.exbin.bined.basic.CodeAreaViewMode;
 import org.exbin.bined.CodeCharactersCase;
 import org.exbin.bined.CodeType;
 import org.exbin.bined.DefaultCodeAreaCaretPosition;
 import org.exbin.bined.EditationMode;
 import org.exbin.bined.EditationModeChangedListener;
 import org.exbin.bined.EditationOperation;
-import org.exbin.bined.PositionOverflowMode;
 import org.exbin.bined.ScrollBarVisibility;
 import org.exbin.bined.ScrollingListener;
 import org.exbin.bined.SelectionChangedListener;
@@ -83,7 +85,7 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
 
     @Nonnull
     private Charset charset = Charset.forName(CodeAreaAndroidUtils.DEFAULT_ENCODING);
-    private boolean handleClipboard = true;
+    private ClipboardHandlingMode clipboardHandlingMode = ClipboardHandlingMode.PROCESS;
 
     @Nonnull
     private EditationMode editationMode = EditationMode.EXPANDING;
@@ -92,7 +94,7 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
     @Nonnull
     private CodeAreaViewMode viewMode = CodeAreaViewMode.DUAL;
     @Nullable
-    private Font font;
+    private Font codeFont;
     @Nonnull
     private BasicBackgroundPaintMode borderPaintMode = BasicBackgroundPaintMode.STRIPED;
     @Nonnull
@@ -312,7 +314,6 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
                     break;
             }
             updateLayout();
-            repaint();
         }
     }
 
@@ -325,8 +326,7 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
     @Override
     public void setCodeType(CodeType codeType) {
         this.codeType = codeType;
-        reset();
-        repaint();
+        updateLayout();
     }
 
     @Override
@@ -381,7 +381,7 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
 
     @Nullable
     @Override
-    public CodeAreaCaretPosition mousePositionToClosestCaretPosition(int positionX, int positionY, PositionOverflowMode overflowMode) {
+    public CodeAreaCaretPosition mousePositionToClosestCaretPosition(int positionX, int positionY, CaretOverlapMode overflowMode) {
         return painter.mousePositionToClosestCaretPosition(positionX, positionY, overflowMode);
     }
 
@@ -493,7 +493,7 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
 
     @Override
     public void reset() {
-        painter.reset();
+        resetPainter();
     }
 
     @Override
@@ -508,9 +508,7 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
 
     @Override
     public void resetPainter() {
-        if (painter != null) {
-            painter.reset();
-        }
+        painter.reset();
     }
 
     @Override
@@ -592,6 +590,7 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
         }
     }
 
+    @Nonnull
     @Override
     public EditationOperation getActiveOperation() {
         switch (editationMode) {
@@ -629,25 +628,26 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
         }
     }
 
+    @Nonnull
     @Override
-    public boolean isHandleClipboard() {
-        return handleClipboard;
+    public ClipboardHandlingMode getClipboardHandlingMode() {
+        return clipboardHandlingMode;
     }
 
     @Override
-    public void setHandleClipboard(boolean handleClipboard) {
-        this.handleClipboard = handleClipboard;
+    public void setClipboardHandlingMode(ClipboardHandlingMode clipboardHandlingMode) {
+        this.clipboardHandlingMode = clipboardHandlingMode;
     }
 
     @Nonnull
     @Override
     public Font getCodeFont() {
-        return font;
+        return CodeAreaUtils.requireNonNull(codeFont);
     }
 
     @Override
-    public void setCodeFont(Font font) {
-        this.font = font;
+    public void setCodeFont(Font codeFont) {
+        this.codeFont = codeFont;
         painter.resetFont();
         repaint();
     }
@@ -717,7 +717,6 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
         for (SelectionChangedListener listener : selectionChangedListeners) {
             listener.selectionChanged(selection);
         }
-        ;
     }
 
     @Override
@@ -725,7 +724,6 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
         for (CaretMovedListener listener : caretMovedListeners) {
             listener.caretMoved(caret.getCaretPosition());
         }
-        ;
     }
 
     @Override
@@ -733,7 +731,6 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
         for (ScrollingListener listener : scrollingListeners) {
             listener.scrolled();
         }
-        ;
     }
 
     @Override

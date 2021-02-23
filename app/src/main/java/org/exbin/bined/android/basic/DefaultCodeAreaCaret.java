@@ -15,7 +15,7 @@
  */
 package org.exbin.bined.android.basic;
 
-import org.exbin.bined.BasicCodeAreaSection;
+import org.exbin.bined.basic.BasicCodeAreaSection;
 import org.exbin.bined.CodeAreaCaret;
 import org.exbin.bined.CodeAreaCaretPosition;
 import org.exbin.bined.CodeAreaSection;
@@ -144,8 +144,7 @@ public class DefaultCodeAreaCaret implements CodeAreaCaret {
     }
 
     public CodeAreaSection getSection() {
-        CodeAreaSection section = caretPosition.getSection();
-        return section == null ? BasicCodeAreaSection.CODE_MATRIX : section;
+        return caretPosition.getSection().orElse(BasicCodeAreaSection.CODE_MATRIX);
     }
 
     public void setSection(CodeAreaSection section) {
