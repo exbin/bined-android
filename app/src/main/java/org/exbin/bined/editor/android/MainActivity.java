@@ -116,17 +116,24 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
                 return true;
             }
 
-            case R.id.action_exit: {
-                // TODO
-                System.exit(0);
-                return true;
-            }
-
             case R.id.action_settings: {
                 // User chose the "Settings" item, show the app settings UI...
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
 
+                return true;
+            }
+
+            case R.id.action_about: {
+                AboutDialog aboutDialog = new AboutDialog();
+                aboutDialog.show(getSupportFragmentManager(), "aboutDialog");
+
+                return true;
+            }
+
+            case R.id.action_exit: {
+                // TODO
+                System.exit(0);
                 return true;
             }
 
