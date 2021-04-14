@@ -3,21 +3,48 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <org.exbin.bined.editor.android.AboutView
-        style="@style/Widget.AppTheme.MyView"
+<!--    <org.exbin.bined.editor.android.AboutView
         android:id="@+id/aboutView"
+        style="@style/Widget.AppTheme.MyView"
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:paddingLeft="20dp"
         android:paddingBottom="40dp"
         app:exampleDimension="24sp"
         app:exampleDrawable="@android:drawable/ic_menu_add"
-        app:exampleString="Hello, AboutView" />
+        app:exampleString="Hello, AboutView" /> -->
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@android:drawable/sym_def_app_icon" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                app:srcCompat="@drawable/bined_logo"
+                android:contentDescription="@string/bined_logo_description" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:linksClickable="true"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/app_about"
+                android:focusable="true" />
+        </LinearLayout>
+    </ScrollView>
+
 
 </FrameLayout>
