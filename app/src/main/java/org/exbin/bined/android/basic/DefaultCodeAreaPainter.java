@@ -21,7 +21,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.support.constraint.solver.widgets.Rectangle;
+import androidx.constraintlayout.solver.widgets.Rectangle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -69,7 +69,6 @@ import org.exbin.auxiliary.paged_data.BinaryData;
 
 import java.nio.charset.Charset;
 import java.util.Arrays;
-import java.util.Optional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

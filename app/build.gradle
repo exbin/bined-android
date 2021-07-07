@@ -1,14 +1,23 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 27
+    signingConfigs {
+        release {
+        storeFile file('/home/hajdam/cert/exbin/keystore.jks')
+            storePassword 'g5RV7uXp'
+            keyAlias 'android'
+            keyPassword 'H4$PuXmt'
+        }
+    }
+    compileSdkVersion 30
     defaultConfig {
         applicationId "org.exbin.bined.editor.android"
-        minSdkVersion 16
-        targetSdkVersion 27
+        minSdkVersion 27
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        signingConfig signingConfigs.release
     }
     buildTypes {
         release {
@@ -20,14 +29,14 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
-    implementation 'com.android.support:design:27.1.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
     implementation 'com.github.rustamg:file-dialogs:1.0'
+    implementation 'androidx.appcompat:appcompat:1.3.0'
+    implementation 'com.google.android.material:material:1.4.0'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation files('libs/bined-core-0.2.0-SNAPSHOT.jar')
     implementation files('libs/paged_data-0.2.0-SNAPSHOT.jar')
 }

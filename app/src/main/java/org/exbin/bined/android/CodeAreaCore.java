@@ -277,7 +277,7 @@ public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl 
         }
 
         @Override
-        protected void onFocusChanged(boolean gainFocus, int direction, @android.support.annotation.Nullable Rect previouslyFocusedRect) {
+        protected void onFocusChanged(boolean gainFocus, int direction, @androidx.annotation.Nullable Rect previouslyFocusedRect) {
             super.onFocusChanged(gainFocus, direction, previouslyFocusedRect);
             repaint();
         }
