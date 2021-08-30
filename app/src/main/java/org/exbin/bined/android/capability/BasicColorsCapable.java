@@ -17,20 +17,22 @@ package org.exbin.bined.android.capability;
 
 import org.exbin.bined.android.basic.color.BasicCodeAreaColorsProfile;
 
-import javax.annotation.Nullable;
+import java.util.Optional;
+
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Support for basic set of colors.
  *
- * @version 0.2.0 2018/12/24
+ * @version 0.2.0 2021/08/30
  * @author ExBin Project (https://exbin.org)
  */
 @ParametersAreNonnullByDefault
 public interface BasicColorsCapable {
 
-    @Nullable
-    BasicCodeAreaColorsProfile getBasicColors();
+    @Nonnull
+    Optional<BasicCodeAreaColorsProfile> getBasicColors();
 
     void setBasicColors(BasicCodeAreaColorsProfile colors);
 }

@@ -104,8 +104,8 @@ public class BasicCodeAreaDimensions {
         }
 
         modifyRect(scrollPanelRectangle, scrollPanelX, scrollPanelY, scrollPanelWidth, scrollPanelHeight);
-        modifyRect(dataViewRectangle, scrollPanelX, scrollPanelY, dataViewWidth >= 0 ? dataViewWidth : 0, dataViewHeight >= 0 ? dataViewHeight : 0);
-        modifyRect(dataViewInnerRectangle, 0, 0, dataViewWidth >= 0 ? dataViewWidth : 0, dataViewHeight >= 0 ? dataViewHeight : 0);
+        modifyRect(dataViewRectangle, scrollPanelX, scrollPanelY, Math.max(dataViewWidth, 0), Math.max(dataViewHeight, 0));
+        modifyRect(dataViewInnerRectangle, 0, 0, Math.max(dataViewWidth, 0), Math.max(dataViewHeight, 0));
     }
 
     @Nonnull

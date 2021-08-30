@@ -25,6 +25,8 @@ import org.exbin.bined.basic.MovementDirection;
 import org.exbin.bined.basic.PositionScrollVisibility;
 import org.exbin.bined.basic.ScrollingDirection;
 
+import java.util.Optional;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -137,8 +139,18 @@ public interface CodeAreaPainter {
     @Nonnull
     CodeAreaCaretPosition mousePositionToClosestCaretPosition(int positionX, int positionY, CaretOverlapMode overflowMode);
 
+    /**
+     * Performs update of scrollbars after change in data size or position.
+     */
     void updateScrollBars();
 
+    /**
+     * Returns state of the visibility of given caret position within current
+     * scrolling window.
+     *
+     * @param caretPosition caret position
+     * @return visibility state
+     */
     @Nonnull
     PositionScrollVisibility computePositionScrollVisibility(CodeAreaCaretPosition caretPosition);
 
@@ -154,7 +166,8 @@ public interface CodeAreaPainter {
      * @return scroll position or null if caret position is already visible /
      * scrolled to the best fit
      */
-    CodeAreaScrollPosition computeRevealScrollPosition(CodeAreaCaretPosition caretPosition);
+    @Nonnull
+    Optional<CodeAreaScrollPosition> computeRevealScrollPosition(CodeAreaCaretPosition caretPosition);
 
     /**
      * Returns scroll position so that provided caret position is visible in the
@@ -166,8 +179,8 @@ public interface CodeAreaPainter {
      * @return scroll position or null if desired scroll position is the same as
      * current scroll position.
      */
-    @Nullable
-    CodeAreaScrollPosition computeCenterOnScrollPosition(CodeAreaCaretPosition caretPosition);
+    @Nonnull
+    Optional<CodeAreaScrollPosition> computeCenterOnScrollPosition(CodeAreaCaretPosition caretPosition);
 
     /**
      * Computes position for movement action.
@@ -188,4 +201,17 @@ public interface CodeAreaPainter {
      */
     @Nonnull
     CodeAreaScrollPosition computeScrolling(CodeAreaScrollPosition startPosition, ScrollingDirection direction);
+
+    /**
+     * Notify scroll position was modified.
+     *
+     * This is to assist detection of scrolling from outside compare to
+     * scrolling by scrollbar controls.
+     */
+    void scrollPositionModified();
+
+    /**
+     * Notify scroll position was changed outside of scrolling.
+     */
+    void scrollPositionChanged();
 }

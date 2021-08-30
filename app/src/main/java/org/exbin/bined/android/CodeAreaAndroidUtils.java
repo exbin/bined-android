@@ -18,7 +18,6 @@ package org.exbin.bined.android;
 import android.graphics.Color;
 import android.graphics.Rect;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -50,7 +49,7 @@ public class CodeAreaAndroidUtils {
      * @param character input character
      * @return true if character is suppose to have exactly full width
      */
-    public static boolean isMonospaceFullWidthCharater(char character) {
+    public static boolean isMonospaceFullWidthCharacter(char character) {
         return (character > MIN_MONOSPACE_CODE_POINT && (int) character < MAX_MONOSPACE_CODE_POINT
                 && character != INV_SPACE_CODE_POINT
                 && character != EXCEPTION1_CODE_POINT && character != EXCEPTION2_CODE_POINT);
