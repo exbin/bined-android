@@ -8,8 +8,11 @@ import android.os.Bundle;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.rustamg.filedialogs.FileDialog;
@@ -175,5 +178,69 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
                 Logger.getLogger(MainActivity.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+
+    public void buttonAction0(View view) {
+        codeArea.getCommandHandler().keyTyped('0', new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_0));
+    }
+
+    public void buttonAction1(View view) {
+        codeArea.getCommandHandler().keyTyped('1', new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_1));
+    }
+
+    public void buttonAction2(View view) {
+        codeArea.getCommandHandler().keyTyped('2', new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_2));
+    }
+
+    public void buttonAction3(View view) {
+        codeArea.getCommandHandler().keyTyped('3', new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_3));
+    }
+
+    public void buttonAction4(View view) {
+        codeArea.getCommandHandler().keyTyped('4', new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_4));
+    }
+
+    public void buttonAction5(View view) {
+        codeArea.getCommandHandler().keyTyped('5', new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_5));
+    }
+
+    public void buttonAction6(View view) {
+        codeArea.getCommandHandler().keyTyped('6', new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_6));
+    }
+
+    public void buttonAction7(View view) {
+        codeArea.getCommandHandler().keyTyped('7', new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_7));
+    }
+
+    public void buttonAction8(View view) {
+        codeArea.getCommandHandler().keyTyped('8', new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_0));
+    }
+
+    public void buttonAction9(View view) {
+        codeArea.getCommandHandler().keyTyped('1', new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_1));
+    }
+
+    public void buttonActionA(View view) {
+        codeArea.getCommandHandler().keyTyped('a', new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_A));
+    }
+
+    public void buttonActionB(View view) {
+        codeArea.getCommandHandler().keyTyped('b', new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_B));
+    }
+
+    public void buttonActionC(View view) {
+        codeArea.getCommandHandler().keyTyped('c', new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_C));
+    }
+
+    public void buttonActionD(View view) {
+        codeArea.getCommandHandler().keyTyped('d', new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_D));
+    }
+
+    public void buttonActionE(View view) {
+        codeArea.getCommandHandler().keyTyped('e', new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_E));
+    }
+
+    public void buttonActionF(View view) {
+        codeArea.getCommandHandler().keyTyped('f', new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_F));
     }
 }

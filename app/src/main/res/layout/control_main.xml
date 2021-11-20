@@ -25,48 +25,56 @@
                 <Button
                     android:id="@+id/button0"
                     style="@style/MyButtonSmallStyle"
+                    android:onClick="buttonAction0"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0" />
                 <Button
                     android:id="@+id/button1"
                     style="@style/MyButtonSmallStyle"
+                    android:onClick="buttonAction1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="1" />
                 <Button
                     android:id="@+id/button2"
                     style="@style/MyButtonSmallStyle"
+                    android:onClick="buttonAction2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="2" />
                 <Button
                     android:id="@+id/button3"
                     style="@style/MyButtonSmallStyle"
+                    android:onClick="buttonAction3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="3" />
                 <Button
                     android:id="@+id/button4"
                     style="@style/MyButtonSmallStyle"
+                    android:onClick="buttonAction4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="4" />
                 <Button
                     android:id="@+id/button5"
                     style="@style/MyButtonSmallStyle"
+                    android:onClick="buttonAction5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="5" />
                 <Button
                     android:id="@+id/button6"
                     style="@style/MyButtonSmallStyle"
+                    android:onClick="buttonAction6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="6" />
                 <Button
                     android:id="@+id/button7"
                     style="@style/MyButtonSmallStyle"
+                    android:onClick="buttonAction7"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="7" />
@@ -78,48 +86,56 @@
                 <Button
                     android:id="@+id/button8"
                     style="@style/MyButtonSmallStyle"
+                    android:onClick="buttonAction8"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="8" />
                 <Button
                     android:id="@+id/button9"
                     style="@style/MyButtonSmallStyle"
+                    android:onClick="buttonAction9"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="9" />
                 <Button
                     android:id="@+id/buttonA"
                     style="@style/MyButtonSmallStyle"
+                    android:onClick="buttonActionA"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="A" />
                 <Button
                     android:id="@+id/buttonB"
                     style="@style/MyButtonSmallStyle"
+                    android:onClick="buttonActionB"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="B" />
                 <Button
                     android:id="@+id/buttonC"
                     style="@style/MyButtonSmallStyle"
+                    android:onClick="buttonActionC"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="C" />
                 <Button
                     android:id="@+id/buttonD"
                     style="@style/MyButtonSmallStyle"
+                    android:onClick="buttonActionD"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="D" />
                 <Button
                     android:id="@+id/buttonE"
                     style="@style/MyButtonSmallStyle"
+                    android:onClick="buttonActionE"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="E" />
                 <Button
                     android:id="@+id/buttonF"
                     style="@style/MyButtonSmallStyle"
+                    android:onClick="buttonActionF"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="F" />

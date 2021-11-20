@@ -240,11 +240,12 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         dataViewOffsetX = scrollOffsetX - dimensions.getScrollPanelX();
         dataViewOffsetY = scrollOffsetY - dimensions.getScrollPanelY();
 
+        Rect mainAreaRectangle = dimensions.getMainAreaRectangle();
         scrollPanel.layout(
-                dimensions.getRowPositionAreaWidth(),
-                dimensions.getHeaderAreaHeight(),
-                dimensions.getRowPositionAreaWidth() + dimensions.getDataViewWidth(),
-                dimensions.getHeaderAreaHeight() + dimensions.getDataViewHeight());
+                mainAreaRectangle.left,
+                mainAreaRectangle.top,
+                mainAreaRectangle.left + mainAreaRectangle.width(),
+                mainAreaRectangle.top + mainAreaRectangle.height());
 
         int charactersPerPage = dimensions.getCharactersPerPage();
         structure.updateCache(codeArea, charactersPerPage);

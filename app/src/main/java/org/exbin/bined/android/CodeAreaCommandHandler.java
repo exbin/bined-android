@@ -44,6 +44,7 @@ public interface CodeAreaCommandHandler {
     /**
      * Keyboard key was typed.
      *
+     * @param keyCode key code
      * @param keyEvent key event
      */
     void keyTyped(int keyCode, KeyEvent keyEvent);
