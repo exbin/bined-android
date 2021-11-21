@@ -244,8 +244,8 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         scrollPanel.layout(
                 mainAreaRectangle.left,
                 mainAreaRectangle.top,
-                mainAreaRectangle.left + mainAreaRectangle.width(),
-                mainAreaRectangle.top + mainAreaRectangle.height());
+                mainAreaRectangle.right,
+                mainAreaRectangle.bottom);
 
         int charactersPerPage = dimensions.getCharactersPerPage();
         structure.updateCache(codeArea, charactersPerPage);
