@@ -26,12 +26,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import org.exbin.auxiliary.paged_data.BinaryData;
 import org.exbin.bined.CodeAreaControl;
 import org.exbin.bined.DataChangedListener;
 import org.exbin.bined.android.basic.DefaultCodeAreaCommandHandler;
 import org.exbin.bined.capability.ScrollingCapable;
 import org.exbin.bined.capability.SelectionCapable;
-import org.exbin.auxiliary.paged_data.BinaryData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +43,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 /**
  * Hexadecimal viewer/editor component.
  *
- * @version 0.2.0 2018/12/24
+ * @version 0.2.0 2021/12/01
  * @author ExBin Project (https://exbin.org)
  */
 @ParametersAreNonnullByDefault
@@ -284,8 +284,17 @@ public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl 
 
         @Override
         public boolean onTouchEvent(MotionEvent event) {
+            if (event.isButtonPressed(MotionEvent.BUTTON_PRIMARY)) {
+                performClick();
+            }
+
             CodeAreaCore.this.onTouchEvent(event);
             return false;
+        }
+
+        @Override
+        public boolean performClick() {
+            return super.performClick();
         }
     }
 }

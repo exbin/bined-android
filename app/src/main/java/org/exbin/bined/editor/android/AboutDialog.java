@@ -6,8 +6,11 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import androidx.fragment.app.FragmentActivity;
 import androidx.appcompat.app.AppCompatDialogFragment;
+
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 
 public class AboutDialog extends AppCompatDialogFragment {
 
@@ -22,6 +25,8 @@ public class AboutDialog extends AppCompatDialogFragment {
         // Pass null as the parent view because its going in the
         // dialog layout
         View aboutView = inflater.inflate(R.layout.about_view, null);
+        TextView textView = (TextView) aboutView.findViewById(R.id.textView);
+        textView.setMovementMethod(LinkMovementMethod.getInstance());
         builder.setView(aboutView);
         builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
             @Override

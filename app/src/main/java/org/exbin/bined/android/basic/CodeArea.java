@@ -130,10 +130,7 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
     public CodeArea(Context context, AttributeSet attrs) {
         super(context, attrs, DefaultCodeAreaCommandHandler.createDefaultCodeAreaCommandHandlerFactory(context));
 
-        caret = new DefaultCodeAreaCaret(() -> {
-            notifyCaretChanged();
-            repaint();
-        });
+        caret = new DefaultCodeAreaCaret(this::notifyCaretChanged);
         painter = new DefaultCodeAreaPainter(this);
         painter.attach();
         init();

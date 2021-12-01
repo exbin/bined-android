@@ -21,20 +21,19 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
-import androidx.constraintlayout.solver.widgets.Rectangle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import androidx.constraintlayout.solver.widgets.Rectangle;
+
+import org.exbin.auxiliary.paged_data.BinaryData;
 import org.exbin.bined.CaretOverlapMode;
-import org.exbin.bined.CodeAreaSelection;
-import org.exbin.bined.basic.BasicCodeAreaSection;
-import org.exbin.bined.basic.BasicCodeAreaZone;
 import org.exbin.bined.CodeAreaCaret;
 import org.exbin.bined.CodeAreaCaretPosition;
 import org.exbin.bined.CodeAreaSection;
+import org.exbin.bined.CodeAreaSelection;
 import org.exbin.bined.CodeAreaUtils;
-import org.exbin.bined.basic.CodeAreaViewMode;
 import org.exbin.bined.CodeCharactersCase;
 import org.exbin.bined.CodeType;
 import org.exbin.bined.DataChangedListener;
@@ -51,8 +50,11 @@ import org.exbin.bined.android.capability.FontCapable;
 import org.exbin.bined.basic.BasicBackgroundPaintMode;
 import org.exbin.bined.basic.BasicCodeAreaLayout;
 import org.exbin.bined.basic.BasicCodeAreaScrolling;
+import org.exbin.bined.basic.BasicCodeAreaSection;
 import org.exbin.bined.basic.BasicCodeAreaStructure;
+import org.exbin.bined.basic.BasicCodeAreaZone;
 import org.exbin.bined.basic.CodeAreaScrollPosition;
+import org.exbin.bined.basic.CodeAreaViewMode;
 import org.exbin.bined.basic.MovementDirection;
 import org.exbin.bined.basic.PositionScrollVisibility;
 import org.exbin.bined.basic.ScrollBarVerticalScale;
@@ -64,7 +66,6 @@ import org.exbin.bined.capability.CodeCharactersCaseCapable;
 import org.exbin.bined.capability.EditModeCapable;
 import org.exbin.bined.capability.RowWrappingCapable;
 import org.exbin.bined.capability.ScrollingCapable;
-import org.exbin.auxiliary.paged_data.BinaryData;
 import org.exbin.bined.capability.SelectionCapable;
 
 import java.nio.charset.Charset;
@@ -79,7 +80,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
  * Code area component default painter.
  *
  * @author ExBin Project (http://exbin.org)
- * @version 0.2.0 2021/08/30
+ * @version 0.2.0 2021/12/01
  */
 @ParametersAreNonnullByDefault
 public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapableCodeAreaPainter {
@@ -100,6 +101,8 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
     private final View dataView;
     @Nonnull
     private final DefaultCodeAreaScrollPane scrollPanel;
+    @Nonnull
+    private final DefaultCodeAreaMouseListener codeAreaMouseListener;
 
     private int dataViewOffsetX = 0;
     private int dataViewOffsetY = 0;
@@ -122,6 +125,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
 
     @Nonnull
     private final BasicCodeAreaLayout layout = new BasicCodeAreaLayout();
+    @Nonnull
     private BasicCodeAreaColorsProfile colorsProfile = new BasicCodeAreaColorsProfile();
 
     @Nullable
@@ -172,6 +176,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
                 ((ScrollingCapable) codeArea).setScrollPosition(scrolling.getScrollPosition());
             }
         };
+        scrollPanel.setLongClickable(true);
 
         dataView = new View(DefaultCodeAreaPainter.this.codeArea.getContext()) {
             @Override
@@ -180,8 +185,10 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
                 paintMainArea(canvas);
             }
         };
+        dataView.setLongClickable(true);
         scrollPanel.addView(dataView);
 
+        codeAreaMouseListener = new DefaultCodeAreaMouseListener(codeArea, scrollPanel);
         codeAreaDataChangeListener = this::dataChanged;
     }
 
@@ -191,12 +198,14 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
                 RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT);
         codeArea.addView(scrollPanel, wrapLayout);
+        dataView.setOnTouchListener(codeAreaMouseListener);
         codeArea.addDataChangedListener(codeAreaDataChangeListener);
     }
 
     @Override
     public void detach() {
         this.codeArea.removeView(scrollPanel);
+        dataView.setOnTouchListener(null);
         codeArea.removeDataChangedListener(codeAreaDataChangeListener);
     }
 
@@ -1074,9 +1083,12 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         mainAreaRect.top += dataViewOffsetY;
 
         Rect intersection = CodeAreaAndroidUtils.computeIntersection(mainAreaRect, scrolledCursorRect);
-        boolean cursorVisible = caret.isCursorVisible() && intersection != null && !intersection.isEmpty();
+        boolean cursorVisible = caret.isCursorVisible() && (intersection == null || !intersection.isEmpty());
 
         if (cursorVisible) {
+            if (intersection == null) {
+                intersection = scrolledCursorRect;
+            }
             g.clipRect(intersection);
             DefaultCodeAreaCaret.CursorRenderingMode renderingMode = caret.getRenderingMode();
             paint.setColor(colorsProfile.getCursorColor());

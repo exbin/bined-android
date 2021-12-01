@@ -42,7 +42,7 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:text="@string/app_about"
-                android:focusable="true" />
+                android:focusable="true"/>
         </LinearLayout>
     </ScrollView>
 

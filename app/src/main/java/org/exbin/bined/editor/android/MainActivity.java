@@ -4,11 +4,13 @@ import android.Manifest;
 import android.app.DialogFragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -65,6 +67,8 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
         codeArea = findViewById(R.id.codeArea);
 
+        registerForContextMenu(codeArea);
+
         if (fileData != null) {
             codeArea.setContentData(fileData);
         } else {
@@ -83,6 +87,53 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuItem cutMenuItem = menu.add(0, v.getId(), 0, "Cut");
+        cutMenuItem.setEnabled(codeArea.isEditable() && codeArea.hasSelection());
+        MenuItem copyMenuItem = menu.add(0, v.getId(), 1, "Copy");
+        copyMenuItem.setEnabled(codeArea.hasSelection());
+        MenuItem pasteMenuItem = menu.add(0, v.getId(), 2, "Paste");
+        pasteMenuItem.setEnabled(codeArea.isEditable() && codeArea.canPaste());
+        MenuItem deleteMenuItem = menu.add(0, v.getId(), 3, "Delete");
+        deleteMenuItem.setEnabled(codeArea.isEditable() && codeArea.hasSelection());
+        MenuItem selectAllMenuItem = menu.add(0, v.getId(), 4, "Select All");
+    }
+
+    // menu item select listener
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getOrder()) {
+            case 0: {
+                codeArea.cut();
+                break;
+            }
+            case 1: {
+                codeArea.copy();
+                break;
+            }
+            case 2: {
+                codeArea.paste();
+                break;
+            }
+            case 3: {
+                codeArea.delete();
+                break;
+            }
+            case 4: {
+                codeArea.selectAll();
+                break;
+            }
+
+            default: {
+                return false;
+            }
+        }
+
         return true;
     }
 
