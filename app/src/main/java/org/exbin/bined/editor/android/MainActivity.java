@@ -4,26 +4,33 @@ import android.Manifest;
 import android.app.DialogFragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Bundle;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 
 import com.rustamg.filedialogs.FileDialog;
 import com.rustamg.filedialogs.OpenFileDialog;
 import com.rustamg.filedialogs.SaveFileDialog;
 
-import org.exbin.bined.android.basic.CodeArea;
 import org.exbin.auxiliary.paged_data.BinaryData;
 import org.exbin.auxiliary.paged_data.ByteArrayEditableData;
+import org.exbin.bined.CodeAreaCaretPosition;
+import org.exbin.bined.EditMode;
+import org.exbin.bined.EditOperation;
+import org.exbin.bined.SelectionRange;
+import org.exbin.bined.android.basic.CodeArea;
+import org.exbin.bined.android.handler.BinaryStatusHandler;
+import org.exbin.bined.capability.EditModeCapable;
+import org.exbin.framework.bined.BinaryStatusApi;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -42,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
     private CodeArea codeArea;
     private static ByteArrayEditableData fileData = null;
+    private BinaryStatusHandler binaryStatus = new BinaryStatusHandler(this);
 
     private boolean storageReadPermissionGranted;
     private boolean storageWritePermissionGranted;
@@ -81,6 +89,31 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
             codeArea.setContentData(basicData);
         }
+
+        codeArea.addDataChangedListener(() -> {
+//            activeFile.getComponent().notifyDataChanged();
+//            if (editorModificationListener != null) {
+//                editorModificationListener.modified();
+//            }
+            updateCurrentDocumentSize();
+        });
+
+        codeArea.addSelectionChangedListener(() -> {
+            binaryStatus.setSelectionRange(codeArea.getSelection());
+//            updateClipboardActionsStatus();
+        });
+
+        codeArea.addCaretMovedListener((CodeAreaCaretPosition caretPosition) -> {
+            binaryStatus.setCursorPosition(caretPosition);
+        });
+
+        codeArea.addEditModeChangedListener((EditMode mode, EditOperation operation) -> {
+            binaryStatus.setEditMode(mode, operation);
+        });
+
+        binaryStatus.setEncoding(codeArea.getCharset().toString());
+
+        updateStatus();
     }
 
     @Override
@@ -205,6 +238,64 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         Toast.makeText(this, "Storage permission is not granted", Toast.LENGTH_LONG).show();
     }
 
+    public void updateStatus() {
+        updateCurrentDocumentSize();
+        updateCurrentCaretPosition();
+        updateCurrentSelectionRange();
+        updateCurrentMemoryMode();
+        updateCurrentEditMode();
+    }
+
+    private void updateCurrentDocumentSize() {
+        if (binaryStatus == null) {
+            return;
+        }
+
+        long documentOriginalSize = 0; // TODO activeFile.getDocumentOriginalSize();
+        long dataSize = codeArea.getDataSize();
+        binaryStatus.setCurrentDocumentSize(dataSize, documentOriginalSize);
+    }
+
+    private void updateCurrentCaretPosition() {
+        if (binaryStatus == null) {
+            return;
+        }
+
+        CodeAreaCaretPosition caretPosition = codeArea.getCaretPosition();
+        binaryStatus.setCursorPosition(caretPosition);
+    }
+
+    private void updateCurrentSelectionRange() {
+        if (binaryStatus == null) {
+            return;
+        }
+
+        SelectionRange selectionRange = codeArea.getSelection();
+        binaryStatus.setSelectionRange(selectionRange);
+    }
+
+    private void updateCurrentMemoryMode() {
+        if (binaryStatus == null) {
+            return;
+        }
+
+        BinaryStatusApi.MemoryMode newMemoryMode = BinaryStatusApi.MemoryMode.RAM_MEMORY;
+        if (((EditModeCapable) codeArea).getEditMode() == EditMode.READ_ONLY) {
+            newMemoryMode = BinaryStatusApi.MemoryMode.READ_ONLY;
+        } /* else if (codeArea.getContentData() instanceof DeltaDocument) {
+            newMemoryMode = BinaryStatusApi.MemoryMode.DELTA_MODE;
+        } */
+
+        binaryStatus.setMemoryMode(newMemoryMode);
+    }
+
+    private void updateCurrentEditMode() {
+        if (binaryStatus == null) {
+            return;
+        }
+
+        binaryStatus.setEditMode(codeArea.getEditMode(), codeArea.getActiveOperation());
+    }
 
     @Override
     public void onFileSelected(FileDialog dialog, File file) {

@@ -25,4 +25,6 @@
 
     <include layout="@layout/control_main" />
 
+    <include layout="@layout/status_panel" />
+
 </LinearLayout>
