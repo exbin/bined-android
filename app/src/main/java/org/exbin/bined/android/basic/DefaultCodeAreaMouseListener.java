@@ -15,7 +15,6 @@
  */
 package org.exbin.bined.android.basic;
 
-import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -28,11 +27,11 @@ import javax.annotation.ParametersAreNonnullByDefault;
 /**
  * Component mouse listener for code area.
  *
- * @version 0.2.0 2021/12/01
+ * @version 0.2.0 2021/12/26
  * @author ExBin Project (https://exbin.org)
  */
 @ParametersAreNonnullByDefault
-public class DefaultCodeAreaMouseListener implements View.OnTouchListener {
+public class DefaultCodeAreaMouseListener implements View.OnTouchListener, View.OnLongClickListener, View.OnContextClickListener {
 
     public static final int MOUSE_SCROLL_LINES = 3;
 
@@ -58,13 +57,24 @@ public class DefaultCodeAreaMouseListener implements View.OnTouchListener {
 
         if (codeArea.isEnabled() && motionEvent.getAction() == MotionEvent.ACTION_UP) {
             moveCaret(motionEvent);
-            return true;
+            return false;
         }
 
         return false;
     }
 
+    @Override
+    public boolean onLongClick(View v) {
+        return codeArea.showContextMenu();
+    }
+
+    @Override
+    public boolean onContextClick(View v) {
+        return codeArea.performContextClick();
+    }
+
     private void performClick() {
+//        codeArea.performContextClick();
     }
 
     private void moveCaret(MotionEvent me) {

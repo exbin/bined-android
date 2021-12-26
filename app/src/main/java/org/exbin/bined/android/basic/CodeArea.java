@@ -156,6 +156,7 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
     private void init() {
         // TODO: Use swing color instead
         //setBackground(Color.WHITE);
+        setLongClickable(true);
         caret.setSection(BasicCodeAreaSection.CODE_MATRIX);
     }
 
