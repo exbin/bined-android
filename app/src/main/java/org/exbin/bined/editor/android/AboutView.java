@@ -10,9 +10,12 @@ import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.View;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 /**
- * TODO: document your custom view class.
+ * About application view.
  */
+@ParametersAreNonnullByDefault
 public class AboutView extends View {
     private String mExampleString; // TODO: use a default from R.string...
     private int mExampleColor = Color.RED; // TODO: use a default from R.color...

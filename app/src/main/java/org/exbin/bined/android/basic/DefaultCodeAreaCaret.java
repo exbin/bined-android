@@ -143,6 +143,8 @@ public class DefaultCodeAreaCaret implements CodeAreaCaret {
         resetBlink();
     }
 
+    @Nonnull
+    @Override
     public CodeAreaSection getSection() {
         return caretPosition.getSection().orElse(BasicCodeAreaSection.CODE_MATRIX);
     }

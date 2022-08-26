@@ -189,11 +189,6 @@ public class BinaryStatusHandler implements BinaryStatusApi {
     }
 
     @Override
-    public void setControlHandler(StatusControlHandler statusControlHandler) {
-        // TODO this.statusControlHandler = statusControlHandler;
-    }
-
-    @Override
     public void setMemoryMode(BinaryStatusApi.MemoryMode memoryMode) {
         final TextView memoryModeLabel = (TextView) app.findViewById(R.id.memoryModeLabel);
         memoryModeLabel.setText(memoryMode.getDisplayChar());

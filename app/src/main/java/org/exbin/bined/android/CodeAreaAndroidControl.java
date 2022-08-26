@@ -17,6 +17,8 @@ package org.exbin.bined.android;
 
 import android.graphics.Canvas;
 
+import org.exbin.bined.basic.CodeAreaScrollPosition;
+
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -51,4 +53,11 @@ public interface CodeAreaAndroidControl {
      * should be recomputed and updated if necessary.
      */
     void updateLayout();
+
+    /**
+     * Updates scroll position.
+     *
+     * @param scrollPosition scroll position
+     */
+    void updateScrollPosition(CodeAreaScrollPosition scrollPosition);
 }

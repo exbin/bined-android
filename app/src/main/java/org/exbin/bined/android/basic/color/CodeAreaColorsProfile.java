@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
- * Color profile.
+ * Colors profile.
  *
  * @version 0.2.0 2019/08/17
  * @author ExBin Project (https://exbin.org)

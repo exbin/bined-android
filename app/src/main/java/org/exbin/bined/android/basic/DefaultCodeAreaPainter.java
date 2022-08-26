@@ -795,6 +795,10 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         int charactersPerRow = structure.getCharactersPerRow();
         int skipToChar = visibility.getSkipToChar();
         int skipRestFromChar = visibility.getSkipRestFromChar();
+        int rowHeight = metrics.getRowHeight();
+        int subFontSpace = metrics.getSubFontSpace();
+
+        int positionY = rowPositionY + rowHeight - subFontSpace;
 
         int renderOffset = skipToChar;
         Integer renderColor = null;
@@ -817,7 +821,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
             if (sequenceBreak) {
                 if (renderOffset < charOnRow) {
                     if (renderColor != null) {
-                        renderBackgroundSequence(g, dataViewOffsetX + renderOffset, dataViewOffsetY + charOnRow, dataViewOffsetX + rowPositionX, dataViewOffsetY + rowPositionY);
+                        renderBackgroundSequence(g, dataViewOffsetX + rowPositionX + renderOffset, dataViewOffsetY + charOnRow, dataViewOffsetX + rowPositionX, dataViewOffsetY + positionY);
                     }
                 }
 
@@ -834,7 +838,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
 
         if (renderOffset < charactersPerRow) {
             if (renderColor != null) {
-                renderBackgroundSequence(g, dataViewOffsetX + renderOffset, dataViewOffsetY + charactersPerRow, dataViewOffsetX + rowPositionX, dataViewOffsetY + rowPositionY);
+                renderBackgroundSequence(g, dataViewOffsetX + rowPositionX + renderOffset, dataViewOffsetY + charactersPerRow, dataViewOffsetX + rowPositionX, dataViewOffsetY + positionY);
             }
         }
     }

@@ -15,20 +15,32 @@
  */
 package org.exbin.bined.android.basic.color;
 
+import org.exbin.bined.android.basic.color.BasicCodeAreaColorsProfile;
+
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Capability of painter to handle basic colors setting.
  *
- * @version 0.2.0 2019/08/17
+ * @version 0.2.0 2018/11/28
  * @author ExBin Project (https://exbin.org)
  */
 @ParametersAreNonnullByDefault
 public interface BasicColorsCapableCodeAreaPainter {
 
+    /**
+     * Returns basic profile for colors.
+     *
+     * @return colors profile
+     */
     @Nonnull
     BasicCodeAreaColorsProfile getBasicColors();
 
-    void setBasicColors(BasicCodeAreaColorsProfile colors);
+    /**
+     * Sets basic profile for colors.
+     *
+     * @param colorsProfile colors profile
+     */
+    void setBasicColors(BasicCodeAreaColorsProfile colorsProfile);
 }

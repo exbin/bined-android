@@ -86,6 +86,7 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
 
     @Nonnull
     private Charset charset = Charset.forName(CodeAreaAndroidUtils.DEFAULT_ENCODING);
+    @Nonnull
     private ClipboardHandlingMode clipboardHandlingMode = ClipboardHandlingMode.PROCESS;
 
     @Nonnull
@@ -119,9 +120,13 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
     @Nonnull
     private HorizontalScrollUnit horizontalScrollUnit = HorizontalScrollUnit.PIXEL;
 
+    @Nonnull
     private final List<CaretMovedListener> caretMovedListeners = new ArrayList<>();
+    @Nonnull
     private final List<ScrollingListener> scrollingListeners = new ArrayList<>();
+    @Nonnull
     private final List<SelectionChangedListener> selectionChangedListeners = new ArrayList<>();
+    @Nonnull
     private final List<EditModeChangedListener> editModeChangedListeners = new ArrayList<>();
 
     /**
@@ -231,34 +236,41 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
         return painter.isInitialized();
     }
 
+    @Override
     public long getDataPosition() {
         return caret.getDataPosition();
     }
 
+    @Override
     public int getCodeOffset() {
         return caret.getCodeOffset();
     }
 
     @Nonnull
+    @Override
     public CodeAreaSection getActiveSection() {
         return caret.getSection();
     }
 
     @Nonnull
+    @Override
     public CodeAreaCaretPosition getCaretPosition() {
         return caret.getCaretPosition();
     }
 
+    @Override
     public void setCaretPosition(CodeAreaCaretPosition caretPosition) {
         caret.setCaretPosition(caretPosition);
         notifyCaretMoved();
     }
 
+    @Override
     public void setCaretPosition(long dataPosition) {
         caret.setCaretPosition(dataPosition);
         notifyCaretMoved();
     }
 
+    @Override
     public void setCaretPosition(long dataPosition, int codeOffset) {
         caret.setCaretPosition(dataPosition, codeOffset);
         notifyCaretMoved();
@@ -299,12 +311,12 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
             this.viewMode = viewMode;
             switch (viewMode) {
                 case CODE_MATRIX:
-                    getCaret().setSection(BasicCodeAreaSection.CODE_MATRIX);
+                    caret.setSection(BasicCodeAreaSection.CODE_MATRIX);
                     reset();
                     notifyCaretMoved();
                     break;
                 case TEXT_PREVIEW:
-                    getCaret().setSection(BasicCodeAreaSection.TEXT_PREVIEW);
+                    caret.setSection(BasicCodeAreaSection.TEXT_PREVIEW);
                     reset();
                     notifyCaretMoved();
                     break;
@@ -411,6 +423,15 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
         }
     }
 
+    @Override
+    public void updateScrollPosition(CodeAreaScrollPosition scrollPosition) {
+        if (!scrollPosition.equals(this.scrollPosition)) {
+            this.scrollPosition.setScrollPosition(scrollPosition);
+            repaint();
+            notifyScrolled();
+        }
+    }
+
     @Nonnull
     @Override
     public ScrollBarVisibility getVerticalScrollBarVisibility() {
@@ -433,12 +454,12 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
     @Override
     public void setVerticalScrollUnit(VerticalScrollUnit verticalScrollUnit) {
         this.verticalScrollUnit = verticalScrollUnit;
-        long linePosition = scrollPosition.getRowPosition();
+        long rowPosition = scrollPosition.getRowPosition();
         if (verticalScrollUnit == VerticalScrollUnit.ROW) {
             scrollPosition.setRowOffset(0);
         }
         resetPainter();
-        scrollPosition.setRowPosition(linePosition);
+        scrollPosition.setRowPosition(rowPosition);
         updateScrollBars();
         notifyScrolled();
     }
@@ -465,12 +486,12 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
     @Override
     public void setHorizontalScrollUnit(HorizontalScrollUnit horizontalScrollUnit) {
         this.horizontalScrollUnit = horizontalScrollUnit;
-        int bytePosition = scrollPosition.getCharPosition();
+        int charPosition = scrollPosition.getCharPosition();
         if (horizontalScrollUnit == HorizontalScrollUnit.CHARACTER) {
             scrollPosition.setCharOffset(0);
         }
         resetPainter();
-        scrollPosition.setCharPosition(bytePosition);
+        scrollPosition.setCharPosition(charPosition);
         updateScrollBars();
         notifyScrolled();
     }
@@ -509,7 +530,16 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
     }
 
     protected void notifyCaretChanged() {
+        if (painter != null) {
+            painter.resetCaret();
+        }
         repaint();
+    }
+
+    @Override
+    public void notifyDataChanged() {
+        super.notifyDataChanged();
+        updateLayout();
     }
 
     @Nonnull
@@ -565,16 +595,18 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
         repaint();
     }
 
-    @Nonnull
-    public EditMode getEditMode() {
-        return editMode;
-    }
-
     @Override
     public boolean isEditable() {
         return editMode != EditMode.READ_ONLY;
     }
 
+    @Nonnull
+    @Override
+    public EditMode getEditMode() {
+        return editMode;
+    }
+
+    @Override
     public void setEditMode(EditMode editMode) {
         boolean changed = editMode != this.editMode;
         this.editMode = editMode;
@@ -605,10 +637,12 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
     }
 
     @Nonnull
+    @Override
     public EditOperation getEditOperation() {
         return editOperation;
     }
 
+    @Override
     public void setEditOperation(EditOperation editOperation) {
         EditOperation previousOperation = getActiveOperation();
         this.editOperation = editOperation;
@@ -704,9 +738,9 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
     }
 
     @Override
-    public void setBasicColors(BasicCodeAreaColorsProfile colors) {
+    public void setBasicColors(BasicCodeAreaColorsProfile colorsProfile) {
         if (painter instanceof BasicColorsCapableCodeAreaPainter) {
-            ((BasicColorsCapableCodeAreaPainter) painter).setBasicColors(colors);
+            ((BasicColorsCapableCodeAreaPainter) painter).setBasicColors(colorsProfile);
         }
     }
 
@@ -758,10 +792,12 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
         scrollingListeners.remove(scrollingListener);
     }
 
+    @Override
     public void addEditModeChangedListener(EditModeChangedListener editModeChangedListener) {
         editModeChangedListeners.add(editModeChangedListener);
     }
 
+    @Override
     public void removeEditModeChangedListener(EditModeChangedListener editModeChangedListener) {
         editModeChangedListeners.remove(editModeChangedListener);
     }

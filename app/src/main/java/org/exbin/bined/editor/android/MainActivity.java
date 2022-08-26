@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             }
 
             codeArea.setContentData(basicData);
+// TODO Test            codeArea.setSelection(20, 30);
         }
 
         codeArea.addDataChangedListener(() -> {
