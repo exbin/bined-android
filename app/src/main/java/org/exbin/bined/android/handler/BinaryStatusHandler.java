@@ -31,6 +31,7 @@ import org.exbin.framework.bined.StatusDocumentSizeFormat;
 import org.exbin.framework.bined.BinaryStatusApi;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Binary editor status handler.
@@ -38,6 +39,7 @@ import javax.annotation.Nonnull;
  * @version 0.2.1 2021/12/09
  * @author ExBin Project (http://exbin.org)
  */
+@ParametersAreNonnullByDefault
 public class BinaryStatusHandler implements BinaryStatusApi {
 
     public static final String INSERT_EDIT_MODE_LABEL = "INS";

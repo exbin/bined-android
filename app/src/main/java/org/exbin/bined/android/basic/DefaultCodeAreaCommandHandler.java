@@ -1,4 +1,4 @@
-/*
+    /*
  * Copyright (C) ExBin Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -67,6 +67,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
 
+    public static final String BINED_CLIPBOARD_MIME = "application/x-bined";
     public static final int LAST_CONTROL_CODE = 31;
     private static final char DELETE_CHAR = (char) 0x7f;
 
@@ -79,6 +80,7 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
 
     private ClipboardManager clipboard;
     private boolean canPaste = false;
+    private ClipDescription binedDataFlavor;
     private ClipDescription binaryDataFlavor;
     private ClipData currentClipboardData = null;
 
@@ -95,6 +97,7 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
             }
         });
 
+        binedDataFlavor = new ClipDescription("BinEd Data", new String[] { BINED_CLIPBOARD_MIME });
         binaryDataFlavor = new ClipDescription("Binary Data", new String[] { CodeAreaUtils.MIME_CLIPBOARD_BINARY });
 //        try {
 //            clipboard.addFlavorListener((FlavorEvent e) -> {
@@ -534,7 +537,7 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
 
             BinaryData copy = data.copy(first, last - first + 1);
 
-            ClipData clipData = new ClipData(binaryDataFlavor, new ClipData.Item(new Intent() {
+            ClipData clipData = new ClipData(binedDataFlavor, new ClipData.Item(new Intent() {
                 @Nullable
                 @Override
                 public Uri getData() {
@@ -780,6 +783,7 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
             ((SelectionCapable) codeArea).setSelection(dataPosition, dataPosition);
         }
     }
+
     private void updateCanPaste() {
         canPaste = clipboard.hasPrimaryClip(); // CodeAreaUtils.canPaste(clipboard, binaryDataFlavor);
     }

@@ -18,6 +18,8 @@ package org.exbin.bined.android;
 import android.graphics.Color;
 import android.graphics.Rect;
 
+import org.exbin.bined.CharsetStreamTranslator;
+
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -37,7 +39,7 @@ public class CodeAreaAndroidUtils {
     public static final int EXCEPTION2_CODE_POINT = 0x9e;
 
     public static int MAX_COMPONENT_VALUE = 255;
-    public static final String DEFAULT_ENCODING = "UTF-8";
+    public static final String DEFAULT_ENCODING = CharsetStreamTranslator.DEFAULT_ENCODING;
 
     private CodeAreaAndroidUtils() {
     }

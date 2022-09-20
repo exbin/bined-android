@@ -17,6 +17,8 @@ package org.exbin.bined.android.basic;
 
 import android.graphics.Paint;
 
+import org.exbin.bined.CharsetStreamTranslator;
+
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 
@@ -66,8 +68,12 @@ public class BasicCodeAreaMetrics {
             monospaceFont = characterWidth == fontMetrics.measureText(" ") && characterWidth == fontMetrics.measureText("i");
         }
 
-        CharsetEncoder encoder = charset.newEncoder();
-        maxBytesPerChar = (int) encoder.maxBytesPerChar();
+        try {
+            CharsetEncoder encoder = charset.newEncoder();
+            maxBytesPerChar = (int) encoder.maxBytesPerChar();
+        } catch (UnsupportedOperationException ex) {
+            maxBytesPerChar = CharsetStreamTranslator.DEFAULT_MAX_BYTES_PER_CHAR;
+        }
     }
 
     public boolean isInitialized() {
