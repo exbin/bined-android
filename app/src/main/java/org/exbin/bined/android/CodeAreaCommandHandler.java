@@ -30,7 +30,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public interface CodeAreaCommandHandler {
 
     /**
-     * Notifies command handler about end of sequence of appendable commands.
+     * Notifies command handler about end of sequence of append-able commands.
      */
     void undoSequenceBreak();
 

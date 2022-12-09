@@ -23,7 +23,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
- * Code area swing control.
+ * Code area android control.
  *
  * @version 0.2.0 2018/09/07
  * @author ExBin Project (https://exbin.org)

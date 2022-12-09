@@ -10,7 +10,6 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,7 +27,6 @@ import org.exbin.bined.EditMode;
 import org.exbin.bined.EditOperation;
 import org.exbin.bined.SelectionRange;
 import org.exbin.bined.android.basic.CodeArea;
-import org.exbin.bined.android.handler.BinaryStatusHandler;
 import org.exbin.bined.capability.EditModeCapable;
 import org.exbin.framework.bined.BinaryStatusApi;
 

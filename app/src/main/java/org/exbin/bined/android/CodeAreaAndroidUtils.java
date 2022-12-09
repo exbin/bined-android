@@ -38,7 +38,7 @@ public class CodeAreaAndroidUtils {
     public static final int EXCEPTION1_CODE_POINT = 0x8e;
     public static final int EXCEPTION2_CODE_POINT = 0x9e;
 
-    public static int MAX_COMPONENT_VALUE = 255;
+    public static int MAX_COLOR_COMPONENT_VALUE = 255;
     public static final String DEFAULT_ENCODING = CharsetStreamTranslator.DEFAULT_ENCODING;
 
     private CodeAreaAndroidUtils() {
@@ -74,9 +74,9 @@ public class CodeAreaAndroidUtils {
 
     public static int createNegativeColor(int color) {
         return Color.rgb(
-                MAX_COMPONENT_VALUE - Color.red(color),
-                MAX_COMPONENT_VALUE - Color.green(color),
-                MAX_COMPONENT_VALUE - Color.blue(color));
+                MAX_COLOR_COMPONENT_VALUE - Color.red(color),
+                MAX_COLOR_COMPONENT_VALUE - Color.green(color),
+                MAX_COLOR_COMPONENT_VALUE - Color.blue(color));
     }
 
     public static int computeGrayColor(int color) {
