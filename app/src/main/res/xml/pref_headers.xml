@@ -3,6 +3,11 @@
     <!-- These settings headers are only used on tablets. -->
 
     <header
+        android:fragment="org.exbin.bined.editor.android.SettingsActivity$AppearancePreferenceFragment"
+        android:icon="@drawable/ic_info_black_24dp"
+        android:title="@string/pref_header_appearance" />
+
+    <header
         android:fragment="org.exbin.bined.editor.android.SettingsActivity$GeneralPreferenceFragment"
         android:icon="@drawable/ic_info_black_24dp"
         android:title="@string/pref_header_general" />

@@ -45,6 +45,12 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
     private static final String EXAMPLE_FILE_PATH = "/org/exbin/bined/android/example/resources/lorem_1.txt";
 
+    private static final int CUT_ITEM_ID = 1;
+    private static final int COPY_ITEM_ID = 2;
+    private static final int PASTE_ITEM_ID = 3;
+    private static final int DELETE_ITEM_ID = 4;
+    private static final int SELECT_ALL_ITEM_ID = 5;
+
     private CodeArea codeArea;
     private static ByteArrayEditableData fileData = null;
     private BinaryStatusHandler binaryStatus = new BinaryStatusHandler(this);
@@ -125,38 +131,38 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        MenuItem cutMenuItem = menu.add(0, v.getId(), 0, "Cut");
+        MenuItem cutMenuItem = menu.add(0, CUT_ITEM_ID, 0, "Cut");
         cutMenuItem.setEnabled(codeArea.isEditable() && codeArea.hasSelection());
-        MenuItem copyMenuItem = menu.add(0, v.getId(), 1, "Copy");
+        MenuItem copyMenuItem = menu.add(0, COPY_ITEM_ID, 1, "Copy");
         copyMenuItem.setEnabled(codeArea.hasSelection());
-        MenuItem pasteMenuItem = menu.add(0, v.getId(), 2, "Paste");
+        MenuItem pasteMenuItem = menu.add(0, PASTE_ITEM_ID, 2, "Paste");
         pasteMenuItem.setEnabled(codeArea.isEditable() && codeArea.canPaste());
-        MenuItem deleteMenuItem = menu.add(0, v.getId(), 3, "Delete");
+        MenuItem deleteMenuItem = menu.add(0, DELETE_ITEM_ID, 3, "Delete");
         deleteMenuItem.setEnabled(codeArea.isEditable() && codeArea.hasSelection());
-        MenuItem selectAllMenuItem = menu.add(0, v.getId(), 4, "Select All");
+        MenuItem selectAllMenuItem = menu.add(0, SELECT_ALL_ITEM_ID, 4, "Select All");
     }
 
     // menu item select listener
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        switch (item.getOrder()) {
-            case 0: {
+        switch (item.getItemId()) {
+            case CUT_ITEM_ID: {
                 codeArea.cut();
                 break;
             }
-            case 1: {
+            case COPY_ITEM_ID: {
                 codeArea.copy();
                 break;
             }
-            case 2: {
+            case PASTE_ITEM_ID: {
                 codeArea.paste();
                 break;
             }
-            case 3: {
+            case DELETE_ITEM_ID: {
                 codeArea.delete();
                 break;
             }
-            case 4: {
+            case SELECT_ALL_ITEM_ID: {
                 codeArea.selectAll();
                 break;
             }
