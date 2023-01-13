@@ -1,7 +1,7 @@
 package org.exbin.bined.editor.android;
 
 import android.Manifest;
-import android.app.DialogFragment;
+import androidx.fragment.app.DialogFragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
