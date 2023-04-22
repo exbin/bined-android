@@ -6,7 +6,7 @@ package java.util;
  */
 public class Optional<T> {
 
-    private static final Optional<?> EMPTY = new Optional(Null.INSTANCE);
+    private static final Optional<Null> EMPTY = new Optional<>(Null.INSTANCE);
     private T value;
 
     protected Optional(T value) {
