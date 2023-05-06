@@ -30,7 +30,7 @@
                 android:layout_height="180dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                app:srcCompat="@drawable/bined_logo"
+                app:srcCompat="@drawable/app_icon"
                 android:contentDescription="@string/bined_logo_description" />
 
             <TextView
