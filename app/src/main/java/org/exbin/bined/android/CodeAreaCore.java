@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import org.exbin.auxiliary.paged_data.BinaryData;
+import org.exbin.auxiliary.paged_data.EmptyBinaryData;
 import org.exbin.bined.CodeAreaControl;
 import org.exbin.bined.DataChangedListener;
 import org.exbin.bined.android.basic.DefaultCodeAreaCommandHandler;
@@ -49,8 +50,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl {
 
-    @Nullable
-    private BinaryData contentData;
+    @Nonnull
+    private BinaryData contentData = EmptyBinaryData.INSTANCE;
 
     @Nonnull
     protected final PrimaryView primaryView;
@@ -153,21 +154,21 @@ public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl 
         return false;
     }
 
-    @Nullable
+    @Nonnull
     @Override
     public BinaryData getContentData() {
         return contentData;
     }
 
     public void setContentData(@Nullable BinaryData contentData) {
-        this.contentData = contentData;
+        this.contentData = contentData == null ? EmptyBinaryData.INSTANCE : contentData;
         notifyDataChanged();
         repaint();
     }
 
     @Override
     public long getDataSize() {
-        return contentData == null ? 0 : contentData.getDataSize();
+        return contentData.getDataSize();
     }
 
     /**
