@@ -54,6 +54,11 @@ public interface CodeAreaCommandHandler {
     void enterPressed();
 
     /**
+     * Tab key was pressed.
+     */
+    void tabPressed();
+
+    /**
      * Backspace key was pressed.
      */
     void backSpacePressed();

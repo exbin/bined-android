@@ -184,7 +184,7 @@ public interface CodeAreaPainter {
     /**
      * Computes position for movement action.
      *
-     * @param position  source position
+     * @param position source position
      * @param direction movement direction
      * @return target position
      */
@@ -195,7 +195,7 @@ public interface CodeAreaPainter {
      * Computes scrolling position for given shift action.
      *
      * @param startPosition start position
-     * @param direction     scrolling direction
+     * @param direction scrolling direction
      * @return target position
      */
     @Nonnull
@@ -203,7 +203,7 @@ public interface CodeAreaPainter {
 
     /**
      * Notify scroll position was modified.
-     *
+     * <p>
      * This is to assist detection of scrolling from outside compare to
      * scrolling by scrollbar controls.
      */

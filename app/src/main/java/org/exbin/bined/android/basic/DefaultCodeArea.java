@@ -15,6 +15,7 @@
  */
 package org.exbin.bined.android.basic;
 
+import org.exbin.bined.capability.BackgroundPaintCapable;
 import org.exbin.bined.capability.BasicScrollingCapable;
 import org.exbin.bined.capability.CaretCapable;
 import org.exbin.bined.capability.CharsetCapable;
@@ -26,7 +27,6 @@ import org.exbin.bined.capability.RowWrappingCapable;
 import org.exbin.bined.capability.ScrollingCapable;
 import org.exbin.bined.capability.SelectionCapable;
 import org.exbin.bined.capability.ViewModeCapable;
-import org.exbin.bined.android.capability.BackgroundPaintCapable;
 import org.exbin.bined.android.capability.BasicColorsCapable;
 import org.exbin.bined.android.capability.FontCapable;
 
