@@ -48,7 +48,7 @@ public interface CodeAreaAndroidControl {
 
     /**
      * Requests update of the component layout.
-     *
+     * <p>
      * Notifies code area, that change of parameters will affect layout and it
      * should be recomputed and updated if necessary.
      */

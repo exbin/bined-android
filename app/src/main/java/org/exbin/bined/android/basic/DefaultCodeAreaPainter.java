@@ -27,7 +27,7 @@ import android.widget.RelativeLayout;
 
 import androidx.constraintlayout.solver.widgets.Rectangle;
 
-import org.exbin.auxiliary.paged_data.BinaryData;
+import org.exbin.auxiliary.binary_data.BinaryData;
 import org.exbin.bined.CaretOverlapMode;
 import org.exbin.bined.CodeAreaCaret;
 import org.exbin.bined.CodeAreaCaretPosition;

@@ -26,8 +26,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-import org.exbin.auxiliary.paged_data.BinaryData;
-import org.exbin.auxiliary.paged_data.EmptyBinaryData;
+import org.exbin.auxiliary.binary_data.BinaryData;
+import org.exbin.auxiliary.binary_data.EmptyBinaryData;
 import org.exbin.bined.CodeAreaControl;
 import org.exbin.bined.DataChangedListener;
 import org.exbin.bined.android.basic.DefaultCodeAreaCommandHandler;
@@ -151,6 +151,10 @@ public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl 
             return ((SelectionCapable) this).hasSelection();
         }
 
+        return false;
+    }
+
+    public boolean isEditable() {
         return false;
     }
 

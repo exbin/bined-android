@@ -50,8 +50,8 @@ import org.exbin.bined.capability.EditModeCapable;
 import org.exbin.bined.capability.ScrollingCapable;
 import org.exbin.bined.capability.SelectionCapable;
 import org.exbin.bined.capability.ViewModeCapable;
-import org.exbin.auxiliary.paged_data.BinaryData;
-import org.exbin.auxiliary.paged_data.EditableBinaryData;
+import org.exbin.auxiliary.binary_data.BinaryData;
+import org.exbin.auxiliary.binary_data.EditableBinaryData;
 
 import java.nio.ByteBuffer;
 
@@ -284,7 +284,7 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
         if (keyValue == KeyEvent.KEYCODE_UNKNOWN) {
             return;
         }
-        if (!((EditModeCapable) codeArea).isEditable()) {
+        if (!checkEditAllowed()) {
             return;
         }
 
@@ -900,7 +900,7 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
 
     @Override
     public boolean checkEditAllowed() {
-        return ((EditModeCapable) codeArea).isEditable();
+        return codeArea.isEditable();
     }
 
     @Nonnull
