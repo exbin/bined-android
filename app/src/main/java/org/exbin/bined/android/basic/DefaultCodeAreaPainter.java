@@ -41,6 +41,7 @@ import org.exbin.bined.DefaultCodeAreaCaretPosition;
 import org.exbin.bined.EditOperation;
 import org.exbin.bined.PositionCodeType;
 import org.exbin.bined.android.CodeAreaAndroidUtils;
+import org.exbin.bined.android.CodeAreaCore;
 import org.exbin.bined.android.CodeAreaPainter;
 import org.exbin.bined.android.Font;
 import org.exbin.bined.android.basic.color.BasicCodeAreaColorsProfile;
@@ -85,7 +86,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapableCodeAreaPainter {
 
     @Nonnull
-    protected final CodeArea codeArea;
+    protected final CodeAreaCore codeArea;
     private volatile boolean initialized = false;
     private volatile boolean adjusting = false;
 
@@ -153,7 +154,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
     private Charset charMappingCharset = null;
     private final char[] charMapping = new char[256];
 
-    public DefaultCodeAreaPainter(final CodeArea codeArea) {
+    public DefaultCodeAreaPainter(final CodeAreaCore codeArea) {
         this.codeArea = codeArea;
 
         scrollPanel = new DefaultCodeAreaScrollPane(codeArea.getContext()) {
@@ -229,6 +230,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
     @Override
     public void resetFont() {
         fontChanged = true;
+        resetLayout();
     }
 
     @Override
@@ -264,7 +266,6 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         codeCharactersCase = ((CodeCharactersCaseCapable) codeArea).getCodeCharactersCase();
         backgroundPaintMode = ((BackgroundPaintCapable) codeArea).getBackgroundPaintMode();
         showMirrorCursor = ((CaretCapable) codeArea).isShowMirrorCursor();
-//        antialiasingMode = ((AntialiasingCapable) codeArea).getAntialiasingMode();
         minRowPositionLength = ((RowWrappingCapable) codeArea).getMinRowPositionLength();
         maxRowPositionLength = ((RowWrappingCapable) codeArea).getMaxRowPositionLength();
 
@@ -571,8 +572,12 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
 
             positionY += rowHeight;
             dataPosition += bytesPerRow;
+            if (dataPosition < 0) {
+                break;
+            }
         }
 
+        // Decoration lines
         paint.setColor(colorsProfile.getDecorationLine());
         int lineX = rowPositionAreaWidth - (characterWidth / 2);
         if (lineX >= 0) {
@@ -677,12 +682,16 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         int dataViewX = dimensions.getScrollPanelX();
         int dataViewY = dimensions.getScrollPanelY();
         int rowsPerRect = dimensions.getRowsPerRect();
+        long dataSize = codeArea.getDataSize();
         CodeAreaScrollPosition scrollPosition = scrolling.getScrollPosition();
         long dataPosition = scrollPosition.getRowPosition() * bytesPerRow;
         int rowPositionX = dataViewX - scrollPosition.getCharPosition() * characterWidth - scrollPosition.getCharOffset();
         int rowPositionY = dataViewY - scrollPosition.getRowOffset();
         paint.setColor(colorsProfile.getTextColor());
         for (int row = 0; row <= rowsPerRect; row++) {
+            if (dataPosition > dataSize) {
+                break;
+            }
             prepareRowData(dataPosition);
             paintRowBackground(g, dataPosition, rowPositionX, rowPositionY);
             paintRowText(g, dataPosition, rowPositionX, rowPositionY);
@@ -1208,7 +1217,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
                 break;
             }
             default:
-                throw new IllegalStateException("Unexpected rendering mode " + renderingMode.name());
+                throw CodeAreaUtils.getInvalidTypeException(renderingMode);
         }
     }
 
@@ -1445,6 +1454,11 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         g.drawText(drawnChars, charOffset, length, positionX, positionY, paint);
     }
 
+    /**
+     * Precomputes widths for basic ascii characters.
+     *
+     * @param charset character set
+     */
     private void buildCharMapping(Charset charset) {
         for (int i = 0; i < 256; i++) {
             charMapping[i] = new String(new byte[]{(byte) i}, charset).charAt(0);
@@ -1497,7 +1511,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
     }
 
     /**
-     * Render sequence of background rectangles.
+     * Renders sequence of background rectangles.
      * <p>
      * Doesn't include character at offset end.
      */

@@ -42,7 +42,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
- * Hexadecimal viewer/editor component.
+ * Binary viewer/editor component.
  *
  * @author ExBin Project (https://exbin.org)
  */
@@ -74,7 +74,7 @@ public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl 
      */
     public CodeAreaCore(Context context, AttributeSet attrs, @Nullable CodeAreaCommandHandler.CodeAreaCommandHandlerFactory commandHandlerFactory) {
         super(context, attrs);
-        this.commandHandler = commandHandlerFactory == null ? new DefaultCodeAreaCommandHandler(context, this) : commandHandlerFactory.createCommandHandler(this);
+        this.commandHandler = commandHandlerFactory == null ? new DefaultCodeAreaCommandHandler(context, this) : createCommandHandler(commandHandlerFactory);
         init();
 
         primaryView = new PrimaryView(context, attrs);
@@ -90,6 +90,11 @@ public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl 
 //        setFocusable(true);
 //        setSystemUiVisibility(getSystemUiVisibility() | View.FOCUSABLE);
 //        setFocusTraversalKeysEnabled(false);
+    }
+
+    @Nonnull
+    private CodeAreaCommandHandler createCommandHandler(CodeAreaCommandHandler.CodeAreaCommandHandlerFactory commandHandlerFactory) {
+        return commandHandlerFactory.createCommandHandler(this);
     }
 
     @Nonnull
@@ -175,11 +180,9 @@ public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl 
     }
 
     /**
-     * Notifies component, that internal data was changed.
+     * Notifies component, that the internal data was changed.
      */
     public void notifyDataChanged() {
-        resetPainter();
-
         for (DataChangedListener listener : dataChangedListeners) {
             listener.dataChanged();
         }
@@ -226,22 +229,10 @@ public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl 
 
     public abstract void paintView(Canvas g);
 
+    @ParametersAreNonnullByDefault
     private class PrimaryView extends View {
 
-        /**
-         * Creates new instance with default command handler and painter.
-         */
         public PrimaryView(Context context, AttributeSet attrs) {
-            this(context, attrs, null);
-        }
-
-        /**
-         * Creates new instance with provided command handler and codeArea factory
-         * methods.
-         *
-         * @param commandHandlerFactory command handler or null for default handler
-         */
-        public PrimaryView(Context context, AttributeSet attrs, @Nullable CodeAreaCommandHandler.CodeAreaCommandHandlerFactory commandHandlerFactory) {
             super(context, attrs);
             setFocusable(true);
         }

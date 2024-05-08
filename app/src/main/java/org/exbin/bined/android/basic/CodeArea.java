@@ -66,7 +66,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
- * Code area component default code area.
+ * Code area component.
  *
  * @author ExBin Project (https://exbin.org)
  */

@@ -28,7 +28,6 @@ import org.exbin.bined.basic.ScrollingDirection;
 import java.util.Optional;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
