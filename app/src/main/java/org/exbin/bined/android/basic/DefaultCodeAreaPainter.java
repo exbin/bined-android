@@ -829,7 +829,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
             if (sequenceBreak) {
                 if (renderOffset < charOnRow) {
                     if (renderColor != null) {
-                        renderBackgroundSequence(g, dataViewOffsetX + rowPositionX + renderOffset, dataViewOffsetY + charOnRow, dataViewOffsetX + rowPositionX, dataViewOffsetY + positionY);
+                        renderBackgroundSequence(g, renderOffset, charOnRow, rowPositionX, positionY);
                     }
                 }
 
@@ -846,7 +846,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
 
         if (renderOffset < charactersPerRow) {
             if (renderColor != null) {
-                renderBackgroundSequence(g, dataViewOffsetX + rowPositionX + renderOffset, dataViewOffsetY + charactersPerRow, dataViewOffsetX + rowPositionX, dataViewOffsetY + positionY);
+                renderBackgroundSequence(g, renderOffset, charactersPerRow, rowPositionX, positionY);
             }
         }
     }
@@ -1518,7 +1518,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
     private void renderBackgroundSequence(Canvas g, int startOffset, int endOffset, int rowPositionX, int positionY) {
         int characterWidth = metrics.getCharacterWidth();
         int rowHeight = metrics.getRowHeight();
-        g.drawRect(rowPositionX + startOffset * characterWidth, positionY, rowPositionX + endOffset * characterWidth, positionY + rowHeight, paint);
+        g.drawRect(dataViewOffsetX + rowPositionX + startOffset * characterWidth, dataViewOffsetY + 1 + positionY - rowHeight, dataViewOffsetX + rowPositionX + endOffset * characterWidth, dataViewOffsetY + 1 + positionY, paint);
     }
 
     @Override
@@ -1545,10 +1545,11 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         // scrollPanel.setHorizontalScrollBarPolicy(CodeAreaAndroidUtils.getHorizontalScrollBarPolicy(scrolling.getHorizontalScrollBarVisibility()));
 
         int verticalScrollValue = scrolling.getVerticalScrollValue(rowHeight, rowsPerDocument);
-        scrollPanel.setVerticalScrollbarPosition(verticalScrollValue);
+        // scrollPanel.setVerticalScrollbarPosition(verticalScrollValue);
 
         int horizontalScrollValue = scrolling.getHorizontalScrollValue(characterWidth);
         // scrollPanel.setHorizontalScrollBar.setValue(horizontalScrollValue);
+        scrollPanel.updateScrollBars(verticalScrollValue, horizontalScrollValue);
 
         adjusting = false;
 

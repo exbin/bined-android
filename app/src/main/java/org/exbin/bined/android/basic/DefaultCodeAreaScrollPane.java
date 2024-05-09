@@ -55,8 +55,6 @@ public class DefaultCodeAreaScrollPane extends TwoDimensionScrollView {
     public void updateScrollBars(int verticalScrollValue, int horizontalScrollValue) {
         scrollingUpdate = true;
         scrollTo(horizontalScrollValue, verticalScrollValue);
-//        verticalScrollBar.setValue(verticalScrollValue);
-//        horizontalScrollBar.setValue(horizontalScrollValue);
         scrollingUpdate = false;
     }
 }
