@@ -17,6 +17,7 @@ package org.exbin.bined.android;
 
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.view.KeyEvent;
 
 import org.exbin.bined.CharsetStreamTranslator;
 
@@ -95,5 +96,9 @@ public class CodeAreaAndroidUtils {
         int right = Math.min(rect1.right, rect2.right);
         int bottom = Math.min(rect1.bottom, rect2.bottom);
         return new Rect(left, top, right, bottom);
+    }
+
+    public static int getMetaMaskDown() {
+        return KeyEvent.META_CTRL_MASK;
     }
 }

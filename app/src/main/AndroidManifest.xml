@@ -27,6 +27,6 @@
             android:exported="true" />
     </application>
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- legacy <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> -->
 
 </manifest>

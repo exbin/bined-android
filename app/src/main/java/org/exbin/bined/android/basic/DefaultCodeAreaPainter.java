@@ -288,7 +288,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
     }
 
     private void validateCaret() {
-        CodeAreaCaret caret = ((CaretCapable) codeArea).getCaret();
+        CodeAreaCaret caret = ((CaretCapable) codeArea).getCodeAreaCaret();
         CodeAreaCaretPosition caretPosition = caret.getCaretPosition();
         if (caretPosition.getDataPosition() > codeArea.getDataSize()) {
             caret.setCaretPosition(null);
@@ -1080,7 +1080,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
             cursorDataCache.cursorData = new byte[cursorDataLength];
         }
 
-        DefaultCodeAreaCaret caret = (DefaultCodeAreaCaret) ((CaretCapable) codeArea).getCaret();
+        DefaultCodeAreaCaret caret = (DefaultCodeAreaCaret) ((CaretCapable) codeArea).getCodeAreaCaret();
         Rect cursorRect = getPositionRect(caret.getDataPosition(), caret.getCodeOffset(), caret.getSection());
         if (cursorRect == null) {
             return;

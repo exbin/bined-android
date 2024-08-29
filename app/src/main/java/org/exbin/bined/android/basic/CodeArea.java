@@ -24,7 +24,7 @@ import org.exbin.bined.CaretOverlapMode;
 import org.exbin.bined.ClipboardHandlingMode;
 import org.exbin.bined.RowWrappingMode;
 import org.exbin.bined.basic.BasicCodeAreaSection;
-import org.exbin.bined.CaretMovedListener;
+import org.exbin.bined.CodeAreaCaretListener;
 import org.exbin.bined.CodeAreaCaretPosition;
 import org.exbin.bined.CodeAreaSelection;
 import org.exbin.bined.CodeAreaSection;
@@ -77,7 +77,7 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
     private CodeAreaPainter painter;
 
     @Nonnull
-    private final DefaultCodeAreaCaret caret;
+    private final DefaultCodeAreaCaret codeAreaCaret;
     @Nonnull
     private final CodeAreaSelection selection = new CodeAreaSelection();
     @Nonnull
@@ -119,7 +119,7 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
     @Nonnull
     private HorizontalScrollUnit horizontalScrollUnit = HorizontalScrollUnit.PIXEL;
 
-    private final List<CaretMovedListener> caretMovedListeners = new ArrayList<>();
+    private final List<CodeAreaCaretListener> caretMovedListeners = new ArrayList<>();
     private final List<ScrollingListener> scrollingListeners = new ArrayList<>();
     private final List<SelectionChangedListener> selectionChangedListeners = new ArrayList<>();
     private final List<EditModeChangedListener> editModeChangedListeners = new ArrayList<>();
@@ -140,7 +140,7 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
         super(context, attrs, commandHandlerFactory);
 
         painter = new DefaultCodeAreaPainter(this);
-        caret = new DefaultCodeAreaCaret(this::notifyCaretChanged);
+        codeAreaCaret = new DefaultCodeAreaCaret(this::notifyCaretChanged);
         painter.attach();
         init();
     }
@@ -149,7 +149,7 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
         // TODO: Use swing color instead
         //setBackground(Color.WHITE);
         setLongClickable(true);
-        caret.setSection(BasicCodeAreaSection.CODE_MATRIX);
+        codeAreaCaret.setSection(BasicCodeAreaSection.CODE_MATRIX);
     }
 
     @Nonnull
@@ -182,8 +182,8 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
 
     @Nonnull
     @Override
-    public DefaultCodeAreaCaret getCaret() {
-        return caret;
+    public DefaultCodeAreaCaret getCodeAreaCaret() {
+        return codeAreaCaret;
     }
 
     @Override
@@ -225,41 +225,41 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
 
     @Override
     public long getDataPosition() {
-        return caret.getDataPosition();
+        return codeAreaCaret.getDataPosition();
     }
 
     @Override
     public int getCodeOffset() {
-        return caret.getCodeOffset();
+        return codeAreaCaret.getCodeOffset();
     }
 
     @Nonnull
     @Override
     public CodeAreaSection getActiveSection() {
-        return caret.getSection();
+        return codeAreaCaret.getSection();
     }
 
     @Nonnull
     @Override
-    public CodeAreaCaretPosition getCaretPosition() {
-        return caret.getCaretPosition();
+    public CodeAreaCaretPosition getActiveCaretPosition() {
+        return codeAreaCaret.getCaretPosition();
     }
 
     @Override
-    public void setCaretPosition(CodeAreaCaretPosition caretPosition) {
-        caret.setCaretPosition(caretPosition);
+    public void setActiveCaretPosition(CodeAreaCaretPosition caretPosition) {
+        codeAreaCaret.setCaretPosition(caretPosition);
         notifyCaretMoved();
     }
 
     @Override
-    public void setCaretPosition(long dataPosition) {
-        caret.setCaretPosition(dataPosition);
+    public void setActiveCaretPosition(long dataPosition) {
+        codeAreaCaret.setCaretPosition(dataPosition);
         notifyCaretMoved();
     }
 
     @Override
-    public void setCaretPosition(long dataPosition, int codeOffset) {
-        caret.setCaretPosition(dataPosition, codeOffset);
+    public void setActiveCaretPosition(long dataPosition, int codeOffset) {
+        codeAreaCaret.setCaretPosition(dataPosition, codeOffset);
         notifyCaretMoved();
     }
 
@@ -298,12 +298,12 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
             this.viewMode = viewMode;
             switch (viewMode) {
                 case CODE_MATRIX:
-                    caret.setSection(BasicCodeAreaSection.CODE_MATRIX);
+                    codeAreaCaret.setSection(BasicCodeAreaSection.CODE_MATRIX);
                     reset();
                     notifyCaretMoved();
                     break;
                 case TEXT_PREVIEW:
-                    caret.setSection(BasicCodeAreaSection.TEXT_PREVIEW);
+                    codeAreaCaret.setSection(BasicCodeAreaSection.TEXT_PREVIEW);
                     reset();
                     notifyCaretMoved();
                     break;
@@ -330,12 +330,12 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
 
     public void validateCaret() {
         boolean moved = false;
-        if (caret.getDataPosition() > getDataSize()) {
-            caret.setDataPosition(getDataSize());
+        if (codeAreaCaret.getDataPosition() > getDataSize()) {
+            codeAreaCaret.setDataPosition(getDataSize());
             moved = true;
         }
-        if (caret.getSection() == BasicCodeAreaSection.CODE_MATRIX && caret.getCodeOffset() >= codeType.getMaxDigitsForByte()) {
-            caret.setCodeOffset(codeType.getMaxDigitsForByte() - 1);
+        if (codeAreaCaret.getSection() == BasicCodeAreaSection.CODE_MATRIX && codeAreaCaret.getCodeOffset() >= codeType.getMaxDigitsForByte()) {
+            codeAreaCaret.setCodeOffset(codeType.getMaxDigitsForByte() - 1);
             moved = true;
         }
 
@@ -346,7 +346,7 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
 
     @Override
     public void revealCursor() {
-        revealPosition(caret.getCaretPosition());
+        revealPosition(codeAreaCaret.getCaretPosition());
     }
 
     @Override
@@ -368,7 +368,7 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
 
     @Override
     public void centerOnCursor() {
-        centerOnPosition(caret.getCaretPosition());
+        centerOnPosition(codeAreaCaret.getCaretPosition());
     }
 
     @Override
@@ -618,7 +618,7 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
             for (EditModeChangedListener listener : editModeChangedListeners) {
                 listener.editModeChanged(editMode, getActiveOperation());
             }
-            caret.resetBlink();
+            codeAreaCaret.resetBlink();
             notifyCaretChanged();
             repaint();
         }
@@ -656,7 +656,7 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
             for (EditModeChangedListener listener : editModeChangedListeners) {
                 listener.editModeChanged(editMode, currentOperation);
             }
-            caret.resetBlink();
+            codeAreaCaret.resetBlink();
             notifyCaretChanged();
             repaint();
         }
@@ -755,8 +755,8 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
     }
 
     protected void notifyCaretMoved() {
-        for (CaretMovedListener listener : caretMovedListeners) {
-            listener.caretMoved(caret.getCaretPosition());
+        for (CodeAreaCaretListener listener : caretMovedListeners) {
+            listener.caretMoved(codeAreaCaret.getCaretPosition());
         }
     }
 
@@ -778,12 +778,12 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
     }
 
     @Override
-    public void addCaretMovedListener(CaretMovedListener caretMovedListener) {
+    public void addCaretMovedListener(CodeAreaCaretListener caretMovedListener) {
         caretMovedListeners.add(caretMovedListener);
     }
 
     @Override
-    public void removeCaretMovedListener(CaretMovedListener caretMovedListener) {
+    public void removeCaretMovedListener(CodeAreaCaretListener caretMovedListener) {
         caretMovedListeners.remove(caretMovedListener);
     }
 

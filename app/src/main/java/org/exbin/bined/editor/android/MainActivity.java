@@ -265,7 +265,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             return;
         }
 
-        CodeAreaCaretPosition caretPosition = codeArea.getCaretPosition();
+        CodeAreaCaretPosition caretPosition = codeArea.getActiveCaretPosition();
         binaryStatus.setCursorPosition(caretPosition);
     }
 
