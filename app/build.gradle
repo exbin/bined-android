@@ -45,7 +45,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
-    implementation 'org.exbin.bined:bined-core:0.3.0-SNAPSHOT'
-    implementation 'org.exbin.bined:bined-operation:0.3.0-SNAPSHOT'
+//    implementation 'org.exbin.bined:bined-core:0.3.0-SNAPSHOT'
+//    implementation 'org.exbin.bined:bined-operation:0.3.0-SNAPSHOT'
     implementation 'org.exbin.auxiliary:binary_data:0.2.1'
 }
