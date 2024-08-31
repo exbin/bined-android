@@ -3,11 +3,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="org.exbin.bined.editor.android.MainActivity">
     <item
+        android:id="@+id/app_bar_search"
+        android:icon="@drawable/ic_search_black_24dp"
+        android:title="@string/action_search"
+        app:actionViewClass="android.widget.SearchView"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/app_bar_undo"
+        android:icon="@drawable/ic_undo_24dp"
+        android:title="@string/action_undo"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/app_bar_redo"
+        android:icon="@drawable/ic_redo_24dp"
+        android:title="@string/action_redo"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_new"
+        android:title="@string/action_new" />
+    <item
         android:id="@+id/action_open"
         android:title="@string/action_open" />
     <item
         android:id="@+id/action_save"
         android:title="@string/action_save" />
+    <item
+        android:id="@+id/view_menu"
+        android:title="@string/view_menu">
+        <menu>
+            <item
+                android:id="@+id/view_mode"
+                android:title="@string/view_mode" />
+            <item
+                android:id="@+id/code_type"
+                android:title="@string/code_type" />
+            <item
+                android:id="@+id/hex_chars_case"
+                android:title="@string/hex_characters_case" />
+        </menu>
+    </item>
     <item
         android:id="@+id/action_settings"
         android:title="@string/action_settings" />

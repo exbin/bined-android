@@ -28,6 +28,9 @@ import org.exbin.bined.EditOperation;
 import org.exbin.bined.SelectionRange;
 import org.exbin.bined.android.basic.CodeArea;
 import org.exbin.bined.capability.EditModeCapable;
+import org.exbin.bined.highlight.android.HighlightNonAsciiCodeAreaPainter;
+import org.exbin.bined.operation.android.CodeAreaOperationCommandHandler;
+import org.exbin.bined.operation.android.CodeAreaUndoRedo;
 import org.exbin.framework.bined.BinaryStatusApi;
 
 import java.io.File;
@@ -51,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
     private CodeArea codeArea;
     private static ByteArrayEditableData fileData = null;
-    private BinaryStatusHandler binaryStatus = new BinaryStatusHandler(this);
+    private final BinaryStatusHandler binaryStatus = new BinaryStatusHandler(this);
 
     private boolean storageReadPermissionGranted;
     private boolean storageWritePermissionGranted;
@@ -76,6 +79,10 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 //        });
 
         codeArea = findViewById(R.id.codeArea);
+
+        CodeAreaOperationCommandHandler commandHandler = new CodeAreaOperationCommandHandler(codeArea.getContext(), codeArea, new CodeAreaUndoRedo(codeArea));
+        codeArea.setCommandHandler(commandHandler);
+        codeArea.setPainter(new HighlightNonAsciiCodeAreaPainter(codeArea));
 
         registerForContextMenu(codeArea);
 
@@ -181,6 +188,11 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         int id = item.getItemId();
 
         switch (item.getItemId()) {
+            case R.id.action_new: {
+
+                return true;
+            }
+
             case R.id.action_open: {
                 if (storageReadPermissionGranted) {
                     OpenFileDialog dialog = new OpenFileDialog();
@@ -226,10 +238,20 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
                 return true;
             }
 
-//            case R.id.action_favorite:
-//                // User chose the "Favorite" action, mark the current item
-//                // as a favorite...
-//                return true;
+            case R.id.code_type: {
+                // TODO
+                return true;
+            }
+
+            case R.id.view_mode: {
+                // TODO
+                return true;
+            }
+
+            case R.id.hex_chars_case: {
+                // TODO
+                return true;
+            }
 
             default:
                 return super.onOptionsItemSelected(item);

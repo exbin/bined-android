@@ -31,8 +31,9 @@
     <string name="pref_title_vibrate">Vibrate</string>
 
     <!-- Example settings for Notifications -->
-    <string name="action_open">Open</string>
 
+    <string name="action_new">New</string>
+    <string name="action_open">Open</string>
     <string name="action_save">Save</string>
 
     <string name="action_settings">Settings</string>
@@ -55,6 +56,13 @@
 
     <!-- Preference Titles -->
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="view_menu">View</string>
+    <string name="view_mode">View Mode</string>
+    <string name="code_type">Code Type</string>
+    <string name="hex_characters_case">Hex Characters Case</string>
+    <string name="action_search">Search</string>
+    <string name="action_undo">Undo</string>
+    <string name="action_redo">Redo</string>
     <string-array name="pref_example_list_titles">
         <item>Always</item>
         <item>When possible</item>
