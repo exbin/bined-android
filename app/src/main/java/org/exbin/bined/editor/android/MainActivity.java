@@ -43,8 +43,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class MainActivity extends AppCompatActivity implements FileDialog.OnFileSelectedListener {
 
-    private static final String EXAMPLE_FILE_PATH = "/org/exbin/bined/android/example/resources/lorem_1.txt";
-
     private static final int CUT_ITEM_ID = 1;
     private static final int COPY_ITEM_ID = 2;
     private static final int PASTE_ITEM_ID = 3;
@@ -85,11 +83,12 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             codeArea.setContentData(fileData);
         } else {
             ByteArrayEditableData basicData = new ByteArrayEditableData();
+            /* // Load sample data
             try {
                 basicData.loadFromStream(MainActivity.class.getResourceAsStream(EXAMPLE_FILE_PATH));
             } catch (IOException ex) {
                 Logger.getLogger(MainActivity.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            } */
 
             codeArea.setContentData(basicData);
         }

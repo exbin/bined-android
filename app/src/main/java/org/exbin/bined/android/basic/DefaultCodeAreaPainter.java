@@ -619,7 +619,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
 
         paintCursor(g);
 
-        paintDebugInfo(g, dataViewRectangle, scrollPosition);
+//        paintDebugInfo(g, dataViewRectangle, scrollPosition);
     }
 
     // Debugging counter
