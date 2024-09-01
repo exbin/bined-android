@@ -15,8 +15,8 @@ Features
 
 UNDER DEVELOPMENT  
 
-  * TODO: Data as hexadecimal codes and text preview
-  * TODO: Insert and overwrite edit modes
+  * Data as hexadecimal codes and text preview
+  * Insert and overwrite edit modes
   * TODO: Support for selection and clipboard actions
   * TODO: Support for showing unprintable/whitespace characters
   * TODO: Support for undo/redo

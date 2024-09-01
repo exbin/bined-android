@@ -44,6 +44,10 @@
                 android:enabled="false"
                 android:title="@string/hex_characters_case" />
             <item
+                android:id="@+id/encoding"
+                android:enabled="false"
+                android:title="@string/encoding" />
+            <item
                 android:id="@+id/non_printing_characters"
                 android:enabled="false"
                 android:title="@string/non_printing_characters" />
@@ -57,11 +61,11 @@
                 android:id="@+id/go_to_position"
                 android:enabled="false"
                 android:title="@string/go_to_position" />
-
         </menu>
     </item>
     <item
         android:id="@+id/action_settings"
+        android:enabled="false"
         android:title="@string/action_settings" />
     <item
         android:id="@+id/action_about"
