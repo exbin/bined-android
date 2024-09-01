@@ -2,14 +2,20 @@ package org.exbin.bined.editor.android;
 
 import android.Manifest;
 import androidx.fragment.app.DialogFragment;
+
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.method.KeyListener;
+import android.text.method.TextKeyListener;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +33,7 @@ import org.exbin.bined.EditMode;
 import org.exbin.bined.EditOperation;
 import org.exbin.bined.SelectionRange;
 import org.exbin.bined.android.basic.CodeArea;
+import org.exbin.bined.basic.BasicCodeAreaSection;
 import org.exbin.bined.capability.EditModeCapable;
 import org.exbin.bined.highlight.android.HighlightNonAsciiCodeAreaPainter;
 import org.exbin.bined.operation.android.CodeAreaOperationCommandHandler;
@@ -62,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
     private boolean storageReadPermissionGranted;
     private boolean storageWritePermissionGranted;
+    private boolean keyboardShown = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -135,6 +143,48 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
         codeArea.addCaretMovedListener((CodeAreaCaretPosition caretPosition) -> {
             binaryStatus.setCursorPosition(caretPosition);
+
+            boolean showKeyboard = codeArea.getActiveSection() == BasicCodeAreaSection.TEXT_PREVIEW;
+            if (showKeyboard != keyboardShown) {
+
+                keyboardShown = showKeyboard;
+                InputMethodManager im = (InputMethodManager)codeArea.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (showKeyboard) {
+                    im.showSoftInput(codeArea, InputMethodManager.SHOW_IMPLICIT);
+                } else {
+                    im.hideSoftInputFromWindow(codeArea.getWindowToken(), 0);
+                }
+            }
+        });
+
+        codeArea.setOnKeyListener(new View.OnKeyListener() {
+
+            private KeyListener keyListener = new TextKeyListener(TextKeyListener.Capitalize.NONE, false);
+            private Editable editable = Editable.Factory.getInstance().newEditable("");
+
+            @Override
+            public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+                if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+                    keyListener.onKeyDown(view, editable, keyCode, keyEvent);
+                    processKeys(keyEvent);
+                } else if (keyEvent.getAction() == KeyEvent.ACTION_UP) {
+                    commandHandler.keyPressed(keyEvent);
+                } else {
+                    keyListener.onKeyOther(view, editable, keyEvent);
+                    processKeys(keyEvent);
+                }
+                return true;
+            }
+
+            private void processKeys(KeyEvent keyEvent) {
+                int outputCharsLength = editable.length();
+                if (outputCharsLength > 0) {
+                    for (int i = 0; i < outputCharsLength; i++) {
+                        commandHandler.keyTyped(editable.charAt(i), keyEvent);
+                    }
+                    editable.clear();
+                }
+            }
         });
 
         codeArea.addEditModeChangedListener((EditMode mode, EditOperation operation) -> {

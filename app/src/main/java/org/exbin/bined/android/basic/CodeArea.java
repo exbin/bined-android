@@ -149,6 +149,8 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
         // TODO: Use swing color instead
         //setBackground(Color.WHITE);
         setLongClickable(true);
+        setFocusable(true);
+        setFocusableInTouchMode(true);
         codeAreaCaret.setSection(BasicCodeAreaSection.CODE_MATRIX);
     }
 

@@ -261,7 +261,7 @@ public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl 
 
         @Override
         public boolean onKeyDown(int keyCode, KeyEvent keyEvent) {
-            commandHandler.keyTyped(keyCode, keyEvent);
+            commandHandler.keyTyped(keyEvent.getUnicodeChar(), keyEvent);
             return super.onKeyDown(keyCode, keyEvent);
         }
 

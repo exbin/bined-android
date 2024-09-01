@@ -33,19 +33,31 @@
         <menu>
             <item
                 android:id="@+id/view_mode"
+                android:enabled="false"
                 android:title="@string/view_mode" />
             <item
                 android:id="@+id/code_type"
+                android:enabled="false"
                 android:title="@string/code_type" />
             <item
                 android:id="@+id/hex_chars_case"
+                android:enabled="false"
                 android:title="@string/hex_characters_case" />
+            <item
+                android:id="@+id/non_printing_characters"
+                android:enabled="false"
+                android:title="@string/non_printing_characters" />
         </menu>
     </item>
     <item
         android:id="@+id/edit_menu"
         android:title="@string/edit_menu">
         <menu>
+            <item
+                android:id="@+id/go_to_position"
+                android:enabled="false"
+                android:title="@string/go_to_position" />
+
         </menu>
     </item>
     <item
