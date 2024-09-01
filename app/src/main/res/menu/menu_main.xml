@@ -43,6 +43,12 @@
         </menu>
     </item>
     <item
+        android:id="@+id/edit_menu"
+        android:title="@string/edit_menu">
+        <menu>
+        </menu>
+    </item>
+    <item
         android:id="@+id/action_settings"
         android:title="@string/action_settings" />
     <item

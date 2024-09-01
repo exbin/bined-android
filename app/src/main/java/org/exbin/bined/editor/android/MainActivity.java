@@ -53,6 +53,10 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     private static final int SELECT_ALL_ITEM_ID = 5;
 
     private CodeArea codeArea;
+    private CodeAreaUndoRedo undoRedo;
+
+    private long documentOriginalSize = 0;
+    private Menu menu;
     private static ByteArrayEditableData fileData = null;
     private final BinaryStatusHandler binaryStatus = new BinaryStatusHandler(this);
 
@@ -80,7 +84,23 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
         codeArea = findViewById(R.id.codeArea);
 
-        CodeAreaOperationCommandHandler commandHandler = new CodeAreaOperationCommandHandler(codeArea.getContext(), codeArea, new CodeAreaUndoRedo(codeArea));
+        undoRedo = new CodeAreaUndoRedo(codeArea);
+        undoRedo.addChangeListener(() -> {
+            if (menu != null) {
+                menu.findItem(R.id.app_bar_undo).setEnabled(undoRedo.canUndo());
+                menu.findItem(R.id.app_bar_redo).setEnabled(undoRedo.canRedo());
+            }
+//            View undoAction = findViewById(R.id.app_bar_undo);
+//            if (undoAction != null) {
+//                undoAction.setEnabled(undoRedo.canUndo());
+//            }
+//            View redoAction = findViewById(R.id.app_bar_redo);
+//            if (redoAction != null) {
+//                redoAction.setEnabled(undoRedo.canRedo());
+//            }
+        });
+
+        CodeAreaOperationCommandHandler commandHandler = new CodeAreaOperationCommandHandler(codeArea.getContext(), codeArea, undoRedo);
         codeArea.setCommandHandler(commandHandler);
         codeArea.setPainter(new HighlightNonAsciiCodeAreaPainter(codeArea));
 
@@ -130,6 +150,11 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        this.menu = menu;
+        menu.findItem(R.id.app_bar_undo).setEnabled(undoRedo.canUndo());
+        menu.findItem(R.id.app_bar_redo).setEnabled(undoRedo.canRedo());
+
         return true;
     }
 
@@ -189,7 +214,12 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
         switch (item.getItemId()) {
             case R.id.action_new: {
+                // TODO Release file
 
+                codeArea.setContentData(new ByteArrayEditableData());
+                undoRedo.clear();
+
+                documentOriginalSize = 0;
                 return true;
             }
 
@@ -253,6 +283,16 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
                 return true;
             }
 
+            case R.id.app_bar_undo: {
+                undoRedo.performUndo();
+                return true;
+            }
+
+            case R.id.app_bar_redo: {
+                undoRedo.performRedo();
+                return true;
+            }
+
             default:
                 return super.onOptionsItemSelected(item);
 
@@ -276,7 +316,6 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             return;
         }
 
-        long documentOriginalSize = 0; // TODO activeFile.getDocumentOriginalSize();
         long dataSize = codeArea.getDataSize();
         binaryStatus.setCurrentDocumentSize(dataSize, documentOriginalSize);
     }
@@ -330,6 +369,8 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
                 FileInputStream fileInputStream = new FileInputStream(file);
                 fileData.loadFromStream(fileInputStream);
                 fileInputStream.close();
+                documentOriginalSize = fileData.getDataSize();
+                undoRedo.clear();
             } catch (IOException ex) {
                 Logger.getLogger(MainActivity.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -341,6 +382,8 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
                 FileOutputStream fileOutputStream = new FileOutputStream(file);
                 contentData.saveToStream(fileOutputStream);
                 fileOutputStream.close();
+                documentOriginalSize = contentData.getDataSize();
+                undoRedo.setSyncPosition();
             } catch (IOException ex) {
                 Logger.getLogger(MainActivity.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -409,5 +452,45 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
     public void buttonActionF(View view) {
         codeArea.getCommandHandler().keyTyped('f', new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_F));
+    }
+
+    public void buttonActionUp(View view) {
+        codeArea.getCommandHandler().keyPressed(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_UP));
+    }
+
+    public void buttonActionDown(View view) {
+        codeArea.getCommandHandler().keyPressed(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_DOWN));
+    }
+
+    public void buttonActionLeft(View view) {
+        codeArea.getCommandHandler().keyPressed(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_LEFT));
+    }
+
+    public void buttonActionRight(View view) {
+        codeArea.getCommandHandler().keyPressed(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_RIGHT));
+    }
+
+    public void buttonActionHome(View view) {
+        codeArea.getCommandHandler().keyPressed(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MOVE_HOME));
+    }
+
+    public void buttonActionEnd(View view) {
+        codeArea.getCommandHandler().keyPressed(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MOVE_END));
+    }
+
+    public void buttonActionInsert(View view) {
+        codeArea.getCommandHandler().keyPressed(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_INSERT));
+    }
+
+    public void buttonActionDelete(View view) {
+        codeArea.getCommandHandler().keyPressed(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
+    }
+
+    public void buttonActionBk(View view) {
+        codeArea.getCommandHandler().keyPressed(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK));
+    }
+
+    public void buttonActionTab(View view) {
+        codeArea.getCommandHandler().keyPressed(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_TAB));
     }
 }
