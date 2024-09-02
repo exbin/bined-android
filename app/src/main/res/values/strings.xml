@@ -41,7 +41,7 @@
 
     <string name="action_exit">Exit</string>
     <string name="exampleString">Test</string>
-    <string name="app_about">Name: BinEd - Binary/Hex Editor\nVersion: 0.2.0\nVendor: <a href="https://exbin.org">ExBin Project</a>\nLicense: <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>\nHomepage: <a href="https://bined.exbin.org/android">https://bined.exbin.org/android</a></string>
+    <string name="app_about">Name: BinEd - Binary/Hex Editor\nVersion: 0.2.1 SNAPSHOT\nVendor: <a href="https://exbin.org">ExBin Project</a>\nLicense: <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>\nHomepage: <a href="https://bined.exbin.org/android">https://bined.exbin.org/android</a></string>
     <string name="bined_logo_description">BinEd Logo</string>
     <string name="pref_header_appearance">Appearance</string>
     <string name="title_activity_settings2">SettingsActivity2</string>

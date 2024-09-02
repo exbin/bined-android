@@ -7,8 +7,7 @@
 /.idea/caches/
 .DS_Store
 /build
-/app/debug
-/app/release
+/app/build
 /captures
 .externalNativeBuild
 *~
