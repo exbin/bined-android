@@ -1,7 +1,7 @@
 BinEd - Binary/Hex Editor
 =========================
 
-Binary/hex viewer/editor for Android written in Java.
+Editor for binary data (hex viewer/editor) written in Java.
 
 Homepage: https://bined.exbin.org/android  
 
