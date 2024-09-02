@@ -154,6 +154,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
                 keyboardShown = showKeyboard;
                 InputMethodManager im = (InputMethodManager)codeArea.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                codeArea.requestFocus();
                 if (showKeyboard) {
                     im.showSoftInput(codeArea, InputMethodManager.SHOW_IMPLICIT);
                 } else {

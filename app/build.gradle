@@ -27,6 +27,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    sourceSets {
+        main.java.srcDirs += 'libsrc'
+    }
     namespace 'org.exbin.bined.editor.android'
 }
 
