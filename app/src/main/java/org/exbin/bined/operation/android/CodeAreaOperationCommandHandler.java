@@ -259,12 +259,12 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
                 }
                 break;
             }
-            case KeyEvent.KEYCODE_DEL: {
+            case KeyEvent.KEYCODE_FORWARD_DEL: {
                 deletePressed();
 //                keyEvent.consume();
                 break;
             }
-            case KeyEvent.KEYCODE_BACK: {
+            case KeyEvent.KEYCODE_DEL: {
                 backSpacePressed();
 //                keyEvent.consume();
                 break;

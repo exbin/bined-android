@@ -240,7 +240,7 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
 //                keyEvent.consume();
                 break;
             }
-            case KeyEvent.KEYCODE_DEL: {
+            case KeyEvent.KEYCODE_FORWARD_DEL: {
                 EditMode editMode = ((EditModeCapable) codeArea).getEditMode();
                 if (editMode == EditMode.EXPANDING) {
                     deletePressed();
@@ -248,7 +248,7 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
                 }
                 break;
             }
-            case KeyEvent.KEYCODE_BACK: {
+            case KeyEvent.KEYCODE_DEL: {
                 EditMode editMode = ((EditModeCapable) codeArea).getEditMode();
                 if (editMode == EditMode.EXPANDING) {
                     backSpacePressed();

@@ -170,16 +170,25 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
             @Override
             public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
-                if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-                    keyListener.onKeyDown(view, editable, keyCode, keyEvent);
-                    processKeys(keyEvent);
-                } else if (keyEvent.getAction() == KeyEvent.ACTION_UP) {
-                    commandHandler.keyPressed(keyEvent);
-                } else {
-                    keyListener.onKeyOther(view, editable, keyEvent);
-                    processKeys(keyEvent);
+                try {
+                    if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+                        if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_DEL || keyEvent.getKeyCode() == KeyEvent.KEYCODE_FORWARD_DEL) {
+                            commandHandler.keyPressed(keyEvent);
+                        } else {
+                            keyListener.onKeyDown(view, editable, keyCode, keyEvent);
+                            processKeys(keyEvent);
+                        }
+                    } else if (keyEvent.getAction() == KeyEvent.ACTION_UP) {
+                        commandHandler.keyPressed(keyEvent);
+                    } else {
+                        keyListener.onKeyOther(view, editable, keyEvent);
+                        processKeys(keyEvent);
+                    }
+                    return true;
+                } catch (Exception ex) {
+                    // ignore
                 }
-                return true;
+                return false;
             }
 
             private void processKeys(KeyEvent keyEvent) {
@@ -539,11 +548,11 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     }
 
     public void buttonActionDelete(View view) {
-        codeArea.getCommandHandler().keyPressed(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
+        codeArea.getCommandHandler().keyPressed(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_FORWARD_DEL));
     }
 
     public void buttonActionBk(View view) {
-        codeArea.getCommandHandler().keyPressed(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK));
+        codeArea.getCommandHandler().keyPressed(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
     }
 
     public void buttonActionTab(View view) {
