@@ -26,7 +26,11 @@
         android:title="@string/action_open" />
     <item
         android:id="@+id/action_save"
+        android:enabled="false"
         android:title="@string/action_save" />
+    <item
+        android:id="@+id/action_save_as"
+        android:title="@string/action_save_as" />
     <item
         android:id="@+id/view_menu"
         android:title="@string/view_menu">

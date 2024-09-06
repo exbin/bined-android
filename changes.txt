@@ -1,4 +1,7 @@
 0.2.1
 
+0.2.0.1 (2024-09-05)
+- Minor fix of keyboard support in preview
+
 0.2.0 (2024-09-01)
 - First release

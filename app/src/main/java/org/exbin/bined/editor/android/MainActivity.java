@@ -1,11 +1,15 @@
 package org.exbin.bined.editor.android;
 
 import android.Manifest;
+
+import androidx.activity.result.contract.ActivityResultContract;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -23,10 +27,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
-import com.rustamg.filedialogs.FileDialog;
-import com.rustamg.filedialogs.OpenFileDialog;
-import com.rustamg.filedialogs.SaveFileDialog;
-
 import org.exbin.auxiliary.binary_data.BinaryData;
 import org.exbin.auxiliary.binary_data.ByteArrayEditableData;
 import org.exbin.bined.CodeAreaCaretPosition;
@@ -41,10 +41,9 @@ import org.exbin.bined.operation.android.CodeAreaOperationCommandHandler;
 import org.exbin.bined.operation.android.CodeAreaUndoRedo;
 import org.exbin.framework.bined.BinaryStatusApi;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -52,13 +51,16 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public class MainActivity extends AppCompatActivity implements FileDialog.OnFileSelectedListener {
+public class MainActivity extends AppCompatActivity {
 
     private static final int CUT_ITEM_ID = 1;
     private static final int COPY_ITEM_ID = 2;
     private static final int PASTE_ITEM_ID = 3;
     private static final int DELETE_ITEM_ID = 4;
     private static final int SELECT_ALL_ITEM_ID = 5;
+
+    private static final int OPEN_FILE_ACTIVITY = 1;
+    private static final int SAVE_FILE_ACTIVITY = 2;
 
     private CodeArea codeArea;
     private CodeAreaUndoRedo undoRedo;
@@ -289,25 +291,58 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             }
 
             case R.id.action_open: {
-                if (storageReadPermissionGranted) {
-                    OpenFileDialog dialog = new OpenFileDialog();
-                    dialog.setStyle(DialogFragment.STYLE_NO_TITLE, R.style.AppTheme);
-                    dialog.show(getSupportFragmentManager(), OpenFileDialog.class.getName());
-                } else {
-                    showPermissionError();
-                }
+                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("*/*");
+
+                // Optionally, specify a URI for the file that should appear in the
+                // system file picker when it loads.
+                // intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri);
+
+                // startActivityForResult(intent, 1);
+                startActivityForResult(Intent.createChooser(intent, "Select a file"), OPEN_FILE_ACTIVITY);
 
                 return true;
             }
 
             case R.id.action_save: {
-                if (storageWritePermissionGranted) {
-                    FileDialog dialog = new SaveFileDialog();
-                    dialog.setStyle(DialogFragment.STYLE_NO_TITLE, R.style.AppTheme);
-                    dialog.show(getSupportFragmentManager(), SaveFileDialog.class.getName());
-                } else {
-                    showPermissionError();
-                }
+
+                return true;
+            }
+
+            case R.id.action_save_as: {
+                Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("*/*");
+
+                // Optionally, specify a URI for the file that should appear in the
+                // system file picker when it loads.
+                // intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri);
+
+                // startActivityForResult(intent, 1);
+/*                registerForActivityResult(new ActivityResultContract<Uri, Uri>() {
+                    @NonNull
+                    @Override
+                    public Intent createIntent(@NonNull Context context, Uri input) {
+                        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                        intent.addCategory(Intent.CATEGORY_OPENABLE);
+                        intent.setType("* / *");
+
+                        // Optionally, specify a URI for the file that should appear in the
+                        // system file picker when it loads.
+                        // intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri);
+
+                        return intent;
+                    }
+
+                    @Override
+                    public Uri parseResult(int resultCode, @androidx.annotation.Nullable Intent intent) {
+                        return intent.getData();
+                    }
+                }, result -> {
+
+                }); */
+                startActivityForResult(Intent.createChooser(intent, "Save as file"), SAVE_FILE_ACTIVITY);
 
                 return true;
             }
@@ -427,30 +462,41 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     }
 
     @Override
-    public void onFileSelected(FileDialog dialog, File file) {
-        if (dialog instanceof OpenFileDialog) {
-            fileData = new ByteArrayEditableData();
-            try {
-                FileInputStream fileInputStream = new FileInputStream(file);
-                fileData.loadFromStream(fileInputStream);
-                fileInputStream.close();
-                documentOriginalSize = fileData.getDataSize();
-                undoRedo.clear();
-            } catch (IOException ex) {
-                Logger.getLogger(MainActivity.class.getName()).log(Level.SEVERE, null, ex);
-            }
+    protected void onActivityResult(int requestCode, int resultCode, @androidx.annotation.Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-            codeArea.setContentData(fileData);
-        } else {
-            BinaryData contentData = codeArea.getContentData();
-            try {
-                FileOutputStream fileOutputStream = new FileOutputStream(file);
-                contentData.saveToStream(fileOutputStream);
-                fileOutputStream.close();
-                documentOriginalSize = contentData.getDataSize();
-                undoRedo.setSyncPosition();
-            } catch (IOException ex) {
-                Logger.getLogger(MainActivity.class.getName()).log(Level.SEVERE, null, ex);
+        if (requestCode == OPEN_FILE_ACTIVITY) {
+            if (data != null && data.getData() != null) {
+                fileData = new ByteArrayEditableData();
+                try {
+                    InputStream inputStream = getContentResolver().openInputStream(data.getData());
+                    if (inputStream == null) {
+                        return;
+                    }
+                    fileData.loadFromStream(inputStream);
+                    inputStream.close();
+                    documentOriginalSize = fileData.getDataSize();
+                    undoRedo.clear();
+                    codeArea.setContentData(fileData);
+                } catch (IOException ex) {
+                    Logger.getLogger(MainActivity.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        } else if (requestCode == SAVE_FILE_ACTIVITY) {
+            if (data != null && data.getData() != null) {
+                BinaryData contentData = codeArea.getContentData();
+                try {
+                    OutputStream outputStream = getContentResolver().openOutputStream(data.getData());
+                    if (outputStream == null) {
+                        return;
+                    }
+                    fileData.saveToStream(outputStream);
+                    outputStream.close();
+                    documentOriginalSize = contentData.getDataSize();
+                    undoRedo.setSyncPosition();
+                } catch (IOException ex) {
+                    Logger.getLogger(MainActivity.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
     }
