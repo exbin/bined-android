@@ -2,14 +2,9 @@ package org.exbin.bined.editor.android;
 
 import android.Manifest;
 
-import androidx.activity.result.contract.ActivityResultContract;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.DialogFragment;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;

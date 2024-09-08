@@ -3,22 +3,22 @@
     <!-- These settings headers are only used on tablets. -->
 
     <header
-        android:fragment="org.exbin.bined.editor.android.SettingsActivity$AppearancePreferenceFragment"
+        android:fragment="org.exbin.bined.editor.android.SettingsActivity3$AppearancePreferenceFragment"
         android:icon="@drawable/ic_info_black_24dp"
         android:title="@string/pref_header_appearance" />
 
     <header
-        android:fragment="org.exbin.bined.editor.android.SettingsActivity$GeneralPreferenceFragment"
+        android:fragment="org.exbin.bined.editor.android.SettingsActivity3$GeneralPreferenceFragment"
         android:icon="@drawable/ic_info_black_24dp"
         android:title="@string/pref_header_general" />
 
     <header
-        android:fragment="org.exbin.bined.editor.android.SettingsActivity$NotificationPreferenceFragment"
+        android:fragment="org.exbin.bined.editor.android.SettingsActivity3$NotificationPreferenceFragment"
         android:icon="@drawable/ic_notifications_black_24dp"
         android:title="@string/pref_header_notifications" />
 
     <header
-        android:fragment="org.exbin.bined.editor.android.SettingsActivity$DataSyncPreferenceFragment"
+        android:fragment="org.exbin.bined.editor.android.SettingsActivity3$DataSyncPreferenceFragment"
         android:icon="@drawable/ic_sync_black_24dp"
         android:title="@string/pref_header_data_sync" />
 

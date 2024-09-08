@@ -1,0 +1,36 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Preference
+        app:key="encoding"
+        app:title="@string/encoding"
+        app:defaultValue="UTF-8"
+        app:useSimpleSummaryProvider="true" />
+
+    <ListPreference
+        app:defaultValue="dual"
+        app:entries="@array/view_mode_entries"
+        app:entryValues="@array/view_mode_values"
+        app:key="view_mode"
+        app:title="@string/view_mode"
+        app:useSimpleSummaryProvider="true" />
+
+    <ListPreference
+        app:defaultValue="hexadecimal"
+        app:entries="@array/code_type_entries"
+        app:entryValues="@array/code_type_values"
+        app:key="code_type"
+        app:title="@string/code_type"
+        app:useSimpleSummaryProvider="true" />
+
+    <ListPreference
+        app:defaultValue="lower"
+        app:entries="@array/hex_chars_case_entries"
+        app:entryValues="@array/hex_chars_case_values"
+        app:key="hex_chars_case"
+        app:title="@string/hex_characters_case"
+        app:useSimpleSummaryProvider="true" />
+
+    <SwitchPreferenceCompat
+        app:key="non_printing_characters"
+        app:title="@string/non_printing_characters" />
+</PreferenceScreen>

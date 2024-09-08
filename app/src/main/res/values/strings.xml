@@ -46,6 +46,7 @@
     <string name="bined_logo_description">BinEd Logo</string>
     <string name="pref_header_appearance">Appearance</string>
     <string name="title_activity_settings2">SettingsActivity2</string>
+    <string name="view_header">View</string>
     <string name="messages_header">Messages</string>
     <string name="sync_header">Sync</string>
     <string name="signature_title">Your signature</string>

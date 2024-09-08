@@ -9,4 +9,40 @@
         <item>reply</item>
         <item>reply_all</item>
     </string-array>
+
+    <string-array name="view_mode_entries">
+        <item>Dual</item>
+        <item>Code Matrix</item>
+        <item>Text Preview</item>
+    </string-array>
+
+    <string-array name="view_mode_values">
+        <item>dual</item>
+        <item>code_matrix</item>
+        <item>text_preview</item>
+    </string-array>
+
+    <string-array name="code_type_entries">
+        <item>Binary</item>
+        <item>Octal</item>
+        <item>Decimal</item>
+        <item>Hexadecimal</item>
+    </string-array>
+
+    <string-array name="code_type_values">
+        <item>binary</item>
+        <item>octal</item>
+        <item>decimal</item>
+        <item>hexadecimal</item>
+    </string-array>
+
+    <string-array name="hex_chars_case_entries">
+        <item>Upper Case</item>
+        <item>Lower Case</item>
+    </string-array>
+
+    <string-array name="hex_chars_case_values">
+        <item>upper</item>
+        <item>lower</item>
+    </string-array>
 </resources>

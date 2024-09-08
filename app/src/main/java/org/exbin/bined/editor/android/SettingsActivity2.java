@@ -11,7 +11,7 @@ public class SettingsActivity2 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.settings_activity);
+        setContentView(R.layout.settings_activity3);
         if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
