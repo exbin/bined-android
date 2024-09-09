@@ -28,6 +28,7 @@ public class SettingsActivity extends AppCompatActivity implements
         } else {
             setTitle(savedInstanceState.getCharSequence(TITLE_TAG));
         }
+/*
         getSupportFragmentManager().addOnBackStackChangedListener(
                 new FragmentManager.OnBackStackChangedListener() {
                     @Override
@@ -40,7 +41,7 @@ public class SettingsActivity extends AppCompatActivity implements
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        } */
     }
 
     @Override

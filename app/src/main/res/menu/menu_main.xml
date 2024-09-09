@@ -41,7 +41,6 @@
                 android:title="@string/view_mode" />
             <item
                 android:id="@+id/code_type"
-                android:enabled="false"
                 android:title="@string/code_type" />
             <item
                 android:id="@+id/hex_chars_case"

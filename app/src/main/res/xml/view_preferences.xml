@@ -1,6 +1,12 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <Preference
+    <EditTextPreference
+        app:key="font"
+        app:title="@string/font"
+        app:defaultValue="Font"
+        app:useSimpleSummaryProvider="true" />
+
+    <EditTextPreference
         app:key="encoding"
         app:title="@string/encoding"
         app:defaultValue="UTF-8"

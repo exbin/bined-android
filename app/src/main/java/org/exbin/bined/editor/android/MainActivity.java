@@ -21,6 +21,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
+import androidx.preference.ListPreferenceDialogFragmentCompat;
+import androidx.preference.PreferenceDialogFragmentCompat;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
 
 import org.exbin.auxiliary.binary_data.BinaryData;
 import org.exbin.auxiliary.binary_data.ByteArrayEditableData;
@@ -364,7 +369,29 @@ public class MainActivity extends AppCompatActivity {
             }
 
             case R.id.code_type: {
-                // TODO
+                PreferenceFragmentCompat preferenceFragment = new PreferenceFragmentCompat() {
+                    @Override
+                    public void onCreatePreferences(@androidx.annotation.Nullable Bundle savedInstanceState, @androidx.annotation.Nullable String rootKey) {
+                        addPreferencesFromResource(R.xml.view_preferences);
+                    }
+                };
+//                ListPreferenceDialogFragmentCompat dialogFragment = ListPreferenceDialogFragmentCompat.newInstance("code_type");
+//                dialogFragment.show(getSupportFragmentManager(), "view_preferences");
+                // preferenceFragment.setArguments();
+                getSupportFragmentManager().beginTransaction().replace(R.id.settings, preferenceFragment).commit();
+
+//                Intent intent = new Intent(this, PreferenceActivity.class);
+//                startActivity(intent);
+
+                // startActivity(intent);
+//                preferenceActivity.show
+//                R.id.
+//                PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+//                PreferenceManager.createPrefe
+//                getPrefere
+//                int viewPreferences = R.xml.view_preferences;
+//                SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//                defaultSharedPreferences.get
                 return true;
             }
 
