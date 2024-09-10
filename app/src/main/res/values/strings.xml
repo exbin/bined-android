@@ -70,6 +70,8 @@
     <string name="action_undo">Undo</string>
     <string name="action_redo">Redo</string>
     <string name="font">Font</string>
+    <string name="button_set">Set</string>
+    <string name="button_cancel">Cancel</string>
 
     <string-array name="pref_example_list_titles">
         <item>Always</item>

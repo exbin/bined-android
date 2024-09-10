@@ -1,11 +1,22 @@
+/*
+ * Copyright (C) ExBin Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.exbin.bined.editor.android;
-
-import android.Manifest;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.method.KeyListener;
@@ -18,18 +29,15 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.DialogFragment;
-import androidx.preference.ListPreferenceDialogFragmentCompat;
-import androidx.preference.PreferenceDialogFragmentCompat;
-import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.PreferenceManager;
+import androidx.preference.ListPreference;
 
 import org.exbin.auxiliary.binary_data.BinaryData;
 import org.exbin.auxiliary.binary_data.ByteArrayEditableData;
 import org.exbin.bined.CodeAreaCaretPosition;
+import org.exbin.bined.CodeType;
 import org.exbin.bined.EditMode;
 import org.exbin.bined.EditOperation;
 import org.exbin.bined.SelectionRange;
@@ -70,20 +78,12 @@ public class MainActivity extends AppCompatActivity {
     private static ByteArrayEditableData fileData = null;
     private final BinaryStatusHandler binaryStatus = new BinaryStatusHandler(this);
 
-    private boolean storageReadPermissionGranted;
-    private boolean storageWritePermissionGranted;
     private boolean keyboardShown = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        this.storageReadPermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
-        this.storageWritePermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
-        if (Build.VERSION.SDK_INT > 32) {
-            storageReadPermissionGranted = true;
-            storageWritePermissionGranted = true;
-        }
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -124,15 +124,7 @@ public class MainActivity extends AppCompatActivity {
         if (fileData != null) {
             codeArea.setContentData(fileData);
         } else {
-            ByteArrayEditableData basicData = new ByteArrayEditableData();
-            /* // Load sample data
-            try {
-                basicData.loadFromStream(MainActivity.class.getResourceAsStream(EXAMPLE_FILE_PATH));
-            } catch (IOException ex) {
-                Logger.getLogger(MainActivity.class.getName()).log(Level.SEVERE, null, ex);
-            } */
-
-            codeArea.setContentData(basicData);
+            codeArea.setContentData(new ByteArrayEditableData());
         }
 
         codeArea.addDataChangedListener(() -> {
@@ -369,16 +361,41 @@ public class MainActivity extends AppCompatActivity {
             }
 
             case R.id.code_type: {
-                PreferenceFragmentCompat preferenceFragment = new PreferenceFragmentCompat() {
-                    @Override
-                    public void onCreatePreferences(@androidx.annotation.Nullable Bundle savedInstanceState, @androidx.annotation.Nullable String rootKey) {
-                        addPreferencesFromResource(R.xml.view_preferences);
-                    }
-                };
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(R.string.code_type);
+                builder.setSingleChoiceItems(getResources().getTextArray(R.array.code_type_entries), codeArea.getCodeType().ordinal(), (dialog, which) -> {
+                    codeArea.setCodeType(CodeType.values()[which]);
+                    dialog.dismiss();
+                });
+                builder.setPositiveButton(R.string.button_set, (dialog, which) -> {
+//                    dialog.
+//                    codeArea.setCodeType(CodeType.values()[which]);
+                });
+                builder.setNegativeButton(R.string.button_cancel, null);
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+
+//                ListPreference listPreference = new ListPreference(this, null);
+//                listPreference.setEntries(getResources().getTextArray(R.array.code_type_values));
+//                listPreference.getOnPreferenceClickListener()
+//                getPreferenceManager().showDialog(listPreference);
+
+//                SinglePreferenceFragment singlePreferenceFragment = new SinglePreferenceFragment();
+//                getSupportFragmentManager().beginTransaction().replace(android.R.id.content, singlePreferenceFragment).commit();
+
+//                Preference preference = preferenceActivity.findPreference("code_type");
+                // R.array.code_type_values
+
+//                ListPreference listPreference = new ListPreference(this, null);
+//                listPreference.setEntries(getResources().getTextArray(R.array.code_type_values));
+//                Intent intent = new Intent(this, SinglePreferenceFragment.class);
+//                startActivity(intent);
+//                preferenceActivity.getPreferenceManager().showDialog(listPreference);
+//                preferenceFragment.startActivity();
 //                ListPreferenceDialogFragmentCompat dialogFragment = ListPreferenceDialogFragmentCompat.newInstance("code_type");
 //                dialogFragment.show(getSupportFragmentManager(), "view_preferences");
                 // preferenceFragment.setArguments();
-                getSupportFragmentManager().beginTransaction().replace(R.id.settings, preferenceFragment).commit();
+//                getSupportFragmentManager().beginTransaction().replace(R.id.settings, preferenceFragment).commit();
 
 //                Intent intent = new Intent(this, PreferenceActivity.class);
 //                startActivity(intent);
