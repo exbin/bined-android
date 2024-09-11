@@ -37,14 +37,12 @@
         <menu>
             <item
                 android:id="@+id/view_mode"
-                android:enabled="false"
                 android:title="@string/view_mode" />
             <item
                 android:id="@+id/code_type"
                 android:title="@string/code_type" />
             <item
                 android:id="@+id/hex_chars_case"
-                android:enabled="false"
                 android:title="@string/hex_characters_case" />
             <item
                 android:id="@+id/encoding"
@@ -52,7 +50,8 @@
                 android:title="@string/encoding" />
             <item
                 android:id="@+id/non_printing_characters"
-                android:enabled="false"
+                android:checkable="true"
+                android:checked="true"
                 android:title="@string/non_printing_characters" />
         </menu>
     </item>

@@ -32,17 +32,18 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.preference.ListPreference;
 
 import org.exbin.auxiliary.binary_data.BinaryData;
 import org.exbin.auxiliary.binary_data.ByteArrayEditableData;
 import org.exbin.bined.CodeAreaCaretPosition;
+import org.exbin.bined.CodeCharactersCase;
 import org.exbin.bined.CodeType;
 import org.exbin.bined.EditMode;
 import org.exbin.bined.EditOperation;
 import org.exbin.bined.SelectionRange;
 import org.exbin.bined.android.basic.CodeArea;
 import org.exbin.bined.basic.BasicCodeAreaSection;
+import org.exbin.bined.basic.CodeAreaViewMode;
 import org.exbin.bined.capability.EditModeCapable;
 import org.exbin.bined.highlight.android.HighlightNonAsciiCodeAreaPainter;
 import org.exbin.bined.operation.android.CodeAreaOperationCommandHandler;
@@ -367,10 +368,6 @@ public class MainActivity extends AppCompatActivity {
                     codeArea.setCodeType(CodeType.values()[which]);
                     dialog.dismiss();
                 });
-                builder.setPositiveButton(R.string.button_set, (dialog, which) -> {
-//                    dialog.
-//                    codeArea.setCodeType(CodeType.values()[which]);
-                });
                 builder.setNegativeButton(R.string.button_cancel, null);
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
@@ -413,12 +410,35 @@ public class MainActivity extends AppCompatActivity {
             }
 
             case R.id.view_mode: {
-                // TODO
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(R.string.view_mode);
+                builder.setSingleChoiceItems(getResources().getTextArray(R.array.view_mode_entries), codeArea.getViewMode().ordinal(), (dialog, which) -> {
+                    codeArea.setViewMode(CodeAreaViewMode.values()[which]);
+                    dialog.dismiss();
+                });
+                builder.setNegativeButton(R.string.button_cancel, null);
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
                 return true;
             }
 
             case R.id.hex_chars_case: {
-                // TODO
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(R.string.hex_characters_case);
+                builder.setSingleChoiceItems(getResources().getTextArray(R.array.hex_chars_case_entries), codeArea.getCodeCharactersCase().ordinal(), (dialog, which) -> {
+                    codeArea.setCodeCharactersCase(CodeCharactersCase.values()[which]);
+                    dialog.dismiss();
+                });
+                builder.setNegativeButton(R.string.button_cancel, null);
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+                return true;
+            }
+
+            case R.id.non_printing_characters: {
+                boolean checked = item.isChecked();
+                item.setChecked(!checked);
+                ((HighlightNonAsciiCodeAreaPainter) codeArea.getPainter()).setNonAsciiHighlightingEnabled(!checked);
                 return true;
             }
 
