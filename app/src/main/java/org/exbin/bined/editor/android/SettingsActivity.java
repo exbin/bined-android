@@ -26,6 +26,9 @@ import androidx.fragment.app.FragmentResultListener;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class SettingsActivity extends AppCompatActivity implements
         PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
 
@@ -100,6 +103,7 @@ public class SettingsActivity extends AppCompatActivity implements
         return true;
     }
 
+    @ParametersAreNonnullByDefault
     public static class HeaderFragment extends PreferenceFragmentCompat {
 
         @Override
@@ -108,6 +112,16 @@ public class SettingsActivity extends AppCompatActivity implements
         }
     }
 
+    @ParametersAreNonnullByDefault
+    public static class AppearanceFragment extends PreferenceFragmentCompat {
+
+        @Override
+        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+            setPreferencesFromResource(R.xml.appearance_preferences, rootKey);
+        }
+    }
+
+    @ParametersAreNonnullByDefault
     public static class ViewFragment extends PreferenceFragmentCompat {
 
         @Override
@@ -116,14 +130,7 @@ public class SettingsActivity extends AppCompatActivity implements
         }
     }
 
-    public static class MessagesFragment extends PreferenceFragmentCompat {
-
-        @Override
-        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-            setPreferencesFromResource(R.xml.messages_preferences, rootKey);
-        }
-    }
-
+    @ParametersAreNonnullByDefault
     public static class SyncFragment extends PreferenceFragmentCompat {
 
         @Override

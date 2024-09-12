@@ -3,18 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-<!--    <org.exbin.bined.editor.android.AboutView
-        android:id="@+id/aboutView"
-        style="@style/Widget.AppTheme.MyView"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:paddingLeft="20dp"
-        android:paddingBottom="40dp"
-        app:exampleDimension="24sp"
-        app:exampleDrawable="@android:drawable/ic_menu_add"
-        app:exampleString="Hello, AboutView" /> -->
-
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">

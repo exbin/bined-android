@@ -15,16 +15,13 @@ Features
 
 UNDER DEVELOPMENT  
 
-  * Data as hexadecimal codes and text preview
+  * Visualize data as numerical (hexadecimal) codes and text representation
+  * Codes can be also binary, octal or decimal
+  * Support for Unicode, UTF-8 and other charsets
   * Insert and overwrite edit modes
-  * TODO: Support for selection and clipboard actions
-  * TODO: Support for showing unprintable/whitespace characters
-  * TODO: Support for undo/redo
-  * TODO: Support for charset/encoding selection
-  * TODO: Codes can be also binary, octal or decimal
-  * TODO: Searching for text / hexadecimal code with found matches highlighting
-  * TODO: Support for huge files
-  * TODO: Delta mode - Only changes are stored in memory
+  * TODO: Searching for text / hexadecimal code with matching highlighting
+  * Support for undo/redo
+  * TODO: Support for files with size up to exabytes
 
 Compiling
 ---------

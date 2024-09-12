@@ -42,6 +42,9 @@
                 android:id="@+id/code_type"
                 android:title="@string/code_type" />
             <item
+                android:id="@+id/position_code_type"
+                android:title="@string/position_code_type" />
+            <item
                 android:id="@+id/hex_chars_case"
                 android:title="@string/hex_characters_case" />
             <item
@@ -63,6 +66,18 @@
                 android:id="@+id/go_to_position"
                 android:enabled="false"
                 android:title="@string/go_to_position" />
+            <item
+                android:id="@+id/edit_selection"
+                android:enabled="false"
+                android:title="@string/edit_selection" />
+            <item
+                android:id="@+id/insert_data"
+                android:enabled="false"
+                android:title="@string/insert_data" />
+            <item
+                android:id="@+id/convert_data"
+                android:enabled="false"
+                android:title="@string/convert_data" />
         </menu>
     </item>
     <item

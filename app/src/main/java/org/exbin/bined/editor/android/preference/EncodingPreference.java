@@ -20,27 +20,26 @@ import android.util.AttributeSet;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.preference.DialogPreference;
 import androidx.preference.EditTextPreference;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public class FontPreference extends EditTextPreference {
+public class EncodingPreference extends EditTextPreference {
 
-    public FontPreference(@NonNull Context context) {
+    public EncodingPreference(@NonNull Context context) {
         super(context);
     }
 
-    public FontPreference(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public EncodingPreference(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
-    public FontPreference(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public EncodingPreference(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
-    public FontPreference(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public EncodingPreference(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 

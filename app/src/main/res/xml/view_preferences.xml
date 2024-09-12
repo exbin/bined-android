@@ -1,12 +1,12 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <EditTextPreference
+    <org.exbin.bined.editor.android.preference.FontPreference
         app:key="font"
         app:title="@string/font"
         app:defaultValue="Font"
         app:useSimpleSummaryProvider="true" />
 
-    <EditTextPreference
+    <org.exbin.bined.editor.android.preference.EncodingPreference
         app:key="encoding"
         app:title="@string/encoding"
         app:defaultValue="UTF-8"
@@ -26,6 +26,14 @@
         app:entryValues="@array/code_type_values"
         app:key="code_type"
         app:title="@string/code_type"
+        app:useSimpleSummaryProvider="true" />
+
+    <ListPreference
+        app:defaultValue="hexadecimal"
+        app:entries="@array/position_code_type_entries"
+        app:entryValues="@array/position_code_type_values"
+        app:key="position_code_type"
+        app:title="@string/position_code_type"
         app:useSimpleSummaryProvider="true" />
 
     <ListPreference

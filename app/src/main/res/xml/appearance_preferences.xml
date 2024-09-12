@@ -1,0 +1,21 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ListPreference
+        app:defaultValue="automatic"
+        app:entries="@array/theme_entries"
+        app:entryValues="@array/theme_values"
+        app:key="theme"
+        app:enabled="false"
+        app:title="@string/visual_theme"
+        app:useSimpleSummaryProvider="true" />
+
+    <ListPreference
+        app:defaultValue="default"
+        app:entries="@array/language_entries"
+        app:entryValues="@array/language_values"
+        app:key="language"
+        app:enabled="false"
+        app:title="@string/language"
+        app:useSimpleSummaryProvider="true" />
+
+</PreferenceScreen>

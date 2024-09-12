@@ -1,13 +1,26 @@
 <resources>
-    <!-- Reply Preference -->
-    <string-array name="reply_entries">
-        <item>Reply</item>
-        <item>Reply to all</item>
+    <string-array name="theme_entries">
+        <item>Automatic (system)</item>
+        <item>Light</item>
+        <item>Dark</item>
     </string-array>
 
-    <string-array name="reply_values">
-        <item>reply</item>
-        <item>reply_all</item>
+    <string-array name="theme_values">
+        <item>automatic</item>
+        <item>light</item>
+        <item>dark</item>
+    </string-array>
+
+    <string-array name="language_entries">
+        <item>Default (system)</item>
+        <item>English</item>
+        <item>Česky</item>
+    </string-array>
+
+    <string-array name="language_values">
+        <item>default</item>
+        <item>en_US</item>
+        <item>cs_CZ</item>
     </string-array>
 
     <string-array name="view_mode_entries">
@@ -31,6 +44,18 @@
 
     <string-array name="code_type_values">
         <item>binary</item>
+        <item>octal</item>
+        <item>decimal</item>
+        <item>hexadecimal</item>
+    </string-array>
+
+    <string-array name="position_code_type_entries">
+        <item>Octal</item>
+        <item>Decimal</item>
+        <item>Hexadecimal</item>
+    </string-array>
+
+    <string-array name="position_code_type_values">
         <item>octal</item>
         <item>decimal</item>
         <item>hexadecimal</item>

@@ -47,10 +47,7 @@
     <string name="pref_header_appearance">Appearance</string>
     <string name="title_activity_settings2">SettingsActivity2</string>
     <string name="view_header">View</string>
-    <string name="messages_header">Messages</string>
     <string name="sync_header">Sync</string>
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
     <string name="sync_title">Sync email periodically</string>
     <string name="attachment_title">Download incoming attachments</string>
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
@@ -59,12 +56,18 @@
     <!-- Preference Titles -->
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="view_menu">View</string>
+    <string name="visual_theme">Visual Theme</string>
+    <string name="language">Language</string>
     <string name="view_mode">View Mode</string>
     <string name="code_type">Code Type</string>
+    <string name="position_code_type">Position Code Type</string>
     <string name="hex_characters_case">Hex Characters Case</string>
     <string name="encoding">Encoding</string>
     <string name="non_printing_characters">Non-printing Characters</string>
     <string name="go_to_position">Go To Position</string>
+    <string name="edit_selection">Edit Selection</string>
+    <string name="insert_data">Insert Data</string>
+    <string name="convert_data">Convert Data</string>
     <string name="edit_menu">Edit</string>
     <string name="action_search">Search</string>
     <string name="action_undo">Undo</string>
