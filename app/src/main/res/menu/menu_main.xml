@@ -26,10 +26,12 @@
         android:title="@string/action_open" />
     <item
         android:id="@+id/action_save"
+        android:icon="@drawable/ic_action_save_24"
         android:enabled="false"
         android:title="@string/action_save" />
     <item
         android:id="@+id/action_save_as"
+        android:icon="@drawable/ic_action_save_as_24"
         android:title="@string/action_save_as" />
     <item
         android:id="@+id/view_menu"
@@ -42,19 +44,24 @@
                 android:id="@+id/code_type"
                 android:title="@string/code_type" />
             <item
-                android:id="@+id/position_code_type"
-                android:title="@string/position_code_type" />
-            <item
                 android:id="@+id/hex_chars_case"
                 android:title="@string/hex_characters_case" />
             <item
                 android:id="@+id/encoding"
-                android:enabled="false"
                 android:title="@string/encoding" />
             <item
-                android:id="@+id/non_printing_characters"
+                android:id="@+id/font"
+                android:title="@string/font" />
+            <item
+                android:id="@+id/codes_colorization"
                 android:checkable="true"
                 android:checked="true"
+                android:title="@string/codes_colorization" />
+            <item
+                android:id="@+id/non_printing_characters"
+                android:enabled="false"
+                android:checkable="true"
+                android:checked="false"
                 android:title="@string/non_printing_characters" />
         </menu>
     </item>
@@ -78,6 +85,12 @@
                 android:id="@+id/convert_data"
                 android:enabled="false"
                 android:title="@string/convert_data" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/tools_menu"
+        android:title="@string/tools_menu">
+        <menu>
         </menu>
     </item>
     <item

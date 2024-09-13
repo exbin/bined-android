@@ -15,10 +15,10 @@
  */
 package org.exbin.bined.android;
 
-import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
@@ -29,6 +29,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class Font {
 
+    private Typeface typeface;
+    private int size = 30;
     private int fontFlags;
 
     public static Font fromPaint(Paint paint)
@@ -36,6 +38,31 @@ public class Font {
         Font font = new Font();
         font.setFontFlags(paint.getFlags());
         return font;
+    }
+
+    public static Font create(Font font) {
+        Font fontCopy = new Font();
+        fontCopy.typeface = font.typeface;
+        fontCopy.size = font.size;
+        fontCopy.fontFlags = font.fontFlags;
+        return fontCopy;
+    }
+
+    @Nullable
+    public Typeface getTypeface() {
+        return typeface;
+    }
+
+    public void setTypeface(@Nullable Typeface typeface) {
+        this.typeface = typeface;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
     }
 
     public int getFontFlags() {

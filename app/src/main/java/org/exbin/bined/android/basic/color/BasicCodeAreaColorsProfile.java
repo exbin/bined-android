@@ -15,12 +15,19 @@
  */
 package org.exbin.bined.android.basic.color;
 
+import android.content.Context;
 import android.graphics.Color;
+
+import androidx.appcompat.widget.ThemeUtils;
+import androidx.core.content.res.ResourcesCompat;
+
+import com.google.android.material.color.MaterialColors;
 
 import org.exbin.bined.android.CodeAreaAndroidUtils;
 import org.exbin.bined.color.BasicCodeAreaDecorationColorType;
 import org.exbin.bined.color.CodeAreaBasicColors;
 import org.exbin.bined.color.CodeAreaColorType;
+import org.exbin.bined.editor.android.R;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -55,6 +62,8 @@ public class BasicCodeAreaColorsProfile implements CodeAreaColorsProfile {
     private Integer cursorNegativeColor;
     @Nullable
     private Integer decorationLine;
+    @Nullable
+    private Context context;
 
     public BasicCodeAreaColorsProfile() {
     }
@@ -146,6 +155,10 @@ public class BasicCodeAreaColorsProfile implements CodeAreaColorsProfile {
         return (color == null) ? (basicAltColor == null ? null : getColor(basicAltColor)) : color;
     }
 
+    public void setContext(@Nullable Context context) {
+        this.context = context;
+    }
+
     public void reinitialize() {
             textColor = null; //codeArea.getForeground();
             if (textColor == null) {
@@ -175,5 +188,14 @@ public class BasicCodeAreaColorsProfile implements CodeAreaColorsProfile {
 
             alternateColor = textColor;
             alternateBackground = CodeAreaAndroidUtils.createOddColor(textBackground);
+    }
+
+    @Nullable
+    private Integer getThemeColor(int attr) {
+        if (context == null)
+            return null;
+
+//        return ThemeUtils.getThemeAttrColor(context, attr);
+        return null;
     }
 }

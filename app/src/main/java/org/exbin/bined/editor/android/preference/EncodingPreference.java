@@ -20,7 +20,14 @@ import android.util.AttributeSet;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.preference.EditTextPreference;
+
+import org.exbin.bined.editor.android.R;
+
+import java.nio.charset.Charset;
+import java.util.Map;
+import java.util.SortedMap;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -44,7 +51,36 @@ public class EncodingPreference extends EditTextPreference {
     }
 
     @Override
-    public void setOnBindEditTextListener(@Nullable OnBindEditTextListener onBindEditTextListener) {
-        super.setOnBindEditTextListener(onBindEditTextListener);
+    protected void onClick() {
+        EncodingPreference.showEncodingSelectionDialog(getContext(), getText(), this::setText);
+    }
+
+    @Nullable
+    public static void showEncodingSelectionDialog(Context context, @Nullable String currentCharset, EncodingSelectionListener resultListener) {
+        // TODO Rework to list with cycle ability
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(R.string.encoding);
+        int current = -1;
+        SortedMap<String, Charset> availableCharsets = Charset.availableCharsets();
+        int index = 0;
+        CharSequence[] encodings = new CharSequence[availableCharsets.size()];
+        for (Map.Entry<String, Charset> entry : availableCharsets.entrySet()) {
+            if (entry.getKey().equals(currentCharset)) {
+                current = index;
+            }
+            encodings[index] = entry.getValue().name();
+            index++;
+        }
+        builder.setSingleChoiceItems(encodings, current, (dialog, which) -> {
+            resultListener.resultEncoding(encodings[which].toString());
+            dialog.dismiss();
+        });
+        builder.setNegativeButton(R.string.button_cancel, null);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    public interface EncodingSelectionListener {
+        void resultEncoding(String encoding);
     }
 }

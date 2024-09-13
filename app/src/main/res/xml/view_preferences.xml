@@ -29,14 +29,6 @@
         app:useSimpleSummaryProvider="true" />
 
     <ListPreference
-        app:defaultValue="hexadecimal"
-        app:entries="@array/position_code_type_entries"
-        app:entryValues="@array/position_code_type_values"
-        app:key="position_code_type"
-        app:title="@string/position_code_type"
-        app:useSimpleSummaryProvider="true" />
-
-    <ListPreference
         app:defaultValue="lower"
         app:entries="@array/hex_chars_case_entries"
         app:entryValues="@array/hex_chars_case_values"
@@ -45,6 +37,11 @@
         app:useSimpleSummaryProvider="true" />
 
     <SwitchPreferenceCompat
+        app:key="codes_colorization"
+        app:title="@string/codes_colorization" />
+
+    <SwitchPreferenceCompat
         app:key="non_printing_characters"
+        app:enabled="false"
         app:title="@string/non_printing_characters" />
 </PreferenceScreen>

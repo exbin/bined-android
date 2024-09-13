@@ -21,6 +21,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -353,7 +354,11 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         charset = ((CharsetCapable) codeArea).getCharset();
         font = ((FontCapable) codeArea).getCodeFont();
         paint = new Paint();
-        paint.setTextSize(30);
+        if (font != null) {
+            paint.setTextSize(font.getSize());
+        } else {
+            paint.setTextSize(30);
+        }
         metrics.recomputeMetrics(paint, charset);
 
         recomputeDimensions();
@@ -444,7 +449,6 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         int dataViewX = dimensions.getScrollPanelX();
 //        int headerAreaHeight = dimensions.getHeaderAreaHeight();
 //        int componentWidth = dimensions.getComponentWidth();
-
         paint.setColor(colorsProfile.getTextBackground());
         g.drawRect(headerArea.left, headerArea.top, headerArea.right, headerArea.bottom, paint);
 

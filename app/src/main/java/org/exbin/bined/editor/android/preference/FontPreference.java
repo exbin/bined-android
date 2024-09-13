@@ -20,8 +20,11 @@ import android.util.AttributeSet;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.preference.DialogPreference;
+import androidx.appcompat.app.AlertDialog;
 import androidx.preference.EditTextPreference;
+
+import org.exbin.bined.android.Font;
+import org.exbin.bined.editor.android.R;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -44,8 +47,31 @@ public class FontPreference extends EditTextPreference {
         super(context, attrs);
     }
 
-    @Override
-    public void setOnBindEditTextListener(@Nullable OnBindEditTextListener onBindEditTextListener) {
-        super.setOnBindEditTextListener(onBindEditTextListener);
+    public static void showFontSelectionDialog(Context context, Font codeFont, FontSelectionListener resultListener) {
+        // TODO support for font family / accents
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(R.string.font);
+        CharSequence[] fontHeights = new CharSequence[] {"20", "25", "30", "35", "40", "45", "50", "60", "70", "80", "90", "100"};
+        int currentSelection = -1;
+        String currentSize = String.valueOf(codeFont.getSize());
+        for (int i = 0; i < fontHeights.length; i++) {
+            if (currentSize.equals(fontHeights[i])) {
+                currentSelection = i;
+                break;
+            }
+        }
+        builder.setSingleChoiceItems(fontHeights, currentSelection, (dialog, which) -> {
+            Font resultFont = Font.create(codeFont);
+            resultFont.setSize(Integer.parseInt(fontHeights[which].toString()));
+            resultListener.resultFont(resultFont);
+            dialog.dismiss();
+        });
+        builder.setNegativeButton(R.string.button_cancel, null);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    public interface FontSelectionListener {
+        void resultFont(Font codeFont);
     }
 }

@@ -45,6 +45,8 @@ import org.exbin.bined.android.basic.CodeArea;
 import org.exbin.bined.basic.BasicCodeAreaSection;
 import org.exbin.bined.basic.CodeAreaViewMode;
 import org.exbin.bined.capability.EditModeCapable;
+import org.exbin.bined.editor.android.preference.EncodingPreference;
+import org.exbin.bined.editor.android.preference.FontPreference;
 import org.exbin.bined.highlight.android.HighlightNonAsciiCodeAreaPainter;
 import org.exbin.bined.operation.android.CodeAreaOperationCommandHandler;
 import org.exbin.bined.operation.android.CodeAreaUndoRedo;
@@ -53,6 +55,7 @@ import org.exbin.framework.bined.BinaryStatusApi;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -85,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -435,7 +440,22 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
 
-            case R.id.non_printing_characters: {
+            case R.id.encoding: {
+                EncodingPreference.showEncodingSelectionDialog(this, codeArea.getCharset().name(), encoding -> {
+                    codeArea.setCharset(Charset.forName(encoding));
+                    binaryStatus.setEncoding(codeArea.getCharset().toString());
+                });
+                return true;
+            }
+
+            case R.id.font: {
+                FontPreference.showFontSelectionDialog(this, codeArea.getCodeFont(), codeFont -> {
+                    codeArea.setCodeFont(codeFont);
+                });
+                return true;
+            }
+
+            case R.id.codes_colorization: {
                 boolean checked = item.isChecked();
                 item.setChecked(!checked);
                 ((HighlightNonAsciiCodeAreaPainter) codeArea.getPainter()).setNonAsciiHighlightingEnabled(!checked);

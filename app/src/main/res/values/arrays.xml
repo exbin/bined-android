@@ -49,18 +49,6 @@
         <item>hexadecimal</item>
     </string-array>
 
-    <string-array name="position_code_type_entries">
-        <item>Octal</item>
-        <item>Decimal</item>
-        <item>Hexadecimal</item>
-    </string-array>
-
-    <string-array name="position_code_type_values">
-        <item>octal</item>
-        <item>decimal</item>
-        <item>hexadecimal</item>
-    </string-array>
-
     <string-array name="hex_chars_case_entries">
         <item>Upper Case</item>
         <item>Lower Case</item>
