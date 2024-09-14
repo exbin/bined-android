@@ -13,6 +13,14 @@
         app:useSimpleSummaryProvider="true" />
 
     <ListPreference
+        app:defaultValue="bytes_per_row"
+        app:entries="@array/bytes_per_row_entries"
+        app:entryValues="@array/bytes_per_row_values"
+        app:key="@string/bytes_per_row"
+        app:title="@string/bytes_per_row"
+        app:useSimpleSummaryProvider="true" />
+
+    <ListPreference
         app:defaultValue="dual"
         app:entries="@array/view_mode_entries"
         app:entryValues="@array/view_mode_values"

@@ -9,12 +9,6 @@
         app:fragment="org.exbin.bined.editor.android.SettingsActivity$ViewFragment"
         app:icon="@drawable/messages"
         app:key="view_header"
-        app:title="@string/view_header" />
-
-    <Preference
-        app:fragment="org.exbin.bined.editor.android.SettingsActivity$SyncFragment"
-        app:icon="@drawable/sync"
-        app:key="sync_header"
-        app:title="@string/sync_header" />
+        app:title="@string/pref_view_header" />
 
 </PreferenceScreen>

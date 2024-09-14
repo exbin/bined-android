@@ -19,6 +19,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.method.KeyListener;
 import android.text.method.TextKeyListener;
 import android.view.ContextMenu;
@@ -27,6 +28,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -38,10 +40,14 @@ import org.exbin.auxiliary.binary_data.ByteArrayEditableData;
 import org.exbin.bined.CodeAreaCaretPosition;
 import org.exbin.bined.CodeCharactersCase;
 import org.exbin.bined.CodeType;
+import org.exbin.bined.DefaultCodeAreaCaretPosition;
 import org.exbin.bined.EditMode;
 import org.exbin.bined.EditOperation;
+import org.exbin.bined.RowWrappingMode;
 import org.exbin.bined.SelectionRange;
 import org.exbin.bined.android.basic.CodeArea;
+import org.exbin.bined.android.basic.DefaultCodeAreaPainter;
+import org.exbin.bined.android.basic.color.BasicCodeAreaColorsProfile;
 import org.exbin.bined.basic.BasicCodeAreaSection;
 import org.exbin.bined.basic.CodeAreaViewMode;
 import org.exbin.bined.capability.EditModeCapable;
@@ -65,11 +71,14 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class MainActivity extends AppCompatActivity {
 
-    private static final int CUT_ITEM_ID = 1;
-    private static final int COPY_ITEM_ID = 2;
-    private static final int PASTE_ITEM_ID = 3;
-    private static final int DELETE_ITEM_ID = 4;
-    private static final int SELECT_ALL_ITEM_ID = 5;
+    private static final int SELECTION_START_ID = 1;
+    private static final int SELECTION_END_ID = 2;
+    private static final int CLEAR_SELECTION_ID = 3;
+    private static final int CUT_ITEM_ID = 4;
+    private static final int COPY_ITEM_ID = 5;
+    private static final int PASTE_ITEM_ID = 6;
+    private static final int DELETE_ITEM_ID = 7;
+    private static final int SELECT_ALL_ITEM_ID = 8;
 
     private static final int OPEN_FILE_ACTIVITY = 1;
     private static final int SAVE_FILE_ACTIVITY = 2;
@@ -104,6 +113,13 @@ public class MainActivity extends AppCompatActivity {
 //        });
 
         codeArea = findViewById(R.id.codeArea);
+        codeArea.setEditOperation(EditOperation.INSERT);
+
+        DefaultCodeAreaPainter painter = (DefaultCodeAreaPainter) codeArea.getPainter();
+        BasicCodeAreaColorsProfile basicColors = painter.getBasicColors();
+        basicColors.setContext(this);
+        basicColors.reinitialize();
+        painter.resetColors();
 
         undoRedo = new CodeAreaUndoRedo(codeArea);
         undoRedo.addChangeListener(() -> {
@@ -226,21 +242,38 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        MenuItem cutMenuItem = menu.add(0, CUT_ITEM_ID, 0, "Cut");
+        MenuItem selectionStartMenuItem = menu.add(0, SELECTION_START_ID, 0, getResources().getString(R.string.action_selection_start));
+        MenuItem selectionEndMenuItem = menu.add(1, SELECTION_END_ID, 0, getResources().getString(R.string.action_selection_end));
+        MenuItem clearSelectionMenuItem = menu.add(2, CLEAR_SELECTION_ID, 0, getResources().getString(R.string.action_clear_selection));
+        MenuItem cutMenuItem = menu.add(0, CUT_ITEM_ID, 3, getResources().getString(R.string.action_cut));
         cutMenuItem.setEnabled(codeArea.isEditable() && codeArea.hasSelection());
-        MenuItem copyMenuItem = menu.add(0, COPY_ITEM_ID, 1, "Copy");
+        MenuItem copyMenuItem = menu.add(0, COPY_ITEM_ID, 4, getResources().getString(R.string.action_copy));
         copyMenuItem.setEnabled(codeArea.hasSelection());
-        MenuItem pasteMenuItem = menu.add(0, PASTE_ITEM_ID, 2, "Paste");
+        MenuItem pasteMenuItem = menu.add(0, PASTE_ITEM_ID, 5, getResources().getString(R.string.action_paste));
         pasteMenuItem.setEnabled(codeArea.isEditable() && codeArea.canPaste());
-        MenuItem deleteMenuItem = menu.add(0, DELETE_ITEM_ID, 3, "Delete");
+        MenuItem deleteMenuItem = menu.add(0, DELETE_ITEM_ID, 6, getResources().getString(R.string.action_delete));
         deleteMenuItem.setEnabled(codeArea.isEditable() && codeArea.hasSelection());
-        MenuItem selectAllMenuItem = menu.add(0, SELECT_ALL_ITEM_ID, 4, "Select All");
+        MenuItem selectAllMenuItem = menu.add(0, SELECT_ALL_ITEM_ID, 7, getResources().getString(R.string.action_select_all));
     }
 
     // menu item select listener
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case SELECTION_START_ID: {
+                SelectionRange selection = codeArea.getSelection();
+                // TODO
+                break;
+            }
+            case SELECTION_END_ID: {
+                SelectionRange selection = codeArea.getSelection();
+                // TODO
+                break;
+            }
+            case CLEAR_SELECTION_ID: {
+                codeArea.clearSelection();
+                break;
+            }
             case CUT_ITEM_ID: {
                 codeArea.cut();
                 break;
@@ -404,10 +437,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // startActivity(intent);
 //                preferenceActivity.show
-//                R.id.
 //                PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
-//                PreferenceManager.createPrefe
-//                getPrefere
 //                int viewPreferences = R.xml.view_preferences;
 //                SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 //                defaultSharedPreferences.get
@@ -455,6 +485,41 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
 
+            case R.id.bytes_per_row_fill: {
+                codeArea.setRowWrapping(RowWrappingMode.WRAPPING);
+                codeArea.setMaxBytesPerRow(0);
+                menu.findItem(R.id.bytes_per_row_fill).setChecked(true);
+                return true;
+            }
+
+            case R.id.bytes_per_row_4: {
+                codeArea.setRowWrapping(RowWrappingMode.NO_WRAPPING);
+                codeArea.setMaxBytesPerRow(4);
+                menu.findItem(R.id.bytes_per_row_4).setChecked(true);
+                return true;
+            }
+
+            case R.id.bytes_per_row_8: {
+                codeArea.setRowWrapping(RowWrappingMode.NO_WRAPPING);
+                codeArea.setMaxBytesPerRow(8);
+                menu.findItem(R.id.bytes_per_row_8).setChecked(true);
+                return true;
+            }
+
+            case R.id.bytes_per_row_12: {
+                codeArea.setRowWrapping(RowWrappingMode.NO_WRAPPING);
+                codeArea.setMaxBytesPerRow(12);
+                menu.findItem(R.id.bytes_per_row_12).setChecked(true);
+                return true;
+            }
+
+            case R.id.bytes_per_row_16: {
+                codeArea.setRowWrapping(RowWrappingMode.NO_WRAPPING);
+                codeArea.setMaxBytesPerRow(16);
+                menu.findItem(R.id.bytes_per_row_16).setChecked(true);
+                return true;
+            }
+
             case R.id.codes_colorization: {
                 boolean checked = item.isChecked();
                 item.setChecked(!checked);
@@ -469,6 +534,52 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.app_bar_redo: {
                 undoRedo.performRedo();
+                return true;
+            }
+
+            case R.id.action_cut: {
+                codeArea.cut();
+                return true;
+            }
+
+            case R.id.action_copy: {
+                codeArea.copy();
+                return true;
+            }
+
+            case R.id.action_paste: {
+                codeArea.paste();
+                return true;
+            }
+
+            case R.id.action_delete: {
+                codeArea.delete();
+                return true;
+            }
+
+            case R.id.action_select_all: {
+                codeArea.selectAll();
+                return true;
+            }
+
+            case R.id.go_to_position: {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(R.string.go_to_position);
+                final EditText inputNumber = new EditText(this);
+                inputNumber.setInputType(InputType.TYPE_CLASS_NUMBER);
+                inputNumber.setText(String.valueOf(codeArea.getDataPosition()));
+                builder.setView(inputNumber);
+                builder.setPositiveButton(R.string.button_go_to, (dialog, which) -> {
+                    DefaultCodeAreaCaretPosition caretPosition = new DefaultCodeAreaCaretPosition();
+                    caretPosition.setPosition(codeArea.getActiveCaretPosition());
+                    caretPosition.setDataPosition(Long.parseLong(inputNumber.getText().toString()));
+                    codeArea.setActiveCaretPosition(caretPosition);
+                    codeArea.centerOnCursor();
+                });
+                builder.setNegativeButton(R.string.button_cancel, null);
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+
                 return true;
             }
 

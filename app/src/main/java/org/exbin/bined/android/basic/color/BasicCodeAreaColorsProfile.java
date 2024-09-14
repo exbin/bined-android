@@ -17,8 +17,12 @@ package org.exbin.bined.android.basic.color;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.util.TypedValue;
 
 import androidx.appcompat.widget.ThemeUtils;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.google.android.material.color.MaterialColors;
@@ -160,34 +164,34 @@ public class BasicCodeAreaColorsProfile implements CodeAreaColorsProfile {
     }
 
     public void reinitialize() {
-            textColor = null; //codeArea.getForeground();
-            if (textColor == null) {
-                textColor = Color.BLACK;
-            }
+        textColor = getThemeColor(androidx.appcompat.R.attr.editTextColor);
+        if (textColor == null) {
+            textColor = Color.BLACK;
+        }
 
-            textBackground = null; //codeArea.getBackground();
-            if (textBackground == null) {
-                textBackground = Color.WHITE;
-            }
-            selectionColor = null; //UIManager.getColor("TextArea.selectionColor");
-            if (selectionColor == null) {
-                selectionColor = Color.WHITE;
-            }
-            selectionBackground = null; // UIManager.getColor("TextArea.selectionBackground");
-            if (selectionBackground == null) {
-                selectionBackground = Color.rgb(96, 96, 255);
-            }
-            selectionMirrorColor = selectionColor;
-            selectionMirrorBackground = CodeAreaAndroidUtils.computeGrayColor(selectionBackground);
-            cursorColor = null; //UIManager.getColor("TextArea.caretForeground");
-            if (cursorColor == null) {
-                cursorColor = Color.BLACK;
-            }
-            cursorNegativeColor = CodeAreaAndroidUtils.createNegativeColor(cursorColor);
-            decorationLine = Color.GRAY;
+        textBackground = getThemeColor(androidx.appcompat.R.attr.editTextBackground);
+        if (textBackground == null) {
+            textBackground = CodeAreaAndroidUtils.createNegativeColor(textColor);
+        }
+        selectionColor = getThemeColor(androidx.appcompat.R.attr.editTextColor);
+        if (selectionColor == null) {
+            selectionColor = Color.WHITE;
+        }
+        selectionBackground = getThemeColor(androidx.appcompat.R.attr.selectableItemBackground);
+        if (selectionBackground == null) {
+            selectionBackground = Color.rgb(96, 96, 255);
+        }
+        selectionMirrorColor = selectionColor;
+        selectionMirrorBackground = CodeAreaAndroidUtils.computeGrayColor(selectionBackground);
+        cursorColor = getThemeColor(androidx.appcompat.R.attr.colorControlActivated);
+        if (cursorColor == null) {
+            cursorColor = Color.BLACK;
+        }
+        cursorNegativeColor = CodeAreaAndroidUtils.createNegativeColor(cursorColor);
+        decorationLine = Color.GRAY;
 
-            alternateColor = textColor;
-            alternateBackground = CodeAreaAndroidUtils.createOddColor(textBackground);
+        alternateColor = textColor;
+        alternateBackground = CodeAreaAndroidUtils.createOddColor(textBackground);
     }
 
     @Nullable
@@ -195,7 +199,20 @@ public class BasicCodeAreaColorsProfile implements CodeAreaColorsProfile {
         if (context == null)
             return null;
 
-//        return ThemeUtils.getThemeAttrColor(context, attr);
+        TypedValue typedValue = new TypedValue();
+        context.getTheme().resolveAttribute(attr, typedValue, true);
+        try {
+            return ContextCompat.getColor(context, typedValue.resourceId);
+        } catch (Exception ex) {
+            try {
+                Drawable drawable = ContextCompat.getDrawable(context, typedValue.resourceId);
+                if (drawable instanceof ColorDrawable) {
+                    return ((ColorDrawable) drawable).getColor();
+                }
+            } catch (Exception ex2) {
+                // ignore
+            }
+        }
         return null;
     }
 }

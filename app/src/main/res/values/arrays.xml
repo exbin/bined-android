@@ -23,6 +23,24 @@
         <item>cs_CZ</item>
     </string-array>
 
+    <string-array name="bytes_per_row_entries">
+        <item>Fill Screen</item>
+        <item>4 Bytes</item>
+        <item>8 Bytes</item>
+        <item>12 Bytes</item>
+        <item>16 Bytes</item>
+        <item>Custom</item>
+    </string-array>
+
+    <string-array name="bytes_per_row_values">
+        <item>0</item>
+        <item>4</item>
+        <item>8</item>
+        <item>12</item>
+        <item>16</item>
+        <item>custom</item>
+    </string-array>
+
     <string-array name="view_mode_entries">
         <item>Dual</item>
         <item>Code Matrix</item>

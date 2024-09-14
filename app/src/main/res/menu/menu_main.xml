@@ -26,8 +26,8 @@
         android:title="@string/action_open" />
     <item
         android:id="@+id/action_save"
-        android:icon="@drawable/ic_action_save_24"
         android:enabled="false"
+        android:icon="@drawable/ic_action_save_24"
         android:title="@string/action_save" />
     <item
         android:id="@+id/action_save_as"
@@ -38,6 +38,41 @@
         android:title="@string/view_menu">
         <menu>
             <item
+                android:id="@+id/encoding"
+                android:title="@string/encoding" />
+            <item
+                android:id="@+id/font"
+                android:title="@string/font" />
+            <item
+                android:id="@+id/bytes_per_row"
+                android:title="@string/bytes_per_row">
+                <menu>
+                    <group
+                        android:id="@+id/bytes_per_row_group"
+                        android:checkableBehavior="single">
+                        <item
+                            android:id="@+id/bytes_per_row_fill"
+                            android:title="@string/bytes_per_row_fill" />
+                        <item
+                            android:id="@+id/bytes_per_row_4"
+                            android:title="@string/bytes_per_row_4" />
+                        <item
+                            android:id="@+id/bytes_per_row_8"
+                            android:title="@string/bytes_per_row_8" />
+                        <item
+                            android:id="@+id/bytes_per_row_12"
+                            android:title="@string/bytes_per_row_12" />
+                        <item
+                            android:id="@+id/bytes_per_row_16"
+                            android:title="@string/bytes_per_row_16" />
+                        <item
+                            android:id="@+id/bytes_per_row_custom"
+                            android:enabled="false"
+                            android:title="@string/bytes_per_row_custom" />
+                    </group>
+                </menu>
+            </item>
+            <item
                 android:id="@+id/view_mode"
                 android:title="@string/view_mode" />
             <item
@@ -47,21 +82,15 @@
                 android:id="@+id/hex_chars_case"
                 android:title="@string/hex_characters_case" />
             <item
-                android:id="@+id/encoding"
-                android:title="@string/encoding" />
-            <item
-                android:id="@+id/font"
-                android:title="@string/font" />
-            <item
                 android:id="@+id/codes_colorization"
                 android:checkable="true"
                 android:checked="true"
                 android:title="@string/codes_colorization" />
             <item
                 android:id="@+id/non_printing_characters"
-                android:enabled="false"
                 android:checkable="true"
                 android:checked="false"
+                android:enabled="false"
                 android:title="@string/non_printing_characters" />
         </menu>
     </item>
@@ -70,8 +99,22 @@
         android:title="@string/edit_menu">
         <menu>
             <item
+                android:id="@+id/action_cut"
+                android:title="@string/action_cut" />
+            <item
+                android:id="@+id/action_copy"
+                android:title="@string/action_copy" />
+            <item
+                android:id="@+id/action_paste"
+                android:title="@string/action_paste" />
+            <item
+                android:id="@+id/action_delete"
+                android:title="@string/action_delete" />
+            <item
+                android:id="@+id/action_select_all"
+                android:title="@string/action_select_all" />
+            <item
                 android:id="@+id/go_to_position"
-                android:enabled="false"
                 android:title="@string/go_to_position" />
             <item
                 android:id="@+id/edit_selection"
@@ -90,8 +133,7 @@
     <item
         android:id="@+id/tools_menu"
         android:title="@string/tools_menu">
-        <menu>
-        </menu>
+        <menu></menu>
     </item>
     <item
         android:id="@+id/action_settings"

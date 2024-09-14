@@ -1,36 +1,11 @@
 <resources>
     <string name="app_name">BinEd</string>
+    <string name="app_about">Name: BinEd - Binary/Hex Editor\nVersion: 0.2.1-SNAPSHOT\nVendor: <a href="https://exbin.org">ExBin Project</a>\nLicense: <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>\nHomepage: <a href="https://bined.exbin.org/android">https://bined.exbin.org/android</a></string>
+    <string name="bined_logo_description">BinEd Logo</string>
+
+    <!-- Actions & menu -->
+
     <string name="title_activity_settings">Settings</string>
-
-    <!-- Strings related to Settings -->
-
-    <!-- Example General settings -->
-    <string name="pref_header_general">General</string>
-
-    <string name="pref_title_social_recommendations">Enable social recommendations</string>
-    <string name="pref_description_social_recommendations">Recommendations for people to contact
-        based on your message history
-    </string>
-
-    <string name="pref_title_display_name">Display name</string>
-    <string name="pref_default_display_name">John Smith</string>
-
-    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
-    <string name="pref_header_data_sync">Data &amp; sync</string>
-    <string name="pref_title_sync_frequency">Sync frequency</string>
-
-    <!-- Example settings for Data & Sync -->
-    <string name="pref_title_system_sync_settings">System sync settings</string>
-
-    <string name="pref_header_notifications">Notifications</string>
-    <string name="pref_title_new_message_notifications">New message notifications</string>
-    <string name="pref_title_ringtone">Ringtone</string>
-
-    <string name="pref_ringtone_silent">Silent</string>
-
-    <string name="pref_title_vibrate">Vibrate</string>
-
-    <!-- Example settings for Notifications -->
 
     <string name="action_new">New</string>
     <string name="action_open">Open</string>
@@ -41,20 +16,7 @@
     <string name="action_about">About</string>
 
     <string name="action_exit">Exit</string>
-    <string name="exampleString">Test</string>
-    <string name="app_about">Name: BinEd - Binary/Hex Editor\nVersion: 0.2.1-SNAPSHOT\nVendor: <a href="https://exbin.org">ExBin Project</a>\nLicense: <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>\nHomepage: <a href="https://bined.exbin.org/android">https://bined.exbin.org/android</a></string>
-    <string name="bined_logo_description">BinEd Logo</string>
-    <string name="pref_header_appearance">Appearance</string>
-    <string name="title_activity_settings2">SettingsActivity2</string>
-    <string name="view_header">View</string>
-    <string name="sync_header">Sync</string>
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
 
-    <!-- Preference Titles -->
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="view_menu">View</string>
     <string name="visual_theme">Visual Theme</string>
     <string name="language">Language</string>
@@ -72,50 +34,31 @@
     <string name="action_search">Search</string>
     <string name="action_undo">Undo</string>
     <string name="action_redo">Redo</string>
+    <string name="action_selection_start">Selection Start</string>
+    <string name="action_selection_end">Selection End</string>
+    <string name="action_clear_selection">Clear Selection</string>
+    <string name="action_cut">Cut</string>
+    <string name="action_copy">Copy</string>
+    <string name="action_paste">Paste</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_select_all">Select All</string>
     <string name="font">Font</string>
+    <string name="bytes_per_row">Bytes Per Row</string>
+    <string name="bytes_per_row_fill">Fill Screen</string>
+    <string name="bytes_per_row_4">4 Bytes</string>
+    <string name="bytes_per_row_8">8 Bytes</string>
+    <string name="bytes_per_row_12">12 Bytes</string>
+    <string name="bytes_per_row_16">16 Bytes</string>
+    <string name="bytes_per_row_custom">Custom</string>
     <string name="tools_menu">Tools</string>
-    <string name="button_set">Set</string>
+
     <string name="button_cancel">Cancel</string>
+    <string name="button_set">Set</string>
+    <string name="button_go_to">Go To</string>
 
-    <string-array name="pref_example_list_titles">
-        <item>Always</item>
-        <item>When possible</item>
-        <item>Never</item>
-    </string-array>
+    <!-- Preference Titles -->
 
-    <!-- Messages Preferences -->
-    <string-array name="pref_example_list_values">
-        <item>1</item>
-        <item>0</item>
-        <item>-1</item>
-    </string-array>
-    <string-array name="pref_sync_frequency_titles">
-        <item>15 minutes</item>
-        <item>30 minutes</item>
-        <item>1 hour</item>
-        <item>3 hours</item>
-        <item>6 hours</item>
-        <item>Never</item>
-    </string-array>
+    <string name="pref_header_appearance">Appearance</string>
+    <string name="pref_view_header">View</string>
 
-    <!-- Sync Preferences -->
-    <string-array name="pref_sync_frequency_values">
-        <item>15</item>
-        <item>30</item>
-        <item>60</item>
-        <item>180</item>
-        <item>360</item>
-        <item>-1</item>
-    </string-array>
-    <string-array name="list_preference_entries">
-        <item>Entry 1</item>
-        <item>Entry 2</item>
-        <item>Entry 3</item>
-    </string-array>
-    <string-array name="list_preference_entry_values">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
-    <string-array name="multi_select_list_preference_default_value" />
 </resources>

@@ -47,15 +47,30 @@ public class FontPreference extends EditTextPreference {
         super(context, attrs);
     }
 
+    @Override
+    protected void onClick() {
+        Font currentFont = new Font();
+        try {
+            currentFont.setSize(Integer.parseInt(getText()));
+        } catch (Exception ex) {
+            // ignore
+        }
+        FontPreference.showFontSelectionDialog(getContext(), currentFont, (codeFont) -> {
+            setText(String.valueOf(codeFont.getSize()));
+        });
+    }
+
     public static void showFontSelectionDialog(Context context, Font codeFont, FontSelectionListener resultListener) {
         // TODO support for font family / accents
+        // http://www.ulduzsoft.com/2012/01/enumerating-the-fonts-on-android-platform/
+        // http://www.ulduzsoft.com/2012/01/fontpreference-dialog-for-android/
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(R.string.font);
         CharSequence[] fontHeights = new CharSequence[] {"20", "25", "30", "35", "40", "45", "50", "60", "70", "80", "90", "100"};
         int currentSelection = -1;
         String currentSize = String.valueOf(codeFont.getSize());
         for (int i = 0; i < fontHeights.length; i++) {
-            if (currentSize.equals(fontHeights[i])) {
+            if (fontHeights[i].equals(currentSize)) {
                 currentSelection = i;
                 break;
             }
