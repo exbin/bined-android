@@ -39,7 +39,9 @@
     <string name="action_clear_selection">Clear Selection</string>
     <string name="action_cut">Cut</string>
     <string name="action_copy">Copy</string>
+    <string name="action_copy_as_code">Copy As Code</string>
     <string name="action_paste">Paste</string>
+    <string name="action_paste_from_code">Paste From Code</string>
     <string name="action_delete">Delete</string>
     <string name="action_select_all">Select All</string>
     <string name="font">Font</string>

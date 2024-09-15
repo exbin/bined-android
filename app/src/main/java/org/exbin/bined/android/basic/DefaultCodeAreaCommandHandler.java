@@ -630,8 +630,13 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
             return;
         }
 
+        if (!clipboard.hasPrimaryClip()) {
+            return;
+        }
+
 //        try {
-//            if (clipboard.isDataFlavorAvailable(binaryDataFlavor)) {
+//            ClipData primaryClip = clipboard.getPrimaryClip();
+//            if (primaryClip.clipboard.isDataFlavorAvailable(binaryDataFlavor)) {
 //                if (codeArea.hasSelection()) {
 //                    deleteSelection();
 //                    codeArea.notifyDataChanged();

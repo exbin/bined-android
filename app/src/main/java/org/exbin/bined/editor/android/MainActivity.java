@@ -71,14 +71,16 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class MainActivity extends AppCompatActivity {
 
-    private static final int SELECTION_START_ID = 1;
-    private static final int SELECTION_END_ID = 2;
-    private static final int CLEAR_SELECTION_ID = 3;
-    private static final int CUT_ITEM_ID = 4;
-    private static final int COPY_ITEM_ID = 5;
-    private static final int PASTE_ITEM_ID = 6;
-    private static final int DELETE_ITEM_ID = 7;
-    private static final int SELECT_ALL_ITEM_ID = 8;
+    private static final int SELECTION_START_POPUP_ID = 1;
+    private static final int SELECTION_END_POPUP_ID = 2;
+    private static final int CLEAR_SELECTION_POPUP_ID = 3;
+    private static final int CUT_ACTION_POPUP_ID = 4;
+    private static final int COPY_ACTION_POPUP_ID = 5;
+    private static final int PASTE_ACTION_POPUP_ID = 6;
+    private static final int DELETE_ACTION_POPUP_ID = 7;
+    private static final int SELECT_ALL_ACTION_POPUP_ID = 8;
+    private static final int COPY_AS_CODE_ACTION_POPUP_ID = 9;
+    private static final int PASTE_FROM_CODE_ACTION_POPUP_ID = 10;
 
     private static final int OPEN_FILE_ACTIVITY = 1;
     private static final int SAVE_FILE_ACTIVITY = 2;
@@ -242,56 +244,66 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        MenuItem selectionStartMenuItem = menu.add(0, SELECTION_START_ID, 0, getResources().getString(R.string.action_selection_start));
-        MenuItem selectionEndMenuItem = menu.add(1, SELECTION_END_ID, 0, getResources().getString(R.string.action_selection_end));
-        MenuItem clearSelectionMenuItem = menu.add(2, CLEAR_SELECTION_ID, 0, getResources().getString(R.string.action_clear_selection));
-        MenuItem cutMenuItem = menu.add(0, CUT_ITEM_ID, 3, getResources().getString(R.string.action_cut));
+        MenuItem selectionStartMenuItem = menu.add(0, SELECTION_START_POPUP_ID, 0, getResources().getString(R.string.action_selection_start));
+        MenuItem selectionEndMenuItem = menu.add(0, SELECTION_END_POPUP_ID, 1, getResources().getString(R.string.action_selection_end));
+        MenuItem clearSelectionMenuItem = menu.add(0, CLEAR_SELECTION_POPUP_ID, 2, getResources().getString(R.string.action_clear_selection));
+        MenuItem cutMenuItem = menu.add(1, CUT_ACTION_POPUP_ID, 0, getResources().getString(R.string.action_cut));
         cutMenuItem.setEnabled(codeArea.isEditable() && codeArea.hasSelection());
-        MenuItem copyMenuItem = menu.add(0, COPY_ITEM_ID, 4, getResources().getString(R.string.action_copy));
+        MenuItem copyMenuItem = menu.add(1, COPY_ACTION_POPUP_ID, 1, getResources().getString(R.string.action_copy));
         copyMenuItem.setEnabled(codeArea.hasSelection());
-        MenuItem pasteMenuItem = menu.add(0, PASTE_ITEM_ID, 5, getResources().getString(R.string.action_paste));
+        menu.add(1, COPY_AS_CODE_ACTION_POPUP_ID, 2, getResources().getString(R.string.action_copy_as_code));
+        MenuItem pasteMenuItem = menu.add(1, PASTE_ACTION_POPUP_ID, 3, getResources().getString(R.string.action_paste));
         pasteMenuItem.setEnabled(codeArea.isEditable() && codeArea.canPaste());
-        MenuItem deleteMenuItem = menu.add(0, DELETE_ITEM_ID, 6, getResources().getString(R.string.action_delete));
+        menu.add(1, PASTE_FROM_CODE_ACTION_POPUP_ID, 4, getResources().getString(R.string.action_paste_from_code));
+        MenuItem deleteMenuItem = menu.add(1, DELETE_ACTION_POPUP_ID, 5, getResources().getString(R.string.action_delete));
         deleteMenuItem.setEnabled(codeArea.isEditable() && codeArea.hasSelection());
-        MenuItem selectAllMenuItem = menu.add(0, SELECT_ALL_ITEM_ID, 7, getResources().getString(R.string.action_select_all));
+        MenuItem selectAllMenuItem = menu.add(1, SELECT_ALL_ACTION_POPUP_ID, 6, getResources().getString(R.string.action_select_all));
     }
 
     // menu item select listener
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case SELECTION_START_ID: {
+            case SELECTION_START_POPUP_ID: {
                 SelectionRange selection = codeArea.getSelection();
                 // TODO
                 break;
             }
-            case SELECTION_END_ID: {
+            case SELECTION_END_POPUP_ID: {
                 SelectionRange selection = codeArea.getSelection();
                 // TODO
                 break;
             }
-            case CLEAR_SELECTION_ID: {
+            case CLEAR_SELECTION_POPUP_ID: {
                 codeArea.clearSelection();
                 break;
             }
-            case CUT_ITEM_ID: {
+            case CUT_ACTION_POPUP_ID: {
                 codeArea.cut();
                 break;
             }
-            case COPY_ITEM_ID: {
+            case COPY_ACTION_POPUP_ID: {
                 codeArea.copy();
                 break;
             }
-            case PASTE_ITEM_ID: {
+            case PASTE_ACTION_POPUP_ID: {
                 codeArea.paste();
                 break;
             }
-            case DELETE_ITEM_ID: {
+            case DELETE_ACTION_POPUP_ID: {
                 codeArea.delete();
                 break;
             }
-            case SELECT_ALL_ITEM_ID: {
+            case SELECT_ALL_ACTION_POPUP_ID: {
                 codeArea.selectAll();
+                break;
+            }
+            case COPY_AS_CODE_ACTION_POPUP_ID: {
+                codeArea.copyAsCode();
+                break;
+            }
+            case PASTE_FROM_CODE_ACTION_POPUP_ID: {
+                codeArea.pasteFromCode();
                 break;
             }
 
@@ -571,6 +583,7 @@ public class MainActivity extends AppCompatActivity {
                 builder.setView(inputNumber);
                 builder.setPositiveButton(R.string.button_go_to, (dialog, which) -> {
                     DefaultCodeAreaCaretPosition caretPosition = new DefaultCodeAreaCaretPosition();
+                    caretPosition.setCodeOffset(0);
                     caretPosition.setPosition(codeArea.getActiveCaretPosition());
                     caretPosition.setDataPosition(Long.parseLong(inputNumber.getText().toString()));
                     codeArea.setActiveCaretPosition(caretPosition);
