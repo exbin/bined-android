@@ -18,14 +18,19 @@ package org.exbin.bined.android.basic;
 import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.ClipboardManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+
 import androidx.annotation.Nullable;
 import android.view.KeyEvent;
 
+import org.exbin.auxiliary.binary_data.ByteArrayData;
+import org.exbin.auxiliary.binary_data.ByteArrayEditableData;
 import org.exbin.bined.CaretOverlapMode;
 import org.exbin.bined.ClipboardHandlingMode;
+import org.exbin.bined.android.CodeAreaAndroidUtils;
 import org.exbin.bined.basic.BasicCodeAreaSection;
 import org.exbin.bined.CodeAreaCaretPosition;
 import org.exbin.bined.CodeAreaUtils;
@@ -55,6 +60,7 @@ import org.exbin.auxiliary.binary_data.BinaryData;
 import org.exbin.auxiliary.binary_data.EditableBinaryData;
 
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -83,6 +89,7 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
     private final boolean codeTypeSupported;
     private final boolean viewModeSupported;
 
+    private Context context;
     private ClipboardManager clipboard;
     private boolean canPaste = false;
     private ClipDescription binedDataFlavor;
@@ -90,6 +97,7 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
     private ClipData currentClipboardData = null;
 
     public DefaultCodeAreaCommandHandler(Context context, CodeAreaCore codeArea) {
+        this.context = context;
         this.codeArea = codeArea;
         codeTypeSupported = codeArea instanceof CodeTypeCapable;
         viewModeSupported = codeArea instanceof ViewModeCapable;
@@ -558,14 +566,7 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
 
             BinaryData copy = data.copy(first, last - first + 1);
 
-            ClipData clipData = new ClipData(binedDataFlavor, new ClipData.Item(new Intent() {
-                @Nullable
-                @Override
-                public Uri getData() {
-                    return super.getData();
-                }
-            }));
-//            CodeAreaUtils.BinaryDataClipboardData binaryData = new CodeAreaUtils.BinaryDataClipboardData(copy, binaryDataFlavor);
+            ClipData clipData = CodeAreaAndroidUtils.createBinaryDataClipboardData(copy, binaryDataFlavor);
             setClipboardContent(clipData);
         }
     }
@@ -583,8 +584,7 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
 
             CodeType codeType = ((CodeTypeCapable) codeArea).getCodeType();
             CodeCharactersCase charactersCase = ((CodeCharactersCaseCapable) codeArea).getCodeCharactersCase();
-            ClipData clipData = null; //new ClipData("test");
-//            CodeAreaUtils.CodeDataClipboardData binaryData = new CodeAreaUtils.CodeDataClipboardData(copy, binaryDataFlavor, codeType, charactersCase);
+            ClipData clipData = CodeAreaAndroidUtils.createCodeDataClipboardData(copy, binaryDataFlavor, codeType, charactersCase);
             setClipboardContent(clipData);
         }
     }
@@ -634,79 +634,91 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
             return;
         }
 
-//        try {
-//            ClipData primaryClip = clipboard.getPrimaryClip();
-//            if (primaryClip.clipboard.isDataFlavorAvailable(binaryDataFlavor)) {
-//                if (codeArea.hasSelection()) {
-//                    deleteSelection();
-//                    codeArea.notifyDataChanged();
+        try {
+            ClipData primaryClip = clipboard.getPrimaryClip();
+
+            if (primaryClip == null || primaryClip.getItemCount() == 0) {
+                return;
+            }
+
+            ClipDescription description = primaryClip.getDescription();
+            try {
+                if (!description.hasMimeType(BINED_CLIPBOARD_MIME) && !description.hasMimeType(CodeAreaUtils.MIME_CLIPBOARD_BINARY) && !description.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
+                    return;
+                }
+            } catch (IllegalStateException ex) {
+                return;
+            }
+
+            ClipData.Item clipItem = primaryClip.getItemAt(0);
+            if (description.hasMimeType(BINED_CLIPBOARD_MIME)) {
+                ContentResolver contentResolver = context.getContentResolver();
+//                ContentProviderClient contentProviderClient = contentResolver.acquireContentProviderClient(clipItem.getUri());
+//                Object clipboardData = clipboard.getData(binedDataFlavor);
+//                if (clipboardData instanceof BinaryData) {
+//                    pasteBinaryData((BinaryData) clipboardData);
 //                }
-//
-//                try {
-//                    Object object = clipboard.getData(binaryDataFlavor);
-//                    if (object instanceof BinaryData) {
-//                        DefaultCodeAreaCaret caret = (DefaultCodeAreaCaret) ((CaretCapable) codeArea).getCodeAreaCaret();
-//                        long dataPosition = caret.getDataPosition();
-//
-//                        BinaryData clipboardData = (BinaryData) object;
-//                        long dataSize = clipboardData.getDataSize();
-//                        if (((EditModeCapable) codeArea).getEditMode() == EditMode.OVERWRITE) {
-//                            long toRemove = dataSize;
-//                            if (dataPosition + toRemove > codeArea.getDataSize()) {
-//                                toRemove = codeArea.getDataSize() - dataPosition;
-//                            }
-//                            ((EditableBinaryData) codeArea.getContentData()).remove(dataPosition, toRemove);
-//                        }
-//                        ((EditableBinaryData) codeArea.getContentData()).insert(dataPosition, clipboardData);
-//                        codeArea.notifyDataChanged();
-//
-//                        caret.setCaretPosition(caret.getDataPosition() + dataSize);
-//                        caret.setCodeOffset(0);
-//                        updateScrollBars();
-//                        notifyCaretMoved();
-//                        revealCursor();
-//                    }
-//                } catch (UnsupportedFlavorException | IOException ex) {
-//                    Logger.getLogger(DefaultCodeAreaCommandHandler.class.getName()).log(Level.SEVERE, null, ex);
+            } else if (description.hasMimeType(CodeAreaUtils.MIME_CLIPBOARD_BINARY)) {
+                ContentResolver contentResolver = context.getContentResolver();
+//                Object clipboardData = clipboard.getData(binaryDataFlavor);
+//                if (clipboardData instanceof InputStream) {
+//                    // PagedData pastedData = new PagedData();
+//                    ByteArrayEditableData pastedData = new ByteArrayEditableData();
+//                    pastedData.insert(0, (InputStream) clipboardData, -1);
+//                    pasteBinaryData((BinaryData) pastedData);
 //                }
-//            } else if (clipboard.isDataFlavorAvailable(DataFlavor.stringFlavor)) {
-//                if (codeArea.hasSelection()) {
-//                    deleteSelection();
-//                    codeArea.notifyDataChanged();
-//                }
-//
-//                Object insertedData;
-//                try {
-//                    insertedData = clipboard.getData(DataFlavor.stringFlavor);
-//                    if (insertedData instanceof String) {
-//                        DefaultCodeAreaCaret caret = (DefaultCodeAreaCaret) ((CaretCapable) codeArea).getCodeAreaCaret();
-//                        long dataPosition = caret.getDataPosition();
-//
-//                        byte[] bytes = ((String) insertedData).getBytes(Charset.forName(CodeAreaUtils.DEFAULT_ENCODING));
-//                        int length = bytes.length;
-//                        if (((EditModeCapable) codeArea).getEditMode() == EditMode.OVERWRITE) {
-//                            long toRemove = length;
-//                            if (dataPosition + toRemove > codeArea.getDataSize()) {
-//                                toRemove = codeArea.getDataSize() - dataPosition;
-//                            }
-//                            ((EditableBinaryData) codeArea.getContentData()).remove(dataPosition, toRemove);
-//                        }
-//                        ((EditableBinaryData) codeArea.getContentData()).insert(dataPosition, bytes);
-//                        codeArea.notifyDataChanged();
-//
-//                        caret.setCaretPosition(caret.getDataPosition() + length);
-//                        caret.setCodeOffset(0);
-//                        updateScrollBars();
-//                        notifyCaretMoved();
-//                        revealCursor();
-//                    }
-//                } catch (UnsupportedFlavorException | IOException ex) {
-//                    Logger.getLogger(DefaultCodeAreaCommandHandler.class.getName()).log(Level.SEVERE, null, ex);
-//                }
-//            }
-//        } catch (IllegalStateException ex) {
-//            // Clipboard not available - ignore
-//        }
+            } else if (description.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
+                CharSequence clipboardData = clipItem.getText();
+                if (clipboardData != null) {
+                    byte[] bytes = clipboardData.toString().getBytes(Charset.forName(CodeAreaAndroidUtils.DEFAULT_ENCODING));
+                    BinaryData pastedData = new ByteArrayData(bytes);
+                    pasteBinaryData(pastedData);
+                }
+            }
+        } catch (IllegalStateException ex) {
+            // Clipboard not available - ignore
+        }
+    }
+
+    private void pasteBinaryData(BinaryData pastedData) {
+        BinaryData data = CodeAreaUtils.requireNonNullContentData(codeArea.getContentData());
+        EditMode editMode = ((EditModeCapable) codeArea).getEditMode();
+        EditOperation editOperation = ((EditModeCapable) codeArea).getActiveOperation();
+
+        if (codeArea.hasSelection()) {
+            deleteSelection();
+            codeArea.notifyDataChanged();
+        }
+
+        DefaultCodeAreaCaret caret = (DefaultCodeAreaCaret) ((CaretCapable) codeArea).getCodeAreaCaret();
+        long dataPosition = caret.getDataPosition();
+
+        long dataSize = pastedData.getDataSize();
+        long toRemove = dataSize;
+        if (editMode == EditMode.INPLACE) {
+            if (dataPosition + toRemove > codeArea.getDataSize()) {
+                toRemove = codeArea.getDataSize() - dataPosition;
+            }
+            ((EditableBinaryData) data).replace(dataPosition, pastedData, 0, toRemove);
+        } else {
+            if (editMode == EditMode.EXPANDING && editOperation == EditOperation.OVERWRITE) {
+                if (dataPosition + toRemove > codeArea.getDataSize()) {
+                    toRemove = codeArea.getDataSize() - dataPosition;
+                }
+                ((EditableBinaryData) data).remove(dataPosition, toRemove);
+            }
+
+            ((EditableBinaryData) data).insert(dataPosition, pastedData);
+            caret.setCaretPosition(caret.getDataPosition() + dataSize);
+            updateSelection(SelectingMode.NONE, caret.getCaretPosition());
+        }
+
+        caret.setCodeOffset(0);
+        ((CaretCapable) codeArea).setActiveCaretPosition(caret.getCaretPosition());
+        undoSequenceBreak();
+        codeArea.notifyDataChanged();
+        revealCursor();
+        clearSelection();
     }
 
     @Override
@@ -715,58 +727,73 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
             return;
         }
 
-//        try {
-//            if (!clipboard.isDataFlavorAvailable(binaryDataFlavor) && !clipboard.isDataFlavorAvailable(DataFlavor.stringFlavor)) {
-//                return;
-//            }
-//        } catch (IllegalStateException ex) {
-//            return;
-//        }
-//
-//        try {
-//            if (clipboard.isDataFlavorAvailable(binaryDataFlavor)) {
-//                paste();
-//            } else if (clipboard.isDataFlavorAvailable(DataFlavor.stringFlavor)) {
-//                if (codeArea.hasSelection()) {
-//                    deleteSelection();
-//                    codeArea.notifyDataChanged();
-//                }
-//
-//                Object insertedData;
-//                try {
-//                    insertedData = clipboard.getData(DataFlavor.stringFlavor);
-//                    if (insertedData instanceof String) {
-//                        DefaultCodeAreaCaret caret = (DefaultCodeAreaCaret) ((CaretCapable) codeArea).getCodeAreaCaret();
-//                        long dataPosition = caret.getDataPosition();
-//
-//                        CodeType codeType = getCodeType();
-//                        ByteArrayEditableData pastedData = new ByteArrayEditableData();
-//                        CodeAreaUtils.insertHexStringIntoData((String) insertedData, pastedData, codeType);
-//
-//                        long length = pastedData.getDataSize();
-//                        if (((EditModeCapable) codeArea).getEditMode() == EditMode.OVERWRITE) {
-//                            long toRemove = length;
-//                            if (dataPosition + toRemove > codeArea.getDataSize()) {
-//                                toRemove = codeArea.getDataSize() - dataPosition;
-//                            }
-//                            ((EditableBinaryData) codeArea.getContentData()).remove(dataPosition, toRemove);
-//                        }
-//                        ((EditableBinaryData) codeArea.getContentData()).insert(caret.getDataPosition(), pastedData);
-//                        codeArea.notifyDataChanged();
-//
-//                        caret.setCaretPosition(caret.getDataPosition() + length);
-//                        caret.setCodeOffset(0);
-//                        updateScrollBars();
-//                        notifyCaretMoved();
-//                        revealCursor();
-//                    }
-//                } catch (UnsupportedFlavorException | IOException ex) {
-//                    Logger.getLogger(DefaultCodeAreaCommandHandler.class.getName()).log(Level.SEVERE, null, ex);
-//                }
-//            }
-//        } catch (IllegalStateException ex) {
-//            // Clipboard not available - ignore
-//        }
+        if (!clipboard.hasPrimaryClip()) {
+            return;
+        }
+
+        ClipData primaryClip = clipboard.getPrimaryClip();
+        ClipDescription description = primaryClip.getDescription();
+
+        BinaryData data = CodeAreaUtils.requireNonNullContentData(codeArea.getContentData());
+        EditMode editMode = ((EditModeCapable) codeArea).getEditMode();
+        EditOperation editOperation = ((EditModeCapable) codeArea).getActiveOperation();
+        try {
+            if (!description.hasMimeType(CodeAreaUtils.MIME_CLIPBOARD_BINARY) && !description.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
+                return;
+            }
+        } catch (IllegalStateException ex) {
+            return;
+        }
+
+        try {
+            if (description.hasMimeType(CodeAreaUtils.MIME_CLIPBOARD_BINARY)) {
+                paste();
+            } else if (description.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
+                if (codeArea.hasSelection()) {
+                    deleteSelection();
+                    codeArea.notifyDataChanged();
+                }
+
+                Object insertedData;
+                CharSequence clipboardData = primaryClip.getItemAt(0).getText();
+                if (clipboardData != null) {
+                    insertedData = clipboardData.toString();
+                    DefaultCodeAreaCaret caret = (DefaultCodeAreaCaret) ((CaretCapable) codeArea).getCodeAreaCaret();
+                    long dataPosition = caret.getDataPosition();
+
+                    CodeType codeType = getCodeType();
+                    ByteArrayEditableData pastedData = new ByteArrayEditableData();
+                    CodeAreaUtils.insertHexStringIntoData((String) insertedData, pastedData, codeType);
+
+                    long length = pastedData.getDataSize();
+                    long toRemove = length;
+                    if ((editMode == EditMode.EXPANDING && editOperation == EditOperation.OVERWRITE) || editMode == EditMode.INPLACE) {
+                        if (dataPosition + toRemove > codeArea.getDataSize()) {
+                            toRemove = codeArea.getDataSize() - dataPosition;
+                        }
+                        ((EditableBinaryData) data).remove(dataPosition, toRemove);
+                    }
+                    if (editMode == EditMode.INPLACE && length > toRemove) {
+                        ((EditableBinaryData) data).insert(caret.getDataPosition(), pastedData, 0, toRemove);
+                        caret.setCaretPosition(caret.getDataPosition() + toRemove);
+                        updateSelection(SelectingMode.NONE, caret.getCaretPosition());
+                    } else {
+                        ((EditableBinaryData) data).insert(caret.getDataPosition(), pastedData);
+                        caret.setCaretPosition(caret.getDataPosition() + length);
+                        updateSelection(SelectingMode.NONE, caret.getCaretPosition());
+                    }
+
+                    caret.setCodeOffset(0);
+                    ((CaretCapable) codeArea).setActiveCaretPosition(caret.getCaretPosition());
+                    undoSequenceBreak();
+                    codeArea.notifyDataChanged();
+                    revealCursor();
+                    clearSelection();
+                }
+            }
+        } catch (IllegalStateException ex) {
+            // Clipboard not available - ignore
+        }
     }
 
     @Override

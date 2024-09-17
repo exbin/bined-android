@@ -19,7 +19,6 @@ import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import androidx.annotation.Nullable;
 import android.view.KeyEvent;
@@ -103,6 +102,7 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
     private final boolean codeTypeSupported;
     private final boolean viewModeSupported;
 
+    private Context context;
     protected ClipboardManager clipboard;
     private boolean canPaste = false;
     private ClipDescription binedDataFlavor;
@@ -113,6 +113,7 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
     protected EditDataCommand editCommand = null;
 
     public CodeAreaOperationCommandHandler(Context context, CodeAreaCore codeArea, BinaryDataUndoRedo undoRedo) {
+        this.context = context;
         this.codeArea = codeArea;
         this.undoRedo = undoRedo;
 
@@ -580,15 +581,8 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
 
             BinaryData copy = data.copy(first, last - first + 1);
 
-            ClipData clipData = new ClipData(binedDataFlavor, new ClipData.Item(new Intent() {
-                @Nullable
-                @Override
-                public Uri getData() {
-                    return super.getData();
-                }
-            }));
             Charset charset = codeArea instanceof CharsetCapable ? ((CharsetCapable) codeArea).getCharset() : null;
-//            CodeAreaAndroidUtils.BinaryDataClipboardData binaryData = new CodeAreaSwingUtils.BinaryDataClipboardData(copy, binedDataFlavor, binaryDataFlavor, charset);
+            ClipData clipData = CodeAreaAndroidUtils.createBinaryDataClipboardData(copy, binedDataFlavor, binaryDataFlavor, charset);
             setClipboardContent(clipData);
         }
     }
@@ -604,8 +598,7 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
 
             CodeType codeType = ((CodeTypeCapable) codeArea).getCodeType();
             CodeCharactersCase charactersCase = ((CodeCharactersCaseCapable) codeArea).getCodeCharactersCase();
-            ClipData clipData = null; //new ClipData("test");
-//            CodeAreaSwingUtils.CodeDataClipboardData binaryData = new CodeAreaSwingUtils.CodeDataClipboardData(copy, binedDataFlavor, codeType, charactersCase);
+            ClipData clipData = CodeAreaAndroidUtils.createCodeDataClipboardData(copy, binedDataFlavor, codeType, charactersCase);
             setClipboardContent(clipData);
         }
     }
@@ -651,54 +644,49 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
         if (!checkEditAllowed()) {
             return;
         }
-/*
-        try {
-            if (!clipboard.isDataFlavorAvailable(binedDataFlavor) && !clipboard.isDataFlavorAvailable(binaryDataFlavor) && !clipboard.isDataFlavorAvailable(DataFlavor.stringFlavor) && !clipboard.isDataFlavorAvailable(DataFlavor.getTextPlainUnicodeFlavor())) {
-                return;
-            }
-        } catch (IllegalStateException ex) {
+
+        if (!clipboard.hasPrimaryClip()) {
+            return;
+        }
+
+        ClipData primaryClip = clipboard.getPrimaryClip();
+
+        if (primaryClip == null || primaryClip.getItemCount() == 0) {
             return;
         }
 
         try {
-            if (clipboard.isDataFlavorAvailable(binedDataFlavor)) {
-                try {
-                    Object clipboardData = clipboard.getData(binedDataFlavor);
-                    if (clipboardData instanceof BinaryData) {
-                        pasteBinaryData((BinaryData) clipboardData);
-                    }
-                } catch (UnsupportedFlavorException | IllegalStateException | IOException ex) {
-                    Logger.getLogger(CodeAreaOperationCommandHandler.class.getName()).log(Level.SEVERE, null, ex);
+            ClipDescription description = primaryClip.getDescription();
+            try {
+                if (!description.hasMimeType(BINED_CLIPBOARD_MIME) && !description.hasMimeType(CodeAreaUtils.MIME_CLIPBOARD_BINARY) && !description.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
+                    return;
                 }
-            } else {
-                InputStream clipboardData;
-                try {
-                    // TODO use stream directly without buffer
-                    PagedData pastedData = new PagedData();
-                    if (clipboard.isDataFlavorAvailable(binaryDataFlavor)) {
-                        clipboardData = (InputStream) clipboard.getData(binaryDataFlavor);
-                        pastedData.insert(0, clipboardData, -1);
-                    } else if (clipboard.isDataFlavorAvailable(DataFlavor.getTextPlainUnicodeFlavor())) {
-                        clipboardData = (InputStream) clipboard.getData(DataFlavor.getTextPlainUnicodeFlavor());
+            } catch (IllegalStateException ex) {
+                return;
+            }
 
-                        DataFlavor textPlainUnicodeFlavor = DataFlavor.getTextPlainUnicodeFlavor();
-                        String charsetName = textPlainUnicodeFlavor.getParameter(MIME_CHARSET);
-                        CharsetStreamTranslator translator = new CharsetStreamTranslator(Charset.forName(charsetName), ((CharsetCapable) codeArea).getCharset(), clipboardData);
-
-                        pastedData.insert(0, translator, -1);
-                    } else {
-                        String text = (String) clipboard.getData(DataFlavor.stringFlavor);
-                        pastedData.insert(0, text.getBytes(((CharsetCapable) codeArea).getCharset()));
-                    }
-
+            ClipData.Item clipItem = primaryClip.getItemAt(0);
+            if (description.hasMimeType(BINED_CLIPBOARD_MIME)) {
+//                Object clipboardData = clipboard.getData(binedDataFlavor);
+//                if (clipboardData instanceof BinaryData) {
+//                    pasteBinaryData((BinaryData) clipboardData);
+//                }
+            } else if (description.hasMimeType(CodeAreaUtils.MIME_CLIPBOARD_BINARY)) {
+//                ByteArrayEditableData pastedData = new ByteArrayEditableData();
+//                InputStream clipboardData = (InputStream) clipboard.getData(binaryDataFlavor);
+//                pastedData.insert(0, clipboardData, -1);
+//                pasteBinaryData(pastedData);
+            } else if (description.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
+                CharSequence clipboardData = clipItem.getText();
+                if (clipboardData != null) {
+                    byte[] bytes = clipboardData.toString().getBytes(Charset.forName(CodeAreaAndroidUtils.DEFAULT_ENCODING));
+                    BinaryData pastedData = new ByteArrayData(bytes);
                     pasteBinaryData(pastedData);
-                } catch (UnsupportedFlavorException | IllegalStateException | IOException ex) {
-                    Logger.getLogger(CodeAreaOperationCommandHandler.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         } catch (IllegalStateException ex) {
             // Clipboard not available - ignore
-        } */
+        }
     }
 
     private void pasteBinaryData(BinaryData pastedData) {

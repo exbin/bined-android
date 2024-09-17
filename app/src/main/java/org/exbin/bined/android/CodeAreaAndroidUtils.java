@@ -15,12 +15,28 @@
  */
 package org.exbin.bined.android;
 
+import android.content.ClipData;
+import android.content.ClipDescription;
+import android.content.ContentProvider;
+import android.content.ContentProviderClient;
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.view.KeyEvent;
 
-import org.exbin.bined.CharsetStreamTranslator;
+import androidx.annotation.NonNull;
 
+import org.exbin.auxiliary.binary_data.BinaryData;
+import org.exbin.bined.CharsetStreamTranslator;
+import org.exbin.bined.CodeCharactersCase;
+import org.exbin.bined.CodeType;
+
+import java.nio.charset.Charset;
+
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -100,5 +116,40 @@ public class CodeAreaAndroidUtils {
 
     public static int getMetaMaskDown() {
         return KeyEvent.META_CTRL_MASK;
+    }
+
+    @Nonnull
+    public static ClipData createBinaryDataClipboardData(BinaryData data, ClipDescription binedDataFlavor) {
+        return createBinaryDataClipboardData(data, binedDataFlavor, null, null);
+    }
+
+    @Nonnull
+    public static ClipData createBinaryDataClipboardData(BinaryData data, ClipDescription binedDataFlavor,  @Nullable ClipDescription binaryDataFlavor, @Nullable Charset charset) {
+        ContentResolver contentResolver = new ContentResolver(null) {
+            @androidx.annotation.Nullable
+            @Override
+            public String[] getStreamTypes(@NonNull Uri url, @NonNull String mimeTypeFilter) {
+                return super.getStreamTypes(url, mimeTypeFilter);
+            }
+        };
+        Uri.Builder builder = new Uri.Builder();
+        ClipData clipData = ClipData.newUri(contentResolver, "BinEd Code Data", builder.build());
+        // TODO clipData.add
+        return clipData;
+    }
+
+    @Nonnull
+    public static ClipData createCodeDataClipboardData(BinaryData data, ClipDescription binaryDataFlavor, CodeType codeType, CodeCharactersCase charactersCase) {
+        ContentResolver contentResolver = new ContentResolver(null) {
+            @androidx.annotation.Nullable
+            @Override
+            public String[] getStreamTypes(@NonNull Uri url, @NonNull String mimeTypeFilter) {
+                return super.getStreamTypes(url, mimeTypeFilter);
+            }
+        };
+        Uri.Builder builder = new Uri.Builder();
+        ClipData clipData = ClipData.newUri(contentResolver, "BinEd Code Data", builder.build());
+        // TODO clipData.add
+        return clipData;
     }
 }
