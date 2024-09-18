@@ -37,6 +37,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import org.exbin.auxiliary.binary_data.BinaryData;
 import org.exbin.auxiliary.binary_data.ByteArrayEditableData;
+import org.exbin.bined.CaretOverlapMode;
 import org.exbin.bined.CodeAreaCaretPosition;
 import org.exbin.bined.CodeCharactersCase;
 import org.exbin.bined.CodeType;
@@ -247,31 +248,40 @@ public class MainActivity extends AppCompatActivity {
         MenuItem selectionStartMenuItem = menu.add(0, SELECTION_START_POPUP_ID, 0, getResources().getString(R.string.action_selection_start));
         MenuItem selectionEndMenuItem = menu.add(0, SELECTION_END_POPUP_ID, 1, getResources().getString(R.string.action_selection_end));
         MenuItem clearSelectionMenuItem = menu.add(0, CLEAR_SELECTION_POPUP_ID, 2, getResources().getString(R.string.action_clear_selection));
-        MenuItem cutMenuItem = menu.add(1, CUT_ACTION_POPUP_ID, 0, getResources().getString(R.string.action_cut));
+        MenuItem cutMenuItem = menu.add(1, CUT_ACTION_POPUP_ID, 3, getResources().getString(R.string.action_cut));
         cutMenuItem.setEnabled(codeArea.isEditable() && codeArea.hasSelection());
-        MenuItem copyMenuItem = menu.add(1, COPY_ACTION_POPUP_ID, 1, getResources().getString(R.string.action_copy));
+        MenuItem copyMenuItem = menu.add(1, COPY_ACTION_POPUP_ID, 4, getResources().getString(R.string.action_copy));
         copyMenuItem.setEnabled(codeArea.hasSelection());
-        menu.add(1, COPY_AS_CODE_ACTION_POPUP_ID, 2, getResources().getString(R.string.action_copy_as_code));
-        MenuItem pasteMenuItem = menu.add(1, PASTE_ACTION_POPUP_ID, 3, getResources().getString(R.string.action_paste));
+        menu.add(1, COPY_AS_CODE_ACTION_POPUP_ID, 5, getResources().getString(R.string.action_copy_as_code));
+        MenuItem pasteMenuItem = menu.add(1, PASTE_ACTION_POPUP_ID, 6, getResources().getString(R.string.action_paste));
         pasteMenuItem.setEnabled(codeArea.isEditable() && codeArea.canPaste());
-        menu.add(1, PASTE_FROM_CODE_ACTION_POPUP_ID, 4, getResources().getString(R.string.action_paste_from_code));
-        MenuItem deleteMenuItem = menu.add(1, DELETE_ACTION_POPUP_ID, 5, getResources().getString(R.string.action_delete));
+        menu.add(1, PASTE_FROM_CODE_ACTION_POPUP_ID, 5, getResources().getString(R.string.action_paste_from_code));
+        MenuItem deleteMenuItem = menu.add(1, DELETE_ACTION_POPUP_ID, 7, getResources().getString(R.string.action_delete));
         deleteMenuItem.setEnabled(codeArea.isEditable() && codeArea.hasSelection());
-        MenuItem selectAllMenuItem = menu.add(1, SELECT_ALL_ACTION_POPUP_ID, 6, getResources().getString(R.string.action_select_all));
+        MenuItem selectAllMenuItem = menu.add(1, SELECT_ALL_ACTION_POPUP_ID, 8, getResources().getString(R.string.action_select_all));
     }
 
-    // menu item select listener
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case SELECTION_START_POPUP_ID: {
                 SelectionRange selection = codeArea.getSelection();
-                // TODO
+                CodeAreaCaretPosition touchCaretPosition = codeArea.mousePositionToClosestCaretPosition((int) codeArea.getTouchPositionX(), (int) codeArea.getTouchPositionY(), CaretOverlapMode.PARTIAL_OVERLAP);
+                if (selection.isEmpty()) {
+                    codeArea.setSelection(touchCaretPosition.getDataPosition(), codeArea.getDataPosition());
+                } else {
+                    codeArea.setSelection(touchCaretPosition.getDataPosition(), selection.getEnd());
+                }
                 break;
             }
             case SELECTION_END_POPUP_ID: {
                 SelectionRange selection = codeArea.getSelection();
-                // TODO
+                CodeAreaCaretPosition touchCaretPosition = codeArea.mousePositionToClosestCaretPosition((int) codeArea.getTouchPositionX(), (int) codeArea.getTouchPositionY(), CaretOverlapMode.PARTIAL_OVERLAP);
+                if (selection.isEmpty()) {
+                    codeArea.setSelection(codeArea.getDataPosition(), touchCaretPosition.getDataPosition());
+                } else {
+                    codeArea.setSelection(selection.getStart(), touchCaretPosition.getDataPosition());
+                }
                 break;
             }
             case CLEAR_SELECTION_POPUP_ID: {

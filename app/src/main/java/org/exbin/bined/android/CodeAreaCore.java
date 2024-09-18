@@ -60,6 +60,9 @@ public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl 
 
     private final List<DataChangedListener> dataChangedListeners = new ArrayList<>();
 
+    private float touchPositionX;
+    private float touchPositionY;
+
     /**
      * Creates new instance with default command handler and painter.
      */
@@ -228,6 +231,19 @@ public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl 
     public abstract void updateLayout();
 
     public abstract void paintView(Canvas g);
+
+    public void setTouchPosition(float touchPositionX, float touchPositionY) {
+        this.touchPositionX = touchPositionX;
+        this.touchPositionY = touchPositionY;
+    }
+
+    public float getTouchPositionX() {
+        return touchPositionX;
+    }
+
+    public float getTouchPositionY() {
+        return touchPositionY;
+    }
 
     @ParametersAreNonnullByDefault
     private class PrimaryView extends View {

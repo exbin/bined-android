@@ -566,7 +566,7 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
 
             BinaryData copy = data.copy(first, last - first + 1);
 
-            ClipData clipData = CodeAreaAndroidUtils.createBinaryDataClipboardData(copy, binaryDataFlavor);
+            ClipData clipData = CodeAreaAndroidUtils.createBinaryDataClipboardData(context, copy, binaryDataFlavor);
             setClipboardContent(clipData);
         }
     }
@@ -584,7 +584,7 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
 
             CodeType codeType = ((CodeTypeCapable) codeArea).getCodeType();
             CodeCharactersCase charactersCase = ((CodeCharactersCaseCapable) codeArea).getCodeCharactersCase();
-            ClipData clipData = CodeAreaAndroidUtils.createCodeDataClipboardData(copy, binaryDataFlavor, codeType, charactersCase);
+            ClipData clipData = CodeAreaAndroidUtils.createCodeDataClipboardData(context, copy, binaryDataFlavor, codeType, charactersCase);
             setClipboardContent(clipData);
         }
     }

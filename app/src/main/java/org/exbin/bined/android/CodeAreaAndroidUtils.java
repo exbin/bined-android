@@ -21,6 +21,7 @@ import android.content.ContentProvider;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -31,10 +32,14 @@ import androidx.annotation.NonNull;
 
 import org.exbin.auxiliary.binary_data.BinaryData;
 import org.exbin.bined.CharsetStreamTranslator;
+import org.exbin.bined.CodeAreaUtils;
 import org.exbin.bined.CodeCharactersCase;
 import org.exbin.bined.CodeType;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.Arrays;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -119,13 +124,13 @@ public class CodeAreaAndroidUtils {
     }
 
     @Nonnull
-    public static ClipData createBinaryDataClipboardData(BinaryData data, ClipDescription binedDataFlavor) {
-        return createBinaryDataClipboardData(data, binedDataFlavor, null, null);
+    public static ClipData createBinaryDataClipboardData(Context context, BinaryData data, ClipDescription binedDataFlavor) {
+        return createBinaryDataClipboardData(context, data, binedDataFlavor, null, null);
     }
 
     @Nonnull
-    public static ClipData createBinaryDataClipboardData(BinaryData data, ClipDescription binedDataFlavor,  @Nullable ClipDescription binaryDataFlavor, @Nullable Charset charset) {
-        ContentResolver contentResolver = new ContentResolver(null) {
+    public static ClipData createBinaryDataClipboardData(Context context, BinaryData data, ClipDescription binedDataFlavor, @Nullable ClipDescription binaryDataFlavor, @Nullable Charset charset) {
+/*        ContentResolver contentResolver = new ContentResolver(context) {
             @androidx.annotation.Nullable
             @Override
             public String[] getStreamTypes(@NonNull Uri url, @NonNull String mimeTypeFilter) {
@@ -135,12 +140,21 @@ public class CodeAreaAndroidUtils {
         Uri.Builder builder = new Uri.Builder();
         ClipData clipData = ClipData.newUri(contentResolver, "BinEd Code Data", builder.build());
         // TODO clipData.add
+*/
+        String result;
+        try (ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream()) {
+            data.saveToStream(byteArrayStream);
+            result = charset == null ? byteArrayStream.toString(DEFAULT_ENCODING) : byteArrayStream.toString(charset.name());
+        } catch (IOException ex) {
+            result = "";
+        }
+        ClipData clipData = ClipData.newPlainText("text", result);
         return clipData;
     }
 
     @Nonnull
-    public static ClipData createCodeDataClipboardData(BinaryData data, ClipDescription binaryDataFlavor, CodeType codeType, CodeCharactersCase charactersCase) {
-        ContentResolver contentResolver = new ContentResolver(null) {
+    public static ClipData createCodeDataClipboardData(Context context, BinaryData data, ClipDescription binaryDataFlavor, CodeType codeType, CodeCharactersCase charactersCase) {
+/*        ContentResolver contentResolver = new ContentResolver(context) {
             @androidx.annotation.Nullable
             @Override
             public String[] getStreamTypes(@NonNull Uri url, @NonNull String mimeTypeFilter) {
@@ -150,6 +164,19 @@ public class CodeAreaAndroidUtils {
         Uri.Builder builder = new Uri.Builder();
         ClipData clipData = ClipData.newUri(contentResolver, "BinEd Code Data", builder.build());
         // TODO clipData.add
+ */
+        int charsPerByte = codeType.getMaxDigitsForByte() + 1;
+        int textLength = (int) (data.getDataSize() * charsPerByte);
+        if (textLength > 0) {
+            textLength--;
+        }
+
+        char[] targetData = new char[textLength];
+        Arrays.fill(targetData, ' ');
+        for (int i = 0; i < data.getDataSize(); i++) {
+            CodeAreaUtils.byteToCharsCode(data.getByte(i), codeType, targetData, i * charsPerByte, charactersCase);
+        }
+        ClipData clipData = ClipData.newPlainText("text", new String(targetData));
         return clipData;
     }
 }

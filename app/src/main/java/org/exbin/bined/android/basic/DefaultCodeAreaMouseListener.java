@@ -40,7 +40,7 @@ public class DefaultCodeAreaMouseListener implements View.OnTouchListener, View.
     private final int defaultCursor = 0;
     private final int textCursor = 1;
     private int currentCursor;
-    private boolean mouseDown = false;
+    private boolean menuShown = false;
 
     public DefaultCodeAreaMouseListener(CodeAreaCore codeArea, DefaultCodeAreaScrollPane view) {
         this.codeArea = codeArea;
@@ -50,20 +50,22 @@ public class DefaultCodeAreaMouseListener implements View.OnTouchListener, View.
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        if (motionEvent.isButtonPressed(MotionEvent.BUTTON_PRIMARY)) {
-            performClick();
+        if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+            codeArea.setTouchPosition(computeRelativeX(motionEvent), computeRelativeY(motionEvent));
         }
 
-        if (codeArea.isEnabled() && motionEvent.getAction() == MotionEvent.ACTION_UP) {
+        if (codeArea.isEnabled() && motionEvent.getAction() == MotionEvent.ACTION_UP && !menuShown) {
+            performClick();
             moveCaret(motionEvent);
-            return false;
         }
+        menuShown = false;
 
         return false;
     }
 
     @Override
     public boolean onLongClick(View v) {
+        menuShown = true;
         return codeArea.showContextMenu();
     }
 

@@ -582,7 +582,7 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
             BinaryData copy = data.copy(first, last - first + 1);
 
             Charset charset = codeArea instanceof CharsetCapable ? ((CharsetCapable) codeArea).getCharset() : null;
-            ClipData clipData = CodeAreaAndroidUtils.createBinaryDataClipboardData(copy, binedDataFlavor, binaryDataFlavor, charset);
+            ClipData clipData = CodeAreaAndroidUtils.createBinaryDataClipboardData(context, copy, binedDataFlavor, binaryDataFlavor, charset);
             setClipboardContent(clipData);
         }
     }
@@ -598,7 +598,7 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
 
             CodeType codeType = ((CodeTypeCapable) codeArea).getCodeType();
             CodeCharactersCase charactersCase = ((CodeCharactersCaseCapable) codeArea).getCodeCharactersCase();
-            ClipData clipData = CodeAreaAndroidUtils.createCodeDataClipboardData(copy, binedDataFlavor, codeType, charactersCase);
+            ClipData clipData = CodeAreaAndroidUtils.createCodeDataClipboardData(context, copy, binedDataFlavor, codeType, charactersCase);
             setClipboardContent(clipData);
         }
     }
