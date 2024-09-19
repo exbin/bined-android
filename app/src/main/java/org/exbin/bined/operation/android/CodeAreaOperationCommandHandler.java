@@ -19,63 +19,59 @@ import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.net.Uri;
-import androidx.annotation.Nullable;
 import android.view.KeyEvent;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.Charset;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
-import org.exbin.bined.basic.BasicCodeAreaSection;
-import org.exbin.bined.CharsetStreamTranslator;
+import org.exbin.auxiliary.binary_data.BinaryData;
+import org.exbin.auxiliary.binary_data.ByteArrayData;
+import org.exbin.auxiliary.binary_data.ByteArrayEditableData;
+import org.exbin.bined.CaretOverlapMode;
+import org.exbin.bined.ClipboardHandlingMode;
+import org.exbin.bined.CodeAreaCaretPosition;
+import org.exbin.bined.CodeAreaSection;
 import org.exbin.bined.CodeAreaUtils;
-import org.exbin.bined.basic.CodeAreaViewMode;
 import org.exbin.bined.CodeCharactersCase;
 import org.exbin.bined.CodeType;
 import org.exbin.bined.EditMode;
 import org.exbin.bined.EditOperation;
-import org.exbin.bined.CaretOverlapMode;
 import org.exbin.bined.SelectionRange;
+import org.exbin.bined.android.CodeAreaAndroidUtils;
+import org.exbin.bined.android.CodeAreaCommandHandler;
+import org.exbin.bined.android.CodeAreaCore;
+import org.exbin.bined.android.basic.DefaultCodeAreaCommandHandler;
+import org.exbin.bined.basic.BasicCodeAreaSection;
 import org.exbin.bined.basic.CodeAreaScrollPosition;
+import org.exbin.bined.basic.CodeAreaViewMode;
+import org.exbin.bined.basic.EnterKeyHandlingMode;
 import org.exbin.bined.basic.MovementDirection;
 import org.exbin.bined.basic.ScrollingDirection;
+import org.exbin.bined.basic.TabKeyHandlingMode;
 import org.exbin.bined.capability.CaretCapable;
 import org.exbin.bined.capability.CharsetCapable;
 import org.exbin.bined.capability.ClipboardCapable;
 import org.exbin.bined.capability.CodeCharactersCaseCapable;
 import org.exbin.bined.capability.CodeTypeCapable;
+import org.exbin.bined.capability.EditModeCapable;
 import org.exbin.bined.capability.ScrollingCapable;
 import org.exbin.bined.capability.SelectionCapable;
 import org.exbin.bined.capability.ViewModeCapable;
 import org.exbin.bined.operation.android.command.CodeAreaCommand;
 import org.exbin.bined.operation.android.command.CodeAreaCommandType;
+import org.exbin.bined.operation.android.command.CodeAreaCompoundCommand;
 import org.exbin.bined.operation.android.command.EditCharDataCommand;
 import org.exbin.bined.operation.android.command.EditCodeDataCommand;
 import org.exbin.bined.operation.android.command.EditDataCommand;
-import org.exbin.bined.operation.android.command.CodeAreaCompoundCommand;
 import org.exbin.bined.operation.android.command.InsertDataCommand;
 import org.exbin.bined.operation.android.command.ModifyDataCommand;
 import org.exbin.bined.operation.android.command.RemoveDataCommand;
-import org.exbin.bined.android.CodeAreaCommandHandler;
-import org.exbin.bined.android.CodeAreaCore;
-import org.exbin.bined.android.CodeAreaAndroidUtils;
-import org.exbin.bined.android.basic.DefaultCodeAreaCommandHandler;
-import org.exbin.auxiliary.binary_data.BinaryData;
-import org.exbin.auxiliary.binary_data.ByteArrayData;
-import org.exbin.auxiliary.binary_data.ByteArrayEditableData;
-import org.exbin.bined.ClipboardHandlingMode;
-import org.exbin.bined.CodeAreaCaretPosition;
-import org.exbin.bined.CodeAreaSection;
-import org.exbin.bined.basic.EnterKeyHandlingMode;
-import org.exbin.bined.basic.TabKeyHandlingMode;
-import org.exbin.bined.capability.EditModeCapable;
 import org.exbin.bined.operation.undo.BinaryDataAppendableUndoRedo;
 import org.exbin.bined.operation.undo.BinaryDataUndoRedo;
+
+import java.nio.charset.Charset;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Command handler for undo/redo aware binary editor editing.
@@ -650,7 +646,6 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
         }
 
         ClipData primaryClip = clipboard.getPrimaryClip();
-
         if (primaryClip == null || primaryClip.getItemCount() == 0) {
             return;
         }
@@ -685,6 +680,7 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
                 }
             }
         } catch (IllegalStateException ex) {
+            Logger.getLogger(CodeAreaCommandHandler.class.getName()).log(Level.SEVERE, null, ex);
             // Clipboard not available - ignore
         }
     }
@@ -735,12 +731,6 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
             return;
         }
 
-        if (modifyCommand != null) {
-            modifyCommand.execute();
-        }
-        if (insertCommand != null) {
-            insertCommand.execute();
-        }
         undoRedo.execute(pasteCommand);
 
         undoSequenceBreak();
@@ -754,11 +744,30 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
         if (!checkEditAllowed()) {
             return;
         }
-/*
+
+        if (!clipboard.hasPrimaryClip()) {
+            return;
+        }
+
+        ClipData primaryClip = clipboard.getPrimaryClip();
+        if (primaryClip == null || primaryClip.getItemCount() == 0) {
+            return;
+        }
+
         try {
-            if (clipboard.isDataFlavorAvailable(binedDataFlavor)) {
+            ClipDescription description = primaryClip.getDescription();
+            try {
+                if (!description.hasMimeType(BINED_CLIPBOARD_MIME) && !description.hasMimeType(CodeAreaUtils.MIME_CLIPBOARD_BINARY) && !description.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
+                    return;
+                }
+            } catch (IllegalStateException ex) {
+                return;
+            }
+
+            ClipData.Item clipItem = primaryClip.getItemAt(0);
+            if (description.hasMimeType(BINED_CLIPBOARD_MIME)) {
                 paste();
-            } else if (clipboard.isDataFlavorAvailable(DataFlavor.getTextPlainUnicodeFlavor())) {
+            } else if (description.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
                 DeleteSelectionCommand deleteSelectionCommand = null;
                 if (codeArea.hasSelection()) {
                     deleteSelectionCommand = new DeleteSelectionCommand(codeArea);
@@ -766,28 +775,18 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
                 }
 
                 long dataSize = codeArea.getDataSize();
-                InputStream insertedData;
-                try {
-                    insertedData = (InputStream) clipboard.getData(DataFlavor.getTextPlainUnicodeFlavor());
+                CharSequence clipboardData = clipItem.getText();
+                if (clipboardData != null) {
                     long dataPosition = ((CaretCapable) codeArea).getDataPosition();
 
                     CodeAreaCommand modifyCommand = null;
                     CodeType codeType = ((CodeTypeCapable) codeArea).getCodeType();
 
-                    DataFlavor textPlainUnicodeFlavor = DataFlavor.getTextPlainUnicodeFlavor();
-                    String charsetName = textPlainUnicodeFlavor.getParameter(MIME_CHARSET);
-                    CharsetStreamTranslator translator = new CharsetStreamTranslator(Charset.forName(charsetName), ((CharsetCapable) codeArea).getCharset(), insertedData);
-                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                    byte[] dataBuffer = new byte[1024];
-                    int length;
-                    while ((length = translator.read(dataBuffer)) != -1) {
-                        outputStream.write(dataBuffer, 0, length);
-                    }
-                    String insertedString = outputStream.toString(((CharsetCapable) codeArea).getCharset().name());
+                    String insertedString = clipboardData.toString();
                     ByteArrayEditableData clipData = new ByteArrayEditableData();
                     CodeAreaUtils.insertHexStringIntoData(insertedString, clipData, codeType);
 
-                    PagedData pastedData = new PagedData();
+                    ByteArrayEditableData pastedData = new ByteArrayEditableData();
                     pastedData.insert(0, clipData);
                     long pastedDataSize = pastedData.getDataSize();
                     long insertionPosition = dataPosition;
@@ -800,7 +799,7 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
                     if (replacedPartSize > 0) {
                         modifyCommand = new ModifyDataCommand(codeArea, dataPosition, modifiedData);
                         if (pastedDataSize > replacedPartSize) {
-                            pastedData = pastedData.copy(replacedPartSize, pastedDataSize - replacedPartSize);
+                            pastedData = (ByteArrayEditableData) pastedData.copy(replacedPartSize, pastedDataSize - replacedPartSize);
                             insertionPosition += replacedPartSize;
                         } else {
                             pastedData.clear();
@@ -829,13 +828,12 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
                     codeArea.notifyDataChanged();
                     revealCursor();
                     clearSelection();
-                } catch (UnsupportedFlavorException | IllegalStateException | IOException ex) {
-                    Logger.getLogger(CodeAreaOperationCommandHandler.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         } catch (IllegalStateException ex) {
+            Logger.getLogger(CodeAreaCommandHandler.class.getName()).log(Level.SEVERE, null, ex);
             // Clipboard not available - ignore
-        } */
+        }
     }
 
     @Override
