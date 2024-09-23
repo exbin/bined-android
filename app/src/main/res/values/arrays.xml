@@ -68,12 +68,12 @@
     </string-array>
 
     <string-array name="hex_chars_case_entries">
-        <item>Upper Case</item>
         <item>Lower Case</item>
+        <item>Upper Case</item>
     </string-array>
 
     <string-array name="hex_chars_case_values">
-        <item>UPPER</item>
         <item>LOWER</item>
+        <item>UPPER</item>
     </string-array>
 </resources>

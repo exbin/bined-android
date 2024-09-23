@@ -82,7 +82,7 @@
                 android:id="@+id/hex_chars_case"
                 android:title="@string/hex_characters_case" />
             <item
-                android:id="@+id/codes_colorization"
+                android:id="@+id/code_colorization"
                 android:checkable="true"
                 android:checked="true"
                 android:title="@string/code_colorization" />

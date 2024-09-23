@@ -17,7 +17,6 @@ package org.exbin.bined.editor.android;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -35,8 +34,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.preference.Preference;
-import androidx.preference.PreferenceManager;
 
 import org.exbin.auxiliary.binary_data.BinaryData;
 import org.exbin.auxiliary.binary_data.ByteArrayEditableData;
@@ -262,6 +259,31 @@ public class MainActivity extends AppCompatActivity {
         this.menu = menu;
         menu.findItem(R.id.app_bar_undo).setEnabled(undoRedo.canUndo());
         menu.findItem(R.id.app_bar_redo).setEnabled(undoRedo.canRedo());
+
+        menu.findItem(R.id.code_colorization).setChecked(appPreferences.getCodeAreaPreferences().isCodeColorization());
+        int bytesPerRow = appPreferences.getCodeAreaPreferences().getMaxBytesPerRow();
+        switch (bytesPerRow) {
+            case 0: {
+                menu.findItem(R.id.bytes_per_row_fill).setChecked(true);
+                break;
+            }
+            case 4: {
+                menu.findItem(R.id.bytes_per_row_4).setChecked(true);
+                break;
+            }
+            case 8: {
+                menu.findItem(R.id.bytes_per_row_8).setChecked(true);
+                break;
+            }
+            case 12: {
+                menu.findItem(R.id.bytes_per_row_12).setChecked(true);
+                break;
+            }
+            case 16: {
+                menu.findItem(R.id.bytes_per_row_16).setChecked(true);
+                break;
+            }
+        }
 
         return true;
     }
@@ -534,6 +556,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.font: {
                 FontPreference.showFontSelectionDialog(this, codeArea.getCodeFont(), codeFont -> {
                     codeArea.setCodeFont(codeFont);
+                    appPreferences.getFontPreferences().setFontSize(codeFont.getSize());
                 });
                 return true;
             }
@@ -583,7 +606,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
 
-            case R.id.codes_colorization: {
+            case R.id.code_colorization: {
                 boolean checked = item.isChecked();
                 item.setChecked(!checked);
                 ((HighlightNonAsciiCodeAreaPainter) codeArea.getPainter()).setNonAsciiHighlightingEnabled(!checked);

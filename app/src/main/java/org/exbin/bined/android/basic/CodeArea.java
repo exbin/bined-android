@@ -172,7 +172,9 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
     @Override
     public void paintView(Canvas g) {
         if (!isInitialized()) {
-            ((FontCapable) this).setCodeFont(Font.fromPaint(new Paint()));
+            if (codeFont == null) {
+                codeFont = Font.fromPaint(new Paint());
+            }
         }
         paintComponent(g);
     }
