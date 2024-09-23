@@ -15,10 +15,6 @@
  */
 package org.exbin.bined.editor.android.preference;
 
-import androidx.annotation.Nullable;
-
-import java.util.Optional;
-
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -36,7 +32,7 @@ public class BinaryEditorPreferences {
 
     private final Preferences preferences;
 
-    private final AppPreferences appPreferences;
+    private final MainPreferences mainPreferences;
     private final EditorPreferences editorPreferences;
     private final StatusPreferences statusPreferences;
     private final CodeAreaPreferences codeAreaPreferences;
@@ -49,7 +45,7 @@ public class BinaryEditorPreferences {
     public BinaryEditorPreferences(Preferences preferences) {
         this.preferences = preferences;
 
-        appPreferences = new AppPreferences(preferences);
+        mainPreferences = new MainPreferences(preferences);
         editorPreferences = new EditorPreferences(preferences);
         statusPreferences = new StatusPreferences(preferences);
         codeAreaPreferences = new CodeAreaPreferences(preferences);
@@ -85,8 +81,8 @@ public class BinaryEditorPreferences {
     }
 
     @Nonnull
-    public AppPreferences getAppPreferences() {
-        return appPreferences;
+    public MainPreferences getAppPreferences() {
+        return mainPreferences;
     }
 
     @Nonnull

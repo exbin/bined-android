@@ -21,10 +21,20 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentResultListener;
+import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.SwitchPreferenceCompat;
+import androidx.preference.TwoStatePreference;
+
+import org.exbin.bined.editor.android.preference.BinaryEditorPreferences;
+import org.exbin.bined.editor.android.preference.CodeAreaPreferences;
+import org.exbin.bined.editor.android.preference.EncodingPreference;
+import org.exbin.bined.editor.android.preference.PreferencesWrapper;
+import org.exbin.bined.editor.android.preference.TextEncodingPreferences;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -33,10 +43,12 @@ public class SettingsActivity extends AppCompatActivity implements
         PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
 
     private static final String TITLE_TAG = "settingsActivityTitle";
+    private BinaryEditorPreferences appPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        appPreferences = new BinaryEditorPreferences(new PreferencesWrapper(getApplicationContext()));
         setContentView(R.layout.settings_activity);
         if (savedInstanceState == null) {
             getSupportFragmentManager()
@@ -127,6 +139,18 @@ public class SettingsActivity extends AppCompatActivity implements
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.view_preferences, rootKey);
+
+            SettingsActivity activity = (SettingsActivity) getActivity();
+
+            // Load from preferences
+            CodeAreaPreferences codeAreaPreferences = activity.appPreferences.getCodeAreaPreferences();
+            TextEncodingPreferences encodingPreferences = activity.appPreferences.getEncodingPreferences();
+            ((EncodingPreference) findPreference("encoding")).setText(encodingPreferences.getDefaultEncoding());
+            ((ListPreference) findPreference("bytes_per_row")).setValue(String.valueOf(codeAreaPreferences.getMaxBytesPerRow()));
+            ((ListPreference) findPreference("view_mode")).setValue(codeAreaPreferences.getViewMode().name());
+            ((ListPreference) findPreference("code_type")).setValue(codeAreaPreferences.getCodeType().name());
+            ((ListPreference) findPreference("hex_characters_case")).setValue(codeAreaPreferences.getCodeCharactersCase().name());
+            ((TwoStatePreference) findPreference("code_colorization")).setChecked(codeAreaPreferences.isCodeColorization());
         }
     }
 }

@@ -19,8 +19,10 @@ import org.exbin.bined.CodeCharactersCase;
 import org.exbin.bined.CodeType;
 import org.exbin.bined.PositionCodeType;
 import org.exbin.bined.RowWrappingMode;
+import org.exbin.bined.android.basic.CodeArea;
 import org.exbin.bined.basic.CodeAreaViewMode;
 import org.exbin.bined.editor.android.options.CodeAreaOptions;
+import org.exbin.bined.highlight.android.HighlightNonAsciiCodeAreaPainter;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -198,5 +200,14 @@ public class CodeAreaPreferences implements CodeAreaOptions {
     @Override
     public void setMaxRowPositionLength(int maxRowPositionLength) {
         preferences.putInt(PREFERENCES_MAX_ROW_POSITION_LENGTH, maxRowPositionLength);
+    }
+
+    public void applyPreferences(CodeArea codeArea) {
+        codeArea.setViewMode(getViewMode());
+        codeArea.setCodeType(getCodeType());
+        codeArea.setCodeCharactersCase(getCodeCharactersCase());
+        codeArea.setRowWrapping(getRowWrappingMode());
+        codeArea.setMaxBytesPerRow(getMaxBytesPerRow());
+        ((HighlightNonAsciiCodeAreaPainter) codeArea.getPainter()).setNonAsciiHighlightingEnabled(isCodeColorization());
     }
 }

@@ -48,9 +48,9 @@
     </string-array>
 
     <string-array name="view_mode_values">
-        <item>dual</item>
-        <item>code_matrix</item>
-        <item>text_preview</item>
+        <item>DUAL</item>
+        <item>CODE_MATRIX</item>
+        <item>TEXT_PREVIEW</item>
     </string-array>
 
     <string-array name="code_type_entries">
@@ -61,10 +61,10 @@
     </string-array>
 
     <string-array name="code_type_values">
-        <item>binary</item>
-        <item>octal</item>
-        <item>decimal</item>
-        <item>hexadecimal</item>
+        <item>BINARY</item>
+        <item>OCTAL</item>
+        <item>DECIMAL</item>
+        <item>HEXADECIMAL</item>
     </string-array>
 
     <string-array name="hex_chars_case_entries">
@@ -73,7 +73,7 @@
     </string-array>
 
     <string-array name="hex_chars_case_values">
-        <item>upper</item>
-        <item>lower</item>
+        <item>UPPER</item>
+        <item>LOWER</item>
     </string-array>
 </resources>

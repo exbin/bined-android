@@ -16,7 +16,7 @@
         app:defaultValue="bytes_per_row"
         app:entries="@array/bytes_per_row_entries"
         app:entryValues="@array/bytes_per_row_values"
-        app:key="@string/bytes_per_row"
+        app:key="bytes_per_row"
         app:title="@string/bytes_per_row"
         app:useSimpleSummaryProvider="true" />
 
@@ -40,13 +40,13 @@
         app:defaultValue="lower"
         app:entries="@array/hex_chars_case_entries"
         app:entryValues="@array/hex_chars_case_values"
-        app:key="hex_chars_case"
+        app:key="hex_characters_case"
         app:title="@string/hex_characters_case"
         app:useSimpleSummaryProvider="true" />
 
     <SwitchPreferenceCompat
-        app:key="codes_colorization"
-        app:title="@string/codes_colorization" />
+        app:key="code_colorization"
+        app:title="@string/code_colorization" />
 
     <SwitchPreferenceCompat
         app:key="non_printing_characters"

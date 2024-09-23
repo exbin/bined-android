@@ -15,7 +15,7 @@
  */
 package org.exbin.bined.editor.android.preference;
 
-import org.exbin.bined.editor.android.options.AppOptions;
+import org.exbin.bined.editor.android.options.MainOptions;
 
 import java.util.Locale;
 
@@ -23,12 +23,12 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
- * Application preferences.
+ * Application main preferences.
  *
  * @author ExBin Project (https://exbin.org)
  */
 @ParametersAreNonnullByDefault
-public class AppPreferences implements AppOptions {
+public class MainPreferences implements MainOptions {
 
     public static final String PREFERENCES_LOOK_AND_FEEL = "lookAndFeel";
     public static final String PREFERENCES_LOCALE_LANGUAGE = "locale.language";
@@ -38,7 +38,7 @@ public class AppPreferences implements AppOptions {
 
     private final Preferences preferences;
 
-    public AppPreferences(Preferences preferences) {
+    public MainPreferences(Preferences preferences) {
         this.preferences = preferences;
     }
 

@@ -49,6 +49,7 @@ import org.exbin.bined.EditMode;
 import org.exbin.bined.EditOperation;
 import org.exbin.bined.RowWrappingMode;
 import org.exbin.bined.SelectionRange;
+import org.exbin.bined.android.Font;
 import org.exbin.bined.android.basic.CodeArea;
 import org.exbin.bined.android.basic.DefaultCodeAreaPainter;
 import org.exbin.bined.android.basic.color.BasicCodeAreaColorsProfile;
@@ -105,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        appPreferences = new BinaryEditorPreferences(new PreferencesWrapper(this));
+        appPreferences = new BinaryEditorPreferences(new PreferencesWrapper(getApplicationContext()));
         setContentView(R.layout.activity_main);
 
 //        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
@@ -232,6 +233,22 @@ public class MainActivity extends AppCompatActivity {
             binaryStatus.setEditMode(mode, operation);
         });
 
+        appPreferences.getCodeAreaPreferences().applyPreferences(codeArea);
+        try {
+            codeArea.setCharset(Charset.forName(appPreferences.getEncodingPreferences().getDefaultEncoding()));
+        } catch (Exception ex) {
+            Logger.getLogger(MainActivity.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        try {
+            // TODO: Fix code font
+            Font codeFont = new Font(); // codeArea.getCodeFont();
+            int fontSize = appPreferences.getFontPreferences().getFontSize();
+            codeFont.setSize(fontSize);
+            codeArea.setCodeFont(codeFont);
+        } catch (Exception ex) {
+            Logger.getLogger(MainActivity.class.getName()).log(Level.SEVERE, null, ex);
+        }
         binaryStatus.setEncoding(codeArea.getCharset().toString());
 
         updateStatus();
@@ -432,7 +449,9 @@ public class MainActivity extends AppCompatActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(R.string.code_type);
                 builder.setSingleChoiceItems(getResources().getTextArray(R.array.code_type_entries), codeArea.getCodeType().ordinal(), (dialog, which) -> {
-                    codeArea.setCodeType(CodeType.values()[which]);
+                    CodeType codeType = CodeType.values()[which];
+                    codeArea.setCodeType(codeType);
+                    appPreferences.getCodeAreaPreferences().setCodeType(codeType);
                     dialog.dismiss();
                 });
                 builder.setNegativeButton(R.string.button_cancel, null);
@@ -477,7 +496,9 @@ public class MainActivity extends AppCompatActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(R.string.view_mode);
                 builder.setSingleChoiceItems(getResources().getTextArray(R.array.view_mode_entries), codeArea.getViewMode().ordinal(), (dialog, which) -> {
-                    codeArea.setViewMode(CodeAreaViewMode.values()[which]);
+                    CodeAreaViewMode viewMode = CodeAreaViewMode.values()[which];
+                    codeArea.setViewMode(viewMode);
+                    appPreferences.getCodeAreaPreferences().setViewMode(viewMode);
                     dialog.dismiss();
                 });
                 builder.setNegativeButton(R.string.button_cancel, null);
@@ -490,7 +511,9 @@ public class MainActivity extends AppCompatActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(R.string.hex_characters_case);
                 builder.setSingleChoiceItems(getResources().getTextArray(R.array.hex_chars_case_entries), codeArea.getCodeCharactersCase().ordinal(), (dialog, which) -> {
-                    codeArea.setCodeCharactersCase(CodeCharactersCase.values()[which]);
+                    CodeCharactersCase codeCharactersCase = CodeCharactersCase.values()[which];
+                    codeArea.setCodeCharactersCase(codeCharactersCase);
+                    appPreferences.getCodeAreaPreferences().setCodeCharactersCase(codeCharactersCase);
                     dialog.dismiss();
                 });
                 builder.setNegativeButton(R.string.button_cancel, null);
@@ -502,6 +525,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.encoding: {
                 EncodingPreference.showEncodingSelectionDialog(this, codeArea.getCharset().name(), encoding -> {
                     codeArea.setCharset(Charset.forName(encoding));
+                    appPreferences.getEncodingPreferences().setDefaultEncoding(encoding);
                     binaryStatus.setEncoding(codeArea.getCharset().toString());
                 });
                 return true;
@@ -517,6 +541,8 @@ public class MainActivity extends AppCompatActivity {
             case R.id.bytes_per_row_fill: {
                 codeArea.setRowWrapping(RowWrappingMode.WRAPPING);
                 codeArea.setMaxBytesPerRow(0);
+                appPreferences.getCodeAreaPreferences().setRowWrappingMode(codeArea.getRowWrapping());
+                appPreferences.getCodeAreaPreferences().setMaxBytesPerRow(codeArea.getMaxBytesPerRow());
                 menu.findItem(R.id.bytes_per_row_fill).setChecked(true);
                 return true;
             }
@@ -524,6 +550,8 @@ public class MainActivity extends AppCompatActivity {
             case R.id.bytes_per_row_4: {
                 codeArea.setRowWrapping(RowWrappingMode.NO_WRAPPING);
                 codeArea.setMaxBytesPerRow(4);
+                appPreferences.getCodeAreaPreferences().setRowWrappingMode(codeArea.getRowWrapping());
+                appPreferences.getCodeAreaPreferences().setMaxBytesPerRow(codeArea.getMaxBytesPerRow());
                 menu.findItem(R.id.bytes_per_row_4).setChecked(true);
                 return true;
             }
@@ -531,6 +559,8 @@ public class MainActivity extends AppCompatActivity {
             case R.id.bytes_per_row_8: {
                 codeArea.setRowWrapping(RowWrappingMode.NO_WRAPPING);
                 codeArea.setMaxBytesPerRow(8);
+                appPreferences.getCodeAreaPreferences().setRowWrappingMode(codeArea.getRowWrapping());
+                appPreferences.getCodeAreaPreferences().setMaxBytesPerRow(codeArea.getMaxBytesPerRow());
                 menu.findItem(R.id.bytes_per_row_8).setChecked(true);
                 return true;
             }
@@ -538,6 +568,8 @@ public class MainActivity extends AppCompatActivity {
             case R.id.bytes_per_row_12: {
                 codeArea.setRowWrapping(RowWrappingMode.NO_WRAPPING);
                 codeArea.setMaxBytesPerRow(12);
+                appPreferences.getCodeAreaPreferences().setRowWrappingMode(codeArea.getRowWrapping());
+                appPreferences.getCodeAreaPreferences().setMaxBytesPerRow(codeArea.getMaxBytesPerRow());
                 menu.findItem(R.id.bytes_per_row_12).setChecked(true);
                 return true;
             }
@@ -545,6 +577,8 @@ public class MainActivity extends AppCompatActivity {
             case R.id.bytes_per_row_16: {
                 codeArea.setRowWrapping(RowWrappingMode.NO_WRAPPING);
                 codeArea.setMaxBytesPerRow(16);
+                appPreferences.getCodeAreaPreferences().setRowWrappingMode(codeArea.getRowWrapping());
+                appPreferences.getCodeAreaPreferences().setMaxBytesPerRow(codeArea.getMaxBytesPerRow());
                 menu.findItem(R.id.bytes_per_row_16).setChecked(true);
                 return true;
             }
@@ -553,6 +587,7 @@ public class MainActivity extends AppCompatActivity {
                 boolean checked = item.isChecked();
                 item.setChecked(!checked);
                 ((HighlightNonAsciiCodeAreaPainter) codeArea.getPainter()).setNonAsciiHighlightingEnabled(!checked);
+                appPreferences.getCodeAreaPreferences().setCodeColorization(!checked);
                 return true;
             }
 

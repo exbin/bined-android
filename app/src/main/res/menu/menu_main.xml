@@ -85,7 +85,7 @@
                 android:id="@+id/codes_colorization"
                 android:checkable="true"
                 android:checked="true"
-                android:title="@string/codes_colorization" />
+                android:title="@string/code_colorization" />
             <item
                 android:id="@+id/non_printing_characters"
                 android:checkable="true"

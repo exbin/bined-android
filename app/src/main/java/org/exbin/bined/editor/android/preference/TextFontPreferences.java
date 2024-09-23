@@ -48,6 +48,17 @@ public class TextFontPreferences implements TextFontOptions {
     public TextFontPreferences(Preferences preferences) {
         this.preferences = preferences;
     }
+
+    @Override
+    public int getFontSize() {
+        return preferences.getInt(PREFERENCES_TEXT_FONT_SIZE, 30);
+    }
+
+    @Override
+    public void setFontSize(int size) {
+        preferences.putInt(PREFERENCES_TEXT_FONT_SIZE, size);
+    }
+
 /*
     @Override
     public boolean isUseDefaultFont() {

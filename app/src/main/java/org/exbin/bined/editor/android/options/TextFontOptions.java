@@ -25,6 +25,10 @@ import javax.annotation.ParametersAreNonnullByDefault;
  */
 @ParametersAreNonnullByDefault
 public interface TextFontOptions {
+
+    int getFontSize();
+
+    void setFontSize(int size);
 /*
     @Nonnull
     Font getFont(Font initialFont);
