@@ -38,6 +38,9 @@ public interface MainOptions {
     @Nonnull
     String getLocaleTag();
 
+    @Nonnull
+    String getTheme();
+
     void setLocaleLanguage(String language);
 
     void setLocaleCountry(String country);
@@ -45,4 +48,6 @@ public interface MainOptions {
     void setLocaleVariant(String variant);
 
     void setLocaleTag(String variant);
+
+    void setTheme(String theme);
 }

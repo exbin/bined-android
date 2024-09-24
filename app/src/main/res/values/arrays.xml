@@ -6,7 +6,7 @@
     </string-array>
 
     <string-array name="theme_values">
-        <item>automatic</item>
+        <item>default</item>
         <item>light</item>
         <item>dark</item>
     </string-array>
@@ -19,8 +19,8 @@
 
     <string-array name="language_values">
         <item>default</item>
-        <item>en_US</item>
-        <item>cs_CZ</item>
+        <item>en</item>
+        <item>cs</item>
     </string-array>
 
     <string-array name="bytes_per_row_entries">

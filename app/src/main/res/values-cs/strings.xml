@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">BinEd</string>
+    <string name="app_about">Název: BinEd – binární/hexadecimální editor\nVerze: 0.2.1-SNAPSHOT\nDodavatel: <a href="https://exbin.org">Projekt ExBin</a>\nLicence: <a href="https://www.apache.org/licenses/LICENSE-2.0">Licence Apache, verze 2.0</a>\nDomovská stránka: <a href="https://bined.exbin.org/android ">https://bined.exbin.org/android</a></string>
+    <string name="bined_logo_description">Logo BinEd</string>
+
+    <string name="title_activity_settings">Nastavení</string>
+
+    <string name="action_new">Nový</string>
+    <string name="action_open">Otevřít</string>
+    <string name="action_save">Uložit</string>
+    <string name="action_save_as">Uložit jako</string>
+
+    <string name="action_settings">Nastavení</string>
+    <string name="action_about">O aplikaci</string>
+
+    <string name="action_search">Hledat</string>
+    <string name="action_undo">Vrátit zpět</string>
+    <string name="action_redo">Opakovat</string>
+    <string name="action_selection_start">Zahájení výběru</string>
+    <string name="action_selection_end">Konec výběru</string>
+    <string name="action_clear_selection">Vymazat výběr</string>
+    <string name="action_cut">Vyjmout</string>
+    <string name="action_copy">Kopírovat</string>
+    <string name="action_copy_as_code">Kopírovat jako kód</string>
+    <string name="action_paste">Vložit</string>
+    <string name="action_paste_from_code">Vložit z kódu</string>
+    <string name="action_delete">Smazat</string>
+    <string name="action_select_all">Vybrat vše</string>
+
+    <string name="action_exit">Ukončit</string>
+
+    <string name="view_menu">Zobrazit</string>
+    <string name="visual_theme">Vizuální motiv</string>
+    <string name="language">Jazyk</string>
+    <string name="view_mode">Režim zobrazení</string>
+    <string name="code_type">Typ kódu</string>
+    <string name="hex_characters_case">Velikost hexadecimálních znaků</string>
+    <string name="encoding">Kódování</string>
+    <string name="code_colorization">Zbarvení kódu</string>
+    <string name="non_printing_characters">Netisknutelné znaky</string>
+    <string name="go_to_position">Přejít na pozici</string>
+    <string name="edit_selection">Upravit výběr</string>
+    <string name="insert_data">Vložit data</string>
+    <string name="convert_data">Převést data</string>
+    <string name="edit_menu">Upravit</string>
+    <string name="font">Písmo</string>
+    <string name="bytes_per_row">Bajty na řádek</string>
+    <string name="bytes_per_row_fill">Vyplnit obrazovku</string>
+    <string name="bytes_per_row_4">4 bajty</string>
+    <string name="bytes_per_row_8">8 bajtů</string>
+    <string name="bytes_per_row_12">12 bajtů</string>
+    <string name="bytes_per_row_16">16 bajtů</string>
+    <string name="bytes_per_row_custom">Vlastní</string>
+    <string name="tools_menu">Nástroje</string>
+
+    <string name="application_about">O aplikaci</string>
+    <string name="select_file">Vyberte soubor</string>
+    <string name="save_as_file">Uložit jako soubor</string>
+
+    <string name="button_close">Zavřít</string>
+    <string name="button_cancel">Zrušit</string>
+    <string name="button_set">Nastavit</string>
+    <string name="button_go_to">Přejít na</string>
+
+    <string name="pref_header_appearance">Vzhled</string>
+    <string name="pref_view_header">Zobrazit</string>
+</resources>

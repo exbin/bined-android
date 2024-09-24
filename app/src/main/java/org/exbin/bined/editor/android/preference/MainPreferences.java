@@ -30,7 +30,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class MainPreferences implements MainOptions {
 
-    public static final String PREFERENCES_LOOK_AND_FEEL = "lookAndFeel";
+    public static final String PREFERENCES_THEME = "theme";
     public static final String PREFERENCES_LOCALE_LANGUAGE = "locale.language";
     public static final String PREFERENCES_LOCALE_COUNTRY = "locale.country";
     public static final String PREFERENCES_LOCALE_VARIANT = "locale.variant";
@@ -89,6 +89,12 @@ public class MainPreferences implements MainOptions {
         return Locale.ROOT;
     }
 
+    @Nonnull
+    @Override
+    public String getTheme() {
+        return preferences.get(PREFERENCES_THEME, "default");
+    }
+
     @Override
     public void setLocaleLanguage(String language) {
         preferences.put(PREFERENCES_LOCALE_LANGUAGE, language);
@@ -114,5 +120,10 @@ public class MainPreferences implements MainOptions {
         setLocaleLanguage(locale.getLanguage());
         setLocaleCountry(locale.getCountry());
         setLocaleVariant(locale.getVariant());
+    }
+
+    @Override
+    public void setTheme(String theme) {
+        preferences.put(PREFERENCES_THEME, theme);
     }
 }

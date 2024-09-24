@@ -17,25 +17,29 @@ package org.exbin.bined.editor.android;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.os.LocaleListCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentResultListener;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.SwitchPreferenceCompat;
 import androidx.preference.TwoStatePreference;
 
+import org.exbin.bined.CodeCharactersCase;
+import org.exbin.bined.CodeType;
+import org.exbin.bined.basic.CodeAreaViewMode;
 import org.exbin.bined.editor.android.preference.BinaryEditorPreferences;
 import org.exbin.bined.editor.android.preference.CodeAreaPreferences;
 import org.exbin.bined.editor.android.preference.EncodingPreference;
+import org.exbin.bined.editor.android.preference.MainPreferences;
 import org.exbin.bined.editor.android.preference.PreferencesWrapper;
 import org.exbin.bined.editor.android.preference.TextEncodingPreferences;
 
+import java.util.Locale;
+
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
@@ -43,12 +47,22 @@ public class SettingsActivity extends AppCompatActivity implements
         PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
 
     private static final String TITLE_TAG = "settingsActivityTitle";
+
+    public static final String LANGUAGE_KEY = "language";
+    public static final String THEME_KEY = "theme";
+    public static final String ENCODING_KEY = "encoding";
+    public static final String BYTES_PER_ROW_KEY = "bytes_per_row";
+    public static final String VIEW_MODE_KEY = "view_mode";
+    public static final String CODE_TYPE_KEY = "code_type";
+    public static final String HEX_CHARACTERS_CASE = "hex_characters_case";
+    public static final String CODE_COLORIZATION = "code_colorization";
+
     private BinaryEditorPreferences appPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        appPreferences = new BinaryEditorPreferences(new PreferencesWrapper(getApplicationContext()));
+        appPreferences = getAppPreferences();
         setContentView(R.layout.settings_activity);
         if (savedInstanceState == null) {
             getSupportFragmentManager()
@@ -58,7 +72,7 @@ public class SettingsActivity extends AppCompatActivity implements
         } else {
             setTitle(savedInstanceState.getCharSequence(TITLE_TAG));
         }
-/*
+
         getSupportFragmentManager().addOnBackStackChangedListener(
                 new FragmentManager.OnBackStackChangedListener() {
                     @Override
@@ -68,10 +82,19 @@ public class SettingsActivity extends AppCompatActivity implements
                         }
                     }
                 });
-        ActionBar actionBar = getSupportActionBar();
+/*        ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         } */
+    }
+
+    @Nonnull
+    private BinaryEditorPreferences getAppPreferences() {
+        if (appPreferences == null) {
+            return new BinaryEditorPreferences(new PreferencesWrapper(getApplicationContext()));
+        }
+
+        return appPreferences;
     }
 
     @Override
@@ -129,7 +152,50 @@ public class SettingsActivity extends AppCompatActivity implements
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-            setPreferencesFromResource(R.xml.appearance_preferences, rootKey);
+            setPreferencesFromResource(R.xml.main_preferences, rootKey);
+
+            // Load from preferences
+            SettingsActivity activity = (SettingsActivity) requireActivity();
+            MainPreferences mainPreferences = activity.getAppPreferences().getMainPreferences();
+            ListPreference languagePreference = findPreference(LANGUAGE_KEY);
+            languagePreference.setOnPreferenceChangeListener((preference, newValue) -> {
+                String language = (String) newValue;
+                // Dynamically change theme
+                if ("default".equals(language)) {
+                    AppCompatDelegate.setApplicationLocales(LocaleListCompat. getEmptyLocaleList());
+                } else {
+                    AppCompatDelegate.setApplicationLocales(LocaleListCompat.create(Locale.forLanguageTag(language)));
+                }
+
+                return true;
+            });
+            languagePreference.setValue(mainPreferences.getLocaleTag());
+
+            ListPreference themePreference = findPreference(THEME_KEY);
+            themePreference.setOnPreferenceChangeListener((preference, newValue) -> {
+                // Dynamically change theme
+                if ("dark".equals(newValue)) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                } else if ("light".equals(newValue)) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                }
+
+                return true;
+            });
+            themePreference.setValue(mainPreferences.getTheme());
+        }
+
+        @Override
+        public void onDestroy() {
+            // Save to preferences
+            SettingsActivity activity = (SettingsActivity) requireActivity();
+            MainPreferences mainPreferences = activity.appPreferences.getMainPreferences();
+            mainPreferences.setLocaleTag(((ListPreference) findPreference(LANGUAGE_KEY)).getValue());
+            mainPreferences.setTheme(((ListPreference) findPreference(THEME_KEY)).getValue());
+
+            super.onDestroy();
         }
     }
 
@@ -140,17 +206,32 @@ public class SettingsActivity extends AppCompatActivity implements
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.view_preferences, rootKey);
 
-            SettingsActivity activity = (SettingsActivity) getActivity();
-
             // Load from preferences
+            SettingsActivity activity = (SettingsActivity) requireActivity();
             CodeAreaPreferences codeAreaPreferences = activity.appPreferences.getCodeAreaPreferences();
             TextEncodingPreferences encodingPreferences = activity.appPreferences.getEncodingPreferences();
-            ((EncodingPreference) findPreference("encoding")).setText(encodingPreferences.getDefaultEncoding());
-            ((ListPreference) findPreference("bytes_per_row")).setValue(String.valueOf(codeAreaPreferences.getMaxBytesPerRow()));
-            ((ListPreference) findPreference("view_mode")).setValue(codeAreaPreferences.getViewMode().name());
-            ((ListPreference) findPreference("code_type")).setValue(codeAreaPreferences.getCodeType().name());
-            ((ListPreference) findPreference("hex_characters_case")).setValue(codeAreaPreferences.getCodeCharactersCase().name());
-            ((TwoStatePreference) findPreference("code_colorization")).setChecked(codeAreaPreferences.isCodeColorization());
+            ((EncodingPreference) findPreference(ENCODING_KEY)).setText(encodingPreferences.getDefaultEncoding());
+            ((ListPreference) findPreference(BYTES_PER_ROW_KEY)).setValue(String.valueOf(codeAreaPreferences.getMaxBytesPerRow()));
+            ((ListPreference) findPreference(VIEW_MODE_KEY)).setValue(codeAreaPreferences.getViewMode().name());
+            ((ListPreference) findPreference(CODE_TYPE_KEY)).setValue(codeAreaPreferences.getCodeType().name());
+            ((ListPreference) findPreference(HEX_CHARACTERS_CASE)).setValue(codeAreaPreferences.getCodeCharactersCase().name());
+            ((TwoStatePreference) findPreference(CODE_COLORIZATION)).setChecked(codeAreaPreferences.isCodeColorization());
+        }
+
+        @Override
+        public void onDestroy() {
+            // Save to preferences
+            SettingsActivity activity = (SettingsActivity) requireActivity();
+            CodeAreaPreferences codeAreaPreferences = activity.appPreferences.getCodeAreaPreferences();
+            TextEncodingPreferences encodingPreferences = activity.appPreferences.getEncodingPreferences();
+            encodingPreferences.setDefaultEncoding(((EncodingPreference) findPreference(ENCODING_KEY)).getText());
+            codeAreaPreferences.setMaxBytesPerRow(Integer.parseInt(((ListPreference) findPreference(BYTES_PER_ROW_KEY)).getValue()));
+            codeAreaPreferences.setViewMode(CodeAreaViewMode.valueOf(((ListPreference) findPreference(VIEW_MODE_KEY)).getValue()));
+            codeAreaPreferences.setCodeType(CodeType.valueOf(((ListPreference) findPreference(CODE_TYPE_KEY)).getValue()));
+            codeAreaPreferences.setCodeCharactersCase(CodeCharactersCase.valueOf(((ListPreference) findPreference(HEX_CHARACTERS_CASE)).getValue()));
+            codeAreaPreferences.setCodeColorization(((TwoStatePreference) findPreference(CODE_COLORIZATION)).isChecked());
+
+            super.onDestroy();
         }
     }
 }

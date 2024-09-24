@@ -31,9 +31,14 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.os.LocaleListCompat;
 
 import org.exbin.auxiliary.binary_data.BinaryData;
 import org.exbin.auxiliary.binary_data.ByteArrayEditableData;
@@ -51,11 +56,13 @@ import org.exbin.bined.android.basic.CodeArea;
 import org.exbin.bined.android.basic.DefaultCodeAreaPainter;
 import org.exbin.bined.android.basic.color.BasicCodeAreaColorsProfile;
 import org.exbin.bined.basic.BasicCodeAreaSection;
+import org.exbin.bined.basic.CodeAreaScrollPosition;
 import org.exbin.bined.basic.CodeAreaViewMode;
 import org.exbin.bined.capability.EditModeCapable;
 import org.exbin.bined.editor.android.preference.BinaryEditorPreferences;
 import org.exbin.bined.editor.android.preference.EncodingPreference;
 import org.exbin.bined.editor.android.preference.FontPreference;
+import org.exbin.bined.editor.android.preference.MainPreferences;
 import org.exbin.bined.editor.android.preference.PreferencesWrapper;
 import org.exbin.bined.highlight.android.HighlightNonAsciiCodeAreaPainter;
 import org.exbin.bined.operation.android.CodeAreaOperationCommandHandler;
@@ -66,6 +73,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -86,8 +94,16 @@ public class MainActivity extends AppCompatActivity {
     private static final int COPY_AS_CODE_ACTION_POPUP_ID = 9;
     private static final int PASTE_FROM_CODE_ACTION_POPUP_ID = 10;
 
-    private static final int OPEN_FILE_ACTIVITY = 1;
-    private static final int SAVE_FILE_ACTIVITY = 2;
+    private static final String CURSOR_POSITION_TAG = "bined.cursorPosition";
+    private static final String CURSOR_OFFSET_TAG = "bined.cursorOffset";
+    private static final String CURSOR_SECTION_TAG = "bined.cursorSection";
+    private static final String CURSOR_X_TAG = "bined.cursorDataPosition";
+    private static final String SCROLL_ROW_POSITION_TAG = "bined.scrollRowPosition";
+    private static final String SCROLL_ROW_OFFSET_TAG = "bined.scrollRowOffset";
+    private static final String SCROLL_CHAR_POSITION_TAG = "bined.scrollCharPosition";
+    private static final String SCROLL_CHAR_OFFSET_TAG = "bined.scrollOffsetPosition";
+    private static final String SELECTION_START_TAG = "bined.selectionStart";
+    private static final String SELECTION_END_TAG = "bined.selectionEnd";
 
     private CodeArea codeArea;
     private CodeAreaUndoRedo undoRedo;
@@ -100,13 +116,28 @@ public class MainActivity extends AppCompatActivity {
     private boolean keyboardShown = false;
     private BinaryEditorPreferences appPreferences;
 
+    private ActivityResultLauncher<Intent> openFileLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), this::openFileResultCallback);
+    private ActivityResultLauncher<Intent> saveFileLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), this::saveFileResultCallback);
+    private ActivityResultLauncher<Intent> settingsLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), this::settingsResultCallback);
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         appPreferences = new BinaryEditorPreferences(new PreferencesWrapper(getApplicationContext()));
         setContentView(R.layout.activity_main);
 
-//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        MainPreferences mainPreferences = appPreferences.getMainPreferences();
+        String theme = mainPreferences.getTheme();
+        if ("dark".equals(theme)) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else if ("light".equals(theme)) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+
+        String language = mainPreferences.getLocaleTag();
+        if (!"default".equals(theme)) {
+            AppCompatDelegate.setApplicationLocales(LocaleListCompat.create(Locale.forLanguageTag(language)));
+        }
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -230,6 +261,10 @@ public class MainActivity extends AppCompatActivity {
             binaryStatus.setEditMode(mode, operation);
         });
 
+        applySettings();
+    }
+
+    private void applySettings() {
         appPreferences.getCodeAreaPreferences().applyPreferences(codeArea);
         try {
             codeArea.setCharset(Charset.forName(appPreferences.getEncodingPreferences().getDefaultEncoding()));
@@ -399,7 +434,7 @@ public class MainActivity extends AppCompatActivity {
                 // intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri);
 
                 // startActivityForResult(intent, 1);
-                startActivityForResult(Intent.createChooser(intent, "Select a file"), OPEN_FILE_ACTIVITY);
+                openFileLauncher.launch(Intent.createChooser(intent, getResources().getString(R.string.select_file)));
 
                 return true;
             }
@@ -418,30 +453,7 @@ public class MainActivity extends AppCompatActivity {
                 // system file picker when it loads.
                 // intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri);
 
-                // startActivityForResult(intent, 1);
-/*                registerForActivityResult(new ActivityResultContract<Uri, Uri>() {
-                    @NonNull
-                    @Override
-                    public Intent createIntent(@NonNull Context context, Uri input) {
-                        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-                        intent.addCategory(Intent.CATEGORY_OPENABLE);
-                        intent.setType("* / *");
-
-                        // Optionally, specify a URI for the file that should appear in the
-                        // system file picker when it loads.
-                        // intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri);
-
-                        return intent;
-                    }
-
-                    @Override
-                    public Uri parseResult(int resultCode, @androidx.annotation.Nullable Intent intent) {
-                        return intent.getData();
-                    }
-                }, result -> {
-
-                }); */
-                startActivityForResult(Intent.createChooser(intent, "Save as file"), SAVE_FILE_ACTIVITY);
+                saveFileLauncher.launch(Intent.createChooser(intent, getResources().getString(R.string.save_as_file)));
 
                 return true;
             }
@@ -449,7 +461,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_settings: {
                 // User chose the "Settings" item, show the app settings UI...
                 Intent intent = new Intent(this, SettingsActivity.class);
-                startActivity(intent);
+                settingsLauncher.launch(intent);
 
                 return true;
             }
@@ -462,7 +474,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             case R.id.action_exit: {
-                // TODO
+                // TODO ask to save
                 System.exit(0);
                 return true;
             }
@@ -480,37 +492,6 @@ public class MainActivity extends AppCompatActivity {
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
 
-//                ListPreference listPreference = new ListPreference(this, null);
-//                listPreference.setEntries(getResources().getTextArray(R.array.code_type_values));
-//                listPreference.getOnPreferenceClickListener()
-//                getPreferenceManager().showDialog(listPreference);
-
-//                SinglePreferenceFragment singlePreferenceFragment = new SinglePreferenceFragment();
-//                getSupportFragmentManager().beginTransaction().replace(android.R.id.content, singlePreferenceFragment).commit();
-
-//                Preference preference = preferenceActivity.findPreference("code_type");
-                // R.array.code_type_values
-
-//                ListPreference listPreference = new ListPreference(this, null);
-//                listPreference.setEntries(getResources().getTextArray(R.array.code_type_values));
-//                Intent intent = new Intent(this, SinglePreferenceFragment.class);
-//                startActivity(intent);
-//                preferenceActivity.getPreferenceManager().showDialog(listPreference);
-//                preferenceFragment.startActivity();
-//                ListPreferenceDialogFragmentCompat dialogFragment = ListPreferenceDialogFragmentCompat.newInstance("code_type");
-//                dialogFragment.show(getSupportFragmentManager(), "view_preferences");
-                // preferenceFragment.setArguments();
-//                getSupportFragmentManager().beginTransaction().replace(R.id.settings, preferenceFragment).commit();
-
-//                Intent intent = new Intent(this, PreferenceActivity.class);
-//                startActivity(intent);
-
-                // startActivity(intent);
-//                preferenceActivity.show
-//                PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
-//                int viewPreferences = R.xml.view_preferences;
-//                SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-//                defaultSharedPreferences.get
                 return true;
             }
 
@@ -677,6 +658,46 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        long cursorDataPosition = savedInstanceState.getLong(CURSOR_POSITION_TAG);
+        int cursorOffset = savedInstanceState.getInt(CURSOR_OFFSET_TAG);
+        int cursorSection = savedInstanceState.getInt(CURSOR_SECTION_TAG);
+        codeArea.setActiveCaretPosition(new DefaultCodeAreaCaretPosition(cursorDataPosition, cursorOffset, cursorSection == 0 ? BasicCodeAreaSection.CODE_MATRIX : BasicCodeAreaSection.TEXT_PREVIEW));
+
+        long scrollRowPosition = savedInstanceState.getLong(SCROLL_ROW_POSITION_TAG);
+        int scrollRowOffset = savedInstanceState.getInt(SCROLL_ROW_OFFSET_TAG);
+        int scrollCharPosition = savedInstanceState.getInt(SCROLL_CHAR_POSITION_TAG);
+        int scrollCharOffset = savedInstanceState.getInt(SCROLL_CHAR_OFFSET_TAG);
+        codeArea.setScrollPosition(new CodeAreaScrollPosition(scrollRowPosition, scrollRowOffset, scrollCharPosition, scrollCharOffset));
+
+        long selectionStart = savedInstanceState.getLong(SELECTION_START_TAG);
+        long selectionEnd = savedInstanceState.getLong(SELECTION_END_TAG);
+        codeArea.setSelection(new SelectionRange(selectionStart, selectionEnd));
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        SelectionRange selection = codeArea.getSelection();
+        outState.putLong(SELECTION_START_TAG, selection.getStart());
+        outState.putLong(SELECTION_END_TAG, selection.getEnd());
+
+        CodeAreaScrollPosition scrollPosition = codeArea.getScrollPosition();
+        outState.putLong(SCROLL_ROW_POSITION_TAG, scrollPosition.getRowPosition());
+        outState.putInt(SCROLL_ROW_OFFSET_TAG, scrollPosition.getRowOffset());
+        outState.putInt(SCROLL_CHAR_POSITION_TAG, scrollPosition.getCharPosition());
+        outState.putInt(SCROLL_CHAR_OFFSET_TAG, scrollPosition.getCharOffset());
+
+        CodeAreaCaretPosition caretPosition = codeArea.getActiveCaretPosition();
+        outState.putLong(CURSOR_POSITION_TAG, caretPosition.getDataPosition());
+        outState.putInt(CURSOR_OFFSET_TAG, caretPosition.getCodeOffset());
+        outState.putInt(CURSOR_SECTION_TAG, ((BasicCodeAreaSection) caretPosition.getSection().orElse(BasicCodeAreaSection.CODE_MATRIX)).ordinal());
+    }
+
     private void showPermissionError() {
         Toast.makeText(this, "Storage permission is not granted", Toast.LENGTH_LONG).show();
     }
@@ -739,44 +760,58 @@ public class MainActivity extends AppCompatActivity {
         binaryStatus.setEditMode(codeArea.getEditMode(), codeArea.getActiveOperation());
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @androidx.annotation.Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == OPEN_FILE_ACTIVITY) {
-            if (data != null && data.getData() != null) {
-                fileData = new ByteArrayEditableData();
-                try {
-                    InputStream inputStream = getContentResolver().openInputStream(data.getData());
-                    if (inputStream == null) {
-                        return;
-                    }
-                    fileData.loadFromStream(inputStream);
-                    inputStream.close();
-                    documentOriginalSize = fileData.getDataSize();
-                    undoRedo.clear();
-                    codeArea.setContentData(fileData);
-                } catch (IOException ex) {
-                    Logger.getLogger(MainActivity.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        } else if (requestCode == SAVE_FILE_ACTIVITY) {
-            if (data != null && data.getData() != null) {
-                BinaryData contentData = codeArea.getContentData();
-                try {
-                    OutputStream outputStream = getContentResolver().openOutputStream(data.getData());
-                    if (outputStream == null) {
-                        return;
-                    }
-                    fileData.saveToStream(outputStream);
-                    outputStream.close();
-                    documentOriginalSize = contentData.getDataSize();
-                    undoRedo.setSyncPosition();
-                } catch (IOException ex) {
-                    Logger.getLogger(MainActivity.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+    private void openFileResultCallback(ActivityResult activityResult) {
+        int resultCode = activityResult.getResultCode();
+        Intent data = activityResult.getData();
+        if (resultCode != MainActivity.RESULT_OK || data == null || data.getData() == null) {
+            return;
         }
+
+        fileData = new ByteArrayEditableData();
+        try {
+            InputStream inputStream = getContentResolver().openInputStream(data.getData());
+            if (inputStream == null) {
+                return;
+            }
+            fileData.loadFromStream(inputStream);
+            inputStream.close();
+            documentOriginalSize = fileData.getDataSize();
+            undoRedo.clear();
+            codeArea.setContentData(fileData);
+        } catch (IOException ex) {
+            Logger.getLogger(MainActivity.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void saveFileResultCallback(ActivityResult activityResult) {
+        int resultCode = activityResult.getResultCode();
+        Intent data = activityResult.getData();
+        if (resultCode != MainActivity.RESULT_OK || data == null || data.getData() == null) {
+            return;
+        }
+
+        BinaryData contentData = codeArea.getContentData();
+        try {
+            OutputStream outputStream = getContentResolver().openOutputStream(data.getData());
+            if (outputStream == null) {
+                return;
+            }
+            fileData.saveToStream(outputStream);
+            outputStream.close();
+            documentOriginalSize = contentData.getDataSize();
+            undoRedo.setSyncPosition();
+        } catch (IOException ex) {
+            Logger.getLogger(MainActivity.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void settingsResultCallback(ActivityResult activityResult) {
+        int resultCode = activityResult.getResultCode();
+        if (resultCode != MainActivity.RESULT_OK) {
+            return;
+        }
+
+        applySettings();
     }
 
     public void buttonAction0(View view) {

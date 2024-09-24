@@ -132,6 +132,7 @@
     </item>
     <item
         android:id="@+id/tools_menu"
+        android:enabled="false"
         android:title="@string/tools_menu">
         <menu></menu>
     </item>

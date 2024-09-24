@@ -81,7 +81,7 @@ public class BinaryEditorPreferences {
     }
 
     @Nonnull
-    public MainPreferences getAppPreferences() {
+    public MainPreferences getMainPreferences() {
         return mainPreferences;
     }
 

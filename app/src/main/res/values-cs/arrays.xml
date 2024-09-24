@@ -1,0 +1,34 @@
+<resources>
+    <string-array name="theme_entries">
+        <item>Výchozí (systém)</item>
+        <item>Světlý</item>
+        <item>Tmavý</item>
+    </string-array>
+
+    <string-array name="bytes_per_row_entries">
+        <item>Vyplnit šířku</item>
+        <item>4 bajty</item>
+        <item>8 bajtů</item>
+        <item>12 bajtů</item>
+        <item>16 bajtů</item>
+        <item>Vlastní</item>
+    </string-array>
+
+    <string-array name="view_mode_entries">
+        <item>Duální</item>
+        <item>Matice kódů</item>
+        <item>Náhled textu</item>
+    </string-array>
+
+    <string-array name="code_type_entries">
+        <item>Binární</item>
+        <item>Osmičková</item>
+        <item>Desetinné</item>
+        <item>Hexadecimální</item>
+    </string-array>
+
+    <string-array name="hex_chars_case_entries">
+        <item>Malá písmena</item>
+        <item>Velká písmena</item>
+    </string-array>
+</resources>
