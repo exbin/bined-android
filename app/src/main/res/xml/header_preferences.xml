@@ -2,12 +2,12 @@
 
     <Preference
         app:fragment="org.exbin.bined.editor.android.SettingsActivity$AppearanceFragment"
-        app:icon="@drawable/ic_info_black_24dp"
+        app:icon="@drawable/ic_info_24"
         app:title="@string/pref_header_appearance" />
 
     <Preference
         app:fragment="org.exbin.bined.editor.android.SettingsActivity$ViewFragment"
-        app:icon="@drawable/messages"
+        app:icon="@drawable/ic_eye_24"
         app:key="view_header"
         app:title="@string/pref_view_header" />
 

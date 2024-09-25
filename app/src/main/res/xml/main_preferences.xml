@@ -4,6 +4,7 @@
         app:defaultValue="default"
         app:entries="@array/theme_entries"
         app:entryValues="@array/theme_values"
+        app:icon="@drawable/ic_palette_24"
         app:key="theme"
         app:title="@string/visual_theme"
         app:useSimpleSummaryProvider="true" />
@@ -12,6 +13,7 @@
         app:defaultValue="default"
         app:entries="@array/language_entries"
         app:entryValues="@array/language_values"
+        app:icon="@drawable/ic_language_24"
         app:key="language"
         app:title="@string/language"
         app:useSimpleSummaryProvider="true" />

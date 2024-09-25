@@ -334,7 +334,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:$USER_HOME$/Android/Sdk/icons/material/materialicons/save/baseline_save_24.xml" />
+                                      <entry key="url" value="file:$USER_HOME$/Android/Sdk/icons/material/materialicons/exit_to_app/baseline_exit_to_app_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -344,7 +344,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_action_save_24" />
+                            <entry key="outputName" value="ic_exit_24" />
                           </map>
                         </option>
                       </PersistentState>

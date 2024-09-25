@@ -1,7 +1,8 @@
 0.2.1
 - Basic support for selection / clipboard
 - Changed file dialog
-- Added settings
+- Added settings and preferences
+- Added dark theme and language switching
 
 0.2.0.1 (2024-09-05)
 - Minor fix of keyboard support in preview

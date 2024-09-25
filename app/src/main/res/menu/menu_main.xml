@@ -4,34 +4,36 @@
     tools:context="org.exbin.bined.editor.android.MainActivity">
     <item
         android:id="@+id/app_bar_search"
-        android:icon="@drawable/ic_search_black_24dp"
+        android:icon="@drawable/ic_search_24"
         android:title="@string/action_search"
         app:actionViewClass="android.widget.SearchView"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/app_bar_undo"
-        android:icon="@drawable/ic_undo_24dp"
+        android:icon="@drawable/ic_undo_24"
         android:title="@string/action_undo"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/app_bar_redo"
-        android:icon="@drawable/ic_redo_24dp"
+        android:icon="@drawable/ic_redo_24"
         android:title="@string/action_redo"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_new"
+        android:icon="@drawable/ic_file_new_24"
         android:title="@string/action_new" />
     <item
         android:id="@+id/action_open"
+        android:icon="@drawable/ic_file_open_24"
         android:title="@string/action_open" />
     <item
         android:id="@+id/action_save"
         android:enabled="false"
-        android:icon="@drawable/ic_action_save_24"
+        android:icon="@drawable/ic_file_save_24"
         android:title="@string/action_save" />
     <item
         android:id="@+id/action_save_as"
-        android:icon="@drawable/ic_action_save_as_24"
+        android:icon="@drawable/ic_file_save_as_24"
         android:title="@string/action_save_as" />
     <item
         android:id="@+id/view_menu"
@@ -138,11 +140,14 @@
     </item>
     <item
         android:id="@+id/action_settings"
+        android:icon="@drawable/ic_settings_24"
         android:title="@string/action_settings" />
     <item
         android:id="@+id/action_about"
+        android:icon="@drawable/ic_info_24"
         android:title="@string/action_about" />
     <item
         android:id="@+id/action_exit"
+        android:icon="@drawable/ic_exit_24"
         android:title="@string/action_exit" />
 </menu>

@@ -17,7 +17,9 @@ package org.exbin.bined.editor.android;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.LocaleList;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.method.KeyListener;
@@ -72,11 +74,12 @@ import org.exbin.framework.bined.BinaryStatusApi;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Method;
 import java.nio.charset.Charset;
-import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -134,10 +137,7 @@ public class MainActivity extends AppCompatActivity {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
 
-        String language = mainPreferences.getLocaleTag();
-        if (!"default".equals(theme)) {
-            AppCompatDelegate.setApplicationLocales(LocaleListCompat.create(Locale.forLanguageTag(language)));
-        }
+        AppCompatDelegate.setApplicationLocales(LocaleListCompat.wrap(getLanguageLocaleList()));
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -154,17 +154,11 @@ public class MainActivity extends AppCompatActivity {
         codeArea = findViewById(R.id.codeArea);
         codeArea.setEditOperation(EditOperation.INSERT);
 
-        DefaultCodeAreaPainter painter = (DefaultCodeAreaPainter) codeArea.getPainter();
-        BasicCodeAreaColorsProfile basicColors = painter.getBasicColors();
-        basicColors.setContext(this);
-        basicColors.reinitialize();
-        painter.resetColors();
 
         undoRedo = new CodeAreaUndoRedo(codeArea);
         undoRedo.addChangeListener(() -> {
             if (menu != null) {
-                menu.findItem(R.id.app_bar_undo).setEnabled(undoRedo.canUndo());
-                menu.findItem(R.id.app_bar_redo).setEnabled(undoRedo.canRedo());
+                updateUndoState();
             }
 //            View undoAction = findViewById(R.id.app_bar_undo);
 //            if (undoAction != null) {
@@ -178,7 +172,12 @@ public class MainActivity extends AppCompatActivity {
 
         CodeAreaOperationCommandHandler commandHandler = new CodeAreaOperationCommandHandler(codeArea.getContext(), codeArea, undoRedo);
         codeArea.setCommandHandler(commandHandler);
-        codeArea.setPainter(new HighlightNonAsciiCodeAreaPainter(codeArea));
+        HighlightNonAsciiCodeAreaPainter painter = new HighlightNonAsciiCodeAreaPainter(codeArea);
+        codeArea.setPainter(painter);
+        BasicCodeAreaColorsProfile basicColors = painter.getBasicColors();
+        basicColors.setContext(this);
+        basicColors.reinitialize();
+        painter.resetColors();
 
         registerForContextMenu(codeArea);
 
@@ -264,6 +263,18 @@ public class MainActivity extends AppCompatActivity {
         applySettings();
     }
 
+    @Nonnull
+    private LocaleList getLanguageLocaleList() {
+        String language = appPreferences.getMainPreferences().getLocaleTag();
+        if ("default".equals(language)) {
+            return LocaleList.getDefault();
+        } else if ("en".equals(language)) {
+            return LocaleList.getEmptyLocaleList();
+        }
+
+        return LocaleList.forLanguageTags(language);
+    }
+
     private void applySettings() {
         appPreferences.getCodeAreaPreferences().applyPreferences(codeArea);
         try {
@@ -291,9 +302,21 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
+        // If possible, attempt to show icons in the main menu via reflection
+        if (menu.getClass().getSimpleName().equals("MenuBuilder")) {
+            try {
+                Method method = menu.getClass().getDeclaredMethod("setOptionalIconsVisible", Boolean.TYPE);
+                method.setAccessible(true);
+                method.invoke(menu, true);
+            } catch (NoSuchMethodException ex) {
+                Logger.getLogger(MainActivity.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
         this.menu = menu;
-        menu.findItem(R.id.app_bar_undo).setEnabled(undoRedo.canUndo());
-        menu.findItem(R.id.app_bar_redo).setEnabled(undoRedo.canRedo());
+        updateUndoState();
 
         menu.findItem(R.id.code_colorization).setChecked(appPreferences.getCodeAreaPreferences().isCodeColorization());
         int bytesPerRow = appPreferences.getCodeAreaPreferences().getMaxBytesPerRow();
@@ -428,6 +451,9 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
                 intent.setType("*/*");
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    intent.putExtra(Intent.EXTRA_LOCALE_LIST, getLanguageLocaleList());
+                }
 
                 // Optionally, specify a URI for the file that should appear in the
                 // system file picker when it loads.
@@ -448,6 +474,9 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
                 intent.setType("*/*");
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    intent.putExtra(Intent.EXTRA_LOCALE_LIST, getLanguageLocaleList());
+                }
 
                 // Optionally, specify a URI for the file that should appear in the
                 // system file picker when it loads.
@@ -758,6 +787,17 @@ public class MainActivity extends AppCompatActivity {
         }
 
         binaryStatus.setEditMode(codeArea.getEditMode(), codeArea.getActiveOperation());
+    }
+
+    private void updateUndoState() {
+        boolean canUndo = undoRedo.canUndo();
+        MenuItem undoMenuItem = menu.findItem(R.id.app_bar_undo);
+        undoMenuItem.setEnabled(canUndo);
+        // TODO undoMenuItem.setIconTintList(new ColorStateList(ColorStateList.));
+
+        boolean canRedo = undoRedo.canRedo();
+        MenuItem redoMenuItem = menu.findItem(R.id.app_bar_redo);
+        redoMenuItem.setEnabled(canRedo);
     }
 
     private void openFileResultCallback(ActivityResult activityResult) {

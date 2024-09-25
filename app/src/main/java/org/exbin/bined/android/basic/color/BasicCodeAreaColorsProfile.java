@@ -16,6 +16,7 @@
 package org.exbin.bined.android.basic.color;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -164,18 +165,18 @@ public class BasicCodeAreaColorsProfile implements CodeAreaColorsProfile {
     }
 
     public void reinitialize() {
-        textColor = getThemeColor(androidx.appcompat.R.attr.editTextColor);
+        textColor = getThemeColor(androidx.appcompat.R.attr.color);
         if (textColor == null) {
-            textColor = Color.BLACK;
+            textColor = isDarkMode() ? Color.WHITE : Color.BLACK;
         }
 
-        textBackground = getThemeColor(androidx.appcompat.R.attr.editTextBackground);
+        textBackground = getThemeColor(androidx.appcompat.R.attr.panelBackground);
         if (textBackground == null) {
             textBackground = CodeAreaAndroidUtils.createNegativeColor(textColor);
         }
         selectionColor = getThemeColor(androidx.appcompat.R.attr.editTextColor);
         if (selectionColor == null) {
-            selectionColor = Color.WHITE;
+            selectionColor = isDarkMode() ? Color.BLACK : Color.WHITE;
         }
         selectionBackground = getThemeColor(androidx.appcompat.R.attr.selectableItemBackground);
         if (selectionBackground == null) {
@@ -183,9 +184,9 @@ public class BasicCodeAreaColorsProfile implements CodeAreaColorsProfile {
         }
         selectionMirrorColor = selectionColor;
         selectionMirrorBackground = CodeAreaAndroidUtils.computeGrayColor(selectionBackground);
-        cursorColor = getThemeColor(androidx.appcompat.R.attr.colorControlActivated);
+        cursorColor = getThemeColor(androidx.appcompat.R.attr.color);
         if (cursorColor == null) {
-            cursorColor = Color.BLACK;
+            cursorColor = isDarkMode() ? Color.WHITE : Color.BLACK;
         }
         cursorNegativeColor = CodeAreaAndroidUtils.createNegativeColor(cursorColor);
         decorationLine = Color.GRAY;
@@ -214,5 +215,9 @@ public class BasicCodeAreaColorsProfile implements CodeAreaColorsProfile {
             }
         }
         return null;
+    }
+
+    private boolean isDarkMode() {
+        return context != null && (context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
     }
 }
