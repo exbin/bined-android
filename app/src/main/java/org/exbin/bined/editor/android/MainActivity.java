@@ -40,6 +40,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.os.LocaleListCompat;
 
@@ -66,6 +67,10 @@ import org.exbin.bined.editor.android.preference.EncodingPreference;
 import org.exbin.bined.editor.android.preference.FontPreference;
 import org.exbin.bined.editor.android.preference.MainPreferences;
 import org.exbin.bined.editor.android.preference.PreferencesWrapper;
+import org.exbin.bined.editor.android.search.BinarySearchService;
+import org.exbin.bined.editor.android.search.BinarySearchServiceImpl;
+import org.exbin.bined.editor.android.search.SearchCondition;
+import org.exbin.bined.editor.android.search.SearchParameters;
 import org.exbin.bined.highlight.android.HighlightNonAsciiCodeAreaPainter;
 import org.exbin.bined.operation.android.CodeAreaOperationCommandHandler;
 import org.exbin.bined.operation.android.CodeAreaUndoRedo;
@@ -115,6 +120,18 @@ public class MainActivity extends AppCompatActivity {
     private static ByteArrayEditableData fileData = null;
     private Uri currentFileUri = null;
     private final BinaryStatusHandler binaryStatus = new BinaryStatusHandler(this);
+    private BinarySearchService searchService;
+    private final BinarySearchService.SearchStatusListener searchStatusListener = new BinarySearchService.SearchStatusListener() {
+        @Override
+        public void setStatus(BinarySearchService.FoundMatches foundMatches, SearchParameters.MatchMode matchMode) {
+            // TODO Add search status panel
+        }
+
+        @Override
+        public void clearStatus() {
+
+        }
+    };
 
     private boolean keyboardShown = false;
     private BinaryEditorPreferences appPreferences;
@@ -142,18 +159,9 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
-
         codeArea = findViewById(R.id.codeArea);
         codeArea.setEditOperation(EditOperation.INSERT);
-
+        searchService = new BinarySearchServiceImpl(codeArea);
 
         undoRedo = new CodeAreaUndoRedo(codeArea);
         undoRedo.addChangeListener(() -> {
@@ -248,9 +256,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        codeArea.addEditModeChangedListener((EditMode mode, EditOperation operation) -> {
-            binaryStatus.setEditMode(mode, operation);
-        });
+        codeArea.addEditModeChangedListener(binaryStatus::setEditMode);
 
         applySettings();
     }
@@ -310,6 +316,9 @@ public class MainActivity extends AppCompatActivity {
         this.menu = menu;
         updateUndoState();
 
+        codeArea.addSelectionChangedListener(this::updateEditActionsState);
+        updateEditActionsState();
+
         menu.findItem(R.id.code_colorization).setChecked(appPreferences.getCodeAreaPreferences().isCodeColorization());
         int bytesPerRow = appPreferences.getCodeAreaPreferences().getMaxBytesPerRow();
         switch (bytesPerRow) {
@@ -334,6 +343,27 @@ public class MainActivity extends AppCompatActivity {
                 break;
             }
         }
+
+        MenuItem searchMenuItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) searchMenuItem.getActionView();
+        searchView.setSubmitButtonEnabled(true);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                searchService.performFindAgain(searchStatusListener);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                SearchCondition searchCondition = new SearchCondition();
+                searchCondition.setSearchText(newText);
+                SearchParameters searchParameters = new SearchParameters();
+                searchParameters.setCondition(searchCondition);
+                searchService.performFind(searchParameters, searchStatusListener);
+                return true;
+            }
+        });
 
         return true;
     }
@@ -631,7 +661,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void releaseFile(PostReleaseAction postReleaseAction) {
-        if (!undoRedo.isModified() || currentFileUri == null) {
+        if (!undoRedo.isModified()) {
             postReleaseAction.released(true);
             return;
         }
@@ -802,6 +832,18 @@ public class MainActivity extends AppCompatActivity {
         }
 
         binaryStatus.setEditMode(codeArea.getEditMode(), codeArea.getActiveOperation());
+    }
+
+    private void updateEditActionsState() {
+        MenuItem cutMenuItem = menu.findItem(R.id.action_cut);
+        cutMenuItem.setEnabled(codeArea.isEditable() && codeArea.hasSelection());
+
+        MenuItem copyMenuItem = menu.findItem(R.id.action_copy);
+        copyMenuItem.setEnabled(codeArea.hasSelection());
+        MenuItem pasteMenuItem = menu.findItem(R.id.action_paste);
+        pasteMenuItem.setEnabled(codeArea.isEditable() && codeArea.canPaste());
+        MenuItem deleteMenuItem = menu.findItem(R.id.action_delete);
+        deleteMenuItem.setEnabled(codeArea.isEditable() && codeArea.hasSelection());
     }
 
     private void updateUndoState() {
