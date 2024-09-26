@@ -17,6 +17,7 @@ package org.exbin.bined.editor.android;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.LocaleList;
@@ -55,7 +56,6 @@ import org.exbin.bined.RowWrappingMode;
 import org.exbin.bined.SelectionRange;
 import org.exbin.bined.android.Font;
 import org.exbin.bined.android.basic.CodeArea;
-import org.exbin.bined.android.basic.DefaultCodeAreaPainter;
 import org.exbin.bined.android.basic.color.BasicCodeAreaColorsProfile;
 import org.exbin.bined.basic.BasicCodeAreaSection;
 import org.exbin.bined.basic.CodeAreaScrollPosition;
@@ -100,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
     private static final String CURSOR_POSITION_TAG = "bined.cursorPosition";
     private static final String CURSOR_OFFSET_TAG = "bined.cursorOffset";
     private static final String CURSOR_SECTION_TAG = "bined.cursorSection";
-    private static final String CURSOR_X_TAG = "bined.cursorDataPosition";
     private static final String SCROLL_ROW_POSITION_TAG = "bined.scrollRowPosition";
     private static final String SCROLL_ROW_OFFSET_TAG = "bined.scrollRowOffset";
     private static final String SCROLL_CHAR_POSITION_TAG = "bined.scrollCharPosition";
@@ -114,14 +113,15 @@ public class MainActivity extends AppCompatActivity {
     private long documentOriginalSize = 0;
     private Menu menu;
     private static ByteArrayEditableData fileData = null;
+    private Uri currentFileUri = null;
     private final BinaryStatusHandler binaryStatus = new BinaryStatusHandler(this);
 
     private boolean keyboardShown = false;
     private BinaryEditorPreferences appPreferences;
 
-    private ActivityResultLauncher<Intent> openFileLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), this::openFileResultCallback);
-    private ActivityResultLauncher<Intent> saveFileLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), this::saveFileResultCallback);
-    private ActivityResultLauncher<Intent> settingsLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), this::settingsResultCallback);
+    private final ActivityResultLauncher<Intent> openFileLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), this::openFileResultCallback);
+    private final ActivityResultLauncher<Intent> saveFileLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), this::saveFileResultCallback);
+    private final ActivityResultLauncher<Intent> settingsLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), this::settingsResultCallback);
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -160,14 +160,6 @@ public class MainActivity extends AppCompatActivity {
             if (menu != null) {
                 updateUndoState();
             }
-//            View undoAction = findViewById(R.id.app_bar_undo);
-//            if (undoAction != null) {
-//                undoAction.setEnabled(undoRedo.canUndo());
-//            }
-//            View redoAction = findViewById(R.id.app_bar_redo);
-//            if (redoAction != null) {
-//                redoAction.setEnabled(undoRedo.canRedo());
-//            }
         });
 
         CodeAreaOperationCommandHandler commandHandler = new CodeAreaOperationCommandHandler(codeArea.getContext(), codeArea, undoRedo);
@@ -219,8 +211,8 @@ public class MainActivity extends AppCompatActivity {
 
         codeArea.setOnKeyListener(new View.OnKeyListener() {
 
-            private KeyListener keyListener = new TextKeyListener(TextKeyListener.Capitalize.NONE, false);
-            private Editable editable = Editable.Factory.getInstance().newEditable("");
+            private final KeyListener keyListener = new TextKeyListener(TextKeyListener.Capitalize.NONE, false);
+            private final Editable editable = Editable.Factory.getInstance().newEditable("");
 
             @Override
             public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
@@ -266,10 +258,10 @@ public class MainActivity extends AppCompatActivity {
     @Nonnull
     private LocaleList getLanguageLocaleList() {
         String language = appPreferences.getMainPreferences().getLocaleTag();
-        if ("default".equals(language)) {
-            return LocaleList.getDefault();
-        } else if ("en".equals(language)) {
+        if (language.isEmpty()) {
             return LocaleList.getEmptyLocaleList();
+        } else if ("en".equals(language)) {
+            return LocaleList.getDefault();
         }
 
         return LocaleList.forLanguageTags(language);
@@ -436,254 +428,277 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        switch (item.getItemId()) {
-            case R.id.action_new: {
-                // TODO Release file
+        if (id == R.id.action_new) {
+            releaseFile(successful -> {
+                if (successful) {
+                    codeArea.setContentData(new ByteArrayEditableData());
+                    undoRedo.clear();
 
-                codeArea.setContentData(new ByteArrayEditableData());
-                undoRedo.clear();
-
-                documentOriginalSize = 0;
-                return true;
-            }
-
-            case R.id.action_open: {
-                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType("*/*");
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    intent.putExtra(Intent.EXTRA_LOCALE_LIST, getLanguageLocaleList());
+                    documentOriginalSize = 0;
                 }
+            });
 
-                // Optionally, specify a URI for the file that should appear in the
-                // system file picker when it loads.
-                // intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri);
+            return true;
+        } else if (id == R.id.action_open) {
+            releaseFile(successful -> {
+                if (successful) {
+                    Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    intent.setType("*/*");
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        intent.putExtra(Intent.EXTRA_LOCALE_LIST, getLanguageLocaleList());
+                    }
 
-                // startActivityForResult(intent, 1);
-                openFileLauncher.launch(Intent.createChooser(intent, getResources().getString(R.string.select_file)));
+                    // Optionally, specify a URI for the file that should appear in the
+                    // system file picker when it loads.
+                    // intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri);
 
-                return true;
-            }
-
-            case R.id.action_save: {
-
-                return true;
-            }
-
-            case R.id.action_save_as: {
-                Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType("*/*");
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    intent.putExtra(Intent.EXTRA_LOCALE_LIST, getLanguageLocaleList());
+                    // startActivityForResult(intent, 1);
+                    openFileLauncher.launch(Intent.createChooser(intent, getResources().getString(R.string.select_file)));
                 }
+            });
 
-                // Optionally, specify a URI for the file that should appear in the
-                // system file picker when it loads.
-                // intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri);
-
-                saveFileLauncher.launch(Intent.createChooser(intent, getResources().getString(R.string.save_as_file)));
-
-                return true;
+            return true;
+        } else if (id == R.id.action_save) {
+            if (currentFileUri == null) {
+                saveAs();
+            } else {
+                saveFile(currentFileUri);
             }
 
-            case R.id.action_settings: {
-                // User chose the "Settings" item, show the app settings UI...
-                Intent intent = new Intent(this, SettingsActivity.class);
-                settingsLauncher.launch(intent);
+            return true;
+        } else if (id == R.id.action_save_as) {
+            saveAs();
 
-                return true;
+            return true;
+        } else if (id == R.id.action_settings) {
+            // User chose the "Settings" item, show the app settings UI...
+            Intent intent = new Intent(this, SettingsActivity.class);
+            settingsLauncher.launch(intent);
+
+            return true;
+        } else if (id == R.id.action_about) {
+            AboutDialog aboutDialog = new AboutDialog();
+            aboutDialog.show(getSupportFragmentManager(), "aboutDialog");
+
+            return true;
+        } else if (id == R.id.action_exit) {
+            releaseFile(successful -> {
+                if (successful) {
+                    System.exit(0);
+                }
+            });
+
+            return true;
+        } else if (id == R.id.code_type) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.code_type);
+            builder.setSingleChoiceItems(getResources().getTextArray(R.array.code_type_entries), codeArea.getCodeType().ordinal(), (dialog, which) -> {
+                CodeType codeType = CodeType.values()[which];
+                codeArea.setCodeType(codeType);
+                appPreferences.getCodeAreaPreferences().setCodeType(codeType);
+                dialog.dismiss();
+            });
+            builder.setNegativeButton(R.string.button_cancel, null);
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+
+            return true;
+        } else if (id == R.id.view_mode) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.view_mode);
+            builder.setSingleChoiceItems(getResources().getTextArray(R.array.view_mode_entries), codeArea.getViewMode().ordinal(), (dialog, which) -> {
+                CodeAreaViewMode viewMode = CodeAreaViewMode.values()[which];
+                codeArea.setViewMode(viewMode);
+                appPreferences.getCodeAreaPreferences().setViewMode(viewMode);
+                dialog.dismiss();
+            });
+            builder.setNegativeButton(R.string.button_cancel, null);
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+            return true;
+        } else if (id == R.id.hex_chars_case) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.hex_characters_case);
+            builder.setSingleChoiceItems(getResources().getTextArray(R.array.hex_chars_case_entries), codeArea.getCodeCharactersCase().ordinal(), (dialog, which) -> {
+                CodeCharactersCase codeCharactersCase = CodeCharactersCase.values()[which];
+                codeArea.setCodeCharactersCase(codeCharactersCase);
+                appPreferences.getCodeAreaPreferences().setCodeCharactersCase(codeCharactersCase);
+                dialog.dismiss();
+            });
+            builder.setNegativeButton(R.string.button_cancel, null);
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+            return true;
+        } else if (id == R.id.encoding) {
+            EncodingPreference.showEncodingSelectionDialog(this, codeArea.getCharset().name(), encoding -> {
+                codeArea.setCharset(Charset.forName(encoding));
+                appPreferences.getEncodingPreferences().setDefaultEncoding(encoding);
+                binaryStatus.setEncoding(codeArea.getCharset().toString());
+            });
+            return true;
+        } else if (id == R.id.font) {
+            FontPreference.showFontSelectionDialog(this, codeArea.getCodeFont(), codeFont -> {
+                codeArea.setCodeFont(codeFont);
+                appPreferences.getFontPreferences().setFontSize(codeFont.getSize());
+            });
+            return true;
+        } else if (id == R.id.bytes_per_row_fill) {
+            codeArea.setRowWrapping(RowWrappingMode.WRAPPING);
+            codeArea.setMaxBytesPerRow(0);
+            appPreferences.getCodeAreaPreferences().setRowWrappingMode(codeArea.getRowWrapping());
+            appPreferences.getCodeAreaPreferences().setMaxBytesPerRow(codeArea.getMaxBytesPerRow());
+            menu.findItem(R.id.bytes_per_row_fill).setChecked(true);
+            return true;
+        } else if (id == R.id.bytes_per_row_4) {
+            codeArea.setRowWrapping(RowWrappingMode.NO_WRAPPING);
+            codeArea.setMaxBytesPerRow(4);
+            appPreferences.getCodeAreaPreferences().setRowWrappingMode(codeArea.getRowWrapping());
+            appPreferences.getCodeAreaPreferences().setMaxBytesPerRow(codeArea.getMaxBytesPerRow());
+            menu.findItem(R.id.bytes_per_row_4).setChecked(true);
+            return true;
+        } else if (id == R.id.bytes_per_row_8) {
+            codeArea.setRowWrapping(RowWrappingMode.NO_WRAPPING);
+            codeArea.setMaxBytesPerRow(8);
+            appPreferences.getCodeAreaPreferences().setRowWrappingMode(codeArea.getRowWrapping());
+            appPreferences.getCodeAreaPreferences().setMaxBytesPerRow(codeArea.getMaxBytesPerRow());
+            menu.findItem(R.id.bytes_per_row_8).setChecked(true);
+            return true;
+        } else if (id == R.id.bytes_per_row_12) {
+            codeArea.setRowWrapping(RowWrappingMode.NO_WRAPPING);
+            codeArea.setMaxBytesPerRow(12);
+            appPreferences.getCodeAreaPreferences().setRowWrappingMode(codeArea.getRowWrapping());
+            appPreferences.getCodeAreaPreferences().setMaxBytesPerRow(codeArea.getMaxBytesPerRow());
+            menu.findItem(R.id.bytes_per_row_12).setChecked(true);
+            return true;
+        } else if (id == R.id.bytes_per_row_16) {
+            codeArea.setRowWrapping(RowWrappingMode.NO_WRAPPING);
+            codeArea.setMaxBytesPerRow(16);
+            appPreferences.getCodeAreaPreferences().setRowWrappingMode(codeArea.getRowWrapping());
+            appPreferences.getCodeAreaPreferences().setMaxBytesPerRow(codeArea.getMaxBytesPerRow());
+            menu.findItem(R.id.bytes_per_row_16).setChecked(true);
+            return true;
+        } else if (id == R.id.code_colorization) {
+            boolean checked = item.isChecked();
+            item.setChecked(!checked);
+            ((HighlightNonAsciiCodeAreaPainter) codeArea.getPainter()).setNonAsciiHighlightingEnabled(!checked);
+            appPreferences.getCodeAreaPreferences().setCodeColorization(!checked);
+            return true;
+        } else if (id == R.id.action_undo) {
+            undoRedo.performUndo();
+            return true;
+        } else if (id == R.id.action_redo) {
+            undoRedo.performRedo();
+            return true;
+        } else if (id == R.id.action_cut) {
+            codeArea.cut();
+            return true;
+        } else if (id == R.id.action_copy) {
+            codeArea.copy();
+            return true;
+        } else if (id == R.id.action_paste) {
+            codeArea.paste();
+            return true;
+        } else if (id == R.id.action_delete) {
+            codeArea.delete();
+            return true;
+        } else if (id == R.id.action_select_all) {
+            codeArea.selectAll();
+            return true;
+        } else if (id == R.id.go_to_position) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.go_to_position);
+            final EditText inputNumber = new EditText(this);
+            inputNumber.setInputType(InputType.TYPE_CLASS_NUMBER);
+            inputNumber.setText(String.valueOf(codeArea.getDataPosition()));
+            builder.setView(inputNumber);
+            builder.setPositiveButton(R.string.button_go_to, (dialog, which) -> {
+                DefaultCodeAreaCaretPosition caretPosition = new DefaultCodeAreaCaretPosition();
+                caretPosition.setCodeOffset(0);
+                caretPosition.setPosition(codeArea.getActiveCaretPosition());
+                caretPosition.setDataPosition(Long.parseLong(inputNumber.getText().toString()));
+                codeArea.setActiveCaretPosition(caretPosition);
+                codeArea.centerOnCursor();
+            });
+            builder.setNegativeButton(R.string.button_cancel, null);
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void releaseFile(PostReleaseAction postReleaseAction) {
+        if (!undoRedo.isModified() || currentFileUri == null) {
+            postReleaseAction.released(true);
+            return;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.file_modified);
+        builder.setPositiveButton(R.string.button_save, (dialog, which) -> {
+            saveFile(currentFileUri);
+            postReleaseAction.released(true);
+        });
+        builder.setNeutralButton(R.string.button_discard, (dialog, which) -> {
+            postReleaseAction.released(true);
+        });
+        builder.setNegativeButton(R.string.button_cancel, (dialog, which) -> {
+            postReleaseAction.released(false);
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    public void saveAs() {
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("*/*");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.putExtra(Intent.EXTRA_LOCALE_LIST, getLanguageLocaleList());
+        }
+
+        // Optionally, specify a URI for the file that should appear in the
+        // system file picker when it loads.
+        // intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri);
+
+        saveFileLauncher.launch(Intent.createChooser(intent, getResources().getString(R.string.save_as_file)));
+    }
+
+    public void openFile(Uri fileUri) {
+        fileData = new ByteArrayEditableData();
+        try {
+            InputStream inputStream = getContentResolver().openInputStream(fileUri);
+            if (inputStream == null) {
+                return;
             }
+            fileData.loadFromStream(inputStream);
+            inputStream.close();
+            documentOriginalSize = fileData.getDataSize();
+            undoRedo.clear();
+            codeArea.setContentData(fileData);
+            currentFileUri = fileUri;
+        } catch (IOException ex) {
+            Logger.getLogger(MainActivity.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
-            case R.id.action_about: {
-                AboutDialog aboutDialog = new AboutDialog();
-                aboutDialog.show(getSupportFragmentManager(), "aboutDialog");
-
-                return true;
+    public void saveFile(Uri fileUri) {
+        BinaryData contentData = codeArea.getContentData();
+        try {
+            OutputStream outputStream = getContentResolver().openOutputStream(fileUri);
+            if (outputStream == null) {
+                return;
             }
-
-            case R.id.action_exit: {
-                // TODO ask to save
-                System.exit(0);
-                return true;
-            }
-
-            case R.id.code_type: {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(R.string.code_type);
-                builder.setSingleChoiceItems(getResources().getTextArray(R.array.code_type_entries), codeArea.getCodeType().ordinal(), (dialog, which) -> {
-                    CodeType codeType = CodeType.values()[which];
-                    codeArea.setCodeType(codeType);
-                    appPreferences.getCodeAreaPreferences().setCodeType(codeType);
-                    dialog.dismiss();
-                });
-                builder.setNegativeButton(R.string.button_cancel, null);
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
-
-                return true;
-            }
-
-            case R.id.view_mode: {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(R.string.view_mode);
-                builder.setSingleChoiceItems(getResources().getTextArray(R.array.view_mode_entries), codeArea.getViewMode().ordinal(), (dialog, which) -> {
-                    CodeAreaViewMode viewMode = CodeAreaViewMode.values()[which];
-                    codeArea.setViewMode(viewMode);
-                    appPreferences.getCodeAreaPreferences().setViewMode(viewMode);
-                    dialog.dismiss();
-                });
-                builder.setNegativeButton(R.string.button_cancel, null);
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
-                return true;
-            }
-
-            case R.id.hex_chars_case: {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(R.string.hex_characters_case);
-                builder.setSingleChoiceItems(getResources().getTextArray(R.array.hex_chars_case_entries), codeArea.getCodeCharactersCase().ordinal(), (dialog, which) -> {
-                    CodeCharactersCase codeCharactersCase = CodeCharactersCase.values()[which];
-                    codeArea.setCodeCharactersCase(codeCharactersCase);
-                    appPreferences.getCodeAreaPreferences().setCodeCharactersCase(codeCharactersCase);
-                    dialog.dismiss();
-                });
-                builder.setNegativeButton(R.string.button_cancel, null);
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
-                return true;
-            }
-
-            case R.id.encoding: {
-                EncodingPreference.showEncodingSelectionDialog(this, codeArea.getCharset().name(), encoding -> {
-                    codeArea.setCharset(Charset.forName(encoding));
-                    appPreferences.getEncodingPreferences().setDefaultEncoding(encoding);
-                    binaryStatus.setEncoding(codeArea.getCharset().toString());
-                });
-                return true;
-            }
-
-            case R.id.font: {
-                FontPreference.showFontSelectionDialog(this, codeArea.getCodeFont(), codeFont -> {
-                    codeArea.setCodeFont(codeFont);
-                    appPreferences.getFontPreferences().setFontSize(codeFont.getSize());
-                });
-                return true;
-            }
-
-            case R.id.bytes_per_row_fill: {
-                codeArea.setRowWrapping(RowWrappingMode.WRAPPING);
-                codeArea.setMaxBytesPerRow(0);
-                appPreferences.getCodeAreaPreferences().setRowWrappingMode(codeArea.getRowWrapping());
-                appPreferences.getCodeAreaPreferences().setMaxBytesPerRow(codeArea.getMaxBytesPerRow());
-                menu.findItem(R.id.bytes_per_row_fill).setChecked(true);
-                return true;
-            }
-
-            case R.id.bytes_per_row_4: {
-                codeArea.setRowWrapping(RowWrappingMode.NO_WRAPPING);
-                codeArea.setMaxBytesPerRow(4);
-                appPreferences.getCodeAreaPreferences().setRowWrappingMode(codeArea.getRowWrapping());
-                appPreferences.getCodeAreaPreferences().setMaxBytesPerRow(codeArea.getMaxBytesPerRow());
-                menu.findItem(R.id.bytes_per_row_4).setChecked(true);
-                return true;
-            }
-
-            case R.id.bytes_per_row_8: {
-                codeArea.setRowWrapping(RowWrappingMode.NO_WRAPPING);
-                codeArea.setMaxBytesPerRow(8);
-                appPreferences.getCodeAreaPreferences().setRowWrappingMode(codeArea.getRowWrapping());
-                appPreferences.getCodeAreaPreferences().setMaxBytesPerRow(codeArea.getMaxBytesPerRow());
-                menu.findItem(R.id.bytes_per_row_8).setChecked(true);
-                return true;
-            }
-
-            case R.id.bytes_per_row_12: {
-                codeArea.setRowWrapping(RowWrappingMode.NO_WRAPPING);
-                codeArea.setMaxBytesPerRow(12);
-                appPreferences.getCodeAreaPreferences().setRowWrappingMode(codeArea.getRowWrapping());
-                appPreferences.getCodeAreaPreferences().setMaxBytesPerRow(codeArea.getMaxBytesPerRow());
-                menu.findItem(R.id.bytes_per_row_12).setChecked(true);
-                return true;
-            }
-
-            case R.id.bytes_per_row_16: {
-                codeArea.setRowWrapping(RowWrappingMode.NO_WRAPPING);
-                codeArea.setMaxBytesPerRow(16);
-                appPreferences.getCodeAreaPreferences().setRowWrappingMode(codeArea.getRowWrapping());
-                appPreferences.getCodeAreaPreferences().setMaxBytesPerRow(codeArea.getMaxBytesPerRow());
-                menu.findItem(R.id.bytes_per_row_16).setChecked(true);
-                return true;
-            }
-
-            case R.id.code_colorization: {
-                boolean checked = item.isChecked();
-                item.setChecked(!checked);
-                ((HighlightNonAsciiCodeAreaPainter) codeArea.getPainter()).setNonAsciiHighlightingEnabled(!checked);
-                appPreferences.getCodeAreaPreferences().setCodeColorization(!checked);
-                return true;
-            }
-
-            case R.id.app_bar_undo: {
-                undoRedo.performUndo();
-                return true;
-            }
-
-            case R.id.app_bar_redo: {
-                undoRedo.performRedo();
-                return true;
-            }
-
-            case R.id.action_cut: {
-                codeArea.cut();
-                return true;
-            }
-
-            case R.id.action_copy: {
-                codeArea.copy();
-                return true;
-            }
-
-            case R.id.action_paste: {
-                codeArea.paste();
-                return true;
-            }
-
-            case R.id.action_delete: {
-                codeArea.delete();
-                return true;
-            }
-
-            case R.id.action_select_all: {
-                codeArea.selectAll();
-                return true;
-            }
-
-            case R.id.go_to_position: {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(R.string.go_to_position);
-                final EditText inputNumber = new EditText(this);
-                inputNumber.setInputType(InputType.TYPE_CLASS_NUMBER);
-                inputNumber.setText(String.valueOf(codeArea.getDataPosition()));
-                builder.setView(inputNumber);
-                builder.setPositiveButton(R.string.button_go_to, (dialog, which) -> {
-                    DefaultCodeAreaCaretPosition caretPosition = new DefaultCodeAreaCaretPosition();
-                    caretPosition.setCodeOffset(0);
-                    caretPosition.setPosition(codeArea.getActiveCaretPosition());
-                    caretPosition.setDataPosition(Long.parseLong(inputNumber.getText().toString()));
-                    codeArea.setActiveCaretPosition(caretPosition);
-                    codeArea.centerOnCursor();
-                });
-                builder.setNegativeButton(R.string.button_cancel, null);
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
-
-                return true;
-            }
-
-            default:
-                return super.onOptionsItemSelected(item);
-
+            fileData.saveToStream(outputStream);
+            outputStream.close();
+            documentOriginalSize = contentData.getDataSize();
+            undoRedo.setSyncPosition();
+            currentFileUri = fileUri;
+        } catch (IOException ex) {
+            Logger.getLogger(MainActivity.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -790,13 +805,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUndoState() {
+        MenuItem saveMenuItem = menu.findItem(R.id.action_save);
+        saveMenuItem.setEnabled(currentFileUri == null || undoRedo.isModified());
+
         boolean canUndo = undoRedo.canUndo();
-        MenuItem undoMenuItem = menu.findItem(R.id.app_bar_undo);
+        MenuItem undoMenuItem = menu.findItem(R.id.action_undo);
         undoMenuItem.setEnabled(canUndo);
         // TODO undoMenuItem.setIconTintList(new ColorStateList(ColorStateList.));
 
         boolean canRedo = undoRedo.canRedo();
-        MenuItem redoMenuItem = menu.findItem(R.id.app_bar_redo);
+        MenuItem redoMenuItem = menu.findItem(R.id.action_redo);
         redoMenuItem.setEnabled(canRedo);
     }
 
@@ -807,20 +825,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        fileData = new ByteArrayEditableData();
-        try {
-            InputStream inputStream = getContentResolver().openInputStream(data.getData());
-            if (inputStream == null) {
-                return;
-            }
-            fileData.loadFromStream(inputStream);
-            inputStream.close();
-            documentOriginalSize = fileData.getDataSize();
-            undoRedo.clear();
-            codeArea.setContentData(fileData);
-        } catch (IOException ex) {
-            Logger.getLogger(MainActivity.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        openFile(data.getData());
     }
 
     private void saveFileResultCallback(ActivityResult activityResult) {
@@ -830,19 +835,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        BinaryData contentData = codeArea.getContentData();
-        try {
-            OutputStream outputStream = getContentResolver().openOutputStream(data.getData());
-            if (outputStream == null) {
-                return;
-            }
-            fileData.saveToStream(outputStream);
-            outputStream.close();
-            documentOriginalSize = contentData.getDataSize();
-            undoRedo.setSyncPosition();
-        } catch (IOException ex) {
-            Logger.getLogger(MainActivity.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        saveFile(data.getData());
     }
 
     private void settingsResultCallback(ActivityResult activityResult) {
@@ -956,5 +949,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void buttonActionTab(View view) {
         codeArea.getCommandHandler().keyPressed(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_TAB));
+    }
+
+    public interface PostReleaseAction {
+        void released(boolean successful);
     }
 }

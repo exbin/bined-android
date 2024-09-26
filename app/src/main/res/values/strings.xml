@@ -58,11 +58,14 @@
     <string name="application_about">About App</string>
     <string name="select_file">Select a file</string>
     <string name="save_as_file">Save as file</string>
+    <string name="file_modified">File was modified</string>
 
     <string name="button_close">Close</string>
     <string name="button_cancel">Cancel</string>
     <string name="button_set">Set</string>
     <string name="button_go_to">Go To</string>
+    <string name="button_save">Save</string>
+    <string name="button_discard">Discard</string>
 
     <!-- Preference Titles -->
 

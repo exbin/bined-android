@@ -3,18 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="org.exbin.bined.editor.android.MainActivity">
     <item
-        android:id="@+id/app_bar_search"
+        android:id="@+id/action_search"
         android:icon="@drawable/ic_search_24"
         android:title="@string/action_search"
         app:actionViewClass="android.widget.SearchView"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/app_bar_undo"
+        android:id="@+id/action_undo"
         android:icon="@drawable/ic_undo_24"
         android:title="@string/action_undo"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/app_bar_redo"
+        android:id="@+id/action_redo"
         android:icon="@drawable/ic_redo_24"
         android:title="@string/action_redo"
         app:showAsAction="ifRoom" />
@@ -28,7 +28,6 @@
         android:title="@string/action_open" />
     <item
         android:id="@+id/action_save"
-        android:enabled="false"
         android:icon="@drawable/ic_file_save_24"
         android:title="@string/action_save" />
     <item

@@ -4,10 +4,10 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-09-12T20:27:18.662484384Z">
+        <DropdownSelection timestamp="2024-09-26T11:10:09.819583563Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=/home/hajdam/.config/.android/avd/Pixel_8_API_34.avd" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=/home/hajdam/.config/.android/avd/Pixel_8_API_27.avd" />
             </handle>
           </Target>
         </DropdownSelection>

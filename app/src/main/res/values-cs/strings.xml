@@ -57,11 +57,14 @@
     <string name="application_about">O aplikaci</string>
     <string name="select_file">Vyberte soubor</string>
     <string name="save_as_file">Uložit jako soubor</string>
+    <string name="file_modified">Soubor by upraven</string>
 
     <string name="button_close">Zavřít</string>
     <string name="button_cancel">Zrušit</string>
     <string name="button_set">Nastavit</string>
     <string name="button_go_to">Přejít na</string>
+    <string name="button_save">Uložit</string>
+    <string name="button_discard">Zahodit</string>
 
     <string name="pref_header_appearance">Vzhled</string>
     <string name="pref_view_header">Zobrazit</string>

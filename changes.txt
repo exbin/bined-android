@@ -3,6 +3,7 @@
 - Changed file dialog
 - Added settings and preferences
 - Added dark theme and language switching
+- Added menu icons
 
 0.2.0.1 (2024-09-05)
 - Minor fix of keyboard support in preview

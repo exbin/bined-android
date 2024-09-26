@@ -169,7 +169,8 @@ public class SettingsActivity extends AppCompatActivity implements
 
                 return true;
             });
-            languagePreference.setValue(mainPreferences.getLocaleTag());
+            String localeTag = mainPreferences.getLocaleTag();
+            languagePreference.setValue(localeTag.isEmpty() ? "default" : localeTag);
 
             ListPreference themePreference = findPreference(THEME_KEY);
             themePreference.setOnPreferenceChangeListener((preference, newValue) -> {
@@ -192,7 +193,8 @@ public class SettingsActivity extends AppCompatActivity implements
             // Save to preferences
             SettingsActivity activity = (SettingsActivity) requireActivity();
             MainPreferences mainPreferences = activity.appPreferences.getMainPreferences();
-            mainPreferences.setLocaleTag(((ListPreference) findPreference(LANGUAGE_KEY)).getValue());
+            String value = ((ListPreference) findPreference(LANGUAGE_KEY)).getValue();
+            mainPreferences.setLocaleTag("default".equals(value) ? "" : value);
             mainPreferences.setTheme(((ListPreference) findPreference(THEME_KEY)).getValue());
 
             super.onDestroy();
