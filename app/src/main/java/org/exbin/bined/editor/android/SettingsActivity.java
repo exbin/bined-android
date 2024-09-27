@@ -15,6 +15,8 @@
  */
 package org.exbin.bined.editor.android;
 
+import android.app.Activity;
+import android.app.Instrumentation;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +24,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.os.LocaleListCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentResultListener;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -33,9 +36,11 @@ import org.exbin.bined.basic.CodeAreaViewMode;
 import org.exbin.bined.editor.android.preference.BinaryEditorPreferences;
 import org.exbin.bined.editor.android.preference.CodeAreaPreferences;
 import org.exbin.bined.editor.android.preference.EncodingPreference;
+import org.exbin.bined.editor.android.preference.FontPreference;
 import org.exbin.bined.editor.android.preference.MainPreferences;
 import org.exbin.bined.editor.android.preference.PreferencesWrapper;
 import org.exbin.bined.editor.android.preference.TextEncodingPreferences;
+import org.exbin.bined.editor.android.preference.TextFontPreferences;
 
 import java.util.Locale;
 
@@ -50,6 +55,7 @@ public class SettingsActivity extends AppCompatActivity implements
 
     public static final String LANGUAGE_KEY = "language";
     public static final String THEME_KEY = "theme";
+    public static final String FONT_KEY = "font";
     public static final String ENCODING_KEY = "encoding";
     public static final String BYTES_PER_ROW_KEY = "bytes_per_row";
     public static final String VIEW_MODE_KEY = "view_mode";
@@ -121,14 +127,12 @@ public class SettingsActivity extends AppCompatActivity implements
                 getClassLoader(),
                 pref.getFragment());
         fragment.setArguments(args);
-// TODO: Replace deprecated
-//        fragmentManager.setFragmentResultListener(0, fragment, new FragmentResultListener() {
-//            @Override
-//            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle result) {
-//                caller.result
-//            }
-//        });
-        fragment.setTargetFragment(caller, 0);
+        fragmentManager.setFragmentResultListener("requestKey", fragment, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@Nonnull String requestKey, @Nonnull Bundle result) {
+                caller.getParentFragmentManager().setFragmentResult(requestKey, result);
+            }
+        });
         // Replace the existing Fragment with the new Fragment
         fragmentManager.beginTransaction()
                 .replace(R.id.settings, fragment)
@@ -211,6 +215,8 @@ public class SettingsActivity extends AppCompatActivity implements
             // Load from preferences
             SettingsActivity activity = (SettingsActivity) requireActivity();
             CodeAreaPreferences codeAreaPreferences = activity.appPreferences.getCodeAreaPreferences();
+            TextFontPreferences fontPreferences = activity.appPreferences.getFontPreferences();
+            ((FontPreference) findPreference(FONT_KEY)).setText(String.valueOf(fontPreferences.getFontSize()));
             TextEncodingPreferences encodingPreferences = activity.appPreferences.getEncodingPreferences();
             ((EncodingPreference) findPreference(ENCODING_KEY)).setText(encodingPreferences.getDefaultEncoding());
             ((ListPreference) findPreference(BYTES_PER_ROW_KEY)).setValue(String.valueOf(codeAreaPreferences.getMaxBytesPerRow()));
@@ -225,6 +231,8 @@ public class SettingsActivity extends AppCompatActivity implements
             // Save to preferences
             SettingsActivity activity = (SettingsActivity) requireActivity();
             CodeAreaPreferences codeAreaPreferences = activity.appPreferences.getCodeAreaPreferences();
+            TextFontPreferences fontPreferences = activity.appPreferences.getFontPreferences();
+            fontPreferences.setFontSize(Integer.parseInt(((FontPreference) findPreference(FONT_KEY)).getText()));
             TextEncodingPreferences encodingPreferences = activity.appPreferences.getEncodingPreferences();
             encodingPreferences.setDefaultEncoding(((EncodingPreference) findPreference(ENCODING_KEY)).getText());
             codeAreaPreferences.setMaxBytesPerRow(Integer.parseInt(((ListPreference) findPreference(BYTES_PER_ROW_KEY)).getValue()));

@@ -1,2 +1,2 @@
-* Initial release
-* Limited functionality
+- Initial release
+- Limited functionality

@@ -21,6 +21,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.LocaleList;
+import android.provider.DocumentsContract;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.method.KeyListener;
@@ -81,6 +82,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -119,8 +121,10 @@ public class MainActivity extends AppCompatActivity {
     private Menu menu;
     private static ByteArrayEditableData fileData = null;
     private Uri currentFileUri = null;
+    private Uri pickerInitialUri = null;
     private final BinaryStatusHandler binaryStatus = new BinaryStatusHandler(this);
     private BinarySearchService searchService;
+    private Runnable postSaveAsAction = null;
     private final BinarySearchService.SearchStatusListener searchStatusListener = new BinarySearchService.SearchStatusListener() {
         @Override
         public void setStatus(BinarySearchService.FoundMatches foundMatches, SearchParameters.MatchMode matchMode) {
@@ -319,33 +323,10 @@ public class MainActivity extends AppCompatActivity {
         codeArea.addSelectionChangedListener(this::updateEditActionsState);
         updateEditActionsState();
 
-        menu.findItem(R.id.code_colorization).setChecked(appPreferences.getCodeAreaPreferences().isCodeColorization());
-        int bytesPerRow = appPreferences.getCodeAreaPreferences().getMaxBytesPerRow();
-        switch (bytesPerRow) {
-            case 0: {
-                menu.findItem(R.id.bytes_per_row_fill).setChecked(true);
-                break;
-            }
-            case 4: {
-                menu.findItem(R.id.bytes_per_row_4).setChecked(true);
-                break;
-            }
-            case 8: {
-                menu.findItem(R.id.bytes_per_row_8).setChecked(true);
-                break;
-            }
-            case 12: {
-                menu.findItem(R.id.bytes_per_row_12).setChecked(true);
-                break;
-            }
-            case 16: {
-                menu.findItem(R.id.bytes_per_row_16).setChecked(true);
-                break;
-            }
-        }
+        updateViewActionsState();
 
         MenuItem searchMenuItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) searchMenuItem.getActionView();
+        SearchView searchView = Objects.requireNonNull((SearchView) searchMenuItem.getActionView());
         searchView.setSubmitButtonEnabled(true);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -371,9 +352,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        MenuItem selectionStartMenuItem = menu.add(0, SELECTION_START_POPUP_ID, 0, getResources().getString(R.string.action_selection_start));
-        MenuItem selectionEndMenuItem = menu.add(0, SELECTION_END_POPUP_ID, 1, getResources().getString(R.string.action_selection_end));
-        MenuItem clearSelectionMenuItem = menu.add(0, CLEAR_SELECTION_POPUP_ID, 2, getResources().getString(R.string.action_clear_selection));
+        menu.add(0, SELECTION_START_POPUP_ID, 0, getResources().getString(R.string.action_selection_start));
+        menu.add(0, SELECTION_END_POPUP_ID, 1, getResources().getString(R.string.action_selection_end));
+        menu.add(0, CLEAR_SELECTION_POPUP_ID, 2, getResources().getString(R.string.action_clear_selection));
         MenuItem cutMenuItem = menu.add(1, CUT_ACTION_POPUP_ID, 3, getResources().getString(R.string.action_cut));
         cutMenuItem.setEnabled(codeArea.isEditable() && codeArea.hasSelection());
         MenuItem copyMenuItem = menu.add(1, COPY_ACTION_POPUP_ID, 4, getResources().getString(R.string.action_copy));
@@ -384,7 +365,7 @@ public class MainActivity extends AppCompatActivity {
         menu.add(1, PASTE_FROM_CODE_ACTION_POPUP_ID, 5, getResources().getString(R.string.action_paste_from_code));
         MenuItem deleteMenuItem = menu.add(1, DELETE_ACTION_POPUP_ID, 7, getResources().getString(R.string.action_delete));
         deleteMenuItem.setEnabled(codeArea.isEditable() && codeArea.hasSelection());
-        MenuItem selectAllMenuItem = menu.add(1, SELECT_ALL_ACTION_POPUP_ID, 8, getResources().getString(R.string.action_select_all));
+        menu.add(1, SELECT_ALL_ACTION_POPUP_ID, 8, getResources().getString(R.string.action_select_all));
     }
 
     @Override
@@ -459,33 +440,30 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_new) {
-            releaseFile(successful -> {
-                if (successful) {
-                    codeArea.setContentData(new ByteArrayEditableData());
-                    undoRedo.clear();
+            releaseFile(() -> {
+                codeArea.setContentData(new ByteArrayEditableData());
+                undoRedo.clear();
+                currentFileUri = null;
 
-                    documentOriginalSize = 0;
-                }
+                documentOriginalSize = 0;
             });
 
             return true;
         } else if (id == R.id.action_open) {
-            releaseFile(successful -> {
-                if (successful) {
-                    Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                    intent.addCategory(Intent.CATEGORY_OPENABLE);
-                    intent.setType("*/*");
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        intent.putExtra(Intent.EXTRA_LOCALE_LIST, getLanguageLocaleList());
-                    }
-
-                    // Optionally, specify a URI for the file that should appear in the
-                    // system file picker when it loads.
-                    // intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri);
-
-                    // startActivityForResult(intent, 1);
-                    openFileLauncher.launch(Intent.createChooser(intent, getResources().getString(R.string.select_file)));
+            releaseFile(() -> {
+                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("*/*");
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    intent.putExtra(Intent.EXTRA_LOCALE_LIST, getLanguageLocaleList());
                 }
+
+                if (pickerInitialUri != null) {
+                    intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri);
+                }
+
+                // startActivityForResult(intent, 1);
+                openFileLauncher.launch(Intent.createChooser(intent, getResources().getString(R.string.select_file)));
             });
 
             return true;
@@ -513,10 +491,8 @@ public class MainActivity extends AppCompatActivity {
 
             return true;
         } else if (id == R.id.action_exit) {
-            releaseFile(successful -> {
-                if (successful) {
-                    System.exit(0);
-                }
+            releaseFile(() -> {
+                System.exit(0);
             });
 
             return true;
@@ -660,29 +636,37 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void releaseFile(PostReleaseAction postReleaseAction) {
+    public void releaseFile(Runnable postReleaseAction) {
         if (!undoRedo.isModified()) {
-            postReleaseAction.released(true);
+            postReleaseAction.run();
             return;
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.file_modified);
         builder.setPositiveButton(R.string.button_save, (dialog, which) -> {
-            saveFile(currentFileUri);
-            postReleaseAction.released(true);
+            if (currentFileUri == null) {
+                saveAs();
+            } else {
+                saveFile(currentFileUri);
+            }
+            postReleaseAction.run();
         });
         builder.setNeutralButton(R.string.button_discard, (dialog, which) -> {
-            postReleaseAction.released(true);
+            postReleaseAction.run();
         });
-        builder.setNegativeButton(R.string.button_cancel, (dialog, which) -> {
-            postReleaseAction.released(false);
-        });
+        builder.setNegativeButton(R.string.button_cancel, null);
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
 
     public void saveAs() {
+        saveAs(null);
+    }
+
+    public void saveAs(@Nullable Runnable postSaveAsAction) {
+        this.postSaveAsAction = postSaveAsAction;
+
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("*/*");
@@ -690,9 +674,9 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra(Intent.EXTRA_LOCALE_LIST, getLanguageLocaleList());
         }
 
-        // Optionally, specify a URI for the file that should appear in the
-        // system file picker when it loads.
-        // intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri);
+        if (pickerInitialUri != null) {
+            intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri);
+        }
 
         saveFileLauncher.launch(Intent.createChooser(intent, getResources().getString(R.string.save_as_file)));
     }
@@ -710,6 +694,7 @@ public class MainActivity extends AppCompatActivity {
             undoRedo.clear();
             codeArea.setContentData(fileData);
             currentFileUri = fileUri;
+            pickerInitialUri = fileUri;
         } catch (IOException ex) {
             Logger.getLogger(MainActivity.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -727,6 +712,7 @@ public class MainActivity extends AppCompatActivity {
             documentOriginalSize = contentData.getDataSize();
             undoRedo.setSyncPosition();
             currentFileUri = fileUri;
+            pickerInitialUri = fileUri;
         } catch (IOException ex) {
             Logger.getLogger(MainActivity.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -846,6 +832,33 @@ public class MainActivity extends AppCompatActivity {
         deleteMenuItem.setEnabled(codeArea.isEditable() && codeArea.hasSelection());
     }
 
+    private void updateViewActionsState() {
+        menu.findItem(R.id.code_colorization).setChecked(appPreferences.getCodeAreaPreferences().isCodeColorization());
+        int bytesPerRow = appPreferences.getCodeAreaPreferences().getMaxBytesPerRow();
+        switch (bytesPerRow) {
+            case 0: {
+                menu.findItem(R.id.bytes_per_row_fill).setChecked(true);
+                break;
+            }
+            case 4: {
+                menu.findItem(R.id.bytes_per_row_4).setChecked(true);
+                break;
+            }
+            case 8: {
+                menu.findItem(R.id.bytes_per_row_8).setChecked(true);
+                break;
+            }
+            case 12: {
+                menu.findItem(R.id.bytes_per_row_12).setChecked(true);
+                break;
+            }
+            case 16: {
+                menu.findItem(R.id.bytes_per_row_16).setChecked(true);
+                break;
+            }
+        }
+    }
+
     private void updateUndoState() {
         MenuItem saveMenuItem = menu.findItem(R.id.action_save);
         saveMenuItem.setEnabled(currentFileUri == null || undoRedo.isModified());
@@ -878,15 +891,15 @@ public class MainActivity extends AppCompatActivity {
         }
 
         saveFile(data.getData());
+        if (postSaveAsAction != null) {
+            postSaveAsAction.run();
+            postSaveAsAction = null;
+        }
     }
 
     private void settingsResultCallback(ActivityResult activityResult) {
-        int resultCode = activityResult.getResultCode();
-        if (resultCode != MainActivity.RESULT_OK) {
-            return;
-        }
-
         applySettings();
+        updateViewActionsState();
     }
 
     public void buttonAction0(View view) {
@@ -991,9 +1004,5 @@ public class MainActivity extends AppCompatActivity {
 
     public void buttonActionTab(View view) {
         codeArea.getCommandHandler().keyPressed(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_TAB));
-    }
-
-    public interface PostReleaseAction {
-        void released(boolean successful);
     }
 }
