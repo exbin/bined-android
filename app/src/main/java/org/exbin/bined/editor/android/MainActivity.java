@@ -277,6 +277,32 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         codeArea.addEditModeChangedListener(binaryStatus::setEditMode);
 
         applySettings();
+
+        processIntent(getIntent());
+    }
+
+    private void processIntent(Intent intent) {
+        String action = intent.getAction();
+        if (action == null) {
+            return;
+        }
+
+        if (Intent.ACTION_VIEW.equals(action) || Intent.ACTION_EDIT.equals(action)) {
+            String scheme = intent.getScheme();
+            if ("file".equals(scheme) || "content".equals(scheme)) {
+                Uri fileUri = intent.getData();
+                if (fileUri != null) {
+                    releaseFile(() -> {
+                        openFile(fileUri);
+                        // Content should be opened as unspecified file
+                        if ("content".equals(scheme)) {
+                            currentFileUri = null;
+                            pickerInitialUri = null;
+                        }
+                    });
+                }
+            }
+        }
     }
 
     @Nonnull
@@ -492,7 +518,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
                 PackageInfo info = manager.getPackageInfo(this.getPackageName(), PackageManager.GET_ACTIVITIES);
                 appVersion = info.versionName;
             } catch (PackageManager.NameNotFoundException e) {
-
+                // ignore
             }
 
             AboutDialog aboutDialog = new AboutDialog();
@@ -833,6 +859,12 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         }
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        processIntent(intent);
+    }
+
     public void updateStatus() {
         updateCurrentDocumentSize();
         updateCurrentCaretPosition();
@@ -1099,4 +1131,5 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     public static boolean isGoogleTV(Context context) {
         final PackageManager pm = context.getPackageManager();
         return pm.hasSystemFeature(PackageManager.FEATURE_LEANBACK);
-    }}
+    }
+}
