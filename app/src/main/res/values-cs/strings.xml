@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">BinEd</string>
-    <string name="app_about">Název: BinEd – binární/hexadecimální editor\nVerze: 0.2.1\nDodavatel: <a href="https://exbin.org">Projekt ExBin</a>\nLicence: <a href="https://www.apache.org/licenses/LICENSE-2.0">Licence Apache, verze 2.0</a>\nDomovská stránka: <a href="https://bined.exbin.org/android ">https://bined.exbin.org/android</a></string>
+    <string name="app_about">Název: BinEd – binární/hexadecimální editor\nVerze: %1$s\nDodavatel: <a href="https://exbin.org">Projekt ExBin</a>\nLicence: <a href="https://www.apache.org/licenses/LICENSE-2.0">Licence Apache, verze 2.0</a>\nDomovská stránka: <a href="https://bined.exbin.org/android ">https://bined.exbin.org/android</a></string>
     <string name="bined_logo_description">Logo BinEd</string>
 
     <string name="title_activity_settings">Nastavení</string>

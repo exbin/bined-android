@@ -15,8 +15,12 @@
  */
 package org.exbin.bined.editor.android;
 
+import android.Manifest;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -43,7 +47,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.os.LocaleListCompat;
+import androidx.fragment.app.DialogFragment;
+
+import com.rustamg.filedialogs.FileDialog;
+import com.rustamg.filedialogs.OpenFileDialog;
+import com.rustamg.filedialogs.SaveFileDialog;
 
 import org.exbin.auxiliary.binary_data.BinaryData;
 import org.exbin.auxiliary.binary_data.ByteArrayEditableData;
@@ -77,6 +88,7 @@ import org.exbin.bined.operation.android.CodeAreaOperationCommandHandler;
 import org.exbin.bined.operation.android.CodeAreaUndoRedo;
 import org.exbin.framework.bined.BinaryStatusApi;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -91,7 +103,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements FileDialog.OnFileSelectedListener {
 
     private static final int SELECTION_START_POPUP_ID = 1;
     private static final int SELECTION_END_POPUP_ID = 2;
@@ -103,6 +115,8 @@ public class MainActivity extends AppCompatActivity {
     private static final int SELECT_ALL_ACTION_POPUP_ID = 8;
     private static final int COPY_AS_CODE_ACTION_POPUP_ID = 9;
     private static final int PASTE_FROM_CODE_ACTION_POPUP_ID = 10;
+
+    private static final int STORAGE_PERMISSION_CODE = 1;
 
     private static final String CURSOR_POSITION_TAG = "bined.cursorPosition";
     private static final String CURSOR_OFFSET_TAG = "bined.cursorOffset";
@@ -211,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
             if (showKeyboard != keyboardShown) {
 
                 keyboardShown = showKeyboard;
-                InputMethodManager im = (InputMethodManager)codeArea.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager im = (InputMethodManager) codeArea.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 codeArea.requestFocus();
                 if (showKeyboard) {
                     im.showSoftInput(codeArea, InputMethodManager.SHOW_IMPLICIT);
@@ -450,21 +464,7 @@ public class MainActivity extends AppCompatActivity {
 
             return true;
         } else if (id == R.id.action_open) {
-            releaseFile(() -> {
-                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType("*/*");
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    intent.putExtra(Intent.EXTRA_LOCALE_LIST, getLanguageLocaleList());
-                }
-
-                if (pickerInitialUri != null) {
-                    intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri);
-                }
-
-                // startActivityForResult(intent, 1);
-                openFileLauncher.launch(Intent.createChooser(intent, getResources().getString(R.string.select_file)));
-            });
+            releaseFile(this::openFile);
 
             return true;
         } else if (id == R.id.action_save) {
@@ -486,7 +486,17 @@ public class MainActivity extends AppCompatActivity {
 
             return true;
         } else if (id == R.id.action_about) {
+            PackageManager manager = this.getPackageManager();
+            String appVersion = "";
+            try {
+                PackageInfo info = manager.getPackageInfo(this.getPackageName(), PackageManager.GET_ACTIVITIES);
+                appVersion = info.versionName;
+            } catch (PackageManager.NameNotFoundException e) {
+
+            }
+
             AboutDialog aboutDialog = new AboutDialog();
+            aboutDialog.setAppVersion(appVersion);
             aboutDialog.show(getSupportFragmentManager(), "aboutDialog");
 
             return true;
@@ -660,12 +670,52 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
+    public void openFile() {
+        if (MainActivity.isGoogleTV(this)) {
+            fallBackOpenFile();
+            return;
+        }
+
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("*/*");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.putExtra(Intent.EXTRA_LOCALE_LIST, getLanguageLocaleList());
+        }
+
+        if (pickerInitialUri != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri);
+        }
+
+        try {
+            openFileLauncher.launch(Intent.createChooser(intent, getResources().getString(R.string.select_file)));
+        } catch (ActivityNotFoundException ex) {
+            fallBackOpenFile();
+        }
+    }
+
+    private void fallBackOpenFile() {
+        boolean permissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+        if (permissionGranted) {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.setStyle(DialogFragment.STYLE_NO_TITLE, R.style.AppTheme);
+            dialog.show(getSupportFragmentManager(), OpenFileDialog.class.getName());
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
+        }
+    }
+
     public void saveAs() {
         saveAs(null);
     }
 
     public void saveAs(@Nullable Runnable postSaveAsAction) {
         this.postSaveAsAction = postSaveAsAction;
+
+        if (MainActivity.isGoogleTV(this)) {
+            fallBackSaveAs();
+            return;
+        }
 
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -674,11 +724,26 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra(Intent.EXTRA_LOCALE_LIST, getLanguageLocaleList());
         }
 
-        if (pickerInitialUri != null) {
+        if (pickerInitialUri != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri);
         }
 
-        saveFileLauncher.launch(Intent.createChooser(intent, getResources().getString(R.string.save_as_file)));
+        try {
+            saveFileLauncher.launch(Intent.createChooser(intent, getResources().getString(R.string.save_as_file)));
+        } catch (ActivityNotFoundException ex) {
+            fallBackSaveAs();
+        }
+    }
+
+    private void fallBackSaveAs() {
+        boolean permissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+        if (permissionGranted) {
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.setStyle(DialogFragment.STYLE_NO_TITLE, R.style.AppTheme);
+            dialog.show(getSupportFragmentManager(), SaveFileDialog.class.getName());
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
+        }
     }
 
     public void openFile(Uri fileUri) {
@@ -758,8 +823,14 @@ public class MainActivity extends AppCompatActivity {
         outState.putInt(CURSOR_SECTION_TAG, ((BasicCodeAreaSection) caretPosition.getSection().orElse(BasicCodeAreaSection.CODE_MATRIX)).ordinal());
     }
 
-    private void showPermissionError() {
-        Toast.makeText(this, "Storage permission is not granted", Toast.LENGTH_LONG).show();
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        boolean permissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+        if (!permissionGranted) {
+            Toast.makeText(this, "Storage permission is not granted", Toast.LENGTH_LONG).show();
+        }
     }
 
     public void updateStatus() {
@@ -897,6 +968,25 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Legacy support for file dialog using external library.
+     *
+     * @param dialog file dialog
+     * @param file   selected file
+     */
+    @Override
+    public void onFileSelected(FileDialog dialog, File file) {
+        if (dialog instanceof OpenFileDialog) {
+            openFile(Uri.fromFile(file));
+        } else {
+            saveFile(Uri.fromFile(file));
+            if (postSaveAsAction != null) {
+                postSaveAsAction.run();
+                postSaveAsAction = null;
+            }
+        }
+    }
+
     private void settingsResultCallback(ActivityResult activityResult) {
         applySettings();
         updateViewActionsState();
@@ -1005,4 +1095,8 @@ public class MainActivity extends AppCompatActivity {
     public void buttonActionTab(View view) {
         codeArea.getCommandHandler().keyPressed(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_TAB));
     }
-}
+
+    public static boolean isGoogleTV(Context context) {
+        final PackageManager pm = context.getPackageManager();
+        return pm.hasSystemFeature(PackageManager.FEATURE_LEANBACK);
+    }}

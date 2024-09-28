@@ -32,6 +32,12 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class AboutDialog extends AppCompatDialogFragment {
 
+    private String appVersion;
+
+    public void setAppVersion(String appVersion) {
+        this.appVersion = appVersion;
+    }
+
     @Nonnull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -44,7 +50,8 @@ public class AboutDialog extends AppCompatDialogFragment {
         // Pass null as the parent view because its going in the
         // dialog layout
         View aboutView = inflater.inflate(R.layout.about_view, null);
-        TextView textView = (TextView) aboutView.findViewById(R.id.textView);
+        TextView textView = aboutView.findViewById(R.id.textView);
+        textView.setText(String.format(getResources().getString(R.string.app_about), appVersion));
         textView.setMovementMethod(LinkMovementMethod.getInstance());
         builder.setView(aboutView);
         builder.setPositiveButton(getResources().getString(R.string.button_close), (dialog, which) -> {
