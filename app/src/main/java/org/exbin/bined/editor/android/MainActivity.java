@@ -722,12 +722,31 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
     private void fallBackOpenFile() {
         boolean permissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
-        if (permissionGranted) {
-            OpenFileDialog dialog = new OpenFileDialog();
-            dialog.setStyle(DialogFragment.STYLE_NO_TITLE, R.style.AppTheme);
-            dialog.show(getSupportFragmentManager(), OpenFileDialog.class.getName());
+        if (!permissionGranted) {
+            requestWriteExternalStoragePermission();
+            return;
+        }
+
+        OpenFileDialog dialog = new OpenFileDialog();
+        dialog.setStyle(DialogFragment.STYLE_NO_TITLE, R.style.AppTheme);
+        dialog.show(getSupportFragmentManager(), OpenFileDialog.class.getName());
+    }
+
+    private void requestWriteExternalStoragePermission() {
+        final String[] permissions = new String[]{
+                Manifest.permission.READ_EXTERNAL_STORAGE
+                , Manifest.permission.WRITE_EXTERNAL_STORAGE
+        };
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(R.string.storage_permission_request);
+            builder.setPositiveButton(R.string.button_request, (dialog, which) -> {
+                ActivityCompat.requestPermissions(MainActivity.this, permissions, STORAGE_PERMISSION_CODE);
+            });
+            builder.setNegativeButton(R.string.button_cancel, null);
+            builder.show();
         } else {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
+            ActivityCompat.requestPermissions(MainActivity.this, permissions, STORAGE_PERMISSION_CODE);
         }
     }
 
@@ -855,7 +874,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
         boolean permissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
         if (!permissionGranted) {
-            Toast.makeText(this, "Storage permission is not granted", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.storage_permission_is_not_granted, Toast.LENGTH_LONG).show();
         }
     }
 

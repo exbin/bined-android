@@ -58,6 +58,8 @@
     <string name="select_file">Vyberte soubor</string>
     <string name="save_as_file">Uložit jako soubor</string>
     <string name="file_modified">Soubor by upraven</string>
+    <string name="storage_permission_is_not_granted">Není uděleno oprávnění k úložišti</string>
+    <string name="storage_permission_request">Je třeba povolit oprávnění úložiště</string>
 
     <string name="button_close">Zavřít</string>
     <string name="button_cancel">Zrušit</string>
@@ -65,6 +67,7 @@
     <string name="button_go_to">Přejít na</string>
     <string name="button_save">Uložit</string>
     <string name="button_discard">Zahodit</string>
+    <string name="button_request">Vyžádat</string>
 
     <string name="pref_header_appearance">Vzhled</string>
     <string name="pref_view_header">Zobrazit</string>
