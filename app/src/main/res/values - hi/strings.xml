@@ -1,0 +1,78 @@
+<resources>
+    <string name="app_name">BinEd</string>
+    <string name="app_about">नाम: BinEd - बाइनरी/हेक्स संपादक\nवर्ज़न: %1$s\nविक्रेता: <a href="https://exbin.org">ExBin प्रोजेक्ट</a>\nलाइसेंस: <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache लाइसेंस, संस्करण 2.0</a>\nमुखपृष्ठ: <a href="https://bined.exbin.org/android">https://bined.exbin.org/android</a></string>
+    <string name="bined_logo_description">BinEd लोगो</string>
+
+    <!-- Actions & menu -->
+
+    <string name="title_activity_settings">सेटिंग्स</string>
+
+    <string name="action_new">नया</string>
+    <string name="action_open">खोलें</string>
+    <string name="action_save">सहेजें</string>
+    <string name="action_save_as">के रूप में सहेजें</string>
+
+    <string name="action_settings">सेटिंग्स</string>
+    <string name="action_about">के बारे में</string>
+
+    <string name="action_search">खोजें</string>
+    <string name="action_undo">पूर्ववत करें</string>
+    <string name="action_redo">फिर से करें</string>
+    <string name="action_selection_start">चयन प्रारंभ</string>
+    <string name="action_selection_end">चयन अंत</string>
+    <string name="action_clear_selection">चयन साफ़ करें</string>
+    <string name="action_cut">काटें</string>
+    <string name="action_copy">कॉपी करें</string>
+    <string name="action_copy_as_code">कोड के रूप में कॉपी करें</string>
+    <string name="action_paste">पेस्ट करें</string>
+    <string name="action_paste_from_code">कोड से पेस्ट करें</string>
+    <string name="action_delete">हटाएँ</string>
+    <string name="action_select_all">सभी का चयन करें</string>
+
+    <string name="action_exit">बाहर निकलें</string>
+
+    <string name="view_menu">देखे</string>
+    <string name="visual_theme">दृश्य थीम</string>
+    <string name="language">भाषा</string>
+    <string name="view_mode">दृश्य मोड</string>
+    <string name="code_type">कोड प्रकार</string>
+    <string name="hex_characters_case">हेक्स वर्ण केस</string>
+    <string name="encoding">कोडिंग</string>
+    <string name="code_colorization">कोड रंगीकरण</string>
+    <string name="non_printing_characters">गैर-मुद्रण वर्ण</string>
+    <string name="go_to_position">स्थान पर जाएँ</string>
+    <string name="edit_selection">चयन संपादित करें</string>
+    <string name="insert_data">डेटा डालें</string>
+    <string name="convert_data">डेटा परिवर्तित करें</string>
+    <string name="edit_menu">संपादित करें</string>
+    <string name="font">फॉन्ट</string>
+    <string name="bytes_per_row">प्रति पंक्ति बाइट्स</string>
+    <string name="bytes_per_row_fill">स्क्रीन भरें</string>
+    <string name="bytes_per_row_4">4 बाइट</string>
+    <string name="bytes_per_row_8">8 बाइट</string>
+    <string name="bytes_per_row_12">12 बाइट</string>
+    <string name="bytes_per_row_16">16 बाइट</string>
+    <string name="bytes_per_row_custom">पसंद के अनुसार</string>
+    <string name="tools_menu">उपकरण</string>
+
+    <string name="application_about">ऐप के बारे में</string>
+    <string name="select_file">एक फ़ाइल चुनें</string>
+    <string name="save_as_file">फ़ाइल के रूप में सहेजें</string>
+    <string name="file_modified">फ़ाइल को संशोधित किया गया</string>
+    <string name="storage_permission_is_not_granted">स्टोरेज अनुमति नहीं दी गई</string>
+    <string name="storage_permission_request">स्टोरेज अनुमतियाँ सक्षम करने की आवश्यकता है</string>
+
+    <string name="button_close">बंद करें</string>
+    <string name="button_cancel">रद्द करें</string>
+    <string name="button_set">सेट करें</string>
+    <string name="button_go_to">जाएँ</string>
+    <string name="button_save">सहेजें</string>
+    <string name="button_discard">खारिज करें</string>
+    <string name="button_request">अनुरोध करें</string>
+
+    <!-- Preference Titles -->
+
+    <string name="pref_header_appearance">दृश्यता</string>
+    <string name="pref_view_header">दृश्य</string>
+
+</resources>
