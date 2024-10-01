@@ -1,10 +1,4 @@
 <resources>
-    <string-array name="language_entries">
-        <item>डिफ़ॉल्ट (सिस्टम)</item>
-        <item>अंग्रेज़ी</item>
-        <item>चेक</item>
-    </string-array>
-
     <string-array name="bytes_per_row_entries">
         <item>स्क्रीन भरें</item>
         <item>4 बाइट</item>

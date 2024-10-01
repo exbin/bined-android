@@ -15,12 +15,14 @@
         <item>Default (system)</item>
         <item>English</item>
         <item>Česky</item>
+        <item>हिंदी</item>
     </string-array>
 
     <string-array name="language_values">
         <item>default</item>
         <item>en</item>
         <item>cs</item>
+        <item>hi</item>
     </string-array>
 
     <string-array name="bytes_per_row_entries">
