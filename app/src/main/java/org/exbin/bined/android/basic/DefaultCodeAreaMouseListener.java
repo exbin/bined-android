@@ -34,13 +34,13 @@ public class DefaultCodeAreaMouseListener implements View.OnTouchListener, View.
 
     public static final int MOUSE_SCROLL_LINES = 3;
 
-    private final CodeAreaCore codeArea;
-    private final DefaultCodeAreaScrollPane view;
+    protected final CodeAreaCore codeArea;
+    protected final DefaultCodeAreaScrollPane view;
 
-    private final int defaultCursor = 0;
-    private final int textCursor = 1;
-    private int currentCursor;
-    private boolean menuShown = false;
+    protected final int defaultCursor = 0;
+    protected final int textCursor = 1;
+    protected int currentCursor;
+    protected boolean menuShown = false;
 
     public DefaultCodeAreaMouseListener(CodeAreaCore codeArea, DefaultCodeAreaScrollPane view) {
         this.codeArea = codeArea;

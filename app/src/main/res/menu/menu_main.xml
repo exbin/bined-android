@@ -88,11 +88,11 @@
                 android:checked="true"
                 android:title="@string/code_colorization" />
             <item
-                android:id="@+id/non_printing_characters"
+                android:id="@+id/non_printable_characters"
                 android:checkable="true"
-                android:checked="false"
-                android:enabled="false"
-                android:title="@string/non_printing_characters" />
+                android:checked="true"
+                android:enabled="true"
+                android:title="@string/nonprintable_characters" />
         </menu>
     </item>
     <item

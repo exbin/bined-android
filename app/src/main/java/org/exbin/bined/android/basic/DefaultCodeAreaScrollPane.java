@@ -30,8 +30,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class DefaultCodeAreaScrollPane extends TwoDimensionScrollView {
 
-    private volatile boolean scrollingByUser = false;
-    private volatile boolean scrollingUpdate = false;
+    protected volatile boolean scrollingByUser = false;
+    protected volatile boolean scrollingUpdate = false;
 
     public DefaultCodeAreaScrollPane(Context context) {
         super(context);

@@ -19,7 +19,6 @@ import java.util.Optional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import org.exbin.bined.color.CodeAreaBasicColors;
 import org.exbin.bined.color.CodeAreaColorGroup;
 import org.exbin.bined.color.CodeAreaColorType;
 
@@ -31,10 +30,10 @@ import org.exbin.bined.color.CodeAreaColorType;
 @ParametersAreNonnullByDefault
 public enum CodeAreaMatchColorType implements CodeAreaColorType {
 
-    MATCH_COLOR(CodeAreaBasicColors.TEXT_COLOR.getId(), MatchCodeAreaColorsGroup.MATCHING),
-    MATCH_BACKGROUND(CodeAreaBasicColors.TEXT_BACKGROUND.getId(), MatchCodeAreaColorsGroup.MATCHING),
-    ACTIVE_MATCH_COLOR(CodeAreaBasicColors.TEXT_COLOR.getId(), MatchCodeAreaColorsGroup.MATCHING),
-    ACTIVE_MATCH_BACKGROUND(CodeAreaBasicColors.TEXT_BACKGROUND.getId(), MatchCodeAreaColorsGroup.MATCHING);
+    MATCH_COLOR("matchColor", MatchCodeAreaColorsGroup.MATCHING),
+    MATCH_BACKGROUND("matchBackground", MatchCodeAreaColorsGroup.MATCHING),
+    CURRENT_MATCH_COLOR("currentMatchColor", MatchCodeAreaColorsGroup.MATCHING),
+    CURRENT_MATCH_BACKGROUND("currentMatchBackground", MatchCodeAreaColorsGroup.MATCHING);
 
     @Nonnull
     private final String typeId;

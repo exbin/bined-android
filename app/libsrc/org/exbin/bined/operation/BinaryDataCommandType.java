@@ -15,20 +15,10 @@
  */
 package org.exbin.bined.operation;
 
-import javax.annotation.Nonnull;
-
 /**
  * Command type interface.
  *
  * @author ExBin Project (https://exbin.org)
  */
 public interface BinaryDataCommandType {
-
-    /**
-     * Returns type name.
-     *
-     * @return type name
-     */
-    @Nonnull
-    String getName();
 }

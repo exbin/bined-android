@@ -31,9 +31,9 @@ import org.exbin.bined.operation.undo.BinaryDataUndoableOperation;
 @ParametersAreNonnullByDefault
 public class RemoveDataOperation extends CodeAreaOperation {
 
-    private final long position;
-    private final int codeOffset;
-    private final long length;
+    protected final long position;
+    protected final int codeOffset;
+    protected final long length;
 
     public RemoveDataOperation(CodeAreaCore codeArea, long position, int codeOffset, long length) {
         super(codeArea);

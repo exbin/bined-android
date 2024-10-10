@@ -15,14 +15,11 @@
  */
 package org.exbin.bined.operation.undo;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
 /**
  * Code area undo support handler.
  *
  * @author ExBin Project (https://exbin.org)
  */
-@ParametersAreNonnullByDefault
 public interface BinaryDataUndoRedoState {
 
     /**

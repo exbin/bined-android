@@ -15,8 +15,6 @@
  */
 package org.exbin.bined.operation.android.command;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import org.exbin.bined.operation.BinaryDataCommandType;
 
 /**
@@ -24,43 +22,30 @@ import org.exbin.bined.operation.BinaryDataCommandType;
  *
  * @author ExBin Project (https://exbin.org)
  */
-@ParametersAreNonnullByDefault
 public enum CodeAreaCommandType implements BinaryDataCommandType {
 
     /**
      * Insert data command.
      */
-    DATA_INSERTED("Data inserted"),
+    DATA_INSERTED,
     /**
      * Remove data command.
      */
-    DATA_REMOVED("Data removed"),
+    DATA_REMOVED,
     /**
      * Modify data command.
      */
-    DATA_MODIFIED("Data modified"),
+    DATA_MODIFIED,
     /**
      * Move data command.
      */
-    DATA_MOVED("Data moved"),
+    DATA_MOVED,
     /**
      * Compound command.
      */
-    COMPOUND("Compound"),
+    COMPOUND,
     /**
      * Edit data command.
      */
-    DATA_EDITED("Data edited");
-
-    private final String name;
-
-    CodeAreaCommandType(String name) {
-        this.name = name;
-    }
-
-    @Nonnull
-    @Override
-    public String getName() {
-        return name;
-    }
+    DATA_EDITED;
 }

@@ -30,8 +30,8 @@ import org.exbin.bined.operation.undo.BinaryDataUndoableOperation;
 @ParametersAreNonnullByDefault
 public class ModifyDataOperation extends CodeAreaOperation {
 
-    private final long position;
-    private final BinaryData data;
+    protected final long position;
+    protected final BinaryData data;
 
     public ModifyDataOperation(CodeAreaCore codeArea, long position, BinaryData data) {
         super(codeArea);

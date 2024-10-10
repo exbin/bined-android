@@ -110,8 +110,11 @@ public class TwoDimensionScrollView extends FrameLayout {
         // we rely on the fact the View.scrollBy calls scrollTo.
         if (getChildCount() > 0) {
             View child = getChildAt(0);
-            x = clamp(x, getWidth() - getPaddingRight() - getPaddingLeft(), child.getWidth());
-            y = clamp(y, getHeight() - getPaddingBottom() - getPaddingTop(), child.getHeight());
+            // TODO For some reason child size resets to zero, disabling this as workaround :-/
+            if (child.getWidth() > 0 && child.getHeight() > 0) {
+                x = clamp(x, getWidth() - getPaddingRight() - getPaddingLeft(), child.getWidth());
+                y = clamp(y, getHeight() - getPaddingBottom() - getPaddingTop(), child.getHeight());
+            }
             if (x != getScrollX() || y != getScrollY()) {
                 super.scrollTo(x, y);
             }

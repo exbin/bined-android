@@ -15,9 +15,6 @@
  */
 package org.exbin.bined.operation.android;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 import org.exbin.bined.operation.BinaryDataOperationType;
 
 /**
@@ -25,44 +22,30 @@ import org.exbin.bined.operation.BinaryDataOperationType;
  *
  * @author ExBin Project (https://exbin.org)
  */
-@ParametersAreNonnullByDefault
 public enum CodeAreaOperationType implements BinaryDataOperationType {
 
     /**
      * Insert data operation.
      */
-    INSERT_DATA("Insert data"),
+    INSERT_DATA,
     /**
      * Remove data operation.
      */
-    REMOVE_DATA("Remove data"),
+    REMOVE_DATA,
     /**
      * Modify data operation.
      */
-    MODIFY_DATA("Modify data"),
+    MODIFY_DATA,
     /**
      * Move data operation.
      */
-    MOVE_DATA("Move data"),
+    MOVE_DATA,
     /**
      * Edit data operation.
      */
-    EDIT_DATA("Edit data"),
+    EDIT_DATA,
     /**
      * Compound operation.
      */
-    COMPOUND("Compound operation");
-
-    @Nullable
-    private final String name;
-
-    CodeAreaOperationType(String name) {
-        this.name = name;
-    }
-
-    @Nonnull
-    @Override
-    public String getName() {
-        return name;
-    }
+    COMPOUND;
 }

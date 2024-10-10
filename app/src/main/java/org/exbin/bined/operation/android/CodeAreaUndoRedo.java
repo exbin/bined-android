@@ -36,14 +36,14 @@ import org.exbin.bined.operation.undo.BinaryDataUndoableCommand;
 @ParametersAreNonnullByDefault
 public class CodeAreaUndoRedo implements BinaryDataUndoRedo, BinaryDataAppendableUndoRedo {
 
-    private int undoMaximumCount;
-    private int undoMaximumSize;
-    private int usedSize;
-    private int commandPosition;
-    private int syncPosition = -1;
-    private final List<BinaryDataCommand> commands = new ArrayList<>();
-    private final CodeAreaCore codeArea;
-    private final List<BinaryDataUndoRedoChangeListener> listeners = new ArrayList<>();
+    protected int undoMaximumCount;
+    protected int undoMaximumSize;
+    protected int usedSize;
+    protected int commandPosition;
+    protected int syncPosition = -1;
+    protected final List<BinaryDataCommand> commands = new ArrayList<>();
+    protected final CodeAreaCore codeArea;
+    protected final List<BinaryDataUndoRedoChangeListener> listeners = new ArrayList<>();
 
     /**
      * Creates a new instance.
@@ -162,9 +162,9 @@ public class CodeAreaUndoRedo implements BinaryDataUndoRedo, BinaryDataAppendabl
 
     @Override
     public void clear() {
-        commands.forEach((command) -> {
+        for (BinaryDataCommand command : commands) {
             command.dispose();
-        });
+        }
         commands.clear();
         init();
         undoUpdated();

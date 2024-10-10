@@ -34,18 +34,4 @@ public abstract class CodeAreaCommand extends BinaryDataAbstractCommand {
     public CodeAreaCommand(CodeAreaCore codeArea) {
         this.codeArea = codeArea;
     }
-
-    /**
-     * Returns type of the command.
-     *
-     * @return command type
-     */
-    @Nonnull
-    public abstract CodeAreaCommandType getType();
-
-    @Nonnull
-    @Override
-    public String getName() {
-        return getType().getName();
-    }
 }

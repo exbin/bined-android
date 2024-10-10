@@ -35,15 +35,15 @@ import org.exbin.bined.operation.undo.BinaryDataUndoableOperation;
 @ParametersAreNonnullByDefault
 public class InsertCodeEditDataOperation extends CodeEditDataOperation {
 
-    private final long startPosition;
-    private final int startCodeOffset;
-    private boolean trailing = false;
-    private EditableBinaryData trailingValue = null;
-    private final CodeType codeType;
-    private byte value;
+    protected final long startPosition;
+    protected final int startCodeOffset;
+    protected boolean trailing = false;
+    protected EditableBinaryData trailingValue = null;
+    protected final CodeType codeType;
+    protected byte value;
 
-    private long length;
-    private int codeOffset = 0;
+    protected long length;
+    protected int codeOffset = 0;
 
     public InsertCodeEditDataOperation(CodeAreaCore codeArea, long startPosition, int startCodeOffset, byte value) {
         super(codeArea);

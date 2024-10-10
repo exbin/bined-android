@@ -35,7 +35,7 @@ import org.exbin.bined.android.CodeAreaCore;
 @ParametersAreNonnullByDefault
 public class CodeAreaCompoundOperation extends CodeAreaOperation implements BinaryDataCompoundOperation {
 
-    private final List<BinaryDataOperation> operations = new ArrayList<>();
+    protected final List<BinaryDataOperation> operations = new ArrayList<>();
 
     public CodeAreaCompoundOperation(CodeAreaCore codeArea) {
         super(codeArea);
@@ -92,5 +92,4 @@ public class CodeAreaCompoundOperation extends CodeAreaOperation implements Bina
     public boolean isEmpty() {
         return operations.isEmpty();
     }
-
 }

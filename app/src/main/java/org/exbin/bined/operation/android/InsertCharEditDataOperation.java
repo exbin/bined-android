@@ -36,8 +36,8 @@ import org.exbin.bined.operation.undo.BinaryDataUndoableOperation;
 @ParametersAreNonnullByDefault
 public class InsertCharEditDataOperation extends CharEditDataOperation {
 
-    private final long startPosition;
-    private final char value;
+    protected final long startPosition;
+    protected final char value;
 
     public InsertCharEditDataOperation(CodeAreaCore coreArea, long startPosition, char value) {
         super(coreArea);

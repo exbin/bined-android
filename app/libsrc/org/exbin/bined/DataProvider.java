@@ -15,7 +15,7 @@
  */
 package org.exbin.bined;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 import org.exbin.auxiliary.binary_data.BinaryData;
 
 /**
@@ -30,7 +30,7 @@ public interface DataProvider {
      *
      * @return binary data
      */
-    @Nullable
+    @Nonnull
     BinaryData getContentData();
 
     /**

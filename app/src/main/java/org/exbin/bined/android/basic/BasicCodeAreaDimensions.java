@@ -30,38 +30,31 @@ import org.exbin.bined.basic.BasicCodeAreaZone;
 @ParametersAreNonnullByDefault
 public class BasicCodeAreaDimensions {
 
-    private int scrollPanelX;
-    private int scrollPanelY;
-    private int scrollPanelWidth;
-    private int scrollPanelHeight;
-    private int verticalScrollBarSize;
-    private int horizontalScrollBarSize;
-    private int dataViewWidth;
-    private int dataViewHeight;
-    private int lastCharOffset;
-    private int lastRowOffset;
+    protected int scrollPanelX;
+    protected int scrollPanelY;
+    protected int scrollPanelWidth;
+    protected int scrollPanelHeight;
+    protected int verticalScrollBarSize;
+    protected int horizontalScrollBarSize;
+    protected int dataViewWidth;
+    protected int dataViewHeight;
+    protected int lastCharOffset;
+    protected int lastRowOffset;
 
-    private int headerAreaHeight;
-    private int rowPositionAreaWidth;
-    private int rowsPerRect;
-    private int rowsPerPage;
-    private int charactersPerPage;
-    private int charactersPerRect;
+    protected int headerAreaHeight;
+    protected int rowPositionAreaWidth;
+    protected int rowsPerRect;
+    protected int rowsPerPage;
+    protected int charactersPerPage;
+    protected int charactersPerRect;
 
-    @Nonnull
-    private final Rect componentRectangle = new Rect();
-    @Nonnull
-    private final Rect mainAreaRectangle = new Rect();
-    @Nonnull
-    private final Rect headerAreaRectangle = new Rect();
-    @Nonnull
-    private final Rect rowPositionAreaRectangle = new Rect();
-    @Nonnull
-    private final Rect scrollPanelRectangle = new Rect();
-    @Nonnull
-    private final Rect dataViewRectangle = new Rect();
-    @Nonnull
-    private final Rect dataViewInnerRectangle = new Rect();
+    protected final Rect componentRectangle = new Rect();
+    protected final Rect mainAreaRectangle = new Rect();
+    protected final Rect headerAreaRectangle = new Rect();
+    protected final Rect rowPositionAreaRectangle = new Rect();
+    protected final Rect scrollPanelRectangle = new Rect();
+    protected final Rect dataViewRectangle = new Rect();
+    protected final Rect dataViewInnerRectangle = new Rect();
 
     public void recomputeSizes(BasicCodeAreaMetrics metrics, int componentX, int componentY, int componentWidth, int componentHeight, int rowPositionLength, int verticalScrollBarSize, int horizontalScrollBarSize) {
         modifyRect(componentRectangle, componentX, componentY, componentWidth, componentHeight);

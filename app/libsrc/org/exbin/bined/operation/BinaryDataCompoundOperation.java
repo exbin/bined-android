@@ -21,7 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
- * Interface for compound XBUP editor operation.
+ * Interface for compound operation.
  *
  * @author ExBin Project (https://exbin.org)
  */

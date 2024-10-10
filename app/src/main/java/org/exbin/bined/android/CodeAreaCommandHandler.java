@@ -31,7 +31,7 @@ public interface CodeAreaCommandHandler {
     /**
      * Notifies command handler about end of sequence of append-able commands.
      */
-    void undoSequenceBreak();
+    void sequenceBreak();
 
     /**
      * Keyboard key was pressed.
@@ -94,16 +94,6 @@ public interface CodeAreaCommandHandler {
     void paste();
 
     /**
-     * Expands selection to all data.
-     */
-    void selectAll();
-
-    /**
-     * Clears data selection.
-     */
-    void clearSelection();
-
-    /**
      * Pastes content of clipboard to cursor area analyzing string code.
      */
     void pasteFromCode();
@@ -114,6 +104,16 @@ public interface CodeAreaCommandHandler {
      * @return true if paste is possible
      */
     boolean canPaste();
+
+    /**
+     * Expands selection to all data.
+     */
+    void selectAll();
+
+    /**
+     * Clears data selection.
+     */
+    void clearSelection();
 
     /**
      * Moves caret with mouse event.

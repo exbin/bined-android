@@ -25,12 +25,12 @@ import javax.annotation.Nonnull;
 public interface BinaryDataCommand {
 
     /**
-     * Returns command name.
+     * Returns type of the command.
      *
-     * @return name
+     * @return command type
      */
     @Nonnull
-    String getName();
+    BinaryDataCommandType getType();
 
     /**
      * Performs operation on given document.

@@ -67,13 +67,19 @@ import org.exbin.bined.EditMode;
 import org.exbin.bined.EditOperation;
 import org.exbin.bined.RowWrappingMode;
 import org.exbin.bined.SelectionRange;
+import org.exbin.bined.android.CodeAreaAndroidUtils;
+import org.exbin.bined.android.CodeAreaPainter;
 import org.exbin.bined.android.Font;
 import org.exbin.bined.android.basic.CodeArea;
+import org.exbin.bined.android.basic.DefaultCodeAreaPainter;
 import org.exbin.bined.android.basic.color.BasicCodeAreaColorsProfile;
+import org.exbin.bined.android.capability.CharAssessorPainterCapable;
+import org.exbin.bined.android.capability.ColorAssessorPainterCapable;
 import org.exbin.bined.basic.BasicCodeAreaSection;
 import org.exbin.bined.basic.CodeAreaScrollPosition;
 import org.exbin.bined.basic.CodeAreaViewMode;
 import org.exbin.bined.capability.EditModeCapable;
+import org.exbin.bined.editor.android.options.Theme;
 import org.exbin.bined.editor.android.preference.BinaryEditorPreferences;
 import org.exbin.bined.editor.android.preference.EncodingPreference;
 import org.exbin.bined.editor.android.preference.FontPreference;
@@ -83,9 +89,11 @@ import org.exbin.bined.editor.android.search.BinarySearchService;
 import org.exbin.bined.editor.android.search.BinarySearchServiceImpl;
 import org.exbin.bined.editor.android.search.SearchCondition;
 import org.exbin.bined.editor.android.search.SearchParameters;
-import org.exbin.bined.highlight.android.HighlightNonAsciiCodeAreaPainter;
+import org.exbin.bined.highlight.android.NonAsciiCodeAreaColorAssessor;
+import org.exbin.bined.highlight.android.NonprintablesCodeAreaAssessor;
 import org.exbin.bined.operation.android.CodeAreaOperationCommandHandler;
 import org.exbin.bined.operation.android.CodeAreaUndoRedo;
+import org.exbin.framework.bined.BinEdCodeAreaAssessor;
 import org.exbin.framework.bined.BinaryStatusApi;
 
 import java.io.File;
@@ -127,6 +135,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     private static final String SCROLL_CHAR_OFFSET_TAG = "bined.scrollOffsetPosition";
     private static final String SELECTION_START_TAG = "bined.selectionStart";
     private static final String SELECTION_END_TAG = "bined.selectionEnd";
+    private static final String EDIT_OPERATION_TAG = "bined.editOperation";
 
     private CodeArea codeArea;
     private CodeAreaUndoRedo undoRedo;
@@ -166,9 +175,9 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
         MainPreferences mainPreferences = appPreferences.getMainPreferences();
         String theme = mainPreferences.getTheme();
-        if ("dark".equals(theme)) {
+        if (Theme.DARK.name().equalsIgnoreCase(theme)) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        } else if ("light".equals(theme)) {
+        } else if (Theme.LIGHT.name().equalsIgnoreCase(theme)) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
 
@@ -190,9 +199,12 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
         CodeAreaOperationCommandHandler commandHandler = new CodeAreaOperationCommandHandler(codeArea.getContext(), codeArea, undoRedo);
         codeArea.setCommandHandler(commandHandler);
-        HighlightNonAsciiCodeAreaPainter painter = new HighlightNonAsciiCodeAreaPainter(codeArea);
+        CodeAreaPainter painter = codeArea.getPainter();
+        BinEdCodeAreaAssessor codeAreaAssessor = new BinEdCodeAreaAssessor(((ColorAssessorPainterCapable) painter).getColorAssessor(), ((CharAssessorPainterCapable) painter).getCharAssessor());
+        ((ColorAssessorPainterCapable) painter).setColorAssessor(codeAreaAssessor);
+        ((CharAssessorPainterCapable) painter).setCharAssessor(codeAreaAssessor);
         codeArea.setPainter(painter);
-        BasicCodeAreaColorsProfile basicColors = painter.getBasicColors();
+        BasicCodeAreaColorsProfile basicColors = ((DefaultCodeAreaPainter) painter).getBasicColors();
         basicColors.setContext(this);
         basicColors.reinitialize();
         painter.resetColors();
@@ -620,10 +632,22 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             appPreferences.getCodeAreaPreferences().setMaxBytesPerRow(codeArea.getMaxBytesPerRow());
             menu.findItem(R.id.bytes_per_row_16).setChecked(true);
             return true;
+        } else if (id == R.id.non_printable_characters) {
+            boolean checked = item.isChecked();
+            item.setChecked(!checked);
+            NonprintablesCodeAreaAssessor nonprintablesCodeAreaAssessor = CodeAreaAndroidUtils.findColorAssessor((ColorAssessorPainterCapable) codeArea.getPainter(), NonprintablesCodeAreaAssessor.class);
+            if (nonprintablesCodeAreaAssessor != null) {
+                nonprintablesCodeAreaAssessor.setShowNonprintables(!checked);
+            }
+            appPreferences.getCodeAreaPreferences().setShowNonprintables(!checked);
+            return true;
         } else if (id == R.id.code_colorization) {
             boolean checked = item.isChecked();
             item.setChecked(!checked);
-            ((HighlightNonAsciiCodeAreaPainter) codeArea.getPainter()).setNonAsciiHighlightingEnabled(!checked);
+            NonAsciiCodeAreaColorAssessor nonAsciiColorAssessor = CodeAreaAndroidUtils.findColorAssessor((ColorAssessorPainterCapable) codeArea.getPainter(), NonAsciiCodeAreaColorAssessor.class);
+            if (nonAsciiColorAssessor != null) {
+                nonAsciiColorAssessor.setNonAsciiHighlightingEnabled(!checked);
+            }
             appPreferences.getCodeAreaPreferences().setCodeColorization(!checked);
             return true;
         } else if (id == R.id.action_undo) {
@@ -846,11 +870,17 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         long selectionStart = savedInstanceState.getLong(SELECTION_START_TAG);
         long selectionEnd = savedInstanceState.getLong(SELECTION_END_TAG);
         codeArea.setSelection(new SelectionRange(selectionStart, selectionEnd));
+
+        boolean editOperation = savedInstanceState.getBoolean(EDIT_OPERATION_TAG);
+        codeArea.setEditOperation(editOperation ? EditOperation.OVERWRITE : EditOperation.INSERT);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+
+        EditOperation editOperation = codeArea.getEditOperation();
+        outState.putBoolean(EDIT_OPERATION_TAG, editOperation == EditOperation.OVERWRITE);
 
         SelectionRange selection = codeArea.getSelection();
         outState.putLong(SELECTION_START_TAG, selection.getStart());
@@ -956,6 +986,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
     private void updateViewActionsState() {
         menu.findItem(R.id.code_colorization).setChecked(appPreferences.getCodeAreaPreferences().isCodeColorization());
+        menu.findItem(R.id.non_printable_characters).setChecked(appPreferences.getCodeAreaPreferences().isShowNonprintables());
         int bytesPerRow = appPreferences.getCodeAreaPreferences().getMaxBytesPerRow();
         switch (bytesPerRow) {
             case 0: {

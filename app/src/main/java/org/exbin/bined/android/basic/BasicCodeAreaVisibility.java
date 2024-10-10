@@ -30,22 +30,22 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class BasicCodeAreaVisibility {
 
-    private int splitLinePos;
+    protected int splitLinePos;
 
-    private int skipToCode;
-    private int skipToChar;
-    private int skipToPreview;
-    private int skipRestFromCode;
-    private int skipRestFromChar;
-    private int skipRestFromPreview;
+    protected int skipToCode;
+    protected int skipToChar;
+    protected int skipToPreview;
+    protected int skipRestFromCode;
+    protected int skipRestFromChar;
+    protected int skipRestFromPreview;
 
-    private boolean codeSectionVisible;
-    private boolean previewSectionVisible;
+    protected boolean codeSectionVisible;
+    protected boolean previewSectionVisible;
 
-    private int charactersPerCodeSection;
-    private int codeLastCharPos;
-    private int previewCharPos;
-    private int previewRelativeX;
+    protected int charactersPerCodeSection;
+    protected int codeLastCharPos;
+    protected int previewCharPos;
+    protected int previewRelativeX;
 
     public void recomputeCharPositions(BasicCodeAreaMetrics metrics, BasicCodeAreaStructure structure, BasicCodeAreaDimensions dimensions, BasicCodeAreaLayout layout, BasicCodeAreaScrolling scrolling) {
         int bytesPerRow = structure.getBytesPerRow();

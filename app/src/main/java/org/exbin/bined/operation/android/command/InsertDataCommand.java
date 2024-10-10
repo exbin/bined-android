@@ -30,8 +30,8 @@ import org.exbin.bined.android.CodeAreaCore;
 @ParametersAreNonnullByDefault
 public class InsertDataCommand extends OpCodeAreaCommand {
 
-    private final long position;
-    private final long dataLength;
+    protected final long position;
+    protected final long dataLength;
 
     public InsertDataCommand(CodeAreaCore codeArea, long position, int codeOffset, BinaryData data) {
         super(codeArea);

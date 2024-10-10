@@ -15,14 +15,11 @@
  */
 package org.exbin.bined;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
 /**
  * Interface for selection change listener.
  *
  * @author ExBin Project (https://exbin.org)
  */
-@ParametersAreNonnullByDefault
 public interface SelectionChangedListener {
 
     /**

@@ -62,6 +62,7 @@ public class SettingsActivity extends AppCompatActivity implements
     public static final String CODE_TYPE_KEY = "code_type";
     public static final String HEX_CHARACTERS_CASE = "hex_characters_case";
     public static final String CODE_COLORIZATION = "code_colorization";
+    public static final String NONPRINTABLE_CHARACTERS = "nonprintable_characters";
 
     private BinaryEditorPreferences appPreferences;
 
@@ -224,6 +225,7 @@ public class SettingsActivity extends AppCompatActivity implements
             ((ListPreference) findPreference(CODE_TYPE_KEY)).setValue(codeAreaPreferences.getCodeType().name());
             ((ListPreference) findPreference(HEX_CHARACTERS_CASE)).setValue(codeAreaPreferences.getCodeCharactersCase().name());
             ((TwoStatePreference) findPreference(CODE_COLORIZATION)).setChecked(codeAreaPreferences.isCodeColorization());
+            ((TwoStatePreference) findPreference(NONPRINTABLE_CHARACTERS)).setChecked(codeAreaPreferences.isShowNonprintables());
         }
 
         @Override
@@ -240,6 +242,7 @@ public class SettingsActivity extends AppCompatActivity implements
             codeAreaPreferences.setCodeType(CodeType.valueOf(((ListPreference) findPreference(CODE_TYPE_KEY)).getValue()));
             codeAreaPreferences.setCodeCharactersCase(CodeCharactersCase.valueOf(((ListPreference) findPreference(HEX_CHARACTERS_CASE)).getValue()));
             codeAreaPreferences.setCodeColorization(((TwoStatePreference) findPreference(CODE_COLORIZATION)).isChecked());
+            codeAreaPreferences.setShowNonprintables(((TwoStatePreference) findPreference(NONPRINTABLE_CHARACTERS)).isChecked());
 
             super.onDestroy();
         }

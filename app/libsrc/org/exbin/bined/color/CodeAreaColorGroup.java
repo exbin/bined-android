@@ -26,7 +26,7 @@ public interface CodeAreaColorGroup {
 
     /**
      * Returns unique string identifier.
-     *
+     * <p>
      * Custom implementations should start with full package name to avoid
      * collisions.
      *

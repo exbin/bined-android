@@ -34,10 +34,10 @@ import org.exbin.bined.operation.undo.BinaryDataUndoableOperation;
 @ParametersAreNonnullByDefault
 public class OverwriteCodeEditDataOperation extends CodeEditDataOperation {
 
-    private final long startPosition;
-    private final int codeOffset;
-    private final CodeType codeType;
-    private byte value;
+    protected final long startPosition;
+    protected final int codeOffset;
+    protected final CodeType codeType;
+    protected byte value;
 
     public OverwriteCodeEditDataOperation(CodeAreaCore codeArea, long startPosition, int codeOffset, CodeType codeType, byte value) {
         super(codeArea);

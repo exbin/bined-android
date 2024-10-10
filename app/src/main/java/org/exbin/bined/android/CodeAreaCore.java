@@ -50,18 +50,18 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl {
 
     @Nonnull
-    private BinaryData contentData = EmptyBinaryData.INSTANCE;
+    protected BinaryData contentData = EmptyBinaryData.INSTANCE;
 
     @Nonnull
     protected final PrimaryView primaryView;
 
     @Nonnull
-    private CodeAreaCommandHandler commandHandler;
+    protected CodeAreaCommandHandler commandHandler;
 
-    private final List<DataChangedListener> dataChangedListeners = new ArrayList<>();
+    protected final List<DataChangedListener> dataChangedListeners = new ArrayList<>();
 
-    private float touchPositionX;
-    private float touchPositionY;
+    protected float touchPositionX;
+    protected float touchPositionY;
 
     /**
      * Creates new instance with default command handler and painter.

@@ -34,12 +34,12 @@ import org.exbin.bined.operation.undo.BinaryDataUndoableOperation;
 @ParametersAreNonnullByDefault
 public class DeleteCodeEditDataOperation extends CodeEditDataOperation {
 
-    private static final char BACKSPACE_CHAR = '\b';
-    private static final char DELETE_CHAR = (char) 0x7f;
-    private final CodeType codeType;
+    protected static final char BACKSPACE_CHAR = '\b';
+    protected static final char DELETE_CHAR = (char) 0x7f;
+    protected final CodeType codeType;
 
-    private long position;
-    private byte value;
+    protected long position;
+    protected byte value;
 
     public DeleteCodeEditDataOperation(CodeAreaCore codeArea, long startPosition, CodeType codeType, byte value) {
         super(codeArea);

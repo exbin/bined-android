@@ -37,14 +37,14 @@ import org.exbin.bined.android.CodeAreaCore;
 public class EditCharDataCommand extends EditDataCommand implements BinaryDataAppendableCommand {
 
     @Nonnull
-    private final EditCommandType commandType;
+    protected final EditOperationType editOperationType;
     protected BinaryDataCommandPhase phase = BinaryDataCommandPhase.CREATED;
-    private BinaryDataUndoableOperation activeOperation;
+    protected BinaryDataUndoableOperation activeOperation;
 
-    public EditCharDataCommand(CodeAreaCore codeArea, EditCommandType commandType, long position, char charData) {
+    public EditCharDataCommand(CodeAreaCore codeArea, EditOperationType editOperationType, long position, char charData) {
         super(codeArea);
-        this.commandType = commandType;
-        switch (commandType) {
+        this.editOperationType = editOperationType;
+        switch (editOperationType) {
             case INSERT: {
                 activeOperation = new InsertCharEditDataOperation(codeArea, position, charData);
                 break;
@@ -58,7 +58,7 @@ public class EditCharDataCommand extends EditDataCommand implements BinaryDataAp
                 break;
             }
             default:
-                throw CodeAreaUtils.getInvalidTypeException(commandType);
+                throw CodeAreaUtils.getInvalidTypeException(editOperationType);
         }
     }
 
@@ -116,8 +116,8 @@ public class EditCharDataCommand extends EditDataCommand implements BinaryDataAp
 
     @Nonnull
     @Override
-    public EditCommandType getCommandType() {
-        return commandType;
+    public EditOperationType getEditOperationType() {
+        return editOperationType;
     }
 
     @Override

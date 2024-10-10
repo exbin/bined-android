@@ -38,9 +38,9 @@ public abstract class EditDataCommand extends CodeAreaCommand {
     }
 
     @Nonnull
-    public abstract EditCommandType getCommandType();
+    public abstract EditOperationType getEditOperationType();
 
-    public enum EditCommandType {
+    public enum EditOperationType {
         INSERT, OVERWRITE, DELETE
     }
 }

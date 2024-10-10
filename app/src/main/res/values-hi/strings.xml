@@ -39,7 +39,7 @@
     <string name="hex_characters_case">हेक्स वर्ण केस</string>
     <string name="encoding">कोडिंग</string>
     <string name="code_colorization">कोड रंगीकरण</string>
-    <string name="non_printing_characters">गैर-मुद्रण वर्ण</string>
+    <string name="nonprintable_characters">गैर-मुद्रण वर्ण</string>
     <string name="go_to_position">स्थान पर जाएँ</string>
     <string name="edit_selection">चयन संपादित करें</string>
     <string name="insert_data">डेटा डालें</string>

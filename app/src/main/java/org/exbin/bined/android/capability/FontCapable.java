@@ -28,8 +28,18 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public interface FontCapable {
 
+    /**
+     * Returns font used for text painting.
+     *
+     * @return font
+     */
     @Nonnull
     Font getCodeFont();
 
-    void setCodeFont(Font font);
+    /**
+     * Sets font used for text painting.
+     *
+     * @param codeFont font
+     */
+    void setCodeFont(Font codeFont);
 }

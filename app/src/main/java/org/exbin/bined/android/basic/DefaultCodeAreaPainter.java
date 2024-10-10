@@ -42,11 +42,17 @@ import org.exbin.bined.DefaultCodeAreaCaretPosition;
 import org.exbin.bined.EditOperation;
 import org.exbin.bined.PositionCodeType;
 import org.exbin.bined.android.CodeAreaAndroidUtils;
+import org.exbin.bined.android.CodeAreaCharAssessor;
+import org.exbin.bined.android.CodeAreaColorAssessor;
 import org.exbin.bined.android.CodeAreaCore;
+import org.exbin.bined.android.CodeAreaPaintState;
 import org.exbin.bined.android.CodeAreaPainter;
 import org.exbin.bined.android.Font;
 import org.exbin.bined.android.basic.color.BasicCodeAreaColorsProfile;
 import org.exbin.bined.android.basic.color.BasicColorsCapableCodeAreaPainter;
+import org.exbin.bined.android.basic.color.CodeAreaColorsProfile;
+import org.exbin.bined.android.capability.CharAssessorPainterCapable;
+import org.exbin.bined.android.capability.ColorAssessorPainterCapable;
 import org.exbin.bined.android.capability.FontCapable;
 import org.exbin.bined.basic.BasicBackgroundPaintMode;
 import org.exbin.bined.basic.BasicCodeAreaLayout;
@@ -84,79 +90,76 @@ import javax.annotation.ParametersAreNonnullByDefault;
  * @author ExBin Project (https://exbin.org)
  */
 @ParametersAreNonnullByDefault
-public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapableCodeAreaPainter {
+public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapableCodeAreaPainter, CodeAreaPaintState, ColorAssessorPainterCapable, CharAssessorPainterCapable {
 
     @Nonnull
     protected final CodeAreaCore codeArea;
-    private volatile boolean initialized = false;
-    private volatile boolean adjusting = false;
+    protected volatile boolean initialized = false;
+    protected volatile boolean adjusting = false;
 
-    private volatile boolean fontChanged = false;
-    private volatile boolean layoutChanged = true;
-    private volatile boolean resetColors = true;
-    private volatile boolean caretChanged = true;
-
-    @Nullable
-    private Paint paint = null;
-    @Nonnull
-    private final View dataView;
-    @Nonnull
-    private final DefaultCodeAreaScrollPane scrollPanel;
-    @Nonnull
-    private final DefaultCodeAreaMouseListener codeAreaMouseListener;
-
-    private int dataViewOffsetX = 0;
-    private int dataViewOffsetY = 0;
-    private int scrollOffsetX = 0;
-    private int scrollOffsetY = 0;
-
-    @Nonnull
-    private final DataChangedListener codeAreaDataChangeListener;
-
-    @Nonnull
-    private final BasicCodeAreaMetrics metrics = new BasicCodeAreaMetrics();
-    @Nonnull
-    private final BasicCodeAreaStructure structure = new BasicCodeAreaStructure();
-    @Nonnull
-    private final BasicCodeAreaScrolling scrolling = new BasicCodeAreaScrolling();
-    @Nonnull
-    private final BasicCodeAreaDimensions dimensions = new BasicCodeAreaDimensions();
-    @Nonnull
-    private final BasicCodeAreaVisibility visibility = new BasicCodeAreaVisibility();
-
-    @Nonnull
-    private final BasicCodeAreaLayout layout = new BasicCodeAreaLayout();
-    @Nonnull
-    private BasicCodeAreaColorsProfile colorsProfile = new BasicCodeAreaColorsProfile();
+    protected volatile boolean fontChanged = false;
+    protected volatile boolean layoutChanged = true;
+    protected volatile boolean resetColors = true;
+    protected volatile boolean caretChanged = true;
 
     @Nullable
-    private CodeCharactersCase codeCharactersCase;
-    @Nullable
-    private EditOperation editOperation;
-    @Nullable
-    private BasicBackgroundPaintMode backgroundPaintMode;
-    private boolean showMirrorCursor;
-
-    private int rowPositionLength;
-    private int minRowPositionLength;
-    private int maxRowPositionLength;
-
-    @Nullable
-    private Font font;
+    protected Paint paint = null;
     @Nonnull
-    private Charset charset;
+    protected final View dataView;
+    @Nonnull
+    protected final DefaultCodeAreaScrollPane scrollPanel;
+    @Nonnull
+    protected final DefaultCodeAreaMouseListener codeAreaMouseListener;
+
+    protected int dataViewOffsetX = 0;
+    protected int dataViewOffsetY = 0;
+    protected int scrollOffsetX = 0;
+    protected int scrollOffsetY = 0;
+
+    @Nonnull
+    protected final DataChangedListener codeAreaDataChangeListener;
+
+    protected final BasicCodeAreaMetrics metrics = new BasicCodeAreaMetrics();
+    protected final BasicCodeAreaStructure structure = new BasicCodeAreaStructure();
+    protected final BasicCodeAreaScrolling scrolling = new BasicCodeAreaScrolling();
+    protected final BasicCodeAreaDimensions dimensions = new BasicCodeAreaDimensions();
+    protected final BasicCodeAreaVisibility visibility = new BasicCodeAreaVisibility();
+
+    protected final BasicCodeAreaLayout layout = new BasicCodeAreaLayout();
+    @Nonnull
+    protected BasicCodeAreaColorsProfile colorsProfile = new BasicCodeAreaColorsProfile();
 
     @Nullable
-    private RowDataCache rowDataCache = null;
+    protected CodeCharactersCase codeCharactersCase;
     @Nullable
-    private CursorDataCache cursorDataCache = null;
+    protected EditOperation editOperation;
+    @Nullable
+    protected BasicBackgroundPaintMode backgroundPaintMode;
+    protected boolean showMirrorCursor;
+
+    protected int rowPositionLength;
+    protected int minRowPositionLength;
+    protected int maxRowPositionLength;
 
     @Nullable
-    private Charset charMappingCharset = null;
-    private final char[] charMapping = new char[256];
+    protected Font font;
+    @Nonnull
+    protected Charset charset;
+    @Nonnull
+    protected CodeAreaColorAssessor colorAssessor = null;
+    @Nonnull
+    protected CodeAreaCharAssessor charAssessor = null;
+
+    @Nullable
+    protected RowDataCache rowDataCache = null;
+    @Nullable
+    protected CursorDataCache cursorDataCache = null;
 
     public DefaultCodeAreaPainter(final CodeAreaCore codeArea) {
         this.codeArea = codeArea;
+
+        colorAssessor = new DefaultCodeAreaColorAssessor();
+        charAssessor = new DefaultCodeAreaCharAssessor();
 
         scrollPanel = new DefaultCodeAreaScrollPane(codeArea.getContext()) {
             @Override
@@ -606,6 +609,9 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
 //        Rect clipBounds = g.getClipBounds();
 //        Rect mainArea = dimensions.getMainAreaRectangle();
 //        g.clipRect(clipBounds != null ? CodeAreaAndroidUtils.computeIntersection(mainArea, clipBounds) : mainArea);
+        colorAssessor.startPaint(this);
+        charAssessor.startPaint(this);
+
         paintBackground(g);
 
         Rect dataViewRectangle = dimensions.getDataViewRectangle();
@@ -764,28 +770,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
             int skipRestFromPreview = visibility.getSkipRestFromPreview();
             int endPreview = Math.min(skipRestFromPreview, rowBytesLimit);
             for (int byteOnRow = skipToPreview; byteOnRow < endPreview; byteOnRow++) {
-                byte dataByte = rowDataCache.rowData[byteOnRow];
-
-                if (maxBytesPerChar > 1) {
-                    if (dataPosition + maxBytesPerChar > dataSize) {
-                        maxBytesPerChar = (int) (dataSize - dataPosition);
-                    }
-
-                    int charDataLength = maxBytesPerChar;
-                    if (byteOnRow + charDataLength > rowDataCache.rowData.length) {
-                        charDataLength = rowDataCache.rowData.length - byteOnRow;
-                    }
-                    String displayString = new String(rowDataCache.rowData, byteOnRow, charDataLength, charset);
-                    if (!displayString.isEmpty()) {
-                        rowDataCache.rowCharacters[previewCharPos + byteOnRow] = displayString.charAt(0);
-                    }
-                } else {
-                    if (charMappingCharset == null || charMappingCharset != charset) {
-                        buildCharMapping(charset);
-                    }
-
-                    rowDataCache.rowCharacters[previewCharPos + byteOnRow] = charMapping[dataByte & 0xFF];
-                }
+                rowDataCache.rowCharacters[previewCharPos + byteOnRow] = charAssessor.getPreviewCharacter(dataPosition, byteOnRow, previewCharPos, BasicCodeAreaSection.TEXT_PREVIEW);
             }
             if (bytesPerRow > rowBytesLimit) {
                 Arrays.fill(rowDataCache.rowCharacters, previewCharPos + rowBytesLimit, previewCharPos + bytesPerRow, ' ');
@@ -809,6 +794,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         int skipRestFromChar = visibility.getSkipRestFromChar();
         int rowHeight = metrics.getRowHeight();
         int subFontSpace = metrics.getSubFontSpace();
+        CodeAreaSelection selectionHandler = ((SelectionCapable) codeArea).getSelectionHandler();
 
         int positionY = rowPositionY + rowHeight - subFontSpace;
 
@@ -826,7 +812,8 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
             }
             boolean sequenceBreak = false;
 
-            Integer color = getPositionBackgroundColor(rowDataPosition, byteOnRow, charOnRow, section);
+            boolean inSelection = selectionHandler.isInSelection(rowDataPosition + byteOnRow);
+            Integer color = colorAssessor.getPositionBackgroundColor(rowDataPosition, byteOnRow, charOnRow, section, inSelection);
             if (!CodeAreaAndroidUtils.areSameColors(color, renderColor)) {
                 sequenceBreak = true;
             }
@@ -853,33 +840,6 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
                 renderBackgroundSequence(g, renderOffset, charactersPerRow, rowPositionX, positionY);
             }
         }
-    }
-
-    /**
-     * Returns background color for particular code.
-     *
-     * @param rowDataPosition row data position
-     * @param byteOnRow       byte on current row
-     * @param charOnRow       character on current row
-     * @param section         current section
-     * @return color or null for default color
-     */
-    @Nullable
-    public Integer getPositionBackgroundColor(long rowDataPosition, int byteOnRow, int charOnRow, CodeAreaSection section) {
-        CodeAreaSelection selectionHandler = ((SelectionCapable) codeArea).getSelectionHandler();
-        int codeLastCharPos = visibility.getCodeLastCharPos();
-        boolean inSelection = selectionHandler.isInSelection(rowDataPosition + byteOnRow);
-        if (inSelection && (section == BasicCodeAreaSection.CODE_MATRIX)) {
-            if (charOnRow == codeLastCharPos) {
-                inSelection = false;
-            }
-        }
-
-        if (inSelection) {
-            return section == ((CaretCapable) codeArea).getActiveSection() ? colorsProfile.getSelectionBackground() : colorsProfile.getSelectionMirrorBackground();
-        }
-
-        return null;
     }
 
     @Nonnull
@@ -974,6 +934,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         int rowHeight = metrics.getRowHeight();
         int characterWidth = metrics.getCharacterWidth();
         int subFontSpace = metrics.getSubFontSpace();
+        CodeAreaSelection selectionHandler = ((SelectionCapable) codeArea).getSelectionHandler();
 
         int positionY = rowPositionY + rowHeight - subFontSpace;
 
@@ -994,7 +955,8 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
                 section = BasicCodeAreaSection.CODE_MATRIX;
             }
 
-            Integer color = getPositionTextColor(rowDataPosition, byteOnRow, charOnRow, section);
+            boolean inSelection = selectionHandler.isInSelection(rowDataPosition + byteOnRow);
+            Integer color = colorAssessor.getPositionTextColor(rowDataPosition, byteOnRow, charOnRow, section, inSelection);
             if (color == null) {
                 color = colorsProfile.getTextColor();
             }
@@ -1037,24 +999,26 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         }
     }
 
-    /**
-     * Returns background color for particular code.
-     *
-     * @param rowDataPosition row data position
-     * @param byteOnRow       byte on current row
-     * @param charOnRow       character on current row
-     * @param section         current section
-     * @return color or null for default color
-     */
-    @Nullable
-    public Integer getPositionTextColor(long rowDataPosition, int byteOnRow, int charOnRow, CodeAreaSection section) {
-        CodeAreaSelection selectionHandler = ((SelectionCapable) codeArea).getSelectionHandler();
-        boolean inSelection = selectionHandler.isInSelection(rowDataPosition + byteOnRow);
-        if (inSelection) {
-            return section == ((CaretCapable) codeArea).getActiveSection() ? colorsProfile.getSelectionColor() : colorsProfile.getSelectionMirrorColor();
-        }
+    @Nonnull
+    @Override
+    public CodeAreaColorAssessor getColorAssessor() {
+        return colorAssessor;
+    }
 
-        return null;
+    @Override
+    public void setColorAssessor(CodeAreaColorAssessor colorAssessor) {
+        this.colorAssessor = CodeAreaUtils.requireNonNull(colorAssessor);
+    }
+
+    @Nonnull
+    @Override
+    public CodeAreaCharAssessor getCharAssessor() {
+        return charAssessor;
+    }
+
+    @Override
+    public void setCharAssessor(CodeAreaCharAssessor charAssessor) {
+        this.charAssessor = charAssessor;
     }
 
     @Override
@@ -1160,7 +1124,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
 
                 g.drawRect(scrolledCursorRect, paint);
                 paint.setColor(colorsProfile.getCursorNegativeColor());
-                BinaryData codeAreaData = codeArea.getContentData();
+                BinaryData contentData = codeArea.getContentData();
                 int row = (cursorRect.top + scrollPosition.getRowOffset() - dataViewY) / rowHeight;
                 int scrolledX = cursorRect.left + scrollPosition.getCharPosition() * characterWidth + scrollPosition.getCharOffset();
                 int posY = dataViewY + (row + 1) * rowHeight - subFontSpace - scrollPosition.getRowOffset();
@@ -1171,30 +1135,23 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
                         break;
                     }
 
-                    if (maxBytesPerChar > 1) {
-                        int charDataLength = maxBytesPerChar;
-                        if (dataPosition + maxBytesPerChar > dataSize) {
-                            charDataLength = (int) (dataSize - dataPosition);
-                        }
+                    int byteOnRow = (int) (dataPosition % structure.getBytesPerRow());
+                    int previewCharPos = visibility.getPreviewCharPos();
 
-                        if (codeAreaData == null) {
-                            cursorDataCache.cursorChars[0] = ' ';
-                        } else {
-                            codeAreaData.copyToArray(dataPosition, cursorDataCache.cursorData, 0, charDataLength);
-                            String displayString = new String(cursorDataCache.cursorData, 0, charDataLength, charset);
-                            if (!displayString.isEmpty()) {
-                                cursorDataCache.cursorChars[0] = displayString.charAt(0);
-                            }
-                        }
+                    if (contentData.isEmpty()) {
+                        cursorDataCache.cursorChars[0] = charAssessor.getPreviewCursorCharacter(dataPosition, byteOnRow, previewCharPos, cursorDataCache.cursorData, 0, BasicCodeAreaSection.TEXT_PREVIEW);
                     } else {
-                        if (charMappingCharset == null || charMappingCharset != charset) {
-                            buildCharMapping(charset);
-                        }
+                        if (maxBytesPerChar > 1) {
+                            int charDataLength = maxBytesPerChar;
+                            if (dataPosition + maxBytesPerChar > dataSize) {
+                                charDataLength = (int) (dataSize - dataPosition);
+                            }
 
-                        if (codeAreaData == null) {
-                            cursorDataCache.cursorChars[0] = ' ';
+                            contentData.copyToArray(dataPosition, cursorDataCache.cursorData, 0, charDataLength);
+                            cursorDataCache.cursorChars[0] = charAssessor.getPreviewCursorCharacter(dataPosition, byteOnRow, previewCharPos, cursorDataCache.cursorData, charDataLength, BasicCodeAreaSection.TEXT_PREVIEW);
                         } else {
-                            cursorDataCache.cursorChars[0] = charMapping[codeAreaData.getByte(dataPosition) & 0xFF];
+                            cursorDataCache.cursorData[0] = contentData.getByte(dataPosition);
+                            cursorDataCache.cursorChars[0] = charAssessor.getPreviewCursorCharacter(dataPosition, byteOnRow, previewCharPos, cursorDataCache.cursorData, 1, BasicCodeAreaSection.TEXT_PREVIEW);
                         }
                     }
                     int posX = previewRelativeX + charPos * characterWidth - scrollPosition.getCharPosition() * characterWidth - scrollPosition.getCharOffset();
@@ -1208,8 +1165,8 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
                     int byteOffset = structure.computePositionByte(charPos);
                     int codeCharPos = structure.computeFirstCodeCharacterPos(byteOffset);
 
-                    if (codeAreaData != null && dataPosition < dataSize) {
-                        byte dataByte = codeAreaData.getByte(dataPosition);
+                    if (dataPosition < dataSize) {
+                        byte dataByte = contentData.getByte(dataPosition);
                         CodeAreaUtils.byteToCharsCode(dataByte, codeType, cursorDataCache.cursorChars, 0, codeCharactersCase);
                     } else {
                         Arrays.fill(cursorDataCache.cursorChars, ' ');
@@ -1458,18 +1415,6 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         g.drawText(drawnChars, charOffset, length, positionX, positionY, paint);
     }
 
-    /**
-     * Precomputes widths for basic ascii characters.
-     *
-     * @param charset character set
-     */
-    private void buildCharMapping(Charset charset) {
-        for (int i = 0; i < 256; i++) {
-            charMapping[i] = new String(new byte[]{(byte) i}, charset).charAt(0);
-        }
-        charMappingCharset = charset;
-    }
-
     private int getRowPositionLength() {
         if (minRowPositionLength > 0 && minRowPositionLength == maxRowPositionLength) {
             return minRowPositionLength;
@@ -1628,8 +1573,65 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         recomputeLayout();
     }
 
-    protected int getCharactersPerRow() {
+    @Override
+    public int getCharactersPerRow() {
         return structure.getCharactersPerRow();
+    }
+
+    @Override
+    public int getBytesPerRow() {
+        return structure.getBytesPerRow();
+    }
+
+    @Nonnull
+    @Override
+    public CodeAreaSection getActiveSection() {
+        return ((CaretCapable) codeArea).getActiveSection();
+    }
+
+    @Nonnull
+    @Override
+    public Charset getCharset() {
+        return charset;
+    }
+
+    @Override
+    public int getMaxBytesPerChar() {
+        return metrics.getMaxBytesPerChar();
+    }
+
+    @Nonnull
+    @Override
+    public CodeAreaColorsProfile getColorsProfile() {
+        return colorsProfile;
+    }
+
+    @Nonnull
+    @Override
+    public byte[] getRowData() {
+        return rowDataCache.rowData;
+    }
+
+    @Override
+    public int getCodeLastCharPos() {
+        return visibility.getCodeLastCharPos();
+    }
+
+    @Override
+    public long getDataSize() {
+        return structure.getDataSize();
+    }
+
+    @Nonnull
+    @Override
+    public BinaryData getContentData() {
+        return codeArea.getContentData();
+    }
+
+    @Nullable
+    @Override
+    public CodeAreaSelection getSelectionHandler() {
+        return ((SelectionCapable) codeArea).getSelectionHandler();
     }
 
     private int getHorizontalScrollBarSize() {

@@ -19,10 +19,13 @@ import org.exbin.bined.CodeCharactersCase;
 import org.exbin.bined.CodeType;
 import org.exbin.bined.PositionCodeType;
 import org.exbin.bined.RowWrappingMode;
+import org.exbin.bined.android.CodeAreaAndroidUtils;
 import org.exbin.bined.android.basic.CodeArea;
+import org.exbin.bined.android.capability.ColorAssessorPainterCapable;
 import org.exbin.bined.basic.CodeAreaViewMode;
 import org.exbin.bined.editor.android.options.CodeAreaOptions;
-import org.exbin.bined.highlight.android.HighlightNonAsciiCodeAreaPainter;
+import org.exbin.bined.highlight.android.NonAsciiCodeAreaColorAssessor;
+import org.exbin.bined.highlight.android.NonprintablesCodeAreaAssessor;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,7 +42,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class CodeAreaPreferences implements CodeAreaOptions {
 
     public static final String PREFERENCES_CODE_TYPE = "codeType";
-    public static final String PREFERENCES_SHOW_UNPRINTABLES = "showNonpritables";
+    public static final String PREFERENCES_SHOW_NONPRINTABLES = "showNonpritables";
     public static final String PREFERENCES_BYTES_PER_LINE = "bytesPerLine";
     public static final String PREFERENCES_LINE_NUMBERS_LENGTH_TYPE = "lineNumbersLengthType";
     public static final String PREFERENCES_LINE_NUMBERS_LENGTH = "lineNumbersLength";
@@ -77,13 +80,13 @@ public class CodeAreaPreferences implements CodeAreaOptions {
     }
 
     @Override
-    public boolean isShowUnprintables() {
-        return preferences.getBoolean(PREFERENCES_SHOW_UNPRINTABLES, false);
+    public boolean isShowNonprintables() {
+        return preferences.getBoolean(PREFERENCES_SHOW_NONPRINTABLES, true);
     }
 
     @Override
-    public void setShowUnprintables(boolean showUnprintables) {
-        preferences.putBoolean(PREFERENCES_SHOW_UNPRINTABLES, showUnprintables);
+    public void setShowNonprintables(boolean showNonprintables) {
+        preferences.putBoolean(PREFERENCES_SHOW_NONPRINTABLES, showNonprintables);
     }
 
     @Nonnull
@@ -208,6 +211,13 @@ public class CodeAreaPreferences implements CodeAreaOptions {
         codeArea.setCodeCharactersCase(getCodeCharactersCase());
         codeArea.setRowWrapping(getRowWrappingMode());
         codeArea.setMaxBytesPerRow(getMaxBytesPerRow());
-        ((HighlightNonAsciiCodeAreaPainter) codeArea.getPainter()).setNonAsciiHighlightingEnabled(isCodeColorization());
+        NonprintablesCodeAreaAssessor nonprintablesCodeAreaAssessor = CodeAreaAndroidUtils.findColorAssessor((ColorAssessorPainterCapable) codeArea.getPainter(), NonprintablesCodeAreaAssessor.class);
+        if (nonprintablesCodeAreaAssessor != null) {
+            nonprintablesCodeAreaAssessor.setShowNonprintables(isShowNonprintables());
+        }
+        NonAsciiCodeAreaColorAssessor nonAsciiColorAssessor = CodeAreaAndroidUtils.findColorAssessor((ColorAssessorPainterCapable) codeArea.getPainter(), NonAsciiCodeAreaColorAssessor.class);
+        if (nonAsciiColorAssessor != null) {
+            nonAsciiColorAssessor.setNonAsciiHighlightingEnabled(isCodeColorization());
+        }
     }
 }

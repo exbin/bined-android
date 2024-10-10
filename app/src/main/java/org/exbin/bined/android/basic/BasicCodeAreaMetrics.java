@@ -34,14 +34,14 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class BasicCodeAreaMetrics {
 
     @Nullable
-    private Paint fontMetrics;
-    private boolean monospaceFont;
+    protected Paint fontMetrics;
+    protected boolean monospaceFont;
 
-    private int rowHeight;
-    private int characterWidth;
-    private int fontHeight;
-    private int maxBytesPerChar;
-    private int subFontSpace = 0;
+    protected int rowHeight;
+    protected int characterWidth;
+    protected int fontHeight;
+    protected int maxBytesPerChar;
+    protected int subFontSpace = 0;
 
     public void recomputeMetrics(@Nullable Paint fontMetrics, Charset charset) {
         this.fontMetrics = fontMetrics;
@@ -57,7 +57,7 @@ public class BasicCodeAreaMetrics {
              */
             characterWidth = (int) fontMetrics.measureText("w");
             int fontSize = (int) fontMetrics.getTextSize();
-            subFontSpace = rowHeight - fontSize + 4;
+            subFontSpace = (rowHeight / 6);
 
             /*
              * Compare it to small 'i' to detect if font is monospaced.

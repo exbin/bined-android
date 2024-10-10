@@ -19,7 +19,6 @@ import java.util.Optional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import org.exbin.bined.color.CodeAreaBasicColors;
 import org.exbin.bined.color.CodeAreaColorGroup;
 import org.exbin.bined.color.CodeAreaColorType;
 
@@ -31,10 +30,10 @@ import org.exbin.bined.color.CodeAreaColorType;
 @ParametersAreNonnullByDefault
 public enum CodeAreaColorizationColorType implements CodeAreaColorType {
 
-    CONTROL_CODES_COLOR(CodeAreaBasicColors.TEXT_COLOR.getId(), ColorizationCodeAreaColorsGroup.COLORIZATION),
-    CONTROL_CODES_BACKGROUND(CodeAreaBasicColors.TEXT_BACKGROUND.getId(), ColorizationCodeAreaColorsGroup.COLORIZATION),
-    UPPER_CODES_COLOR(CodeAreaBasicColors.TEXT_COLOR.getId(), ColorizationCodeAreaColorsGroup.COLORIZATION),
-    UPPER_CODES_BACKGROUND(CodeAreaBasicColors.TEXT_BACKGROUND.getId(), ColorizationCodeAreaColorsGroup.COLORIZATION);
+    CONTROL_CODES_COLOR("controlCodesColor", ColorizationCodeAreaColorsGroup.COLORIZATION),
+    CONTROL_CODES_BACKGROUND("controlCodesBackground", ColorizationCodeAreaColorsGroup.COLORIZATION),
+    UPPER_CODES_COLOR("upperCodesColor", ColorizationCodeAreaColorsGroup.COLORIZATION),
+    UPPER_CODES_BACKGROUND("upperCodesBackground", ColorizationCodeAreaColorsGroup.COLORIZATION);
 
     @Nonnull
     private final String typeId;

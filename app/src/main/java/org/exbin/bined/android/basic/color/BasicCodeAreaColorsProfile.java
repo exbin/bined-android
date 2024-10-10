@@ -46,29 +46,29 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class BasicCodeAreaColorsProfile implements CodeAreaColorsProfile {
 
     @Nullable
-    private Integer textColor;
+    protected Integer textColor;
     @Nullable
-    private Integer textBackground;
+    protected Integer textBackground;
     @Nullable
-    private Integer selectionColor;
+    protected Integer selectionColor;
     @Nullable
-    private Integer selectionBackground;
+    protected Integer selectionBackground;
     @Nullable
-    private Integer selectionMirrorColor;
+    protected Integer selectionMirrorColor;
     @Nullable
-    private Integer selectionMirrorBackground;
+    protected Integer selectionMirrorBackground;
     @Nullable
-    private Integer alternateColor;
+    protected Integer alternateColor;
     @Nullable
-    private Integer alternateBackground;
+    protected Integer alternateBackground;
     @Nullable
-    private Integer cursorColor;
+    protected Integer cursorColor;
     @Nullable
-    private Integer cursorNegativeColor;
+    protected Integer cursorNegativeColor;
     @Nullable
-    private Integer decorationLine;
+    protected Integer decorationLine;
     @Nullable
-    private Context context;
+    protected Context context;
 
     public BasicCodeAreaColorsProfile() {
     }

@@ -55,7 +55,7 @@ public interface CodeAreaOptions {
 
     boolean isCodeColorization();
 
-    boolean isShowUnprintables();
+    boolean isShowNonprintables();
 
     void setCodeCharactersCase(CodeCharactersCase codeCharactersCase);
 
@@ -73,7 +73,7 @@ public interface CodeAreaOptions {
 
     void setRowWrappingMode(RowWrappingMode rowWrappingMode);
 
-    void setShowUnprintables(boolean showUnprintables);
+    void setShowNonprintables(boolean showUnprintables);
 
     void setViewMode(CodeAreaViewMode viewMode);
 }

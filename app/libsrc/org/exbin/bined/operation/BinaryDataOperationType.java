@@ -15,20 +15,10 @@
  */
 package org.exbin.bined.operation;
 
-import javax.annotation.Nonnull;
-
 /**
  * Operation type interface.
  *
  * @author ExBin Project (https://exbin.org)
  */
 public interface BinaryDataOperationType {
-
-    /**
-     * Returns operation type name.
-     *
-     * @return operation type name
-     */
-    @Nonnull
-    String getName();
 }

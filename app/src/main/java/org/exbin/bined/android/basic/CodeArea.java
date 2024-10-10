@@ -74,55 +74,53 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaAndroidControl {
 
     @Nonnull
-    private CodeAreaPainter painter;
+    protected CodeAreaPainter painter;
 
     @Nonnull
-    private final DefaultCodeAreaCaret codeAreaCaret;
-    @Nonnull
-    private final CodeAreaSelection selection = new CodeAreaSelection();
-    @Nonnull
-    private final CodeAreaScrollPosition scrollPosition = new CodeAreaScrollPosition();
+    protected final DefaultCodeAreaCaret codeAreaCaret;
+    protected final CodeAreaSelection selection = new CodeAreaSelection();
+    protected final CodeAreaScrollPosition scrollPosition = new CodeAreaScrollPosition();
 
     @Nonnull
-    private Charset charset = Charset.forName(CodeAreaAndroidUtils.DEFAULT_ENCODING);
+    protected Charset charset = Charset.forName(CodeAreaAndroidUtils.DEFAULT_ENCODING);
     @Nonnull
-    private ClipboardHandlingMode clipboardHandlingMode = ClipboardHandlingMode.PROCESS;
+    protected ClipboardHandlingMode clipboardHandlingMode = ClipboardHandlingMode.PROCESS;
 
     @Nonnull
-    private EditMode editMode = EditMode.EXPANDING;
+    protected EditMode editMode = EditMode.EXPANDING;
     @Nonnull
-    private EditOperation editOperation = EditOperation.OVERWRITE;
+    protected EditOperation editOperation = EditOperation.OVERWRITE;
     @Nonnull
-    private CodeAreaViewMode viewMode = CodeAreaViewMode.DUAL;
+    protected CodeAreaViewMode viewMode = CodeAreaViewMode.DUAL;
     @Nullable
-    private Font codeFont;
+    protected Font codeFont;
     @Nonnull
-    private BasicBackgroundPaintMode backgroundPaintMode = BasicBackgroundPaintMode.STRIPED;
+    protected BasicBackgroundPaintMode backgroundPaintMode = BasicBackgroundPaintMode.STRIPED;
     @Nonnull
-    private CodeType codeType = CodeType.HEXADECIMAL;
+    protected CodeType codeType = CodeType.HEXADECIMAL;
     @Nonnull
-    private CodeCharactersCase codeCharactersCase = CodeCharactersCase.UPPER;
-    private boolean showMirrorCursor = true;
+    protected CodeCharactersCase codeCharactersCase = CodeCharactersCase.UPPER;
+    protected boolean showMirrorCursor = true;
     @Nonnull
-    private RowWrappingMode rowWrapping = RowWrappingMode.NO_WRAPPING;
-    private int minRowPositionLength = 0;
-    private int maxRowPositionLength = 0;
-    private int wrappingBytesGroupSize = 0;
-    private int maxBytesPerRow = 16;
+    protected RowWrappingMode rowWrapping = RowWrappingMode.NO_WRAPPING;
+    protected int minRowPositionLength = 0;
+    protected int maxRowPositionLength = 0;
+    protected int wrappingBytesGroupSize = 0;
+    protected int maxBytesPerRow = 16;
 
     @Nonnull
-    private ScrollBarVisibility verticalScrollBarVisibility = ScrollBarVisibility.IF_NEEDED;
+    protected ScrollBarVisibility verticalScrollBarVisibility = ScrollBarVisibility.IF_NEEDED;
     @Nonnull
-    private VerticalScrollUnit verticalScrollUnit = VerticalScrollUnit.PIXEL;
+    protected VerticalScrollUnit verticalScrollUnit = VerticalScrollUnit.PIXEL;
     @Nonnull
-    private ScrollBarVisibility horizontalScrollBarVisibility = ScrollBarVisibility.IF_NEEDED;
+    protected ScrollBarVisibility horizontalScrollBarVisibility = ScrollBarVisibility.IF_NEEDED;
     @Nonnull
-    private HorizontalScrollUnit horizontalScrollUnit = HorizontalScrollUnit.PIXEL;
+    protected HorizontalScrollUnit horizontalScrollUnit = HorizontalScrollUnit.PIXEL;
 
-    private final List<CodeAreaCaretListener> caretMovedListeners = new ArrayList<>();
-    private final List<ScrollingListener> scrollingListeners = new ArrayList<>();
-    private final List<SelectionChangedListener> selectionChangedListeners = new ArrayList<>();
-    private final List<EditModeChangedListener> editModeChangedListeners = new ArrayList<>();
+    protected final List<CodeAreaCaretListener> caretMovedListeners = new ArrayList<>();
+    protected final List<ScrollingListener> scrollingListeners = new ArrayList<>();
+    protected final List<SelectionChangedListener> selectionChangedListeners = new ArrayList<>();
+    protected final List<EditModeChangedListener> editModeChangedListeners = new ArrayList<>();
 
     /**
      * Creates new instance with default command handler and painter.

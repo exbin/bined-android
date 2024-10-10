@@ -598,7 +598,6 @@ public class BasicCodeAreaScrolling {
         return Optional.of(targetScrollPosition);
     }
 
-    @Nonnull
     public void updateMaximumScrollPosition(long rowsPerDocument, int rowsPerPage, int charactersPerRow, int charactersPerPage, int lastCharOffset, int lastRowOffset) {
         maximumScrollPosition.reset();
         if (rowsPerDocument > rowsPerPage) {

@@ -25,12 +25,12 @@ import javax.annotation.Nonnull;
 public interface BinaryDataOperation {
 
     /**
-     * Returns operation name.
+     * Returns type of the operation.
      *
-     * @return operation name
+     * @return operation type
      */
     @Nonnull
-    String getName();
+    BinaryDataOperationType getType();
 
     /**
      * Performs operation.
