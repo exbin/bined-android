@@ -50,11 +50,15 @@ public class DefaultCodeAreaScrollPane extends TwoDimensionScrollView {
 
     private void init() {
         setScrollContainer(true);
+//        setHorizontalScrollBarEnabled(true);
+//        setVerticalScrollBarEnabled(true);
+//        setHorizontalFadingEdgeEnabled(false);
     }
 
     public void updateScrollBars(int verticalScrollValue, int horizontalScrollValue) {
         scrollingUpdate = true;
         scrollTo(horizontalScrollValue, verticalScrollValue);
+//        awakenScrollBars();
         scrollingUpdate = false;
     }
 }

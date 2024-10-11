@@ -18,6 +18,7 @@ package org.exbin.bined.android.basic;
 import android.app.Activity;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -793,10 +794,9 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         int skipToChar = visibility.getSkipToChar();
         int skipRestFromChar = visibility.getSkipRestFromChar();
         int rowHeight = metrics.getRowHeight();
-        int subFontSpace = metrics.getSubFontSpace();
         CodeAreaSelection selectionHandler = ((SelectionCapable) codeArea).getSelectionHandler();
 
-        int positionY = rowPositionY + rowHeight - subFontSpace;
+        int positionY = rowPositionY + rowHeight;
 
         int renderOffset = skipToChar;
         Integer renderColor = null;
@@ -1059,12 +1059,9 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         g.save();
         Rect clipBounds = g.getClipBounds();
         Rect mainAreaRect = dimensions.getMainAreaRectangle();
-        mainAreaRect.left += dataViewOffsetX;
-        mainAreaRect.right += dataViewOffsetX;
-        mainAreaRect.bottom += dataViewOffsetY;
-        mainAreaRect.top += dataViewOffsetY;
+        Rect mainAreaRectAdj = new Rect(mainAreaRect.left + dataViewOffsetX, mainAreaRect.top + dataViewOffsetY, mainAreaRect.right + dataViewOffsetX, mainAreaRect.bottom + dataViewOffsetY);
 
-        Rect intersection = CodeAreaAndroidUtils.computeIntersection(mainAreaRect, scrolledCursorRect);
+        Rect intersection = CodeAreaAndroidUtils.computeIntersection(mainAreaRectAdj, scrolledCursorRect);
         boolean cursorVisible = caret.isCursorVisible() && (intersection == null || !intersection.isEmpty());
 
         if (cursorVisible) {
@@ -1077,22 +1074,27 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
             paintCursorRect(g, intersection, scrolledCursorRect, cursorRect, renderingMode, caret);
         }
 
-//        // Paint mirror cursor
-//        if (viewMode == CodeAreaViewMode.DUAL && showMirrorCursor) {
-//            Rect mirrorCursorRect = getMirrorCursorRect(caret.getDataPosition(), caret.getSection());
-//            if (mirrorCursorRect != null) {
-//                intersection = CodeAreaAndroidUtils.computeIntersection(mainAreaRect, mirrorCursorRect);
-//                boolean mirrorCursorVisible = !intersection.isEmpty();
-//                if (mirrorCursorVisible) {
-//                    g.clipRect(intersection);
-//                    paint.setColor(colorsProfile.getCursor();
-////                    Graphics2D g2d = (Graphics2D) g.create();
-////                    Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{2}, 0);
-////                    g2d.setStroke(dashed);
-//                    g.drawRect(mirrorCursorRect.left, mirrorCursorRect.top, mirrorCursorRect.right - 1, mirrorCursorRect.bottom - 1, paint);
-//                }
-//            }
-//        }
+        // Paint mirror cursor
+        if (viewMode == CodeAreaViewMode.DUAL && showMirrorCursor) {
+            updateMirrorCursorRect(caret.getDataPosition(), caret.getSection());
+            Rect mirrorCursorRect = cursorDataCache.mirrorCursorRect;
+            if (mirrorCursorRect != null) {
+                Rect mirrorCursorRectAdj = new Rect(mirrorCursorRect.left + dataViewOffsetX, mirrorCursorRect.top + dataViewOffsetY, mirrorCursorRect.right + dataViewOffsetX, mirrorCursorRect.bottom + dataViewOffsetY);
+                intersection = CodeAreaAndroidUtils.computeIntersection(mainAreaRectAdj, mirrorCursorRectAdj);
+                boolean mirrorCursorVisible = intersection != null && !intersection.isEmpty();
+                if (mirrorCursorVisible) {
+                    g.restore();
+                    g.save();
+                    g.clipRect(intersection);
+                    paint.setStyle(Paint.Style.STROKE);
+                    paint.setColor(colorsProfile.getCursorColor());
+                    paint.setPathEffect(cursorDataCache.dashedStroke);
+                    g.drawRect(mirrorCursorRectAdj.left, mirrorCursorRectAdj.top, mirrorCursorRectAdj.right - 1, mirrorCursorRectAdj.bottom - 1, paint);
+                    paint.setPathEffect(null);
+                    paint.setStyle(Paint.Style.FILL_AND_STROKE);
+                }
+            }
+        }
         g.restore();
     }
 
@@ -1314,16 +1316,14 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         return new Point(caretX, caretY);
     }
 
-    @Nullable
-    private Rect getMirrorCursorRect(long dataPosition, CodeAreaSection section) {
+    private void updateMirrorCursorRect(long dataPosition, CodeAreaSection section) {
         CodeType codeType = structure.getCodeType();
         Point mirrorCursorPoint = getPositionPoint(dataPosition, 0, section == BasicCodeAreaSection.CODE_MATRIX ? BasicCodeAreaSection.TEXT_PREVIEW : BasicCodeAreaSection.CODE_MATRIX);
         if (mirrorCursorPoint == null) {
-            return null;
+            cursorDataCache.mirrorCursorRect.setEmpty();
+        } else {
+            cursorDataCache.mirrorCursorRect = new Rect(mirrorCursorPoint.x, mirrorCursorPoint.y, mirrorCursorPoint.x + metrics.getCharacterWidth() * (section == BasicCodeAreaSection.TEXT_PREVIEW ? codeType.getMaxDigitsForByte() : 1), mirrorCursorPoint.y + metrics.getRowHeight());
         }
-
-        Rect mirrorCursorRect = new Rect(mirrorCursorPoint.x, mirrorCursorPoint.y, mirrorCursorPoint.x + metrics.getCharacterWidth() * (section == BasicCodeAreaSection.TEXT_PREVIEW ? codeType.getMaxDigitsForByte() : 1), mirrorCursorPoint.y + metrics.getRowHeight());
-        return mirrorCursorRect;
     }
 
     @Override
@@ -1670,9 +1670,9 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
 
     private static class CursorDataCache {
 
-        Rectangle caretRect = new Rectangle();
-        Rectangle mirrorCursorRect = new Rectangle();
-//        final Stroke dashedStroke = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{2}, 0);
+        Rect caretRect = new Rect();
+        Rect mirrorCursorRect = new Rect();
+        final DashPathEffect dashedStroke = new DashPathEffect(new float[] {4f, 4f}, 0f);
         int cursorCharsLength;
         char[] cursorChars;
         int cursorDataLength;
