@@ -103,6 +103,7 @@ import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -141,7 +142,9 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     private CodeAreaUndoRedo undoRedo;
 
     private long documentOriginalSize = 0;
+    private Toolbar toolbar;
     private Menu menu;
+    private SearchView searchView;
     private static ByteArrayEditableData fileData = null;
     private Uri currentFileUri = null;
     private Uri pickerInitialUri = null;
@@ -183,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
         AppCompatDelegate.setApplicationLocales(LocaleListCompat.wrap(getLanguageLocaleList()));
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         codeArea = findViewById(R.id.codeArea);
@@ -257,13 +260,26 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
                 try {
                     if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
                         if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_DEL || keyEvent.getKeyCode() == KeyEvent.KEYCODE_FORWARD_DEL) {
+                            editable.clear();
                             commandHandler.keyPressed(keyEvent);
                         } else {
                             keyListener.onKeyDown(view, editable, keyCode, keyEvent);
                             processKeys(keyEvent);
                         }
                     } else if (keyEvent.getAction() == KeyEvent.ACTION_UP) {
-                        commandHandler.keyPressed(keyEvent);
+                        editable.clear();
+                        if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_DPAD_CENTER) {
+                            if (keyEvent.getEventTime() - keyEvent.getDownTime() > TimeUnit.SECONDS.toMillis(1)) {
+                                codeArea.showContextMenu();
+                            } else {
+                                View keyStripeView = findViewById(R.id.controlPanel);
+                                keyStripeView.requestFocus();
+                            }
+                        } else if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_BACK && isGoogleTV(codeArea.getContext())) {
+                            toolbar.showOverflowMenu();
+                        } else {
+                            commandHandler.keyPressed(keyEvent);
+                        }
                     } else {
                         keyListener.onKeyOther(view, editable, keyEvent);
                         processKeys(keyEvent);
@@ -370,15 +386,22 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         }
 
         this.menu = menu;
-        updateUndoState();
+
+        // Currently on Google TV access to app bar icons doesn't seem to work
+        if (isGoogleTV(this)) {
+            for (int i = 0; i < menu.size(); i++) {
+                MenuItem menuItem = menu.getItem(i);
+                menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+            }
+        }
 
         codeArea.addSelectionChangedListener(this::updateEditActionsState);
+        updateUndoState();
         updateEditActionsState();
-
         updateViewActionsState();
 
         MenuItem searchMenuItem = menu.findItem(R.id.action_search);
-        SearchView searchView = Objects.requireNonNull((SearchView) searchMenuItem.getActionView());
+        searchView = Objects.requireNonNull((SearchView) searchMenuItem.getActionView());
         searchView.setSubmitButtonEnabled(true);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -664,6 +687,19 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             return true;
         } else if (id == R.id.action_paste) {
             codeArea.paste();
+            return true;
+        } else if (id == R.id.action_search) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.action_search);
+            searchView.setIconifiedByDefault(false);
+            builder.setNegativeButton(R.string.button_cancel, (dialog, which) -> {
+                searchService.clearMatches();
+            });
+            builder.setView(searchView);
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+            searchView.requestFocus();
+
             return true;
         } else if (id == R.id.action_delete) {
             codeArea.delete();
