@@ -174,7 +174,7 @@ public class BasicCodeAreaColorsProfile implements CodeAreaColorsProfile {
         if (textBackground == null) {
             textBackground = CodeAreaAndroidUtils.createNegativeColor(textColor);
         }
-        selectionColor = getThemeColor(androidx.appcompat.R.attr.editTextColor);
+        selectionColor = textColor; // getThemeColor(androidx.appcompat.R.attr.editTextColor);
         if (selectionColor == null) {
             selectionColor = isDarkMode() ? Color.BLACK : Color.WHITE;
         }
