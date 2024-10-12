@@ -3,6 +3,7 @@
 - Added Hindi translation
 - Added open with support
 - Show nonprintable characters
+- Show mirror cursor
 
 0.2.1 (2024-09-27)
 - Basic support for selection / clipboard

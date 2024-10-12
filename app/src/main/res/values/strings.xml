@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">BinEd</string>
-    <string name="app_about">Name: BinEd - Binary/Hex Editor\nVersion: %1$s\nVendor: <a href="https://exbin.org">ExBin Project</a>\nLicense: <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a>\nHomepage: <a href="https://bined.exbin.org/android">https://bined.exbin.org/android</a></string>
+    <string name="app_about">Name: BinEd - Binary/Hex Editor\nVersion: %1$s\nVendor: &lt;a href="https://exbin.org"&gt;ExBin Project&lt;/a&gt;\nLicense: &lt;a href="https://www.apache.org/licenses/LICENSE-2.0"&gt;Apache License, Version 2.0&lt;/a&gt;\nHomepage: &lt;a href="https://bined.exbin.org/android"&gt;https://bined.exbin.org/android&lt;/a&gt;\n\nContributors:</string>
     <string name="bined_logo_description">BinEd Logo</string>
 
     <!-- Actions & menu -->
@@ -63,6 +63,7 @@
     <string name="storage_permission_request">Need to enable storage permissions</string>
 
     <string name="button_close">Close</string>
+    <string name="button_donate">Donate</string>
     <string name="button_cancel">Cancel</string>
     <string name="button_set">Set</string>
     <string name="button_go_to">Go To</string>

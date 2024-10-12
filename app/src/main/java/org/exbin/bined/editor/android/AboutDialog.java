@@ -17,7 +17,10 @@ package org.exbin.bined.editor.android;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +34,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 public class AboutDialog extends AppCompatDialogFragment {
+
+    private static final String DONATE_LINK = "https://bined.exbin.org/?p=donate";
 
     private String appVersion;
 
@@ -51,10 +56,15 @@ public class AboutDialog extends AppCompatDialogFragment {
         // dialog layout
         View aboutView = inflater.inflate(R.layout.about_view, null);
         TextView textView = aboutView.findViewById(R.id.textView);
-        textView.setText(String.format(getResources().getString(R.string.app_about), appVersion));
+        String htmlString = String.format(getResources().getString(R.string.app_about), appVersion).replace("\n", "<br/>");
+        textView.setText(Html.fromHtml(htmlString, Html.FROM_HTML_MODE_COMPACT));
         textView.setMovementMethod(LinkMovementMethod.getInstance());
         builder.setView(aboutView);
         builder.setPositiveButton(getResources().getString(R.string.button_close), (dialog, which) -> {
+        });
+        builder.setNeutralButton(getResources().getString(R.string.button_donate), (dialog, which) -> {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(DONATE_LINK));
+            startActivity(browserIntent);
         });
         return builder.create();
     }

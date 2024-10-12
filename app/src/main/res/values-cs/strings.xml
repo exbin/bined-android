@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">BinEd</string>
-    <string name="app_about">Název: BinEd – binární/hexadecimální editor\nVerze: %1$s\nDodavatel: <a href="https://exbin.org">Projekt ExBin</a>\nLicence: <a href="https://www.apache.org/licenses/LICENSE-2.0">Licence Apache, verze 2.0</a>\nDomovská stránka: <a href="https://bined.exbin.org/android ">https://bined.exbin.org/android</a></string>
+    <string name="app_about">Název: BinEd – binární/hexadecimální editor\nVerze: %1$s\nDodavatel: &lt;a href="https://exbin.org"&gt;Projekt ExBin&lt;/a&gt;\nLicence: &lt;a href="https://www.apache.org/licenses/LICENSE-2.0"&gt;Licence Apache, verze 2.0&lt;/a&gt;\nDomovská stránka: &lt;a href="https://bined.exbin.org/android "&gt;https://bined.exbin.org/android&lt;/a&gt;\n\nPřispěvatelé:</string>
     <string name="bined_logo_description">Logo BinEd</string>
 
     <string name="title_activity_settings">Nastavení</string>
@@ -62,6 +62,7 @@
     <string name="storage_permission_request">Je třeba povolit oprávnění úložiště</string>
 
     <string name="button_close">Zavřít</string>
+    <string name="button_donate">Podpořit</string>
     <string name="button_cancel">Zrušit</string>
     <string name="button_set">Nastavit</string>
     <string name="button_go_to">Přejít na</string>

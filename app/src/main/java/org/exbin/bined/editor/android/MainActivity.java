@@ -336,10 +336,11 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     @Nonnull
     private LocaleList getLanguageLocaleList() {
         String language = appPreferences.getMainPreferences().getLocaleTag();
+
         if (language.isEmpty()) {
             return LocaleList.getEmptyLocaleList();
         } else if ("en".equals(language)) {
-            return LocaleList.getDefault();
+            return LocaleList.forLanguageTags("en_US");
         }
 
         return LocaleList.forLanguageTags(language);
@@ -1107,7 +1108,9 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
     private void settingsResultCallback(ActivityResult activityResult) {
         applySettings();
-        updateViewActionsState();
+        if (menu != null) {
+            updateViewActionsState();
+        }
     }
 
     public void buttonAction0(View view) {
