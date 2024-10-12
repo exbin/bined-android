@@ -46,6 +46,15 @@ public class DeleteSelectionCommand extends CodeAreaCommand {
 
     @Override
     public void execute() {
+        removeCommand.execute();
+        ((CaretCapable) codeArea).setActiveCaretPosition(position);
+        clearSelection();
+        ((ScrollingCapable) codeArea).revealCursor();
+        codeArea.notifyDataChanged();
+    }
+
+    @Override
+    public void redo() {
         removeCommand.redo();
         ((CaretCapable) codeArea).setActiveCaretPosition(position);
         clearSelection();

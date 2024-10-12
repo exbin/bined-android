@@ -106,7 +106,12 @@ public class EditCharDataCommand extends EditDataCommand implements BinaryDataAp
 
     @Override
     public boolean appendExecute(BinaryDataCommand command) {
+        if (phase != BinaryDataCommandPhase.EXECUTED) {
+            throw new IllegalStateException();
+        }
+
         command.execute();
+
         if (command instanceof EditCharDataCommand && activeOperation instanceof BinaryDataAppendableOperation) {
             return ((BinaryDataAppendableOperation) activeOperation).appendOperation(((EditCharDataCommand) command).activeOperation);
         }

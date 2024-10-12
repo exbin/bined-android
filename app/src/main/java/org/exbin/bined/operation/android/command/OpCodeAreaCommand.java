@@ -58,7 +58,7 @@ public abstract class OpCodeAreaCommand extends CodeAreaCommand {
 
     @Override
     public void undo() {
-        if (phase == BinaryDataCommandPhase.REVERTED) {
+        if (phase != BinaryDataCommandPhase.EXECUTED) {
             throw new IllegalStateException();
         }
 
@@ -70,7 +70,7 @@ public abstract class OpCodeAreaCommand extends CodeAreaCommand {
 
     @Override
     public void redo() {
-        if (phase == BinaryDataCommandPhase.EXECUTED) {
+        if (phase != BinaryDataCommandPhase.REVERTED) {
             throw new IllegalStateException();
         }
 
