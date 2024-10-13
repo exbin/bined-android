@@ -47,6 +47,11 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+/**
+ * Settings activity.
+ *
+ * @author ExBin Project (https://exbin.org)
+ */
 @ParametersAreNonnullByDefault
 public class SettingsActivity extends AppCompatActivity implements
         PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {

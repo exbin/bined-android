@@ -88,6 +88,7 @@ public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl 
     }
 
     private void init() {
+        setContentDescription("Code area");
         // TODO: Use swing color instead
 //        setBackgroundColor(ColorUtils.WHITE);
 //        setFocusable(true);

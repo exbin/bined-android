@@ -28,6 +28,11 @@ import org.exbin.bined.editor.android.R;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+/**
+ * Application font preferences.
+ *
+ * @author ExBin Project (https://exbin.org)
+ */
 @ParametersAreNonnullByDefault
 public class FontPreference extends EditTextPreference {
 

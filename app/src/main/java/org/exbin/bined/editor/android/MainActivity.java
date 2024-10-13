@@ -35,6 +35,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -56,27 +57,24 @@ import com.rustamg.filedialogs.FileDialog;
 import com.rustamg.filedialogs.OpenFileDialog;
 import com.rustamg.filedialogs.SaveFileDialog;
 
-import org.exbin.auxiliary.binary_data.BinaryData;
-import org.exbin.auxiliary.binary_data.ByteArrayEditableData;
 import org.exbin.bined.CaretOverlapMode;
+import org.exbin.bined.CodeAreaCaretListener;
 import org.exbin.bined.CodeAreaCaretPosition;
 import org.exbin.bined.CodeCharactersCase;
 import org.exbin.bined.CodeType;
+import org.exbin.bined.DataChangedListener;
 import org.exbin.bined.DefaultCodeAreaCaretPosition;
 import org.exbin.bined.EditMode;
-import org.exbin.bined.EditOperation;
+import org.exbin.bined.EditModeChangedListener;
 import org.exbin.bined.RowWrappingMode;
+import org.exbin.bined.SelectionChangedListener;
 import org.exbin.bined.SelectionRange;
 import org.exbin.bined.android.CodeAreaAndroidUtils;
-import org.exbin.bined.android.CodeAreaPainter;
 import org.exbin.bined.android.Font;
 import org.exbin.bined.android.basic.CodeArea;
-import org.exbin.bined.android.basic.DefaultCodeAreaPainter;
 import org.exbin.bined.android.basic.color.BasicCodeAreaColorsProfile;
-import org.exbin.bined.android.capability.CharAssessorPainterCapable;
 import org.exbin.bined.android.capability.ColorAssessorPainterCapable;
 import org.exbin.bined.basic.BasicCodeAreaSection;
-import org.exbin.bined.basic.CodeAreaScrollPosition;
 import org.exbin.bined.basic.CodeAreaViewMode;
 import org.exbin.bined.capability.EditModeCapable;
 import org.exbin.bined.editor.android.options.Theme;
@@ -84,22 +82,16 @@ import org.exbin.bined.editor.android.preference.BinaryEditorPreferences;
 import org.exbin.bined.editor.android.preference.EncodingPreference;
 import org.exbin.bined.editor.android.preference.FontPreference;
 import org.exbin.bined.editor.android.preference.MainPreferences;
-import org.exbin.bined.editor.android.preference.PreferencesWrapper;
 import org.exbin.bined.editor.android.search.BinarySearchService;
 import org.exbin.bined.editor.android.search.BinarySearchServiceImpl;
 import org.exbin.bined.editor.android.search.SearchCondition;
 import org.exbin.bined.editor.android.search.SearchParameters;
 import org.exbin.bined.highlight.android.NonAsciiCodeAreaColorAssessor;
 import org.exbin.bined.highlight.android.NonprintablesCodeAreaAssessor;
-import org.exbin.bined.operation.android.CodeAreaOperationCommandHandler;
-import org.exbin.bined.operation.android.CodeAreaUndoRedo;
-import org.exbin.framework.bined.BinEdCodeAreaAssessor;
+import org.exbin.bined.operation.undo.BinaryDataUndoRedoChangeListener;
 import org.exbin.framework.bined.BinaryStatusApi;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.util.Objects;
@@ -111,6 +103,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+/**
+ * Main activity.
+ *
+ * @author ExBin Project (https://exbin.org)
+ */
 @ParametersAreNonnullByDefault
 public class MainActivity extends AppCompatActivity implements FileDialog.OnFileSelectedListener {
 
@@ -127,30 +124,18 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
     private static final int STORAGE_PERMISSION_CODE = 1;
 
-    private static final String CURSOR_POSITION_TAG = "bined.cursorPosition";
-    private static final String CURSOR_OFFSET_TAG = "bined.cursorOffset";
-    private static final String CURSOR_SECTION_TAG = "bined.cursorSection";
-    private static final String SCROLL_ROW_POSITION_TAG = "bined.scrollRowPosition";
-    private static final String SCROLL_ROW_OFFSET_TAG = "bined.scrollRowOffset";
-    private static final String SCROLL_CHAR_POSITION_TAG = "bined.scrollCharPosition";
-    private static final String SCROLL_CHAR_OFFSET_TAG = "bined.scrollOffsetPosition";
-    private static final String SELECTION_START_TAG = "bined.selectionStart";
-    private static final String SELECTION_END_TAG = "bined.selectionEnd";
-    private static final String EDIT_OPERATION_TAG = "bined.editOperation";
-
+    private BinEdFileHandler fileHandler;
     private CodeArea codeArea;
-    private CodeAreaUndoRedo undoRedo;
+    private BinaryEditorPreferences appPreferences;
 
-    private long documentOriginalSize = 0;
     private Toolbar toolbar;
     private Menu menu;
     private SearchView searchView;
-    private static ByteArrayEditableData fileData = null;
-    private Uri currentFileUri = null;
-    private Uri pickerInitialUri = null;
     private final BinaryStatusHandler binaryStatus = new BinaryStatusHandler(this);
     private BinarySearchService searchService;
     private Runnable postSaveAsAction = null;
+    private boolean keyboardShown = false;
+
     private final BinarySearchService.SearchStatusListener searchStatusListener = new BinarySearchService.SearchStatusListener() {
         @Override
         public void setStatus(BinarySearchService.FoundMatches foundMatches, SearchParameters.MatchMode matchMode) {
@@ -162,9 +147,90 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
         }
     };
+    private final BinaryDataUndoRedoChangeListener codeAreaChangeListener = () -> {
+        if (menu != null) {
+            updateUndoState();
+        }
+    };
+    private final DataChangedListener codeAreaDataChangedListener = () -> {
+//            activeFile.getComponent().notifyDataChanged();
+//            if (editorModificationListener != null) {
+//                editorModificationListener.modified();
+//            }
+        updateCurrentDocumentSize();
+    };
+    private final SelectionChangedListener codeAreaSelectionChangedListener = () -> {
+        binaryStatus.setSelectionRange(codeArea.getSelection());
+//            updateClipboardActionsStatus();
+    };
+    private final CodeAreaCaretListener codeAreaCodeAreaCaretListener = caretPosition -> {
+        binaryStatus.setCursorPosition(caretPosition);
 
-    private boolean keyboardShown = false;
-    private BinaryEditorPreferences appPreferences;
+        boolean showKeyboard = codeArea.getActiveSection() == BasicCodeAreaSection.TEXT_PREVIEW;
+        if (showKeyboard != keyboardShown) {
+
+            keyboardShown = showKeyboard;
+            InputMethodManager im = (InputMethodManager) codeArea.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            codeArea.requestFocus();
+            if (showKeyboard) {
+                im.showSoftInput(codeArea, InputMethodManager.SHOW_IMPLICIT);
+            } else {
+                im.hideSoftInputFromWindow(codeArea.getWindowToken(), 0);
+            }
+        }
+    };
+    private final View.OnKeyListener codeAreaOnKeyListener = new View.OnKeyListener() {
+
+        private final KeyListener keyListener = new TextKeyListener(TextKeyListener.Capitalize.NONE, false);
+        private final Editable editable = Editable.Factory.getInstance().newEditable("");
+
+        @Override
+        public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+            try {
+                if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+                    if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_DEL || keyEvent.getKeyCode() == KeyEvent.KEYCODE_FORWARD_DEL) {
+                        editable.clear();
+                        codeArea.getCommandHandler().keyPressed(keyEvent);
+                    } else {
+                        keyListener.onKeyDown(view, editable, keyCode, keyEvent);
+                        processKeys(keyEvent);
+                    }
+                } else if (keyEvent.getAction() == KeyEvent.ACTION_UP) {
+                    editable.clear();
+                    if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_DPAD_CENTER) {
+                        if (keyEvent.getEventTime() - keyEvent.getDownTime() > TimeUnit.SECONDS.toMillis(1)) {
+                            codeArea.showContextMenu();
+                        } else {
+                            View keyStripeView = findViewById(R.id.controlPanel);
+                            keyStripeView.requestFocus();
+                        }
+                    } else if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_BACK && isGoogleTV(codeArea.getContext())) {
+                        toolbar.showOverflowMenu();
+                    } else {
+                        codeArea.getCommandHandler().keyPressed(keyEvent);
+                    }
+                } else {
+                    keyListener.onKeyOther(view, editable, keyEvent);
+                    processKeys(keyEvent);
+                }
+                return true;
+            } catch (Exception ex) {
+                // ignore
+            }
+            return false;
+        }
+
+        private void processKeys(KeyEvent keyEvent) {
+            int outputCharsLength = editable.length();
+            if (outputCharsLength > 0) {
+                for (int i = 0; i < outputCharsLength; i++) {
+                    codeArea.getCommandHandler().keyTyped(editable.charAt(i), keyEvent);
+                }
+                editable.clear();
+            }
+        }
+    };
+    private final EditModeChangedListener codeAreaEditModeChangedListener = binaryStatus::setEditMode;
 
     private final ActivityResultLauncher<Intent> openFileLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), this::openFileResultCallback);
     private final ActivityResultLauncher<Intent> saveFileLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), this::saveFileResultCallback);
@@ -173,7 +239,9 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        appPreferences = new BinaryEditorPreferences(new PreferencesWrapper(getApplicationContext()));
+
+        ApplicationContext application = (ApplicationContext) getApplication();
+        appPreferences = application.getAppPreferences();
         setContentView(R.layout.activity_main);
 
         MainPreferences mainPreferences = appPreferences.getMainPreferences();
@@ -184,129 +252,57 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
 
-        AppCompatDelegate.setApplicationLocales(LocaleListCompat.wrap(getLanguageLocaleList()));
-
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        codeArea = findViewById(R.id.codeArea);
-        codeArea.setEditOperation(EditOperation.INSERT);
-        searchService = new BinarySearchServiceImpl(codeArea);
+        // For now steal code area and keep it in application context
+        fileHandler = application.getFileHandler();
+        if (fileHandler == null) {
+            codeArea = findViewById(R.id.codeArea);
+            fileHandler = new BinEdFileHandler(codeArea);
+            application.setFileHandler(fileHandler);
+        } else {
+            codeArea = fileHandler.getCodeArea();
+            ViewGroup parentView = (ViewGroup) codeArea.getParent();
+            parentView.removeView(codeArea);
+            ViewGroup contentView = findViewById(R.id.contentMain);
+            contentView.removeView(findViewById(R.id.codeArea));
+            contentView.addView(codeArea);
+        }
 
-        undoRedo = new CodeAreaUndoRedo(codeArea);
-        undoRedo.addChangeListener(() -> {
-            if (menu != null) {
-                updateUndoState();
-            }
-        });
+        AppCompatDelegate.setApplicationLocales(LocaleListCompat.wrap(getLanguageLocaleList()));
 
-        CodeAreaOperationCommandHandler commandHandler = new CodeAreaOperationCommandHandler(codeArea.getContext(), codeArea, undoRedo);
-        codeArea.setCommandHandler(commandHandler);
-        CodeAreaPainter painter = codeArea.getPainter();
-        BinEdCodeAreaAssessor codeAreaAssessor = new BinEdCodeAreaAssessor(((ColorAssessorPainterCapable) painter).getColorAssessor(), ((CharAssessorPainterCapable) painter).getCharAssessor());
-        ((ColorAssessorPainterCapable) painter).setColorAssessor(codeAreaAssessor);
-        ((CharAssessorPainterCapable) painter).setCharAssessor(codeAreaAssessor);
-        codeArea.setPainter(painter);
-        BasicCodeAreaColorsProfile basicColors = ((DefaultCodeAreaPainter) painter).getBasicColors();
+        BasicCodeAreaColorsProfile basicColors = codeArea.getBasicColors().orElseThrow();
         basicColors.setContext(this);
         basicColors.reinitialize();
-        painter.resetColors();
+        codeArea.resetColors();
+
+        searchService = new BinarySearchServiceImpl(codeArea);
 
         registerForContextMenu(codeArea);
 
-        if (fileData != null) {
-            codeArea.setContentData(fileData);
-        } else {
-            codeArea.setContentData(new ByteArrayEditableData());
-        }
-
-        codeArea.addDataChangedListener(() -> {
-//            activeFile.getComponent().notifyDataChanged();
-//            if (editorModificationListener != null) {
-//                editorModificationListener.modified();
-//            }
-            updateCurrentDocumentSize();
-        });
-
-        codeArea.addSelectionChangedListener(() -> {
-            binaryStatus.setSelectionRange(codeArea.getSelection());
-//            updateClipboardActionsStatus();
-        });
-
-        codeArea.addCaretMovedListener((CodeAreaCaretPosition caretPosition) -> {
-            binaryStatus.setCursorPosition(caretPosition);
-
-            boolean showKeyboard = codeArea.getActiveSection() == BasicCodeAreaSection.TEXT_PREVIEW;
-            if (showKeyboard != keyboardShown) {
-
-                keyboardShown = showKeyboard;
-                InputMethodManager im = (InputMethodManager) codeArea.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                codeArea.requestFocus();
-                if (showKeyboard) {
-                    im.showSoftInput(codeArea, InputMethodManager.SHOW_IMPLICIT);
-                } else {
-                    im.hideSoftInputFromWindow(codeArea.getWindowToken(), 0);
-                }
-            }
-        });
-
-        codeArea.setOnKeyListener(new View.OnKeyListener() {
-
-            private final KeyListener keyListener = new TextKeyListener(TextKeyListener.Capitalize.NONE, false);
-            private final Editable editable = Editable.Factory.getInstance().newEditable("");
-
-            @Override
-            public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
-                try {
-                    if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-                        if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_DEL || keyEvent.getKeyCode() == KeyEvent.KEYCODE_FORWARD_DEL) {
-                            editable.clear();
-                            commandHandler.keyPressed(keyEvent);
-                        } else {
-                            keyListener.onKeyDown(view, editable, keyCode, keyEvent);
-                            processKeys(keyEvent);
-                        }
-                    } else if (keyEvent.getAction() == KeyEvent.ACTION_UP) {
-                        editable.clear();
-                        if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_DPAD_CENTER) {
-                            if (keyEvent.getEventTime() - keyEvent.getDownTime() > TimeUnit.SECONDS.toMillis(1)) {
-                                codeArea.showContextMenu();
-                            } else {
-                                View keyStripeView = findViewById(R.id.controlPanel);
-                                keyStripeView.requestFocus();
-                            }
-                        } else if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_BACK && isGoogleTV(codeArea.getContext())) {
-                            toolbar.showOverflowMenu();
-                        } else {
-                            commandHandler.keyPressed(keyEvent);
-                        }
-                    } else {
-                        keyListener.onKeyOther(view, editable, keyEvent);
-                        processKeys(keyEvent);
-                    }
-                    return true;
-                } catch (Exception ex) {
-                    // ignore
-                }
-                return false;
-            }
-
-            private void processKeys(KeyEvent keyEvent) {
-                int outputCharsLength = editable.length();
-                if (outputCharsLength > 0) {
-                    for (int i = 0; i < outputCharsLength; i++) {
-                        commandHandler.keyTyped(editable.charAt(i), keyEvent);
-                    }
-                    editable.clear();
-                }
-            }
-        });
-
-        codeArea.addEditModeChangedListener(binaryStatus::setEditMode);
+        fileHandler.getUndoRedo().addChangeListener(codeAreaChangeListener);
+        codeArea.addDataChangedListener(codeAreaDataChangedListener);
+        codeArea.addSelectionChangedListener(codeAreaSelectionChangedListener);
+        codeArea.addCaretMovedListener(codeAreaCodeAreaCaretListener);
+        codeArea.addEditModeChangedListener(codeAreaEditModeChangedListener);
+        codeArea.setOnKeyListener(codeAreaOnKeyListener);
 
         applySettings();
 
         processIntent(getIntent());
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        codeArea.setOnKeyListener(null);
+        codeArea.removeEditModeChangedListener(codeAreaEditModeChangedListener);
+        codeArea.removeCaretMovedListener(codeAreaCodeAreaCaretListener);
+        codeArea.removeSelectionChangedListener(codeAreaSelectionChangedListener);
+        codeArea.removeDataChangedListener(codeAreaDataChangedListener);
+        fileHandler.getUndoRedo().removeChangeListener(codeAreaChangeListener);
     }
 
     private void processIntent(Intent intent) {
@@ -321,11 +317,10 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
                 Uri fileUri = intent.getData();
                 if (fileUri != null) {
                     releaseFile(() -> {
-                        openFile(fileUri);
+                        fileHandler.openFile(getContentResolver(), fileUri);
                         // Content should be opened as unspecified file
                         if ("content".equals(scheme)) {
-                            currentFileUri = null;
-                            pickerInitialUri = null;
+                            fileHandler.clearFileUri();
                         }
                     });
                 }
@@ -517,11 +512,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
         if (id == R.id.action_new) {
             releaseFile(() -> {
-                codeArea.setContentData(new ByteArrayEditableData());
-                undoRedo.clear();
-                currentFileUri = null;
-
-                documentOriginalSize = 0;
+                fileHandler.newFile();
             });
 
             return true;
@@ -530,10 +521,11 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
             return true;
         } else if (id == R.id.action_save) {
+            Uri currentFileUri = fileHandler.getCurrentFileUri();
             if (currentFileUri == null) {
                 saveAs();
             } else {
-                saveFile(currentFileUri);
+                fileHandler.saveFile(getContentResolver(), currentFileUri);
             }
 
             return true;
@@ -675,10 +667,13 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             appPreferences.getCodeAreaPreferences().setCodeColorization(!checked);
             return true;
         } else if (id == R.id.action_undo) {
-            undoRedo.performUndo();
+            fileHandler.getUndoRedo().performUndo();
+            // TODO fix operations instead of validating
+            codeArea.validateCaret();
             return true;
         } else if (id == R.id.action_redo) {
-            undoRedo.performRedo();
+            fileHandler.getUndoRedo().performRedo();
+            codeArea.validateCaret();
             return true;
         } else if (id == R.id.action_cut) {
             codeArea.cut();
@@ -719,8 +714,10 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
                 DefaultCodeAreaCaretPosition caretPosition = new DefaultCodeAreaCaretPosition();
                 caretPosition.setCodeOffset(0);
                 caretPosition.setPosition(codeArea.getActiveCaretPosition());
-                caretPosition.setDataPosition(Long.parseLong(inputNumber.getText().toString()));
+                long targetPosition = Long.parseLong(inputNumber.getText().toString());
+                caretPosition.setDataPosition(Math.min(targetPosition, codeArea.getDataSize()));
                 codeArea.setActiveCaretPosition(caretPosition);
+                codeArea.validateCaret();
                 codeArea.centerOnCursor();
             });
             builder.setNegativeButton(R.string.button_cancel, null);
@@ -734,7 +731,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     }
 
     public void releaseFile(Runnable postReleaseAction) {
-        if (!undoRedo.isModified()) {
+        if (!fileHandler.isModified()) {
             postReleaseAction.run();
             return;
         }
@@ -742,10 +739,11 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.file_modified);
         builder.setPositiveButton(R.string.button_save, (dialog, which) -> {
+            Uri currentFileUri = fileHandler.getCurrentFileUri();
             if (currentFileUri == null) {
                 saveAs();
             } else {
-                saveFile(currentFileUri);
+                fileHandler.saveFile(getContentResolver(), currentFileUri);
             }
             postReleaseAction.run();
         });
@@ -770,6 +768,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             intent.putExtra(Intent.EXTRA_LOCALE_LIST, getLanguageLocaleList());
         }
 
+        Uri pickerInitialUri = fileHandler.getPickerInitialUri();
         if (pickerInitialUri != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri);
         }
@@ -830,6 +829,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             intent.putExtra(Intent.EXTRA_LOCALE_LIST, getLanguageLocaleList());
         }
 
+        Uri pickerInitialUri = fileHandler.getPickerInitialUri();
         if (pickerInitialUri != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri);
         }
@@ -850,89 +850,6 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         } else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
         }
-    }
-
-    public void openFile(Uri fileUri) {
-        fileData = new ByteArrayEditableData();
-        try {
-            InputStream inputStream = getContentResolver().openInputStream(fileUri);
-            if (inputStream == null) {
-                return;
-            }
-            fileData.loadFromStream(inputStream);
-            inputStream.close();
-            documentOriginalSize = fileData.getDataSize();
-            undoRedo.clear();
-            codeArea.setContentData(fileData);
-            currentFileUri = fileUri;
-            pickerInitialUri = fileUri;
-        } catch (IOException ex) {
-            Logger.getLogger(MainActivity.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public void saveFile(Uri fileUri) {
-        BinaryData contentData = codeArea.getContentData();
-        try {
-            OutputStream outputStream = getContentResolver().openOutputStream(fileUri);
-            if (outputStream == null) {
-                return;
-            }
-            fileData.saveToStream(outputStream);
-            outputStream.close();
-            documentOriginalSize = contentData.getDataSize();
-            undoRedo.setSyncPosition();
-            currentFileUri = fileUri;
-            pickerInitialUri = fileUri;
-        } catch (IOException ex) {
-            Logger.getLogger(MainActivity.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-
-        long cursorDataPosition = savedInstanceState.getLong(CURSOR_POSITION_TAG);
-        int cursorOffset = savedInstanceState.getInt(CURSOR_OFFSET_TAG);
-        int cursorSection = savedInstanceState.getInt(CURSOR_SECTION_TAG);
-        codeArea.setActiveCaretPosition(new DefaultCodeAreaCaretPosition(cursorDataPosition, cursorOffset, cursorSection == 0 ? BasicCodeAreaSection.CODE_MATRIX : BasicCodeAreaSection.TEXT_PREVIEW));
-
-        long scrollRowPosition = savedInstanceState.getLong(SCROLL_ROW_POSITION_TAG);
-        int scrollRowOffset = savedInstanceState.getInt(SCROLL_ROW_OFFSET_TAG);
-        int scrollCharPosition = savedInstanceState.getInt(SCROLL_CHAR_POSITION_TAG);
-        int scrollCharOffset = savedInstanceState.getInt(SCROLL_CHAR_OFFSET_TAG);
-        codeArea.setScrollPosition(new CodeAreaScrollPosition(scrollRowPosition, scrollRowOffset, scrollCharPosition, scrollCharOffset));
-
-        long selectionStart = savedInstanceState.getLong(SELECTION_START_TAG);
-        long selectionEnd = savedInstanceState.getLong(SELECTION_END_TAG);
-        codeArea.setSelection(new SelectionRange(selectionStart, selectionEnd));
-
-        boolean editOperation = savedInstanceState.getBoolean(EDIT_OPERATION_TAG);
-        codeArea.setEditOperation(editOperation ? EditOperation.OVERWRITE : EditOperation.INSERT);
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        EditOperation editOperation = codeArea.getEditOperation();
-        outState.putBoolean(EDIT_OPERATION_TAG, editOperation == EditOperation.OVERWRITE);
-
-        SelectionRange selection = codeArea.getSelection();
-        outState.putLong(SELECTION_START_TAG, selection.getStart());
-        outState.putLong(SELECTION_END_TAG, selection.getEnd());
-
-        CodeAreaScrollPosition scrollPosition = codeArea.getScrollPosition();
-        outState.putLong(SCROLL_ROW_POSITION_TAG, scrollPosition.getRowPosition());
-        outState.putInt(SCROLL_ROW_OFFSET_TAG, scrollPosition.getRowOffset());
-        outState.putInt(SCROLL_CHAR_POSITION_TAG, scrollPosition.getCharPosition());
-        outState.putInt(SCROLL_CHAR_OFFSET_TAG, scrollPosition.getCharOffset());
-
-        CodeAreaCaretPosition caretPosition = codeArea.getActiveCaretPosition();
-        outState.putLong(CURSOR_POSITION_TAG, caretPosition.getDataPosition());
-        outState.putInt(CURSOR_OFFSET_TAG, caretPosition.getCodeOffset());
-        outState.putInt(CURSOR_SECTION_TAG, ((BasicCodeAreaSection) caretPosition.getSection().orElse(BasicCodeAreaSection.CODE_MATRIX)).ordinal());
     }
 
     @Override
@@ -965,7 +882,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         }
 
         long dataSize = codeArea.getDataSize();
-        binaryStatus.setCurrentDocumentSize(dataSize, documentOriginalSize);
+        binaryStatus.setCurrentDocumentSize(dataSize, fileHandler.getDocumentOriginalSize());
     }
 
     private void updateCurrentCaretPosition() {
@@ -1051,14 +968,15 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
     private void updateUndoState() {
         MenuItem saveMenuItem = menu.findItem(R.id.action_save);
-        saveMenuItem.setEnabled(currentFileUri == null || undoRedo.isModified());
+        Uri currentFileUri = fileHandler.getCurrentFileUri();
+        saveMenuItem.setEnabled(currentFileUri == null || fileHandler.getUndoRedo().isModified());
 
-        boolean canUndo = undoRedo.canUndo();
+        boolean canUndo = fileHandler.getUndoRedo().canUndo();
         MenuItem undoMenuItem = menu.findItem(R.id.action_undo);
         undoMenuItem.setEnabled(canUndo);
         // TODO undoMenuItem.setIconTintList(new ColorStateList(ColorStateList.));
 
-        boolean canRedo = undoRedo.canRedo();
+        boolean canRedo = fileHandler.getUndoRedo().canRedo();
         MenuItem redoMenuItem = menu.findItem(R.id.action_redo);
         redoMenuItem.setEnabled(canRedo);
     }
@@ -1070,7 +988,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             return;
         }
 
-        openFile(data.getData());
+        fileHandler.openFile(getContentResolver(), data.getData());
     }
 
     private void saveFileResultCallback(ActivityResult activityResult) {
@@ -1080,7 +998,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             return;
         }
 
-        saveFile(data.getData());
+        fileHandler.saveFile(getContentResolver(), data.getData());
         if (postSaveAsAction != null) {
             postSaveAsAction.run();
             postSaveAsAction = null;
@@ -1096,9 +1014,9 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     @Override
     public void onFileSelected(FileDialog dialog, File file) {
         if (dialog instanceof OpenFileDialog) {
-            openFile(Uri.fromFile(file));
+            fileHandler.openFile(getContentResolver(), Uri.fromFile(file));
         } else {
-            saveFile(Uri.fromFile(file));
+            fileHandler.saveFile(getContentResolver(), Uri.fromFile(file));
             if (postSaveAsAction != null) {
                 postSaveAsAction.run();
                 postSaveAsAction = null;

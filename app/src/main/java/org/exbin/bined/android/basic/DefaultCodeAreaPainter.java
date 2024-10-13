@@ -190,6 +190,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
                 paintMainArea(canvas);
             }
         };
+        dataView.setContentDescription("Code area");
         dataView.setLongClickable(true);
         scrollPanel.addView(dataView);
 

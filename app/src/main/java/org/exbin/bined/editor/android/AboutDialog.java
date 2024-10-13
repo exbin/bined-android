@@ -32,6 +32,11 @@ import androidx.fragment.app.FragmentActivity;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+/**
+ * About application dialog.
+ *
+ * @author ExBin Project (https://exbin.org)
+ */
 @ParametersAreNonnullByDefault
 public class AboutDialog extends AppCompatDialogFragment {
 

@@ -31,6 +31,11 @@ import java.util.SortedMap;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+/**
+ * Application encoding preferences.
+ *
+ * @author ExBin Project (https://exbin.org)
+ */
 @ParametersAreNonnullByDefault
 public class EncodingPreference extends EditTextPreference {
 
