@@ -272,7 +272,10 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
         AppCompatDelegate.setApplicationLocales(LocaleListCompat.wrap(getLanguageLocaleList()));
 
-        BasicCodeAreaColorsProfile basicColors = codeArea.getBasicColors().orElseThrow();
+        BasicCodeAreaColorsProfile basicColors = codeArea.getBasicColors().orElse(null);
+        if (basicColors == null) {
+            throw new IllegalStateException("Missing colors profile");
+        }
         basicColors.setContext(this);
         basicColors.reinitialize();
         codeArea.resetColors();
