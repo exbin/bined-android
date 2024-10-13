@@ -1,4 +1,4 @@
-0.2.2
+0.2.2 (2024-10-13)
 - Various bugfixes
 - Added Hindi translation
 - Added open with support
