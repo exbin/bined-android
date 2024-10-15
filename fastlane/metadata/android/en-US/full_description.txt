@@ -1,7 +1,5 @@
 BinEd is a hex editor tool, which allows to directly browse and edit content of any file or binary data.
 
-App is currently beta with limited functionality.
-
 Features
 --------
 

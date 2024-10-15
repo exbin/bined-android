@@ -15,10 +15,12 @@
  */
 package org.exbin.bined.editor.android;
 
-import android.app.Activity;
-import android.app.Instrumentation;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.LocaleList;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.os.LocaleListCompat;
@@ -33,6 +35,7 @@ import androidx.preference.TwoStatePreference;
 import org.exbin.bined.CodeCharactersCase;
 import org.exbin.bined.CodeType;
 import org.exbin.bined.basic.CodeAreaViewMode;
+import org.exbin.bined.editor.android.options.Theme;
 import org.exbin.bined.editor.android.preference.BinaryEditorPreferences;
 import org.exbin.bined.editor.android.preference.CodeAreaPreferences;
 import org.exbin.bined.editor.android.preference.EncodingPreference;
@@ -41,8 +44,6 @@ import org.exbin.bined.editor.android.preference.MainPreferences;
 import org.exbin.bined.editor.android.preference.PreferencesWrapper;
 import org.exbin.bined.editor.android.preference.TextEncodingPreferences;
 import org.exbin.bined.editor.android.preference.TextFontPreferences;
-
-import java.util.Locale;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -94,10 +95,10 @@ public class SettingsActivity extends AppCompatActivity implements
                         }
                     }
                 });
-/*        ActionBar actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-        } */
+        }
     }
 
     @Nonnull
@@ -121,7 +122,10 @@ public class SettingsActivity extends AppCompatActivity implements
         if (getSupportFragmentManager().popBackStackImmediate()) {
             return true;
         }
-        return super.onSupportNavigateUp();
+
+        super.onSupportNavigateUp();
+        finish();
+        return true;
     }
 
     @Override
@@ -170,12 +174,17 @@ public class SettingsActivity extends AppCompatActivity implements
             ListPreference languagePreference = findPreference(LANGUAGE_KEY);
             languagePreference.setOnPreferenceChangeListener((preference, newValue) -> {
                 String language = (String) newValue;
-                // Dynamically change theme
-                if ("default".equals(language)) {
-                    AppCompatDelegate.setApplicationLocales(LocaleListCompat. getEmptyLocaleList());
-                } else {
-                    AppCompatDelegate.setApplicationLocales(LocaleListCompat.create(Locale.forLanguageTag(language)));
-                }
+                // Dynamically change language
+                LocaleListCompat locales = MainActivity.getLanguageLocaleList("default".equals(language) ? "" : language);
+                AppCompatDelegate.setApplicationLocales(locales);
+
+                // Update title for possibly switched language
+                Resources resources = getResources();
+                Configuration configuration = resources.getConfiguration();
+                configuration.setLocales((LocaleList) AppCompatDelegate.getApplicationLocales().unwrap());
+                resources.updateConfiguration(configuration, null);
+
+                activity.setTitle(resources.getString(R.string.pref_header_appearance));
 
                 return true;
             });
@@ -185,9 +194,9 @@ public class SettingsActivity extends AppCompatActivity implements
             ListPreference themePreference = findPreference(THEME_KEY);
             themePreference.setOnPreferenceChangeListener((preference, newValue) -> {
                 // Dynamically change theme
-                if ("dark".equals(newValue)) {
+                if (Theme.DARK.name().equalsIgnoreCase((String) newValue)) {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                } else if ("light".equals(newValue)) {
+                } else if (Theme.LIGHT.name().equalsIgnoreCase((String) newValue)) {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                 } else {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);

@@ -94,6 +94,7 @@ import org.exbin.framework.bined.BinaryStatusApi;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -270,7 +271,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             contentView.addView(codeArea);
         }
 
-        AppCompatDelegate.setApplicationLocales(LocaleListCompat.wrap(getLanguageLocaleList()));
+        AppCompatDelegate.setApplicationLocales(getLanguageLocaleList());
 
         BasicCodeAreaColorsProfile basicColors = codeArea.getBasicColors().orElse(null);
         if (basicColors == null) {
@@ -332,16 +333,14 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     }
 
     @Nonnull
-    private LocaleList getLanguageLocaleList() {
+    private LocaleListCompat getLanguageLocaleList() {
         String language = appPreferences.getMainPreferences().getLocaleTag();
 
         if (language.isEmpty()) {
-            return LocaleList.getEmptyLocaleList();
-        } else if ("en".equals(language)) {
-            return LocaleList.forLanguageTags("en_US");
+            return LocaleListCompat.getEmptyLocaleList();
         }
 
-        return LocaleList.forLanguageTags(language);
+        return LocaleListCompat.create(Locale.forLanguageTag(language));
     }
 
     private void applySettings() {
@@ -768,7 +767,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("*/*");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.putExtra(Intent.EXTRA_LOCALE_LIST, getLanguageLocaleList());
+            intent.putExtra(Intent.EXTRA_LOCALE_LIST, (LocaleList) getLanguageLocaleList().unwrap());
         }
 
         Uri pickerInitialUri = fileHandler.getPickerInitialUri();
@@ -829,7 +828,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("*/*");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.putExtra(Intent.EXTRA_LOCALE_LIST, getLanguageLocaleList());
+            intent.putExtra(Intent.EXTRA_LOCALE_LIST, (LocaleList) getLanguageLocaleList().unwrap());
         }
 
         Uri pickerInitialUri = fileHandler.getPickerInitialUri();
@@ -1141,5 +1140,14 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     public static boolean isGoogleTV(Context context) {
         final PackageManager pm = context.getPackageManager();
         return pm.hasSystemFeature(PackageManager.FEATURE_LEANBACK);
+    }
+
+    @Nonnull
+    public static LocaleListCompat getLanguageLocaleList(String language) {
+        if (language.isEmpty()) {
+            return LocaleListCompat.getEmptyLocaleList();
+        }
+
+        return LocaleListCompat.create(Locale.forLanguageTag(language));
     }
 }

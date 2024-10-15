@@ -9,7 +9,7 @@ android {
         minSdk 24
         targetSdk 34
         versionCode 8
-        versionName "0.2.2"
+        versionName "0.2.3-SNAPSHOT"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
     buildTypes {
