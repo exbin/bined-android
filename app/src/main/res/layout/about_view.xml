@@ -43,7 +43,7 @@
                 android:paddingLeft="10dp"
                 android:paddingTop="10dp"
                 android:paddingRight="10dp"
-                android:text="Miroslav Hajda\nGovind S Nair (Hindi translation)"
+                android:text="Miroslav Hajda\nReza Almanda (app logo)\nGovind S Nair (Hindi translation)"
                 tools:ignore="HardcodedText" />
         </LinearLayout>
     </ScrollView>
