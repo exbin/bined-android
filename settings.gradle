@@ -13,4 +13,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "BinEd"
-include ':app'
+include ':app', ':file_picker'

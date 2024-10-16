@@ -182,7 +182,7 @@ public class SettingsActivity extends AppCompatActivity implements
                 Resources resources = getResources();
                 Configuration configuration = resources.getConfiguration();
                 configuration.setLocales((LocaleList) AppCompatDelegate.getApplicationLocales().unwrap());
-                resources.updateConfiguration(configuration, null);
+                resources = getContext().createConfigurationContext(configuration).getResources();
 
                 activity.setTitle(resources.getString(R.string.pref_header_appearance));
 

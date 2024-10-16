@@ -794,24 +794,6 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         dialog.show(getSupportFragmentManager(), OpenFileDialog.class.getName());
     }
 
-    private void requestWriteExternalStoragePermission() {
-        final String[] permissions = new String[]{
-                Manifest.permission.READ_EXTERNAL_STORAGE
-                , Manifest.permission.WRITE_EXTERNAL_STORAGE
-        };
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage(R.string.storage_permission_request);
-            builder.setPositiveButton(R.string.button_request, (dialog, which) -> {
-                ActivityCompat.requestPermissions(MainActivity.this, permissions, STORAGE_PERMISSION_CODE);
-            });
-            builder.setNegativeButton(R.string.button_cancel, null);
-            builder.show();
-        } else {
-            ActivityCompat.requestPermissions(MainActivity.this, permissions, STORAGE_PERMISSION_CODE);
-        }
-    }
-
     public void saveAs() {
         saveAs(null);
     }
@@ -1140,6 +1122,24 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     public static boolean isGoogleTV(Context context) {
         final PackageManager pm = context.getPackageManager();
         return pm.hasSystemFeature(PackageManager.FEATURE_LEANBACK);
+    }
+
+    private void requestWriteExternalStoragePermission() {
+        final String[] permissions = new String[]{
+                Manifest.permission.READ_EXTERNAL_STORAGE
+                , Manifest.permission.WRITE_EXTERNAL_STORAGE
+        };
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(R.string.storage_permission_request);
+            builder.setPositiveButton(R.string.button_request, (dialog, which) -> {
+                ActivityCompat.requestPermissions(MainActivity.this, permissions, STORAGE_PERMISSION_CODE);
+            });
+            builder.setNegativeButton(R.string.button_cancel, null);
+            builder.show();
+        } else {
+            ActivityCompat.requestPermissions(MainActivity.this, permissions, STORAGE_PERMISSION_CODE);
+        }
     }
 
     @Nonnull

@@ -1,0 +1,27 @@
+apply plugin: 'com.android.library'
+
+android {
+    namespace = 'com.rustamg.filedialogs'
+    compileSdk 34
+
+    defaultConfig {
+        minSdk 24
+        targetSdk 34
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    compileOnly group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
+    implementation 'com.google.android.material:material:1.12.0'
+}

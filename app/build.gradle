@@ -24,27 +24,28 @@ android {
     namespace 'org.exbin.bined.editor.android'
 }
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'androidx.appcompat:appcompat:1.7.0'
+//    implementation 'androidx.appcompat:appcompat:1.7.0'
 //    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     compileOnly group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
-    implementation 'com.github.rustamg:file-dialogs:1.0'
     implementation 'com.google.android.material:material:1.12.0'
     implementation 'androidx.preference:preference:1.2.1'
-    testImplementation 'junit:junit:4.13.2'
-    testImplementation fileTree(include: ['*.jar'], dir: 'libs')
-    testImplementation 'androidx.test:core:1.6.1'
-//    testImplementation 'androidx.test.ext:junit:1.2.1'
-    testCompileOnly group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
+    implementation project(':file_picker')
 //    implementation 'org.exbin.bined:bined-core:0.3.0-SNAPSHOT'
 //    implementation 'org.exbin.bined:bined-operation:0.3.0-SNAPSHOT'
     implementation 'org.exbin.auxiliary:binary_data:0.2.1'
 //    implementation 'org.exbin.auxiliary:binary_data-paged:0.2.1'
+
+    testCompileOnly group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation fileTree(include: ['*.jar'], dir: 'libs')
+    testImplementation 'androidx.test:core:1.6.1'
+//    testImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
 }
