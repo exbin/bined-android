@@ -1,1 +1,1 @@
-BinEd - Binary/Hex Editor
+BinEd - Hex Editor
