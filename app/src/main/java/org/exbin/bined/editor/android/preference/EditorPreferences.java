@@ -47,7 +47,7 @@ public class EditorPreferences implements EditorOptions {
     @Nonnull
     @Override
     public FileHandlingMode getFileHandlingMode() {
-        FileHandlingMode defaultFileHandlingMode = FileHandlingMode.DELTA;
+        FileHandlingMode defaultFileHandlingMode = FileHandlingMode.MEMORY;
         try {
             return FileHandlingMode.valueOf(preferences.get(PREFERENCES_FILE_HANDLING_MODE, defaultFileHandlingMode.name()));
         } catch (IllegalArgumentException ex) {

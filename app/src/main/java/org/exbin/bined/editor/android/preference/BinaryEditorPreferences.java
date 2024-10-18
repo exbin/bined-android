@@ -15,6 +15,8 @@
  */
 package org.exbin.bined.editor.android.preference;
 
+import org.exbin.framework.bined.FileHandlingMode;
+
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -109,6 +111,7 @@ public class BinaryEditorPreferences {
     public TextFontPreferences getFontPreferences() {
         return fontPreferences;
     }
+
 /*
     @Nonnull
     public CodeAreaLayoutPreferences getLayoutPreferences() {

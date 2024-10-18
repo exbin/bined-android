@@ -17,6 +17,7 @@ package org.exbin.bined.editor.android;
 
 import android.Manifest;
 import android.content.ActivityNotFoundException;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -57,6 +58,7 @@ import com.rustamg.filedialogs.FileDialog;
 import com.rustamg.filedialogs.OpenFileDialog;
 import com.rustamg.filedialogs.SaveFileDialog;
 
+import org.exbin.auxiliary.binary_data.delta.DeltaDocument;
 import org.exbin.bined.CaretOverlapMode;
 import org.exbin.bined.CodeAreaCaretListener;
 import org.exbin.bined.CodeAreaCaretPosition;
@@ -260,8 +262,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         fileHandler = application.getFileHandler();
         if (fileHandler == null) {
             codeArea = findViewById(R.id.codeArea);
-            fileHandler = new BinEdFileHandler(codeArea);
-            application.setFileHandler(fileHandler);
+            fileHandler = application.createFileHandler(codeArea);
         } else {
             codeArea = fileHandler.getCodeArea();
             ViewGroup parentView = (ViewGroup) codeArea.getParent();
@@ -317,15 +318,16 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
         if (Intent.ACTION_VIEW.equals(action) || Intent.ACTION_EDIT.equals(action)) {
             String scheme = intent.getScheme();
-            if ("file".equals(scheme) || "content".equals(scheme)) {
+            if (ContentResolver.SCHEME_FILE.equals(scheme) || ContentResolver.SCHEME_CONTENT.equals(scheme)) {
                 Uri fileUri = intent.getData();
                 if (fileUri != null) {
                     releaseFile(() -> {
-                        fileHandler.openFile(getContentResolver(), fileUri);
+                        fileHandler.openFile(getContentResolver(), fileUri, appPreferences.getEditorPreferences().getFileHandlingMode());
                         // Content should be opened as unspecified file
-                        if ("content".equals(scheme)) {
+                        if (ContentResolver.SCHEME_CONTENT.equals(scheme)) {
                             fileHandler.clearFileUri();
                         }
+                        updateStatus();
                     });
                 }
             }
@@ -895,9 +897,9 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         BinaryStatusApi.MemoryMode newMemoryMode = BinaryStatusApi.MemoryMode.RAM_MEMORY;
         if (((EditModeCapable) codeArea).getEditMode() == EditMode.READ_ONLY) {
             newMemoryMode = BinaryStatusApi.MemoryMode.READ_ONLY;
-        } /* else if (codeArea.getContentData() instanceof DeltaDocument) {
+        } else if (codeArea.getContentData() instanceof DeltaDocument) {
             newMemoryMode = BinaryStatusApi.MemoryMode.DELTA_MODE;
-        } */
+        }
 
         binaryStatus.setMemoryMode(newMemoryMode);
     }
@@ -972,7 +974,8 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             return;
         }
 
-        fileHandler.openFile(getContentResolver(), data.getData());
+        fileHandler.openFile(getContentResolver(), data.getData(), appPreferences.getEditorPreferences().getFileHandlingMode());
+        updateStatus();
     }
 
     private void saveFileResultCallback(ActivityResult activityResult) {
@@ -998,7 +1001,8 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     @Override
     public void onFileSelected(FileDialog dialog, File file) {
         if (dialog instanceof OpenFileDialog) {
-            fileHandler.openFile(getContentResolver(), Uri.fromFile(file));
+            fileHandler.openFile(getContentResolver(), Uri.fromFile(file), appPreferences.getEditorPreferences().getFileHandlingMode());
+            updateStatus();
         } else {
             fileHandler.saveFile(getContentResolver(), Uri.fromFile(file));
             if (postSaveAsAction != null) {

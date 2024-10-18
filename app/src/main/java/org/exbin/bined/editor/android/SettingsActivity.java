@@ -38,12 +38,14 @@ import org.exbin.bined.basic.CodeAreaViewMode;
 import org.exbin.bined.editor.android.options.Theme;
 import org.exbin.bined.editor.android.preference.BinaryEditorPreferences;
 import org.exbin.bined.editor.android.preference.CodeAreaPreferences;
+import org.exbin.bined.editor.android.preference.EditorPreferences;
 import org.exbin.bined.editor.android.preference.EncodingPreference;
 import org.exbin.bined.editor.android.preference.FontPreference;
 import org.exbin.bined.editor.android.preference.MainPreferences;
 import org.exbin.bined.editor.android.preference.PreferencesWrapper;
 import org.exbin.bined.editor.android.preference.TextEncodingPreferences;
 import org.exbin.bined.editor.android.preference.TextFontPreferences;
+import org.exbin.framework.bined.FileHandlingMode;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -69,6 +71,7 @@ public class SettingsActivity extends AppCompatActivity implements
     public static final String HEX_CHARACTERS_CASE = "hex_characters_case";
     public static final String CODE_COLORIZATION = "code_colorization";
     public static final String NONPRINTABLE_CHARACTERS = "nonprintable_characters";
+    public static final String FILE_HANDLING_MODE = "file_handling_mode";
 
     private BinaryEditorPreferences appPreferences;
 
@@ -158,6 +161,20 @@ public class SettingsActivity extends AppCompatActivity implements
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.header_preferences, rootKey);
+
+            SettingsActivity activity = (SettingsActivity) requireActivity();
+            EditorPreferences editorPreferences = activity.getAppPreferences().getEditorPreferences();
+            ((ListPreference) findPreference(FILE_HANDLING_MODE)).setValue(editorPreferences.getFileHandlingMode().name());
+        }
+
+        @Override
+        public void onDestroy() {
+            // Save to preferences
+            SettingsActivity activity = (SettingsActivity) requireActivity();
+            EditorPreferences editorPreferences = activity.getAppPreferences().getEditorPreferences();
+            editorPreferences.setFileHandlingMode(FileHandlingMode.valueOf(((ListPreference) findPreference(FILE_HANDLING_MODE)).getValue()));
+
+            super.onDestroy();
         }
     }
 

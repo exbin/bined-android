@@ -11,4 +11,11 @@
         app:key="view_header"
         app:title="@string/pref_view_header" />
 
+    <ListPreference
+        app:defaultValue="MEMORY"
+        app:entries="@array/file_handling_mode_entries"
+        app:entryValues="@array/file_handling_mode_values"
+        app:key="file_handling_mode"
+        app:title="@string/file_handling_mode"
+        app:useSimpleSummaryProvider="true" />
 </PreferenceScreen>

@@ -39,6 +39,7 @@
     <string name="hex_characters_case">Hex Characters Case</string>
     <string name="encoding">Encoding</string>
     <string name="code_colorization">Code Colorization</string>
+    <string name="file_handling_mode">File Handling Mode</string>
     <string name="nonprintable_characters">Nonprintable Characters</string>
     <string name="go_to_position">Go To Position</string>
     <string name="edit_selection">Edit Selection</string>

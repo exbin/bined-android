@@ -16,11 +16,14 @@
 package org.exbin.bined.editor.android;
 
 import android.content.ContentResolver;
-import android.content.res.XmlResourceParser;
 import android.net.Uri;
 
 import org.exbin.auxiliary.binary_data.BinaryData;
 import org.exbin.auxiliary.binary_data.ByteArrayEditableData;
+import org.exbin.auxiliary.binary_data.EditableBinaryData;
+import org.exbin.auxiliary.binary_data.delta.DeltaDocument;
+import org.exbin.auxiliary.binary_data.delta.SegmentsRepository;
+import org.exbin.auxiliary.binary_data.paged.PagedData;
 import org.exbin.bined.EditOperation;
 import org.exbin.bined.android.CodeAreaPainter;
 import org.exbin.bined.android.basic.CodeArea;
@@ -29,6 +32,7 @@ import org.exbin.bined.android.capability.ColorAssessorPainterCapable;
 import org.exbin.bined.operation.android.CodeAreaOperationCommandHandler;
 import org.exbin.bined.operation.android.CodeAreaUndoRedo;
 import org.exbin.framework.bined.BinEdCodeAreaAssessor;
+import org.exbin.framework.bined.FileHandlingMode;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -47,6 +51,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
  */
 @ParametersAreNonnullByDefault
 public class BinEdFileHandler {
+
+    private SegmentsRepository segmentsRepository;
 
     private CodeArea codeArea;
     private CodeAreaUndoRedo undoRedo;
@@ -71,6 +77,14 @@ public class BinEdFileHandler {
         codeArea.setPainter(painter);
     }
 
+    public void setNewData(FileHandlingMode fileHandlingMode) {
+        if (fileHandlingMode == FileHandlingMode.DELTA) {
+            codeArea.setContentData(segmentsRepository.createDocument());
+        } else {
+            codeArea.setContentData(new PagedData());
+        }
+    }
+
     public void newFile() {
         codeArea.setContentData(new ByteArrayEditableData());
         undoRedo.clear();
@@ -79,20 +93,34 @@ public class BinEdFileHandler {
         documentOriginalSize = 0;
     }
 
-    public void openFile(ContentResolver contentResolver, Uri fileUri) {
-        ByteArrayEditableData fileData = new ByteArrayEditableData();
+    public void openFile(ContentResolver contentResolver, Uri fileUri, FileHandlingMode fileHandlingMode) {
+        BinaryData oldData = codeArea.getContentData();
         try {
-            InputStream inputStream = contentResolver.openInputStream(fileUri);
-            if (inputStream == null) {
-                return;
+            if (fileHandlingMode == FileHandlingMode.DELTA) {
+                ContentDataSource dataSource = new ContentDataSource(contentResolver, fileUri);
+                segmentsRepository.addDataSource(dataSource);
+                DeltaDocument document = segmentsRepository.createDocument(dataSource);
+                codeArea.setContentData(document);
+                oldData.dispose();
+            } else {
+                BinaryData data = oldData;
+                if (!(data instanceof PagedData)) {
+                    data = new PagedData();
+                    oldData.dispose();
+                }
+                InputStream inputStream = contentResolver.openInputStream(fileUri);
+                if (inputStream == null) {
+                    return;
+                }
+                ((EditableBinaryData) data).loadFromStream(inputStream);
+                inputStream.close();
+                codeArea.setContentData(data);
             }
-            fileData.loadFromStream(inputStream);
-            inputStream.close();
-            documentOriginalSize = fileData.getDataSize();
+
             undoRedo.clear();
-            codeArea.setContentData(fileData);
             currentFileUri = fileUri;
             pickerInitialUri = fileUri;
+            fileSync();
         } catch (IOException ex) {
             Logger.getLogger(BinEdFileHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -101,19 +129,43 @@ public class BinEdFileHandler {
     public void saveFile(ContentResolver contentResolver, Uri fileUri) {
         BinaryData contentData = codeArea.getContentData();
         try {
-            OutputStream outputStream = contentResolver.openOutputStream(fileUri);
-            if (outputStream == null) {
-                return;
+            if (contentData instanceof DeltaDocument) {
+                // TODO freezes window / replace with progress bar
+                DeltaDocument document = (DeltaDocument) contentData;
+                ContentDataSource fileSource = (ContentDataSource) document.getDataSource();
+                if (fileSource == null || !fileUri.equals(fileSource.getFileUri())) {
+                    fileSource = new ContentDataSource(contentResolver, fileUri);
+                    segmentsRepository.addDataSource(fileSource);
+                    document.setDataSource(fileSource);
+                }
+                if (fileSource == null) {
+                    throw new IllegalStateException("Unexpected state");
+                }
+                segmentsRepository.saveDocument(document);
+
+                fileSync();
+                currentFileUri = fileUri;
+                pickerInitialUri = fileUri;
+            } else {
+                OutputStream outputStream = contentResolver.openOutputStream(fileUri);
+                if (outputStream == null) {
+                    return;
+                }
+                contentData.saveToStream(outputStream);
+                outputStream.close();
+
+                fileSync();
+                currentFileUri = fileUri;
+                pickerInitialUri = fileUri;
             }
-            codeArea.getContentData().saveToStream(outputStream);
-            outputStream.close();
-            documentOriginalSize = contentData.getDataSize();
-            undoRedo.setSyncPosition();
-            currentFileUri = fileUri;
-            pickerInitialUri = fileUri;
         } catch (IOException ex) {
             Logger.getLogger(BinEdFileHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private void fileSync() {
+        documentOriginalSize = getCodeArea().getDataSize();
+        undoRedo.setSyncPosition();
     }
 
     @Nonnull
@@ -128,6 +180,15 @@ public class BinEdFileHandler {
 
     public long getDocumentOriginalSize() {
         return documentOriginalSize;
+    }
+
+    @Nonnull
+    public FileHandlingMode getFileHandlingMode() {
+        return getCodeArea().getContentData() instanceof DeltaDocument ? FileHandlingMode.DELTA : FileHandlingMode.MEMORY;
+    }
+
+    public void setSegmentsRepository(SegmentsRepository segmentsRepository) {
+        this.segmentsRepository = segmentsRepository;
     }
 
     @Nullable

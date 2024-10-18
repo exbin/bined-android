@@ -78,4 +78,14 @@
         <item>LOWER</item>
         <item>UPPER</item>
     </string-array>
+
+    <string-array name="file_handling_mode_entries">
+        <item>Load full file</item>
+        <item>Changes only</item>
+    </string-array>
+
+    <string-array name="file_handling_mode_values">
+        <item>MEMORY</item>
+        <item>DELTA</item>
+    </string-array>
 </resources>

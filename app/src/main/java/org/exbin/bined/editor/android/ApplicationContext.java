@@ -17,6 +17,8 @@ package org.exbin.bined.editor.android;
 
 import android.app.Application;
 
+import org.exbin.auxiliary.binary_data.delta.SegmentsRepository;
+import org.exbin.bined.android.basic.CodeArea;
 import org.exbin.bined.editor.android.preference.BinaryEditorPreferences;
 import org.exbin.bined.editor.android.preference.PreferencesWrapper;
 
@@ -33,6 +35,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class ApplicationContext extends Application {
 
     private BinaryEditorPreferences appPreferences;
+    private final SegmentsRepository segmentsRepository = new SegmentsRepository();
 
     private BinEdFileHandler fileHandler = null;
 
@@ -53,7 +56,10 @@ public class ApplicationContext extends Application {
         return fileHandler;
     }
 
-    public void setFileHandler(BinEdFileHandler fileHandler) {
-        this.fileHandler = fileHandler;
+    @Nonnull
+    public BinEdFileHandler createFileHandler(CodeArea codeArea) {
+        fileHandler = new BinEdFileHandler(codeArea);
+        fileHandler.setSegmentsRepository(segmentsRepository);
+        return fileHandler;
     }
 }

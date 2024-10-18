@@ -25,7 +25,7 @@ UNDER DEVELOPMENT
   * Insert and overwrite edit modes
   * TODO: Searching for text / hexadecimal code with matching highlighting
   * Support for undo/redo
-  * TODO: Support for files with size up to exabytes
+  * Support for files with size up to exabytes
 
 Compiling
 ---------
