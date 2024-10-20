@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="en">
     <string name="app_name">BinEd</string>
     <string name="app_about">Name: BinEd - Binary/Hex Editor\nVersion: %1$s\nVendor: &lt;a href="https://exbin.org"&gt;ExBin Project&lt;/a&gt;\nLicense: &lt;a href="https://www.apache.org/licenses/LICENSE-2.0"&gt;Apache License, Version 2.0&lt;/a&gt;\nHomepage: &lt;a href="https://bined.exbin.org/android"&gt;https://bined.exbin.org/android&lt;/a&gt;\n\nContributors:</string>
     <string name="bined_logo_description">BinEd Logo</string>

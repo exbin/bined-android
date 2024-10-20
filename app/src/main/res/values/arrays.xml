@@ -5,20 +5,20 @@
         <item>Dark</item>
     </string-array>
 
-    <string-array name="theme_values">
+    <string-array name="theme_values" translatable="false">
         <item>default</item>
         <item>light</item>
         <item>dark</item>
     </string-array>
 
-    <string-array name="language_entries">
+    <string-array name="language_entries" translatable="false">
         <item>Default (system)</item>
         <item>English</item>
         <item>Česky</item>
         <item>हिंदी</item>
     </string-array>
 
-    <string-array name="language_values">
+    <string-array name="language_values" translatable="false">
         <item>default</item>
         <item>en</item>
         <item>cs</item>
@@ -34,7 +34,7 @@
         <item>Custom</item>
     </string-array>
 
-    <string-array name="bytes_per_row_values">
+    <string-array name="bytes_per_row_values" translatable="false">
         <item>0</item>
         <item>4</item>
         <item>8</item>
@@ -49,7 +49,7 @@
         <item>Text Preview</item>
     </string-array>
 
-    <string-array name="view_mode_values">
+    <string-array name="view_mode_values" translatable="false">
         <item>DUAL</item>
         <item>CODE_MATRIX</item>
         <item>TEXT_PREVIEW</item>
@@ -62,7 +62,7 @@
         <item>Hexadecimal</item>
     </string-array>
 
-    <string-array name="code_type_values">
+    <string-array name="code_type_values" translatable="false">
         <item>BINARY</item>
         <item>OCTAL</item>
         <item>DECIMAL</item>
@@ -74,7 +74,7 @@
         <item>Upper Case</item>
     </string-array>
 
-    <string-array name="hex_chars_case_values">
+    <string-array name="hex_chars_case_values" translatable="false">
         <item>LOWER</item>
         <item>UPPER</item>
     </string-array>
@@ -84,7 +84,7 @@
         <item>Changes only</item>
     </string-array>
 
-    <string-array name="file_handling_mode_values">
+    <string-array name="file_handling_mode_values" translatable="false">
         <item>MEMORY</item>
         <item>DELTA</item>
     </string-array>

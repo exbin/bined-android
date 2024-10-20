@@ -38,6 +38,7 @@
     <string name="hex_characters_case">Velikost hexadecimálních znaků</string>
     <string name="encoding">Kódování</string>
     <string name="code_colorization">Zbarvení kódu</string>
+    <string name="file_handling_mode">Režim zpracování souborů</string>
     <string name="nonprintable_characters">Netisknutelné znaky</string>
     <string name="go_to_position">Přejít na pozici</string>
     <string name="edit_selection">Upravit výběr</string>
