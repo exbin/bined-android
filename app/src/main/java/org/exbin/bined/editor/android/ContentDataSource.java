@@ -57,9 +57,9 @@ public class ContentDataSource implements DataSource {
     public ContentDataSource(ContentResolver contentResolver, Uri fileUri) throws IOException {
         this.contentResolver = contentResolver;
         this.fileUri = fileUri;
-        descriptor = contentResolver.openAssetFileDescriptor(fileUri, "rwa");
-        outputStream = descriptor.createOutputStream();
+        descriptor = contentResolver.openAssetFileDescriptor(fileUri, "rw");
         inputStream = descriptor.createInputStream();
+        outputStream = descriptor.createOutputStream();
         fileChannel = outputStream.getChannel();
         dataLength = descriptor.getLength();
         window = new DeltaDataPageWindow(this);
@@ -82,7 +82,7 @@ public class ContentDataSource implements DataSource {
 
     @Override
     public long getDataLength() throws IOException {
-        return descriptor.getLength();
+        return dataLength;
     }
 
     @Override
@@ -136,26 +136,9 @@ public class ContentDataSource implements DataSource {
 
     @Override
     public void clearCache() {
-        flush();
         listeners.forEach(listener -> {
             listener.clearCache();
         });
-    }
-
-    private void flush() {
-        checkClosed();
-
-        try {
-            fileChannel.close();
-            inputStream.close();
-            outputStream.close();
-
-            outputStream = descriptor.createOutputStream();
-            inputStream = descriptor.createInputStream();
-            fileChannel = outputStream.getChannel();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Override
