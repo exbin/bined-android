@@ -83,10 +83,7 @@ public class BinEdFileHandler {
         } else {
             codeArea.setContentData(new PagedData());
         }
-    }
 
-    public void newFile() {
-        codeArea.setContentData(new ByteArrayEditableData());
         undoRedo.clear();
         currentFileUri = null;
 

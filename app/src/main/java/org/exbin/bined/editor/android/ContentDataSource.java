@@ -21,8 +21,11 @@ import android.net.Uri;
 
 import org.exbin.auxiliary.binary_data.delta.DataSource;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,14 +42,26 @@ public class ContentDataSource implements DataSource {
 
     private final ContentResolver contentResolver;
     private final Uri fileUri;
+
+    private AssetFileDescriptor descriptor;
+    private final ByteBuffer byteBuffer = ByteBuffer.allocate(1);
     @Nonnull
     private final DeltaDataPageWindow window;
+    private FileInputStream inputStream;
+    private FileOutputStream outputStream;
+    private FileChannel fileChannel;
     private final List<CacheClearListener> listeners = new ArrayList<>();
+    private long dataLength;
     private boolean closed = false;
 
-    public ContentDataSource(ContentResolver contentResolver, Uri fileUri) {
+    public ContentDataSource(ContentResolver contentResolver, Uri fileUri) throws IOException {
         this.contentResolver = contentResolver;
         this.fileUri = fileUri;
+        descriptor = contentResolver.openAssetFileDescriptor(fileUri, "rwa");
+        outputStream = descriptor.createOutputStream();
+        inputStream = descriptor.createInputStream();
+        fileChannel = outputStream.getChannel();
+        dataLength = descriptor.getLength();
         window = new DeltaDataPageWindow(this);
     }
 
@@ -56,27 +71,32 @@ public class ContentDataSource implements DataSource {
     }
 
     @Nonnull
+    public FileInputStream getInputStream() {
+        return inputStream;
+    }
+
+    @Nonnull
     public Uri getFileUri() {
         return fileUri;
     }
 
     @Override
     public long getDataLength() throws IOException {
-        try (AssetFileDescriptor descriptor = contentResolver.openAssetFileDescriptor(fileUri, "r")) {
-            return descriptor.getLength();
-        }
+        return descriptor.getLength();
     }
 
     @Override
     public void setDataLength(long dataLength) throws IOException {
-        throw new UnsupportedOperationException();
+        this.dataLength = dataLength;
+        fileChannel.truncate(dataLength);
     }
 
     @Override
     public byte getByte(long position) throws IOException {
         checkClosed();
         return window.getByte(position);
-        /* try (InputStream stream = contentResolver.openInputStream(fileUri)) {
+        /*
+        try (InputStream stream = contentResolver.openInputStream(fileUri)) {
             stream.skip(position);
             int value = stream.read();
             if (value == -1) {
@@ -88,32 +108,63 @@ public class ContentDataSource implements DataSource {
 
     @Override
     public void setByte(long position, byte value) throws IOException {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public int read(long position, byte[] buffer, int offset, int length) throws IOException {
-        try (InputStream stream = contentResolver.openInputStream(fileUri)) {
-            stream.skip(position);
-            return stream.read(buffer, offset, length);
+        byteBuffer.put(0, value);
+        fileChannel.write(byteBuffer, position);
+        if (position > dataLength) {
+            dataLength = position + 1;
         }
     }
 
     @Override
+    public int read(long position, byte[] buffer, int offset, int length) throws IOException {
+        checkClosed();
+        return window.read(position, buffer, offset, length);
+    }
+
+    @Override
     public void write(long position, byte[] buffer, int offset, int length) throws IOException {
-        throw new UnsupportedOperationException();
+        ByteBuffer writeBuffer = ByteBuffer.wrap(buffer, offset, length);
+        int written = fileChannel.write(writeBuffer, position);
+        if (written == -1) {
+            throw new IllegalStateException("Writing error at position " + position);
+        }
+
+        if (position + length > dataLength) {
+            dataLength = position + length;
+        }
     }
 
     @Override
     public void clearCache() {
+        flush();
         listeners.forEach(listener -> {
             listener.clearCache();
         });
     }
 
+    private void flush() {
+        checkClosed();
+
+        try {
+            fileChannel.close();
+            inputStream.close();
+            outputStream.close();
+
+            outputStream = descriptor.createOutputStream();
+            inputStream = descriptor.createInputStream();
+            fileChannel = outputStream.getChannel();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
     public void close() throws IOException {
         checkClosed();
+        fileChannel.close();
+        inputStream.close();
+        outputStream.close();
+        descriptor.close();
         closed = true;
     }
 
@@ -131,7 +182,7 @@ public class ContentDataSource implements DataSource {
         listeners.remove(listener);
     }
 
-    public static interface CacheClearListener {
+    public interface CacheClearListener {
 
         void clearCache();
     }

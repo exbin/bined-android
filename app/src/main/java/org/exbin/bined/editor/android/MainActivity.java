@@ -182,57 +182,8 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             }
         }
     };
-    private final View.OnKeyListener codeAreaOnKeyListener = new View.OnKeyListener() {
-
-        private final KeyListener keyListener = new TextKeyListener(TextKeyListener.Capitalize.NONE, false);
-        private final Editable editable = Editable.Factory.getInstance().newEditable("");
-
-        @Override
-        public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
-            try {
-                if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-                    if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_DEL || keyEvent.getKeyCode() == KeyEvent.KEYCODE_FORWARD_DEL) {
-                        editable.clear();
-                        codeArea.getCommandHandler().keyPressed(keyEvent);
-                    } else {
-                        keyListener.onKeyDown(view, editable, keyCode, keyEvent);
-                        processKeys(keyEvent);
-                    }
-                } else if (keyEvent.getAction() == KeyEvent.ACTION_UP) {
-                    editable.clear();
-                    if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_DPAD_CENTER) {
-                        if (keyEvent.getEventTime() - keyEvent.getDownTime() > TimeUnit.SECONDS.toMillis(1)) {
-                            codeArea.showContextMenu();
-                        } else {
-                            View keyStripeView = findViewById(R.id.controlPanel);
-                            keyStripeView.requestFocus();
-                        }
-                    } else if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_BACK && isGoogleTV(codeArea.getContext())) {
-                        toolbar.showOverflowMenu();
-                    } else {
-                        codeArea.getCommandHandler().keyPressed(keyEvent);
-                    }
-                } else {
-                    keyListener.onKeyOther(view, editable, keyEvent);
-                    processKeys(keyEvent);
-                }
-                return true;
-            } catch (Exception ex) {
-                // ignore
-            }
-            return false;
-        }
-
-        private void processKeys(KeyEvent keyEvent) {
-            int outputCharsLength = editable.length();
-            if (outputCharsLength > 0) {
-                for (int i = 0; i < outputCharsLength; i++) {
-                    codeArea.getCommandHandler().keyTyped(editable.charAt(i), keyEvent);
-                }
-                editable.clear();
-            }
-        }
-    };
+    private final View.OnKeyListener codeAreaOnKeyListener = new CodeAreaKeyListener();
+    private Object codeAreaOnUnhandledKeyListener = null;
     private final EditModeChangedListener codeAreaEditModeChangedListener = binaryStatus::setEditMode;
 
     private final ActivityResultLauncher<Intent> openFileLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), this::openFileResultCallback);
@@ -292,6 +243,15 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         codeArea.addCaretMovedListener(codeAreaCodeAreaCaretListener);
         codeArea.addEditModeChangedListener(codeAreaEditModeChangedListener);
         codeArea.setOnKeyListener(codeAreaOnKeyListener);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            codeAreaOnUnhandledKeyListener = new View.OnUnhandledKeyEventListener() {
+                @Override
+                public boolean onUnhandledKeyEvent(View view, KeyEvent event) {
+                    return codeAreaOnKeyListener.onKey(view, KeyEvent.KEYCODE_UNKNOWN, event);
+                }
+            };
+            codeArea.addOnUnhandledKeyEventListener((View.OnUnhandledKeyEventListener) codeAreaOnUnhandledKeyListener);
+        }
 
         applySettings();
 
@@ -302,6 +262,9 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     protected void onDestroy() {
         super.onDestroy();
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            codeArea.removeOnUnhandledKeyEventListener((View.OnUnhandledKeyEventListener) codeAreaOnUnhandledKeyListener);
+        }
         codeArea.setOnKeyListener(null);
         codeArea.removeEditModeChangedListener(codeAreaEditModeChangedListener);
         codeArea.removeCaretMovedListener(codeAreaCodeAreaCaretListener);
@@ -516,7 +479,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
         if (id == R.id.action_new) {
             releaseFile(() -> {
-                fileHandler.newFile();
+                fileHandler.setNewData(appPreferences.getEditorPreferences().getFileHandlingMode());
             });
 
             return true;
@@ -1153,5 +1116,62 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         }
 
         return LocaleListCompat.create(Locale.forLanguageTag(language));
+    }
+
+    @ParametersAreNonnullByDefault
+    private class CodeAreaKeyListener implements View.OnKeyListener {
+
+        private final KeyListener keyListener = new TextKeyListener(TextKeyListener.Capitalize.NONE, false);
+        private final Editable editable = Editable.Factory.getInstance().newEditable("");
+
+        public CodeAreaKeyListener() {
+            editable.clear();
+        }
+
+        @Override
+        public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+            try {
+                if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+                    if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_DEL || keyEvent.getKeyCode() == KeyEvent.KEYCODE_FORWARD_DEL) {
+                        editable.clear();
+                        codeArea.getCommandHandler().keyPressed(keyEvent);
+                    } else {
+                        keyListener.onKeyDown(view, editable, keyCode, keyEvent);
+                        processKeys(keyEvent);
+                    }
+                } else if (keyEvent.getAction() == KeyEvent.ACTION_UP) {
+                    editable.clear();
+                    if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_DPAD_CENTER) {
+                        if (keyEvent.getEventTime() - keyEvent.getDownTime() > TimeUnit.SECONDS.toMillis(1)) {
+                            codeArea.showContextMenu();
+                        } else {
+                            View keyStripeView = findViewById(R.id.controlPanel);
+                            keyStripeView.requestFocus();
+                        }
+                    } else if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_BACK && isGoogleTV(codeArea.getContext())) {
+                        toolbar.showOverflowMenu();
+                    } else {
+                        codeArea.getCommandHandler().keyPressed(keyEvent);
+                    }
+                } else {
+                    keyListener.onKeyOther(view, editable, keyEvent);
+                    processKeys(keyEvent);
+                }
+                return true;
+            } catch (Exception ex) {
+                // ignore
+            }
+            return false;
+        }
+
+        private void processKeys(KeyEvent keyEvent) {
+            int outputCharsLength = editable.length();
+            if (outputCharsLength > 0) {
+                for (int i = 0; i < outputCharsLength; i++) {
+                    codeArea.getCommandHandler().keyTyped(editable.charAt(i), keyEvent);
+                }
+                editable.clear();
+            }
+        }
     }
 }

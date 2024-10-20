@@ -60,6 +60,7 @@ public class ApplicationContext extends Application {
     public BinEdFileHandler createFileHandler(CodeArea codeArea) {
         fileHandler = new BinEdFileHandler(codeArea);
         fileHandler.setSegmentsRepository(segmentsRepository);
+        fileHandler.setNewData(appPreferences.getEditorPreferences().getFileHandlingMode());
         return fileHandler;
     }
 }
