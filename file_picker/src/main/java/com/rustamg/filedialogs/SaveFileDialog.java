@@ -41,7 +41,10 @@ public class SaveFileDialog extends FileDialog implements Toolbar.OnMenuItemClic
         mToolbar.getMenu().findItem(R.id.menu_apply).getIcon().setColorFilter(mIconColor, PorterDuff.Mode.SRC_IN);
         mToolbar.setOnMenuItemClickListener(this);
 
-//        mFileNameText.addValidator(new FileNameValidator(getString(R.string.error_invalid_file_name),
+        View saveButton = view.findViewById(R.id.button_save);
+        saveButton.setOnClickListener(this::buttonSave);
+
+        //        mFileNameText.addValidator(new FileNameValidator(getString(R.string.error_invalid_file_name),
 //                getString(R.string.error_empty_field)));
     }
 
@@ -100,5 +103,26 @@ public class SaveFileDialog extends FileDialog implements Toolbar.OnMenuItemClic
         }
 
         return false;
+    }
+
+    public void buttonSave(View view) {
+        String input = mFileNameText.getText().toString();
+        String inputExtension = "";
+
+        if(mExtension != null) {
+            if (!input.endsWith("." + mExtension)) {
+                inputExtension = "." + mExtension;
+            }
+        }
+
+        File result = new File(mCurrentDir, mFileNameText.getText() + inputExtension);
+
+
+        if (result.exists()) {
+            confirmOverwrite(result);
+        }
+        else {
+            sendResult(result);
+        }
     }
 }

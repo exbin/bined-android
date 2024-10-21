@@ -38,16 +38,24 @@
             android:layout_gravity="center" />
     </FrameLayout>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:padding="@dimen/margin_default">
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/et_filename"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:hint="@string/dialog_hint_file_name"
             android:inputType="text|textNoSuggestions" />
-    </FrameLayout>
+
+        <Button
+            android:id="@+id/button_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/menu_item_save" />
+    </LinearLayout>
 </LinearLayout>

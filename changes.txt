@@ -1,5 +1,6 @@
 0.2.3
 - Support for partial file opening
+- Support for D-Pad / Android TV
 
 0.2.2 (2024-10-13)
 - Various bugfixes
