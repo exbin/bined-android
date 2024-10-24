@@ -1019,7 +1019,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     }
 
     public void buttonAction9(View view) {
-        codeArea.getCommandHandler().keyTyped('1', new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_1));
+        codeArea.getCommandHandler().keyTyped('9', new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_9));
     }
 
     public void buttonActionA(View view) {
