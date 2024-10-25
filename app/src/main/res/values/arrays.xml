@@ -88,4 +88,18 @@
         <item>MEMORY</item>
         <item>DELTA</item>
     </string-array>
+
+    <string-array name="keys_panel_mode_entries">
+        <item>Hide</item>
+        <item>Small</item>
+        <item>Medium</item>
+        <item>Big</item>
+    </string-array>
+
+    <string-array name="keys_panel_mode_values" translatable="false">
+        <item>HIDE</item>
+        <item>SMALL</item>
+        <item>MEDIUM</item>
+        <item>BIG</item>
+    </string-array>
 </resources>

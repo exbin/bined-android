@@ -38,7 +38,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
@@ -79,8 +81,10 @@ import org.exbin.bined.android.capability.ColorAssessorPainterCapable;
 import org.exbin.bined.basic.BasicCodeAreaSection;
 import org.exbin.bined.basic.CodeAreaViewMode;
 import org.exbin.bined.capability.EditModeCapable;
+import org.exbin.bined.editor.android.options.KeysPanelMode;
 import org.exbin.bined.editor.android.options.Theme;
 import org.exbin.bined.editor.android.preference.BinaryEditorPreferences;
+import org.exbin.bined.editor.android.preference.EditorPreferences;
 import org.exbin.bined.editor.android.preference.EncodingPreference;
 import org.exbin.bined.editor.android.preference.FontPreference;
 import org.exbin.bined.editor.android.preference.MainPreferences;
@@ -132,6 +136,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     private BinaryEditorPreferences appPreferences;
 
     private Toolbar toolbar;
+    private View keyPanel;
     private Menu menu;
     private SearchView searchView;
     private final BinaryStatusHandler binaryStatus = new BinaryStatusHandler(this);
@@ -207,6 +212,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         }
 
         toolbar = findViewById(R.id.toolbar);
+        keyPanel = findViewById(R.id.keyPanel);
         setSupportActionBar(toolbar);
 
         // For now steal code area and keep it in application context
@@ -256,6 +262,122 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         applySettings();
 
         processIntent(getIntent());
+    }
+
+    private void setupKeyPanel(KeysPanelMode keysPanelMode) {
+        LinearLayout mainView = findViewById(R.id.main);
+        int keyPanelIndex = mainView.indexOfChild(keyPanel);
+        if (keysPanelMode == KeysPanelMode.HIDE) {
+            if (keyPanelIndex >= 0) {
+                mainView.removeViewAt(keyPanelIndex);
+                mainView.requestLayout();
+            }
+            return;
+        }
+
+        if (keyPanelIndex == -1) {
+            mainView.addView(keyPanel, 2);
+            mainView.requestLayout();
+        }
+
+        switch (keysPanelMode) {
+            case SMALL: {
+                setupKeyPanelSize(60, 40);
+                break;
+            }
+            case MEDIUM: {
+                setupKeyPanelSize(90, 60);
+                break;
+            }
+            case BIG: {
+                setupKeyPanelSize(120, 80);
+                break;
+            }
+        }
+        keyPanel.requestLayout();
+    }
+
+    private void setupKeyPanelSize(int buttonWidth, int buttonHeight) {
+        Button button0 = findViewById(R.id.button0);
+        button0.setMinWidth(buttonWidth);
+        button0.setMinHeight(buttonHeight);
+        Button button1 = findViewById(R.id.button1);
+        button1.setMinWidth(buttonWidth);
+        button1.setMinHeight(buttonHeight);
+        Button button2 = findViewById(R.id.button2);
+        button2.setMinWidth(buttonWidth);
+        button2.setMinHeight(buttonHeight);
+        Button button3 = findViewById(R.id.button3);
+        button3.setMinWidth(buttonWidth);
+        button3.setMinHeight(buttonHeight);
+        Button button4 = findViewById(R.id.button4);
+        button4.setMinWidth(buttonWidth);
+        button4.setMinHeight(buttonHeight);
+        Button button5 = findViewById(R.id.button5);
+        button5.setMinWidth(buttonWidth);
+        button5.setMinHeight(buttonHeight);
+        Button button6 = findViewById(R.id.button6);
+        button6.setMinWidth(buttonWidth);
+        button6.setMinHeight(buttonHeight);
+        Button button7 = findViewById(R.id.button7);
+        button7.setMinWidth(buttonWidth);
+        button7.setMinHeight(buttonHeight);
+        Button button8 = findViewById(R.id.button8);
+        button8.setMinWidth(buttonWidth);
+        button8.setMinHeight(buttonHeight);
+        Button button9 = findViewById(R.id.button9);
+        button9.setMinWidth(buttonWidth);
+        button9.setMinHeight(buttonHeight);
+        Button buttonA = findViewById(R.id.buttonA);
+        buttonA.setMinWidth(buttonWidth);
+        buttonA.setMinHeight(buttonHeight);
+        Button buttonB = findViewById(R.id.buttonB);
+        buttonB.setMinWidth(buttonWidth);
+        buttonB.setMinHeight(buttonHeight);
+        Button buttonC = findViewById(R.id.buttonC);
+        buttonC.setMinWidth(buttonWidth);
+        buttonC.setMinHeight(buttonHeight);
+        Button buttonD = findViewById(R.id.buttonD);
+        buttonD.setMinWidth(buttonWidth);
+        buttonD.setMinHeight(buttonHeight);
+        Button buttonE = findViewById(R.id.buttonE);
+        buttonE.setMinWidth(buttonWidth);
+        buttonE.setMinHeight(buttonHeight);
+        Button buttonF = findViewById(R.id.buttonF);
+        buttonF.setMinWidth(buttonWidth);
+        buttonF.setMinHeight(buttonHeight);
+
+        Button buttonHome = findViewById(R.id.buttonHome);
+        buttonHome.setMinWidth(buttonWidth);
+        buttonHome.setMinHeight(buttonHeight);
+        Button buttonEnd = findViewById(R.id.buttonEnd);
+        buttonEnd.setMinWidth(buttonWidth);
+        buttonEnd.setMinHeight(buttonHeight);
+        Button buttonLeft = findViewById(R.id.buttonLeft);
+        buttonLeft.setMinWidth(buttonWidth);
+        buttonLeft.setMinHeight(buttonHeight);
+        Button buttonRight = findViewById(R.id.buttonRight);
+        buttonRight.setMinWidth(buttonWidth);
+        buttonRight.setMinHeight(buttonHeight);
+        Button buttonUp = findViewById(R.id.buttonUp);
+        buttonUp.setMinWidth(buttonWidth);
+        buttonUp.setMinHeight(buttonHeight);
+        Button buttonDown = findViewById(R.id.buttonDown);
+        buttonDown.setMinWidth(buttonWidth);
+        buttonDown.setMinHeight(buttonHeight);
+
+        Button buttonDelete = findViewById(R.id.buttonDelete);
+        buttonDelete.setMinWidth(buttonWidth);
+        buttonDelete.setMinHeight(buttonHeight);
+        Button buttonBk = findViewById(R.id.buttonBk);
+        buttonBk.setMinWidth(buttonWidth);
+        buttonBk.setMinHeight(buttonHeight);
+        Button buttonInsert = findViewById(R.id.buttonInsert);
+        buttonInsert.setMinWidth(buttonWidth);
+        buttonInsert.setMinHeight(buttonHeight);
+        Button buttonTab = findViewById(R.id.buttonTab);
+        buttonTab.setMinWidth(buttonWidth);
+        buttonTab.setMinHeight(buttonHeight);
     }
 
     @Override
@@ -326,6 +448,9 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             Logger.getLogger(MainActivity.class.getName()).log(Level.SEVERE, null, ex);
         }
         binaryStatus.setEncoding(codeArea.getCharset().toString());
+
+        EditorPreferences editorPreferences = appPreferences.getEditorPreferences();
+        setupKeyPanel(editorPreferences.getKeysPanelMode());
 
         updateStatus();
     }
@@ -1145,7 +1270,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
                         if (keyEvent.getEventTime() - keyEvent.getDownTime() > TimeUnit.SECONDS.toMillis(1)) {
                             codeArea.showContextMenu();
                         } else {
-                            View keyStripeView = findViewById(R.id.controlPanel);
+                            View keyStripeView = findViewById(R.id.keyPanel);
                             keyStripeView.requestFocus();
                         }
                     } else if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_BACK && isGoogleTV(codeArea.getContext())) {

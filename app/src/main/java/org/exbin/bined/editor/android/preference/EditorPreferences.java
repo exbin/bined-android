@@ -18,6 +18,7 @@ package org.exbin.bined.editor.android.preference;
 import org.exbin.bined.basic.EnterKeyHandlingMode;
 import org.exbin.bined.basic.TabKeyHandlingMode;
 import org.exbin.bined.editor.android.options.EditorOptions;
+import org.exbin.bined.editor.android.options.KeysPanelMode;
 import org.exbin.framework.bined.FileHandlingMode;
 
 import java.util.logging.Level;
@@ -35,6 +36,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class EditorPreferences implements EditorOptions {
 
     public static final String PREFERENCES_FILE_HANDLING_MODE = "fileHandlingMode";
+    public static final String PREFERENCES_KEYS_PANEL_MODE = "keysPanelMode";
     public static final String PREFERENCES_ENTER_KEY_HANDLING_MODE = "enterKeyHandlingMode";
     public static final String PREFERENCES_TAB_KEY_HANDLING_MODE = "tabKeyHandlingMode";
 
@@ -53,6 +55,23 @@ public class EditorPreferences implements EditorOptions {
         } catch (IllegalArgumentException ex) {
             Logger.getLogger(EditorPreferences.class.getName()).log(Level.SEVERE, null, ex);
             return defaultFileHandlingMode;
+        }
+    }
+
+    @Override
+    public void setKeysPanelMode(KeysPanelMode keysPanelMode) {
+        preferences.put(PREFERENCES_KEYS_PANEL_MODE, keysPanelMode.name());
+    }
+
+    @Nonnull
+    @Override
+    public KeysPanelMode getKeysPanelMode() {
+        KeysPanelMode defaultKeysPanelMode = KeysPanelMode.SMALL;
+        try {
+            return KeysPanelMode.valueOf(preferences.get(PREFERENCES_KEYS_PANEL_MODE, defaultKeysPanelMode.name()));
+        } catch (IllegalArgumentException ex) {
+            Logger.getLogger(EditorPreferences.class.getName()).log(Level.SEVERE, null, ex);
+            return defaultKeysPanelMode;
         }
     }
 

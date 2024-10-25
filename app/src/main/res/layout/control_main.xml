@@ -1,275 +1,270 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.flexbox.FlexboxLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/keyPanel"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:orientation="horizontal"
+    app:flexDirection="row"
+    app:flexWrap="wrap"
     tools:context=".MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <LinearLayout
-        android:id="@+id/controlPanel"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp">
 
-        <TableLayout
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/button0"
+                style="@style/MyButtonSmallStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="buttonAction0"
+                android:text="0" />
+
+            <Button
+                android:id="@+id/button1"
+                style="@style/MyButtonSmallStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="buttonAction1"
+                android:text="1" />
+
+            <Button
+                android:id="@+id/button2"
+                style="@style/MyButtonSmallStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="buttonAction2"
+                android:text="2" />
+
+            <Button
+                android:id="@+id/button3"
+                style="@style/MyButtonSmallStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="buttonAction3"
+                android:text="3" />
+
+            <Button
+                android:id="@+id/button4"
+                style="@style/MyButtonSmallStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="buttonAction4"
+                android:text="4" />
+
+            <Button
+                android:id="@+id/button5"
+                style="@style/MyButtonSmallStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="buttonAction5"
+                android:text="5" />
+
+            <Button
+                android:id="@+id/button6"
+                style="@style/MyButtonSmallStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="buttonAction6"
+                android:text="6" />
+
+            <Button
+                android:id="@+id/button7"
+                style="@style/MyButtonSmallStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="buttonAction7"
+                android:text="7" />
+        </TableRow>
+
+        <TableRow
             android:layout_width="wrap_content"
             android:layout_height="match_parent">
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <Button
-                    android:id="@+id/button0"
-                    style="@style/MyButtonSmallStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="buttonAction0"
-                    android:text="0" />
-
-                <Button
-                    android:id="@+id/button1"
-                    style="@style/MyButtonSmallStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="buttonAction1"
-                    android:text="1" />
-
-                <Button
-                    android:id="@+id/button2"
-                    style="@style/MyButtonSmallStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="buttonAction2"
-                    android:text="2" />
-
-                <Button
-                    android:id="@+id/button3"
-                    style="@style/MyButtonSmallStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="buttonAction3"
-                    android:text="3" />
-
-                <Button
-                    android:id="@+id/button4"
-                    style="@style/MyButtonSmallStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="buttonAction4"
-                    android:text="4" />
-
-                <Button
-                    android:id="@+id/button5"
-                    style="@style/MyButtonSmallStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="buttonAction5"
-                    android:text="5" />
-
-                <Button
-                    android:id="@+id/button6"
-                    style="@style/MyButtonSmallStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="buttonAction6"
-                    android:text="6" />
-
-                <Button
-                    android:id="@+id/button7"
-                    style="@style/MyButtonSmallStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="buttonAction7"
-                    android:text="7" />
-            </TableRow>
-
-            <TableRow
+            <Button
+                android:id="@+id/button8"
+                style="@style/MyButtonSmallStyle"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:onClick="buttonAction8"
+                android:text="8" />
 
-                <Button
-                    android:id="@+id/button8"
-                    style="@style/MyButtonSmallStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="buttonAction8"
-                    android:text="8" />
+            <Button
+                android:id="@+id/button9"
+                style="@style/MyButtonSmallStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="buttonAction9"
+                android:text="9" />
 
-                <Button
-                    android:id="@+id/button9"
-                    style="@style/MyButtonSmallStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="buttonAction9"
-                    android:text="9" />
+            <Button
+                android:id="@+id/buttonA"
+                style="@style/MyButtonSmallStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="buttonActionA"
+                android:text="A" />
 
-                <Button
-                    android:id="@+id/buttonA"
-                    style="@style/MyButtonSmallStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="buttonActionA"
-                    android:text="A" />
+            <Button
+                android:id="@+id/buttonB"
+                style="@style/MyButtonSmallStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="buttonActionB"
+                android:text="B" />
 
-                <Button
-                    android:id="@+id/buttonB"
-                    style="@style/MyButtonSmallStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="buttonActionB"
-                    android:text="B" />
+            <Button
+                android:id="@+id/buttonC"
+                style="@style/MyButtonSmallStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="buttonActionC"
+                android:text="C" />
 
-                <Button
-                    android:id="@+id/buttonC"
-                    style="@style/MyButtonSmallStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="buttonActionC"
-                    android:text="C" />
+            <Button
+                android:id="@+id/buttonD"
+                style="@style/MyButtonSmallStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="buttonActionD"
+                android:text="D" />
 
-                <Button
-                    android:id="@+id/buttonD"
-                    style="@style/MyButtonSmallStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="buttonActionD"
-                    android:text="D" />
+            <Button
+                android:id="@+id/buttonE"
+                style="@style/MyButtonSmallStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="buttonActionE"
+                android:text="E" />
 
-                <Button
-                    android:id="@+id/buttonE"
-                    style="@style/MyButtonSmallStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="buttonActionE"
-                    android:text="E" />
+            <Button
+                android:id="@+id/buttonF"
+                style="@style/MyButtonSmallStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="buttonActionF"
+                android:text="F" />
+        </TableRow>
+    </TableLayout>
 
-                <Button
-                    android:id="@+id/buttonF"
-                    style="@style/MyButtonSmallStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="buttonActionF"
-                    android:text="F" />
-            </TableRow>
-        </TableLayout>
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp">
 
-        <TableLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginStart="5dp">
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            <Button
+                android:id="@+id/buttonHome"
+                style="@style/MyButtonSmallStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="buttonActionHome"
+                android:text="«" />
 
-                <Button
-                    android:id="@+id/buttonHome"
-                    style="@style/MyButtonSmallStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="buttonActionHome"
-                    android:text="«" />
+            <Button
+                android:id="@+id/buttonUp"
+                style="@style/MyButtonSmallStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="buttonActionUp"
+                android:text="▲" />
 
-                <Button
-                    android:id="@+id/buttonUp"
-                    style="@style/MyButtonSmallStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="buttonActionUp"
-                    android:text="▲" />
+            <Button
+                android:id="@+id/buttonEnd"
+                style="@style/MyButtonSmallStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="buttonActionEnd"
+                android:text="»" />
+        </TableRow>
 
-                <Button
-                    android:id="@+id/buttonEnd"
-                    style="@style/MyButtonSmallStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="buttonActionEnd"
-                    android:text="»" />
-            </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            <Button
+                android:id="@+id/buttonLeft"
+                style="@style/MyButtonSmallStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="buttonActionLeft"
+                android:text="◀" />
 
-                <Button
-                    android:id="@+id/buttonLeft"
-                    style="@style/MyButtonSmallStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="buttonActionLeft"
-                    android:text="◀" />
+            <Button
+                android:id="@+id/buttonDown"
+                style="@style/MyButtonSmallStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="buttonActionDown"
+                android:text="▼" />
 
-                <Button
-                    android:id="@+id/buttonDown"
-                    style="@style/MyButtonSmallStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="buttonActionDown"
-                    android:text="▼" />
+            <Button
+                android:id="@+id/buttonRight"
+                style="@style/MyButtonSmallStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="buttonActionRight"
+                android:text="▶" />
+        </TableRow>
 
-                <Button
-                    android:id="@+id/buttonRight"
-                    style="@style/MyButtonSmallStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="buttonActionRight"
-                    android:text="▶" />
-            </TableRow>
+    </TableLayout>
 
-        </TableLayout>
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-        <TableLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginStart="5dp">
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            <Button
+                android:id="@+id/buttonDelete"
+                style="@style/MyButtonSmallStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="buttonActionDelete"
+                android:text="DEL" />
 
-                <Button
-                    android:id="@+id/buttonDelete"
-                    style="@style/MyButtonSmallStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="buttonActionDelete"
-                    android:text="DEL" />
+            <Button
+                android:id="@+id/buttonBk"
+                style="@style/MyButtonSmallStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="buttonActionBk"
+                android:text="⌫" />
+        </TableRow>
 
-                <Button
-                    android:id="@+id/buttonBk"
-                    style="@style/MyButtonSmallStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="buttonActionBk"
-                    android:text="⌫" />
-            </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            <Button
+                android:id="@+id/buttonInsert"
+                style="@style/MyButtonSmallStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="buttonActionInsert"
+                android:text="INS" />
 
-                <Button
-                    android:id="@+id/buttonInsert"
-                    style="@style/MyButtonSmallStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="buttonActionInsert"
-                    android:text="INS" />
+            <Button
+                android:id="@+id/buttonTab"
+                style="@style/MyButtonSmallStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="buttonActionTab"
+                android:text="↹" />
+        </TableRow>
 
-                <Button
-                    android:id="@+id/buttonTab"
-                    style="@style/MyButtonSmallStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="buttonActionTab"
-                    android:text="TB" />
-            </TableRow>
-
-        </TableLayout>
-    </LinearLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </TableLayout>
+</com.google.android.flexbox.FlexboxLayout>

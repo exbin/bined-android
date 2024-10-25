@@ -35,6 +35,7 @@ import androidx.preference.TwoStatePreference;
 import org.exbin.bined.CodeCharactersCase;
 import org.exbin.bined.CodeType;
 import org.exbin.bined.basic.CodeAreaViewMode;
+import org.exbin.bined.editor.android.options.KeysPanelMode;
 import org.exbin.bined.editor.android.options.Theme;
 import org.exbin.bined.editor.android.preference.BinaryEditorPreferences;
 import org.exbin.bined.editor.android.preference.CodeAreaPreferences;
@@ -72,6 +73,7 @@ public class SettingsActivity extends AppCompatActivity implements
     public static final String CODE_COLORIZATION = "code_colorization";
     public static final String NONPRINTABLE_CHARACTERS = "nonprintable_characters";
     public static final String FILE_HANDLING_MODE = "file_handling_mode";
+    public static final String KEYS_PANEL_MODE = "keys_panel_mode";
 
     private BinaryEditorPreferences appPreferences;
 
@@ -83,7 +85,7 @@ public class SettingsActivity extends AppCompatActivity implements
         if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.settings, new HeaderFragment())
+                    .replace(R.id.settings, new HeaderFragment(), "header_fragment")
                     .commit();
         } else {
             setTitle(savedInstanceState.getCharSequence(TITLE_TAG));
@@ -155,6 +157,17 @@ public class SettingsActivity extends AppCompatActivity implements
         return true;
     }
 
+    @Override
+    public void finish() {
+        HeaderFragment fragment = (HeaderFragment) getSupportFragmentManager().findFragmentByTag("header_fragment");
+        // Save to preferences
+        EditorPreferences editorPreferences = getAppPreferences().getEditorPreferences();
+        editorPreferences.setFileHandlingMode(FileHandlingMode.valueOf(((ListPreference) fragment.findPreference(FILE_HANDLING_MODE)).getValue()));
+        editorPreferences.setKeysPanelMode(KeysPanelMode.valueOf(((ListPreference) fragment.findPreference(KEYS_PANEL_MODE)).getValue()));
+
+        super.finish();
+    }
+
     @ParametersAreNonnullByDefault
     public static class HeaderFragment extends PreferenceFragmentCompat {
 
@@ -165,16 +178,7 @@ public class SettingsActivity extends AppCompatActivity implements
             SettingsActivity activity = (SettingsActivity) requireActivity();
             EditorPreferences editorPreferences = activity.getAppPreferences().getEditorPreferences();
             ((ListPreference) findPreference(FILE_HANDLING_MODE)).setValue(editorPreferences.getFileHandlingMode().name());
-        }
-
-        @Override
-        public void onDestroy() {
-            // Save to preferences
-            SettingsActivity activity = (SettingsActivity) requireActivity();
-            EditorPreferences editorPreferences = activity.getAppPreferences().getEditorPreferences();
-            editorPreferences.setFileHandlingMode(FileHandlingMode.valueOf(((ListPreference) findPreference(FILE_HANDLING_MODE)).getValue()));
-
-            super.onDestroy();
+            ((ListPreference) findPreference(KEYS_PANEL_MODE)).setValue(editorPreferences.getKeysPanelMode().name());
         }
     }
 

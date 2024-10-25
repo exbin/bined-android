@@ -15,39 +15,17 @@
  */
 package org.exbin.bined.editor.android.options;
 
-import org.exbin.bined.basic.EnterKeyHandlingMode;
-import org.exbin.bined.basic.TabKeyHandlingMode;
-import org.exbin.framework.bined.FileHandlingMode;
-
-import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
- * Binary editor preferences.
+ * Keys panel mode.
  *
  * @author ExBin Project (https://exbin.org)
  */
 @ParametersAreNonnullByDefault
-public interface EditorOptions {
-
-    @Nonnull
-    FileHandlingMode getFileHandlingMode();
-
-    @Nonnull
-    KeysPanelMode getKeysPanelMode();
-
-    @Nonnull
-    EnterKeyHandlingMode getEnterKeyHandlingMode();
-
-    @Nonnull
-    TabKeyHandlingMode getTabKeyHandlingMode();
-
-    void setFileHandlingMode(FileHandlingMode fileHandlingMode);
-
-    void setKeysPanelMode(KeysPanelMode keysPanelMode);
-
-    void setEnterKeyHandlingMode(EnterKeyHandlingMode enterKeyHandlingMode);
-
-    void setTabKeyHandlingMode(TabKeyHandlingMode tabKeyHandlingMode);
-
+public enum KeysPanelMode {
+    HIDE,
+    SMALL,
+    MEDIUM,
+    BIG
 }
