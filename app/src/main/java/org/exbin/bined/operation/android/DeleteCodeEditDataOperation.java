@@ -128,6 +128,7 @@ public class DeleteCodeEditDataOperation extends CodeEditDataOperation {
                 switch (value) {
                     case BACKSPACE_CHAR: {
                         data.insert(0, ((UndoOperation) operation).getData());
+                        position--;
                         break;
                     }
                     case DELETE_CHAR: {
