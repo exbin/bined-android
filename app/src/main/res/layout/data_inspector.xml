@@ -1,0 +1,207 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/labelBinary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Binary" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/editBit0"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <CheckBox
+            android:id="@+id/editBit1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <CheckBox
+            android:id="@+id/editBit2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <CheckBox
+            android:id="@+id/editBit3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <CheckBox
+            android:id="@+id/editBit4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <CheckBox
+            android:id="@+id/editBit5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <CheckBox
+            android:id="@+id/editBit6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <CheckBox
+            android:id="@+id/editBit7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/labelByte"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Byte" />
+
+    <EditText
+        android:id="@+id/editTextByte"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="12"
+        android:inputType="number" />
+
+    <TextView
+        android:id="@+id/labelWord"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Word" />
+
+    <EditText
+        android:id="@+id/editTextWord"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="12"
+        android:inputType="number" />
+
+    <TextView
+        android:id="@+id/labelInteger"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Integer" />
+
+    <EditText
+        android:id="@+id/editTextInteger"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="12"
+        android:inputType="number" />
+
+    <TextView
+        android:id="@+id/labelLong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Long" />
+
+    <EditText
+        android:id="@+id/editTextLong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="12"
+        android:inputType="number" />
+
+    <TextView
+        android:id="@+id/labelFloat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Float" />
+
+    <EditText
+        android:id="@+id/editTextFloat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="12"
+        android:inputType="number" />
+
+    <TextView
+        android:id="@+id/labelDouble"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Double" />
+
+    <EditText
+        android:id="@+id/editTextDouble"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="12"
+        android:inputType="number" />
+
+    <TextView
+        android:id="@+id/labelCharacter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Character" />
+
+    <EditText
+        android:id="@+id/editTextCharacter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="12" />
+
+    <TextView
+        android:id="@+id/labelString"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="String" />
+
+    <EditText
+        android:id="@+id/editTextString"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="12" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioGroup
+            android:id="@+id/endianGroup"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/radioButtonBigEndian"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="BE" />
+
+        <RadioButton
+            android:id="@+id/radioButtonLittleEndian"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="LE" />
+        </RadioGroup>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="10dp"
+            android:layout_height="match_parent" />
+
+        <RadioGroup
+            android:id="@+id/signGroup"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/radioButtonSigned"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sign" />
+
+            <RadioButton
+                android:id="@+id/radioButtonUnsigned"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Uns" />
+        </RadioGroup>
+    </LinearLayout>
+</LinearLayout>
