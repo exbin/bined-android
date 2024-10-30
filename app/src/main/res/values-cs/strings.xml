@@ -10,10 +10,8 @@
     <string name="action_open">Otevřít</string>
     <string name="action_save">Uložit</string>
     <string name="action_save_as">Uložit jako</string>
-
     <string name="action_settings">Nastavení</string>
     <string name="action_about">O aplikaci</string>
-
     <string name="action_search">Hledat</string>
     <string name="action_undo">Vrátit zpět</string>
     <string name="action_redo">Opakovat</string>
@@ -27,7 +25,6 @@
     <string name="action_paste_from_code">Vložit z kódu</string>
     <string name="action_delete">Smazat</string>
     <string name="action_select_all">Vybrat vše</string>
-
     <string name="action_exit">Ukončit</string>
 
     <string name="view_menu">Zobrazit</string>
@@ -63,6 +60,7 @@
     <string name="storage_permission_is_not_granted">Není uděleno oprávnění k úložišti</string>
     <string name="storage_permission_request">Je třeba povolit oprávnění úložiště</string>
 
+    <string name="button_ok">OK</string>
     <string name="button_close">Zavřít</string>
     <string name="button_donate">Podpořit</string>
     <string name="button_cancel">Zrušit</string>
@@ -71,6 +69,21 @@
     <string name="button_save">Uložit</string>
     <string name="button_discard">Zahodit</string>
     <string name="button_request">Vyžádat</string>
+
+    <string name="value_label_binary">Binární</string>
+    <string name="value_label_byte">Bajt</string>
+    <string name="value_label_word">Word</string>
+    <string name="value_label_integer">Integer</string>
+    <string name="value_label_long">Long</string>
+    <string name="value_label_float">Float</string>
+    <string name="value_label_double">Double</string>
+    <string name="value_label_character">Znak</string>
+    <string name="value_label_string">Řetězec</string>
+    <string name="big_endian_radio_button">BE</string>
+    <string name="little_endian_radio_button">LE</string>
+    <string name="signed_radio_button">Sign</string>
+    <string name="unsigned_radio_button">Uns</string>
+    <string name="error_invalid_input">Neplatný vstup</string>
 
     <string name="pref_header_appearance">Vzhled</string>
     <string name="pref_view_header">Zobrazit</string>

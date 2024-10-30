@@ -11,10 +11,8 @@
     <string name="action_open">खोलें</string>
     <string name="action_save">सहेजें</string>
     <string name="action_save_as">के रूप में सहेजें</string>
-
     <string name="action_settings">सेटिंग्स</string>
     <string name="action_about">के बारे में</string>
-
     <string name="action_search">खोजें</string>
     <string name="action_undo">पूर्ववत करें</string>
     <string name="action_redo">फिर से करें</string>
@@ -28,7 +26,6 @@
     <string name="action_paste_from_code">कोड से पेस्ट करें</string>
     <string name="action_delete">हटाएँ</string>
     <string name="action_select_all">सभी का चयन करें</string>
-
     <string name="action_exit">बाहर निकलें</string>
 
     <string name="view_menu">देखे</string>
@@ -64,6 +61,7 @@
     <string name="storage_permission_is_not_granted">स्टोरेज अनुमति नहीं दी गई</string>
     <string name="storage_permission_request">स्टोरेज अनुमतियाँ सक्षम करने की आवश्यकता है</string>
 
+    <string name="button_ok">OK</string>
     <string name="button_close">बंद करें</string>
     <string name="button_donate">उपहार देना</string>
     <string name="button_cancel">रद्द करें</string>
@@ -72,6 +70,21 @@
     <string name="button_save">सहेजें</string>
     <string name="button_discard">खारिज करें</string>
     <string name="button_request">अनुरोध करें</string>
+
+    <string name="value_label_binary">Binary</string>
+    <string name="value_label_byte">Byte</string>
+    <string name="value_label_word">Word</string>
+    <string name="value_label_integer">Integer</string>
+    <string name="value_label_long">Long</string>
+    <string name="value_label_float">Float</string>
+    <string name="value_label_double">Double</string>
+    <string name="value_label_character">Character</string>
+    <string name="value_label_string">String</string>
+    <string name="big_endian_radio_button">BE</string>
+    <string name="little_endian_radio_button">LE</string>
+    <string name="signed_radio_button">Sign</string>
+    <string name="unsigned_radio_button">Uns</string>
+    <string name="error_invalid_input">अमान्य निवेश</string>
 
     <!-- Preference Titles -->
 

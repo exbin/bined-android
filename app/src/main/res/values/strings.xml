@@ -11,10 +11,8 @@
     <string name="action_open">Open</string>
     <string name="action_save">Save</string>
     <string name="action_save_as">Save As</string>
-
     <string name="action_settings">Settings</string>
     <string name="action_about">About</string>
-
     <string name="action_search">Search</string>
     <string name="action_undo">Undo</string>
     <string name="action_redo">Redo</string>
@@ -28,7 +26,6 @@
     <string name="action_paste_from_code">Paste From Code</string>
     <string name="action_delete">Delete</string>
     <string name="action_select_all">Select All</string>
-
     <string name="action_exit">Exit</string>
 
     <string name="view_menu">View</string>
@@ -64,6 +61,7 @@
     <string name="storage_permission_is_not_granted">Storage permission is not granted</string>
     <string name="storage_permission_request">Need to enable storage permissions</string>
 
+    <string name="button_ok">OK</string>
     <string name="button_close">Close</string>
     <string name="button_donate">Donate</string>
     <string name="button_cancel">Cancel</string>
@@ -72,6 +70,21 @@
     <string name="button_save">Save</string>
     <string name="button_discard">Discard</string>
     <string name="button_request">Request</string>
+
+    <string name="value_label_binary">Binary</string>
+    <string name="value_label_byte">Byte</string>
+    <string name="value_label_word">Word</string>
+    <string name="value_label_integer">Integer</string>
+    <string name="value_label_long">Long</string>
+    <string name="value_label_float">Float</string>
+    <string name="value_label_double">Double</string>
+    <string name="value_label_character">Character</string>
+    <string name="value_label_string">String</string>
+    <string name="big_endian_radio_button">BE</string>
+    <string name="little_endian_radio_button">LE</string>
+    <string name="signed_radio_button">Sign</string>
+    <string name="unsigned_radio_button">Uns</string>
+    <string name="error_invalid_input">Invalid Input</string>
 
     <!-- Preference Titles -->
 

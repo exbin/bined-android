@@ -7,7 +7,7 @@
         android:id="@+id/labelBinary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Binary" />
+        android:text="@string/value_label_binary" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -15,43 +15,43 @@
         android:orientation="horizontal">
 
         <CheckBox
-            android:id="@+id/editBit0"
-            android:layout_width="match_parent"
+            android:id="@+id/checkBoxBit0"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <CheckBox
-            android:id="@+id/editBit1"
-            android:layout_width="match_parent"
+            android:id="@+id/checkBoxBit1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <CheckBox
-            android:id="@+id/editBit2"
-            android:layout_width="match_parent"
+            android:id="@+id/checkBoxBit2"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <CheckBox
-            android:id="@+id/editBit3"
-            android:layout_width="match_parent"
+            android:id="@+id/checkBoxBit3"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <CheckBox
-            android:id="@+id/editBit4"
-            android:layout_width="match_parent"
+            android:id="@+id/checkBoxBit4"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <CheckBox
-            android:id="@+id/editBit5"
-            android:layout_width="match_parent"
+            android:id="@+id/checkBoxBit5"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <CheckBox
-            android:id="@+id/editBit6"
-            android:layout_width="match_parent"
+            android:id="@+id/checkBoxBit6"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <CheckBox
-            android:id="@+id/editBit7"
-            android:layout_width="match_parent"
+            android:id="@+id/checkBoxBit7"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
 
@@ -59,103 +59,115 @@
         android:id="@+id/labelByte"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Byte" />
+        android:labelFor="@+id/editTextByte"
+        android:text="@string/value_label_byte" />
 
     <EditText
         android:id="@+id/editTextByte"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="12"
+        android:importantForAutofill="no"
         android:inputType="number" />
 
     <TextView
         android:id="@+id/labelWord"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Word" />
+        android:labelFor="@+id/editTextWord"
+        android:text="@string/value_label_word" />
 
     <EditText
         android:id="@+id/editTextWord"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="12"
+        android:importantForAutofill="no"
         android:inputType="number" />
 
     <TextView
         android:id="@+id/labelInteger"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Integer" />
+        android:text="@string/value_label_integer" />
 
     <EditText
         android:id="@+id/editTextInteger"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="12"
+        android:importantForAutofill="no"
         android:inputType="number" />
 
     <TextView
         android:id="@+id/labelLong"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Long" />
+        android:text="@string/value_label_long" />
 
     <EditText
         android:id="@+id/editTextLong"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="12"
+        android:importantForAutofill="no"
         android:inputType="number" />
 
     <TextView
         android:id="@+id/labelFloat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Float" />
+        android:text="@string/value_label_float" />
 
     <EditText
         android:id="@+id/editTextFloat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="12"
+        android:importantForAutofill="no"
         android:inputType="number" />
 
     <TextView
         android:id="@+id/labelDouble"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Double" />
+        android:text="@string/value_label_double" />
 
     <EditText
         android:id="@+id/editTextDouble"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="12"
+        android:importantForAutofill="no"
         android:inputType="number" />
 
     <TextView
         android:id="@+id/labelCharacter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Character" />
+        android:text="@string/value_label_character" />
 
     <EditText
         android:id="@+id/editTextCharacter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="12" />
+        android:ems="12"
+        android:importantForAutofill="no"
+        android:inputType="text"/>
 
     <TextView
         android:id="@+id/labelString"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="String" />
+        android:text="@string/value_label_string" />
 
     <EditText
         android:id="@+id/editTextString"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="12" />
+        android:ems="12"
+        android:importantForAutofill="no"
+        android:inputType="text"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -172,13 +184,13 @@
             android:id="@+id/radioButtonBigEndian"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="BE" />
+            android:text="@string/big_endian_radio_button" />
 
         <RadioButton
             android:id="@+id/radioButtonLittleEndian"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="LE" />
+            android:text="@string/little_endian_radio_button" />
         </RadioGroup>
 
         <com.google.android.material.divider.MaterialDivider
@@ -195,13 +207,13 @@
                 android:id="@+id/radioButtonSigned"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sign" />
+                android:text="@string/signed_radio_button" />
 
             <RadioButton
                 android:id="@+id/radioButtonUnsigned"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Uns" />
+                android:text="@string/unsigned_radio_button" />
         </RadioGroup>
     </LinearLayout>
 </LinearLayout>
