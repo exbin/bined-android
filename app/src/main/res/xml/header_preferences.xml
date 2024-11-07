@@ -1,14 +1,13 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <Preference
-        app:fragment="org.exbin.bined.editor.android.SettingsActivity$AppearanceFragment"
         app:icon="@drawable/ic_info_24"
+        app:key="appearance_group"
         app:title="@string/pref_header_appearance" />
 
     <Preference
-        app:fragment="org.exbin.bined.editor.android.SettingsActivity$ViewFragment"
         app:icon="@drawable/ic_eye_24"
-        app:key="view_header"
+        app:key="view_group"
         app:title="@string/pref_view_header" />
 
     <ListPreference

@@ -11,6 +11,8 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-keep class kotlinx.coroutines.CoroutineExceptionHandler
+-keep class kotlinx.coroutines.internal.MainDispatcherFactory
 
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
@@ -19,3 +21,8 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+-dontobfuscate
+#-dontusemixedcaseclassnames
+#-dontpreverify
+#-optimizations !code/simplification/arithmetic,!code/simplification/cast,!field/*,!class/merging/*
+#-optimizationpasses 5
