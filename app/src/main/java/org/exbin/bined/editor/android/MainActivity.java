@@ -81,6 +81,7 @@ import org.exbin.bined.android.capability.ColorAssessorPainterCapable;
 import org.exbin.bined.basic.BasicCodeAreaSection;
 import org.exbin.bined.basic.CodeAreaViewMode;
 import org.exbin.bined.capability.EditModeCapable;
+import org.exbin.bined.editor.android.inspector.BasicValuesInspector;
 import org.exbin.bined.editor.android.options.KeysPanelMode;
 import org.exbin.bined.editor.android.options.Theme;
 import org.exbin.bined.editor.android.preference.BinaryEditorPreferences;
@@ -133,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
     private BinEdFileHandler fileHandler;
     private CodeArea codeArea;
+    private BasicValuesInspector basicValuesInspector;
     private BinaryEditorPreferences appPreferences;
 
     private Toolbar toolbar;
@@ -217,6 +219,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
         // For now steal code area and keep it in application context
         fileHandler = application.getFileHandler();
+        basicValuesInspector = new BasicValuesInspector();
         if (fileHandler == null) {
             codeArea = findViewById(R.id.codeArea);
             fileHandler = application.createFileHandler(codeArea);
@@ -258,6 +261,9 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             };
             codeArea.addOnUnhandledKeyEventListener((View.OnUnhandledKeyEventListener) codeAreaOnUnhandledKeyListener);
         }
+        basicValuesInspector.setCodeArea(codeArea, fileHandler.getUndoRedo(), findViewById(R.id.basic_values_inspector));
+        basicValuesInspector.enableUpdate();
+        // basicValuesInspector.registerFocusPainter(pain);
 
         applySettings();
 

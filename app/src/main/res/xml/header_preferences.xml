@@ -11,7 +11,7 @@
         app:title="@string/pref_view_header" />
 
     <ListPreference
-        app:defaultValue="MEMORY"
+        app:defaultValue="memory"
         app:entries="@array/file_handling_mode_entries"
         app:entryValues="@array/file_handling_mode_values"
         app:key="file_handling_mode"
@@ -24,5 +24,13 @@
         app:entryValues="@array/keys_panel_mode_values"
         app:key="keys_panel_mode"
         app:title="@string/keys_panel_mode"
+        app:useSimpleSummaryProvider="true" />
+
+    <ListPreference
+        app:defaultValue="show"
+        app:entries="@array/data_inspector_mode_entries"
+        app:entryValues="@array/data_inspector_mode_values"
+        app:key="data_inspector_mode"
+        app:title="@string/data_inspector_mode"
         app:useSimpleSummaryProvider="true" />
 </PreferenceScreen>

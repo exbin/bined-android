@@ -59,9 +59,9 @@ public class ViewFragment extends PreferenceFragmentCompat {
         TextEncodingPreferences encodingPreferences = appPreferences.getEncodingPreferences();
         ((EncodingPreference) findPreference(ENCODING_KEY)).setText(encodingPreferences.getDefaultEncoding());
         ((ListPreference) findPreference(BYTES_PER_ROW_KEY)).setValue(String.valueOf(codeAreaPreferences.getMaxBytesPerRow()));
-        ((ListPreference) findPreference(VIEW_MODE_KEY)).setValue(codeAreaPreferences.getViewMode().name());
-        ((ListPreference) findPreference(CODE_TYPE_KEY)).setValue(codeAreaPreferences.getCodeType().name());
-        ((ListPreference) findPreference(HEX_CHARACTERS_CASE)).setValue(codeAreaPreferences.getCodeCharactersCase().name());
+        ((ListPreference) findPreference(VIEW_MODE_KEY)).setValue(codeAreaPreferences.getViewMode().name().toLowerCase());
+        ((ListPreference) findPreference(CODE_TYPE_KEY)).setValue(codeAreaPreferences.getCodeType().name().toLowerCase());
+        ((ListPreference) findPreference(HEX_CHARACTERS_CASE)).setValue(codeAreaPreferences.getCodeCharactersCase().name().toLowerCase());
         ((TwoStatePreference) findPreference(CODE_COLORIZATION)).setChecked(codeAreaPreferences.isCodeColorization());
         ((TwoStatePreference) findPreference(NONPRINTABLE_CHARACTERS)).setChecked(codeAreaPreferences.isShowNonprintables());
     }
@@ -77,9 +77,9 @@ public class ViewFragment extends PreferenceFragmentCompat {
         TextEncodingPreferences encodingPreferences = appPreferences.getEncodingPreferences();
         encodingPreferences.setDefaultEncoding(((EncodingPreference) findPreference(ENCODING_KEY)).getText());
         codeAreaPreferences.setMaxBytesPerRow(Integer.parseInt(((ListPreference) findPreference(BYTES_PER_ROW_KEY)).getValue()));
-        codeAreaPreferences.setViewMode(CodeAreaViewMode.valueOf(((ListPreference) findPreference(VIEW_MODE_KEY)).getValue()));
-        codeAreaPreferences.setCodeType(CodeType.valueOf(((ListPreference) findPreference(CODE_TYPE_KEY)).getValue()));
-        codeAreaPreferences.setCodeCharactersCase(CodeCharactersCase.valueOf(((ListPreference) findPreference(HEX_CHARACTERS_CASE)).getValue()));
+        codeAreaPreferences.setViewMode(CodeAreaViewMode.valueOf(((ListPreference) findPreference(VIEW_MODE_KEY)).getValue().toUpperCase()));
+        codeAreaPreferences.setCodeType(CodeType.valueOf(((ListPreference) findPreference(CODE_TYPE_KEY)).getValue().toUpperCase()));
+        codeAreaPreferences.setCodeCharactersCase(CodeCharactersCase.valueOf(((ListPreference) findPreference(HEX_CHARACTERS_CASE)).getValue().toUpperCase()));
         codeAreaPreferences.setCodeColorization(((TwoStatePreference) findPreference(CODE_COLORIZATION)).isChecked());
         codeAreaPreferences.setShowNonprintables(((TwoStatePreference) findPreference(NONPRINTABLE_CHARACTERS)).isChecked());
 

@@ -17,6 +17,7 @@ package org.exbin.bined.editor.android.preference;
 
 import org.exbin.bined.basic.EnterKeyHandlingMode;
 import org.exbin.bined.basic.TabKeyHandlingMode;
+import org.exbin.bined.editor.android.options.DataInspectorMode;
 import org.exbin.bined.editor.android.options.EditorOptions;
 import org.exbin.bined.editor.android.options.KeysPanelMode;
 import org.exbin.framework.bined.FileHandlingMode;
@@ -39,6 +40,7 @@ public class EditorPreferences implements EditorOptions {
     public static final String PREFERENCES_KEYS_PANEL_MODE = "keysPanelMode";
     public static final String PREFERENCES_ENTER_KEY_HANDLING_MODE = "enterKeyHandlingMode";
     public static final String PREFERENCES_TAB_KEY_HANDLING_MODE = "tabKeyHandlingMode";
+    public static final String PREFERENCES_DATA_INSPECTOR_MODE = "dataInspectorMode";
 
     private final Preferences preferences;
 
@@ -51,7 +53,7 @@ public class EditorPreferences implements EditorOptions {
     public FileHandlingMode getFileHandlingMode() {
         FileHandlingMode defaultFileHandlingMode = FileHandlingMode.MEMORY;
         try {
-            return FileHandlingMode.valueOf(preferences.get(PREFERENCES_FILE_HANDLING_MODE, defaultFileHandlingMode.name()));
+            return FileHandlingMode.valueOf(preferences.get(PREFERENCES_FILE_HANDLING_MODE, defaultFileHandlingMode.name()).toUpperCase());
         } catch (IllegalArgumentException ex) {
             Logger.getLogger(EditorPreferences.class.getName()).log(Level.SEVERE, null, ex);
             return defaultFileHandlingMode;
@@ -68,7 +70,7 @@ public class EditorPreferences implements EditorOptions {
     public KeysPanelMode getKeysPanelMode() {
         KeysPanelMode defaultKeysPanelMode = KeysPanelMode.SMALL;
         try {
-            return KeysPanelMode.valueOf(preferences.get(PREFERENCES_KEYS_PANEL_MODE, defaultKeysPanelMode.name()));
+            return KeysPanelMode.valueOf(preferences.get(PREFERENCES_KEYS_PANEL_MODE, defaultKeysPanelMode.name()).toUpperCase());
         } catch (IllegalArgumentException ex) {
             Logger.getLogger(EditorPreferences.class.getName()).log(Level.SEVERE, null, ex);
             return defaultKeysPanelMode;
@@ -85,7 +87,7 @@ public class EditorPreferences implements EditorOptions {
     public EnterKeyHandlingMode getEnterKeyHandlingMode() {
         EnterKeyHandlingMode defaultValue = EnterKeyHandlingMode.PLATFORM_SPECIFIC;
         try {
-            return EnterKeyHandlingMode.valueOf(preferences.get(PREFERENCES_ENTER_KEY_HANDLING_MODE, defaultValue.name()));
+            return EnterKeyHandlingMode.valueOf(preferences.get(PREFERENCES_ENTER_KEY_HANDLING_MODE, defaultValue.name()).toUpperCase());
         } catch (IllegalArgumentException ex) {
             return defaultValue;
         }
@@ -93,7 +95,7 @@ public class EditorPreferences implements EditorOptions {
 
     @Override
     public void setEnterKeyHandlingMode(EnterKeyHandlingMode enterKeyHandlingMode) {
-        preferences.put(PREFERENCES_ENTER_KEY_HANDLING_MODE, enterKeyHandlingMode.name());
+        preferences.put(PREFERENCES_ENTER_KEY_HANDLING_MODE, enterKeyHandlingMode.name().toLowerCase());
     }
 
     @Nonnull
@@ -101,7 +103,7 @@ public class EditorPreferences implements EditorOptions {
     public TabKeyHandlingMode getTabKeyHandlingMode() {
         TabKeyHandlingMode defaultValue = TabKeyHandlingMode.PLATFORM_SPECIFIC;
         try {
-            return TabKeyHandlingMode.valueOf(preferences.get(PREFERENCES_TAB_KEY_HANDLING_MODE, defaultValue.name()));
+            return TabKeyHandlingMode.valueOf(preferences.get(PREFERENCES_TAB_KEY_HANDLING_MODE, defaultValue.name()).toUpperCase());
         } catch (IllegalArgumentException ex) {
             return defaultValue;
         }
@@ -109,6 +111,24 @@ public class EditorPreferences implements EditorOptions {
 
     @Override
     public void setTabKeyHandlingMode(TabKeyHandlingMode tabKeyHandlingMode) {
-        preferences.put(PREFERENCES_TAB_KEY_HANDLING_MODE, tabKeyHandlingMode.name());
+        preferences.put(PREFERENCES_TAB_KEY_HANDLING_MODE, tabKeyHandlingMode.name().toLowerCase());
     }
+
+    @Override
+    public void setDataInspectorMode(DataInspectorMode dataInspectorMode) {
+        preferences.put(PREFERENCES_DATA_INSPECTOR_MODE, dataInspectorMode.name().toLowerCase());
+    }
+
+    @Nonnull
+    @Override
+    public DataInspectorMode getDataInspectorMode() {
+        DataInspectorMode defaultDataInspectorMode = DataInspectorMode.HIDE;
+        try {
+            return DataInspectorMode.valueOf(preferences.get(PREFERENCES_DATA_INSPECTOR_MODE, defaultDataInspectorMode.name()).toUpperCase());
+        } catch (IllegalArgumentException ex) {
+            Logger.getLogger(EditorPreferences.class.getName()).log(Level.SEVERE, null, ex);
+            return defaultDataInspectorMode;
+        }
+    }
+
 }

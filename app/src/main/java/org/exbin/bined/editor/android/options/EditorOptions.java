@@ -42,6 +42,9 @@ public interface EditorOptions {
     @Nonnull
     TabKeyHandlingMode getTabKeyHandlingMode();
 
+    @Nonnull
+    DataInspectorMode getDataInspectorMode();
+
     void setFileHandlingMode(FileHandlingMode fileHandlingMode);
 
     void setKeysPanelMode(KeysPanelMode keysPanelMode);
@@ -50,4 +53,5 @@ public interface EditorOptions {
 
     void setTabKeyHandlingMode(TabKeyHandlingMode tabKeyHandlingMode);
 
+    void setDataInspectorMode(DataInspectorMode dataInspectorMode);
 }

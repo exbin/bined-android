@@ -50,9 +50,9 @@
     </string-array>
 
     <string-array name="view_mode_values" translatable="false">
-        <item>DUAL</item>
-        <item>CODE_MATRIX</item>
-        <item>TEXT_PREVIEW</item>
+        <item>dual</item>
+        <item>code_matrix</item>
+        <item>text_preview</item>
     </string-array>
 
     <string-array name="code_type_entries">
@@ -63,10 +63,10 @@
     </string-array>
 
     <string-array name="code_type_values" translatable="false">
-        <item>BINARY</item>
-        <item>OCTAL</item>
-        <item>DECIMAL</item>
-        <item>HEXADECIMAL</item>
+        <item>binary</item>
+        <item>octal</item>
+        <item>decimal</item>
+        <item>hexadecimal</item>
     </string-array>
 
     <string-array name="hex_chars_case_entries">
@@ -75,8 +75,8 @@
     </string-array>
 
     <string-array name="hex_chars_case_values" translatable="false">
-        <item>LOWER</item>
-        <item>UPPER</item>
+        <item>lower</item>
+        <item>upper</item>
     </string-array>
 
     <string-array name="file_handling_mode_entries">
@@ -85,8 +85,8 @@
     </string-array>
 
     <string-array name="file_handling_mode_values" translatable="false">
-        <item>MEMORY</item>
-        <item>DELTA</item>
+        <item>memory</item>
+        <item>delta</item>
     </string-array>
 
     <string-array name="keys_panel_mode_entries">
@@ -97,9 +97,19 @@
     </string-array>
 
     <string-array name="keys_panel_mode_values" translatable="false">
-        <item>HIDE</item>
-        <item>SMALL</item>
-        <item>MEDIUM</item>
-        <item>BIG</item>
+        <item>hide</item>
+        <item>small</item>
+        <item>medium</item>
+        <item>big</item>
+    </string-array>
+
+    <string-array name="data_inspector_mode_entries">
+        <item>Hide</item>
+        <item>Show</item>
+    </string-array>
+
+    <string-array name="data_inspector_mode_values" translatable="false">
+        <item>hide</item>
+        <item>show</item>
     </string-array>
 </resources>

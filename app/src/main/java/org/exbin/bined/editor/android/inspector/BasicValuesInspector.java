@@ -621,35 +621,35 @@ public class BasicValuesInspector {
         private void updateField(ValuesPanelField valuesPanelField) {
             switch (valuesPanelField) {
                 case BINARY0: {
-                    view.findViewById(R.id.checkBoxBit0).setSelected((values[0] & 0x80) > 0);
+                    ((CheckBox) view.findViewById(R.id.checkBoxBit0)).setChecked((values[0] & 0x80) > 0);
                     break;
                 }
                 case BINARY1: {
-                    view.findViewById(R.id.checkBoxBit1).setSelected((values[0] & 0x40) > 0);
+                    ((CheckBox) view.findViewById(R.id.checkBoxBit1)).setChecked((values[0] & 0x40) > 0);
                     break;
                 }
                 case BINARY2: {
-                    view.findViewById(R.id.checkBoxBit2).setSelected((values[0] & 0x20) > 0);
+                    ((CheckBox) view.findViewById(R.id.checkBoxBit2)).setChecked((values[0] & 0x20) > 0);
                     break;
                 }
                 case BINARY3: {
-                    view.findViewById(R.id.checkBoxBit3).setSelected((values[0] & 0x10) > 0);
+                    ((CheckBox) view.findViewById(R.id.checkBoxBit3)).setChecked((values[0] & 0x10) > 0);
                     break;
                 }
                 case BINARY4: {
-                    view.findViewById(R.id.checkBoxBit4).setSelected((values[0] & 0x8) > 0);
+                    ((CheckBox) view.findViewById(R.id.checkBoxBit4)).setChecked((values[0] & 0x8) > 0);
                     break;
                 }
                 case BINARY5: {
-                    view.findViewById(R.id.checkBoxBit5).setSelected((values[0] & 0x4) > 0);
+                    ((CheckBox) view.findViewById(R.id.checkBoxBit5)).setChecked((values[0] & 0x4) > 0);
                     break;
                 }
                 case BINARY6: {
-                    view.findViewById(R.id.checkBoxBit6).setSelected((values[0] & 0x2) > 0);
+                    ((CheckBox) view.findViewById(R.id.checkBoxBit6)).setChecked((values[0] & 0x2) > 0);
                     break;
                 }
                 case BINARY7: {
-                    view.findViewById(R.id.checkBoxBit7).setSelected((values[0] & 0x1) > 0);
+                    ((CheckBox) view.findViewById(R.id.checkBoxBit7)).setChecked((values[0] & 0x1) > 0);
                     break;
                 }
                 case BYTE: {

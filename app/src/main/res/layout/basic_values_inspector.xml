@@ -1,219 +1,229 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/labelBinary"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/value_label_binary" />
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/basic_values_inspector"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:minWidth="180dp"
+    android:layout_weight="0">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        android:scrollbars="vertical"
+        android:overScrollMode="always">
 
-        <CheckBox
-            android:id="@+id/checkBoxBit0"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <CheckBox
-            android:id="@+id/checkBoxBit1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <CheckBox
-            android:id="@+id/checkBoxBit2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <CheckBox
-            android:id="@+id/checkBoxBit3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <CheckBox
-            android:id="@+id/checkBoxBit4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <CheckBox
-            android:id="@+id/checkBoxBit5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <CheckBox
-            android:id="@+id/checkBoxBit6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <CheckBox
-            android:id="@+id/checkBoxBit7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/labelByte"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:labelFor="@+id/editTextByte"
-        android:text="@string/value_label_byte" />
-
-    <EditText
-        android:id="@+id/editTextByte"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="12"
-        android:importantForAutofill="no"
-        android:inputType="number" />
-
-    <TextView
-        android:id="@+id/labelWord"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:labelFor="@+id/editTextWord"
-        android:text="@string/value_label_word" />
-
-    <EditText
-        android:id="@+id/editTextWord"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="12"
-        android:importantForAutofill="no"
-        android:inputType="number" />
-
-    <TextView
-        android:id="@+id/labelInteger"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/value_label_integer" />
-
-    <EditText
-        android:id="@+id/editTextInteger"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="12"
-        android:importantForAutofill="no"
-        android:inputType="number" />
-
-    <TextView
-        android:id="@+id/labelLong"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/value_label_long" />
-
-    <EditText
-        android:id="@+id/editTextLong"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="12"
-        android:importantForAutofill="no"
-        android:inputType="number" />
-
-    <TextView
-        android:id="@+id/labelFloat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/value_label_float" />
-
-    <EditText
-        android:id="@+id/editTextFloat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="12"
-        android:importantForAutofill="no"
-        android:inputType="number" />
-
-    <TextView
-        android:id="@+id/labelDouble"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/value_label_double" />
-
-    <EditText
-        android:id="@+id/editTextDouble"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="12"
-        android:importantForAutofill="no"
-        android:inputType="number" />
-
-    <TextView
-        android:id="@+id/labelCharacter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/value_label_character" />
-
-    <EditText
-        android:id="@+id/editTextCharacter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="12"
-        android:importantForAutofill="no"
-        android:inputType="text"/>
-
-    <TextView
-        android:id="@+id/labelString"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/value_label_string" />
-
-    <EditText
-        android:id="@+id/editTextString"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="12"
-        android:importantForAutofill="no"
-        android:inputType="text"/>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <RadioGroup
-            android:id="@+id/endianGroup"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-        <RadioButton
-            android:id="@+id/radioButtonBigEndian"
+        <TextView
+            android:id="@+id/labelBinary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/big_endian_radio_button" />
+            android:text="@string/value_label_binary" />
 
-        <RadioButton
-            android:id="@+id/radioButtonLittleEndian"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/little_endian_radio_button" />
-        </RadioGroup>
-
-        <com.google.android.material.divider.MaterialDivider
-            android:layout_width="10dp"
-            android:layout_height="match_parent" />
-
-        <RadioGroup
-            android:id="@+id/signGroup"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <RadioButton
-                android:id="@+id/radioButtonSigned"
+            <CheckBox
+                android:id="@+id/checkBoxBit0"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/signed_radio_button" />
+                android:layout_height="wrap_content" />
+
+            <CheckBox
+                android:id="@+id/checkBoxBit1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <CheckBox
+                android:id="@+id/checkBoxBit2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <CheckBox
+                android:id="@+id/checkBoxBit3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <CheckBox
+                android:id="@+id/checkBoxBit4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <CheckBox
+                android:id="@+id/checkBoxBit5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <CheckBox
+                android:id="@+id/checkBoxBit6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <CheckBox
+                android:id="@+id/checkBoxBit7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/labelByte"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:labelFor="@+id/editTextByte"
+            android:text="@string/value_label_byte" />
+
+        <EditText
+            android:id="@+id/editTextByte"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="12"
+            android:importantForAutofill="no"
+            android:inputType="number" />
+
+        <TextView
+            android:id="@+id/labelWord"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:labelFor="@+id/editTextWord"
+            android:text="@string/value_label_word" />
+
+        <EditText
+            android:id="@+id/editTextWord"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="12"
+            android:importantForAutofill="no"
+            android:inputType="number" />
+
+        <TextView
+            android:id="@+id/labelInteger"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/value_label_integer" />
+
+        <EditText
+            android:id="@+id/editTextInteger"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="12"
+            android:importantForAutofill="no"
+            android:inputType="number" />
+
+        <TextView
+            android:id="@+id/labelLong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/value_label_long" />
+
+        <EditText
+            android:id="@+id/editTextLong"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="12"
+            android:importantForAutofill="no"
+            android:inputType="number" />
+
+        <TextView
+            android:id="@+id/labelFloat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/value_label_float" />
+
+        <EditText
+            android:id="@+id/editTextFloat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="12"
+            android:importantForAutofill="no"
+            android:inputType="number" />
+
+        <TextView
+            android:id="@+id/labelDouble"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/value_label_double" />
+
+        <EditText
+            android:id="@+id/editTextDouble"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="12"
+            android:importantForAutofill="no"
+            android:inputType="number" />
+
+        <TextView
+            android:id="@+id/labelCharacter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/value_label_character" />
+
+        <EditText
+            android:id="@+id/editTextCharacter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="12"
+            android:importantForAutofill="no"
+            android:inputType="text"/>
+
+        <TextView
+            android:id="@+id/labelString"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/value_label_string" />
+
+        <EditText
+            android:id="@+id/editTextString"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="12"
+            android:importantForAutofill="no"
+            android:inputType="text"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioGroup
+                android:id="@+id/endianGroup"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
             <RadioButton
-                android:id="@+id/radioButtonUnsigned"
+                android:id="@+id/radioButtonBigEndian"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/unsigned_radio_button" />
-        </RadioGroup>
+                android:text="@string/big_endian_radio_button" />
+
+            <RadioButton
+                android:id="@+id/radioButtonLittleEndian"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/little_endian_radio_button" />
+            </RadioGroup>
+
+            <Space
+                android:layout_width="10dp"
+                android:layout_height="match_parent" />
+
+            <RadioGroup
+                android:id="@+id/signGroup"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radioButtonSigned"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/signed_radio_button" />
+
+                <RadioButton
+                    android:id="@+id/radioButtonUnsigned"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/unsigned_radio_button" />
+            </RadioGroup>
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+</ScrollView>

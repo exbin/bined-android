@@ -37,6 +37,7 @@ public class HeaderFragment extends PreferenceFragmentCompat {
     public static final String VIEW_GROUP ="view_group";
     public static final String FILE_HANDLING_MODE = "file_handling_mode";
     public static final String KEYS_PANEL_MODE = "keys_panel_mode";
+    public static final String DATA_INSPECTOR_MODE = "data_inspector_mode";
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -46,7 +47,8 @@ public class HeaderFragment extends PreferenceFragmentCompat {
         EditorPreferences editorPreferences = activity.getAppPreferences().getEditorPreferences();
         findPreference(APPEARANCE_GROUP).setFragment(AppearanceFragment.class.getCanonicalName());
         findPreference(VIEW_GROUP).setFragment(ViewFragment.class.getCanonicalName());
-        ((ListPreference) findPreference(FILE_HANDLING_MODE)).setValue(editorPreferences.getFileHandlingMode().name());
-        ((ListPreference) findPreference(KEYS_PANEL_MODE)).setValue(editorPreferences.getKeysPanelMode().name());
+        ((ListPreference) findPreference(FILE_HANDLING_MODE)).setValue(editorPreferences.getFileHandlingMode().name().toLowerCase());
+        ((ListPreference) findPreference(KEYS_PANEL_MODE)).setValue(editorPreferences.getKeysPanelMode().name().toLowerCase());
+        ((ListPreference) findPreference(DATA_INSPECTOR_MODE)).setValue(editorPreferences.getDataInspectorMode().name().toLowerCase());
     }
 }

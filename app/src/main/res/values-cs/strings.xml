@@ -37,6 +37,7 @@
     <string name="code_colorization">Zbarvení kódu</string>
     <string name="file_handling_mode">Režim zpracování souborů</string>
     <string name="keys_panel_mode">Panel kláves</string>
+    <string name="data_inspector_mode">Režim datové inspekce</string>
     <string name="nonprintable_characters">Netisknutelné znaky</string>
     <string name="go_to_position">Přejít na pozici</string>
     <string name="edit_selection">Upravit výběr</string>

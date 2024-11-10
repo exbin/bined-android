@@ -26,13 +26,12 @@ import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
+import org.exbin.bined.editor.android.options.DataInspectorMode;
 import org.exbin.bined.editor.android.options.KeysPanelMode;
-import org.exbin.bined.editor.android.preference.AppearanceFragment;
 import org.exbin.bined.editor.android.preference.BinaryEditorPreferences;
 import org.exbin.bined.editor.android.preference.EditorPreferences;
 import org.exbin.bined.editor.android.preference.HeaderFragment;
 import org.exbin.bined.editor.android.preference.PreferencesWrapper;
-import org.exbin.bined.editor.android.preference.ViewFragment;
 import org.exbin.framework.bined.FileHandlingMode;
 
 import javax.annotation.Nonnull;
@@ -136,8 +135,9 @@ public class SettingsActivity extends AppCompatActivity implements
         HeaderFragment fragment = (HeaderFragment) getSupportFragmentManager().findFragmentByTag("header_fragment");
         // Save to preferences
         EditorPreferences editorPreferences = getAppPreferences().getEditorPreferences();
-        editorPreferences.setFileHandlingMode(FileHandlingMode.valueOf(((ListPreference) fragment.findPreference(HeaderFragment.FILE_HANDLING_MODE)).getValue()));
-        editorPreferences.setKeysPanelMode(KeysPanelMode.valueOf(((ListPreference) fragment.findPreference(HeaderFragment.KEYS_PANEL_MODE)).getValue()));
+        editorPreferences.setFileHandlingMode(FileHandlingMode.valueOf(((ListPreference) fragment.findPreference(HeaderFragment.FILE_HANDLING_MODE)).getValue().toUpperCase()));
+        editorPreferences.setKeysPanelMode(KeysPanelMode.valueOf(((ListPreference) fragment.findPreference(HeaderFragment.KEYS_PANEL_MODE)).getValue().toUpperCase()));
+        editorPreferences.setDataInspectorMode(DataInspectorMode.valueOf(((ListPreference) fragment.findPreference(HeaderFragment.DATA_INSPECTOR_MODE)).getValue().toUpperCase()));
 
         super.finish();
     }
