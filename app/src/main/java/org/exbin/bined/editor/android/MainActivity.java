@@ -82,6 +82,7 @@ import org.exbin.bined.basic.BasicCodeAreaSection;
 import org.exbin.bined.basic.CodeAreaViewMode;
 import org.exbin.bined.capability.EditModeCapable;
 import org.exbin.bined.editor.android.inspector.BasicValuesInspector;
+import org.exbin.bined.editor.android.options.DataInspectorMode;
 import org.exbin.bined.editor.android.options.KeysPanelMode;
 import org.exbin.bined.editor.android.options.Theme;
 import org.exbin.bined.editor.android.preference.BinaryEditorPreferences;
@@ -139,12 +140,14 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
     private Toolbar toolbar;
     private View keyPanel;
+    private View basicValuesInspectorView;
     private Menu menu;
     private SearchView searchView;
     private final BinaryStatusHandler binaryStatus = new BinaryStatusHandler(this);
     private BinarySearchService searchService;
     private Runnable postSaveAsAction = null;
     private boolean keyboardShown = false;
+    private boolean dataInspectorShown = true;
 
     private final BinarySearchService.SearchStatusListener searchStatusListener = new BinarySearchService.SearchStatusListener() {
         @Override
@@ -215,6 +218,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
         toolbar = findViewById(R.id.toolbar);
         keyPanel = findViewById(R.id.keyPanel);
+        basicValuesInspectorView = findViewById(R.id.basic_values_inspector);
         setSupportActionBar(toolbar);
 
         // For now steal code area and keep it in application context
@@ -457,6 +461,20 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
         EditorPreferences editorPreferences = appPreferences.getEditorPreferences();
         setupKeyPanel(editorPreferences.getKeysPanelMode());
+        DataInspectorMode dataInspectorMode = editorPreferences.getDataInspectorMode();
+        boolean showDataInspector = dataInspectorMode == DataInspectorMode.SHOW;
+        if (showDataInspector != dataInspectorShown) {
+            LinearLayout mainHorizontalLayout = findViewById(R.id.mainHorizontalLayout);
+            if (showDataInspector) {
+                basicValuesInspector.enableUpdate();
+                mainHorizontalLayout.addView(basicValuesInspectorView);
+            } else {
+                basicValuesInspector.disableUpdate();
+                mainHorizontalLayout.removeView(basicValuesInspectorView);
+            }
+            mainHorizontalLayout.requestLayout();
+            dataInspectorShown = showDataInspector;
+        }
 
         updateStatus();
     }

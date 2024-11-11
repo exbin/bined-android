@@ -143,6 +143,12 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
         init();
     }
 
+    @Nonnull
+    @Override
+    public CodeAreaCommandHandler getCommandHandler() {
+        return super.getCommandHandler();
+    }
+
     private void init() {
         // TODO: Use swing color instead
         //setBackground(Color.WHITE);

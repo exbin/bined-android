@@ -1,9 +1,10 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/basic_values_inspector"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:minWidth="180dp"
-    android:layout_weight="0">
+    tools:context=".MainActivity"
+    android:minWidth="200dp">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -193,6 +194,7 @@
                 android:id="@+id/radioButtonBigEndian"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:checked="true"
                 android:text="@string/big_endian_radio_button" />
 
             <RadioButton
@@ -216,6 +218,7 @@
                     android:id="@+id/radioButtonSigned"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:checked="true"
                     android:text="@string/signed_radio_button" />
 
                 <RadioButton
