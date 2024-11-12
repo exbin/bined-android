@@ -33,6 +33,7 @@ public class BasicValuesPositionColorModifier implements BinEdCodeAreaAssessor.P
     private long position = -1;
     private long length;
     private Integer color;
+    private boolean darkMode = false;
 
     public BasicValuesPositionColorModifier() {
         resetColors();
@@ -59,7 +60,7 @@ public class BasicValuesPositionColorModifier implements BinEdCodeAreaAssessor.P
 
     @Override
     public void resetColors() {
-        color = Color.YELLOW;
+        color = darkMode ? 0xFF444400 : Color.YELLOW;
     }
 
     public void setRange(long position, long length) {
@@ -72,9 +73,7 @@ public class BasicValuesPositionColorModifier implements BinEdCodeAreaAssessor.P
         this.length = 0;
     }
 
-    /* TODO
-    public void setColor(Color color) {
-        this.color = color;
+    public void setDarkMode(boolean darkMode) {
+        this.darkMode = darkMode;
     }
-    */
 }

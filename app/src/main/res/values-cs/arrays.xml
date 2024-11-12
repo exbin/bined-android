@@ -31,4 +31,22 @@
         <item>Malá písmena</item>
         <item>Velká písmena</item>
     </string-array>
+
+    <string-array name="file_handling_mode_entries">
+        <item>Načíst celý soubor</item>
+        <item>Pouze změny</item>
+    </string-array>
+
+    <string-array name="keys_panel_mode_entries">
+        <item>Skrýt</item>
+        <item>Malý</item>
+        <item>Střední</item>
+        <item>Velký</item>
+    </string-array>
+
+    <string-array name="data_inspector_mode_entries">
+        <item>Skrýt</item>
+        <item>Zobrazit</item>
+        <item>Při orientaci na šířku</item>
+    </string-array>
 </resources>

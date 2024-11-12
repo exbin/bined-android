@@ -56,6 +56,7 @@ public class BinEdFileHandler {
 
     private CodeArea codeArea;
     private CodeAreaUndoRedo undoRedo;
+    private BinEdCodeAreaAssessor codeAreaAssessor;
 
     private long documentOriginalSize = 0;
     private Uri currentFileUri = null;
@@ -71,7 +72,7 @@ public class BinEdFileHandler {
         CodeAreaOperationCommandHandler commandHandler = new CodeAreaOperationCommandHandler(codeArea.getContext(), codeArea, undoRedo);
         codeArea.setCommandHandler(commandHandler);
         CodeAreaPainter painter = codeArea.getPainter();
-        BinEdCodeAreaAssessor codeAreaAssessor = new BinEdCodeAreaAssessor(((ColorAssessorPainterCapable) painter).getColorAssessor(), ((CharAssessorPainterCapable) painter).getCharAssessor());
+        codeAreaAssessor = new BinEdCodeAreaAssessor(((ColorAssessorPainterCapable) painter).getColorAssessor(), ((CharAssessorPainterCapable) painter).getCharAssessor());
         ((ColorAssessorPainterCapable) painter).setColorAssessor(codeAreaAssessor);
         ((CharAssessorPainterCapable) painter).setCharAssessor(codeAreaAssessor);
         codeArea.setPainter(painter);
@@ -173,6 +174,11 @@ public class BinEdFileHandler {
     @Nonnull
     public CodeAreaUndoRedo getUndoRedo() {
         return undoRedo;
+    }
+
+    @Nonnull
+    public BinEdCodeAreaAssessor getCodeAreaAssessor() {
+        return codeAreaAssessor;
     }
 
     public long getDocumentOriginalSize() {

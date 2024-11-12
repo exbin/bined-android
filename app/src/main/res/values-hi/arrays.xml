@@ -25,4 +25,22 @@
         <item>निम्न वर्ण</item>
         <item>उच्च वर्ण</item>
     </string-array>
+
+    <string-array name="file_handling_mode_entries">
+        <item>पूरी फ़ाइल लोड करें</item>
+        <item>केवल परिवर्तन</item>
+    </string-array>
+
+    <string-array name="keys_panel_mode_entries">
+        <item>छिपाना</item>
+        <item>छोटा</item>
+        <item>मध्यम</item>
+        <item>बड़ा</item>
+    </string-array>
+
+    <string-array name="data_inspector_mode_entries">
+        <item>छिपाना</item>
+        <item>दिखाओ</item>
+        <item>लैंडस्केप ओरिएंटेशन में</item>
+    </string-array>
 </resources>

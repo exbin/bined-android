@@ -106,10 +106,12 @@
     <string-array name="data_inspector_mode_entries">
         <item>Hide</item>
         <item>Show</item>
+        <item>In Landscape Orientation</item>
     </string-array>
 
     <string-array name="data_inspector_mode_values" translatable="false">
         <item>hide</item>
         <item>show</item>
+        <item>landscape</item>
     </string-array>
 </resources>

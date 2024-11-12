@@ -25,5 +25,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public enum DataInspectorMode {
     HIDE,
-    SHOW
+    SHOW,
+    HORIZONTAL
 }

@@ -22,6 +22,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -82,6 +84,7 @@ import org.exbin.bined.basic.BasicCodeAreaSection;
 import org.exbin.bined.basic.CodeAreaViewMode;
 import org.exbin.bined.capability.EditModeCapable;
 import org.exbin.bined.editor.android.inspector.BasicValuesInspector;
+import org.exbin.bined.editor.android.inspector.BasicValuesPositionColorModifier;
 import org.exbin.bined.editor.android.options.DataInspectorMode;
 import org.exbin.bined.editor.android.options.KeysPanelMode;
 import org.exbin.bined.editor.android.options.Theme;
@@ -97,6 +100,7 @@ import org.exbin.bined.editor.android.search.SearchParameters;
 import org.exbin.bined.highlight.android.NonAsciiCodeAreaColorAssessor;
 import org.exbin.bined.highlight.android.NonprintablesCodeAreaAssessor;
 import org.exbin.bined.operation.undo.BinaryDataUndoRedoChangeListener;
+import org.exbin.framework.bined.BinEdCodeAreaAssessor;
 import org.exbin.framework.bined.BinaryStatusApi;
 
 import java.io.File;
@@ -148,6 +152,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     private Runnable postSaveAsAction = null;
     private boolean keyboardShown = false;
     private boolean dataInspectorShown = true;
+    BasicValuesPositionColorModifier basicValuesPositionColorModifier = new BasicValuesPositionColorModifier();
 
     private final BinarySearchService.SearchStatusListener searchStatusListener = new BinarySearchService.SearchStatusListener() {
         @Override
@@ -267,11 +272,15 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         }
         basicValuesInspector.setCodeArea(codeArea, fileHandler.getUndoRedo(), findViewById(R.id.basic_values_inspector));
         basicValuesInspector.enableUpdate();
-        // basicValuesInspector.registerFocusPainter(pain);
+        BinEdCodeAreaAssessor codeAreaAssessor = fileHandler.getCodeAreaAssessor();
+        codeAreaAssessor.addColorModifier(basicValuesPositionColorModifier);
+        basicValuesInspector.registerFocusPainter(basicValuesPositionColorModifier);
 
         applySettings();
 
         processIntent(getIntent());
+
+        codeArea.post(() -> codeArea.requestFocus());
     }
 
     private void setupKeyPanel(KeysPanelMode keysPanelMode) {
@@ -403,6 +412,8 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         codeArea.removeSelectionChangedListener(codeAreaSelectionChangedListener);
         codeArea.removeDataChangedListener(codeAreaDataChangedListener);
         fileHandler.getUndoRedo().removeChangeListener(codeAreaChangeListener);
+        BinEdCodeAreaAssessor codeAreaAssessor = fileHandler.getCodeAreaAssessor();
+        codeAreaAssessor.removeColorModifier(basicValuesPositionColorModifier);
     }
 
     private void processIntent(Intent intent) {
@@ -462,7 +473,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         EditorPreferences editorPreferences = appPreferences.getEditorPreferences();
         setupKeyPanel(editorPreferences.getKeysPanelMode());
         DataInspectorMode dataInspectorMode = editorPreferences.getDataInspectorMode();
-        boolean showDataInspector = dataInspectorMode == DataInspectorMode.SHOW;
+        boolean showDataInspector = dataInspectorMode == DataInspectorMode.SHOW || (dataInspectorMode == DataInspectorMode.HORIZONTAL && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
         if (showDataInspector != dataInspectorShown) {
             LinearLayout mainHorizontalLayout = findViewById(R.id.mainHorizontalLayout);
             if (showDataInspector) {
@@ -475,6 +486,9 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             mainHorizontalLayout.requestLayout();
             dataInspectorShown = showDataInspector;
         }
+
+        boolean isDarkMode = (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) > 0;
+        basicValuesPositionColorModifier.setDarkMode(isDarkMode);
 
         updateStatus();
     }

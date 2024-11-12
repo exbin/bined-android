@@ -100,14 +100,14 @@ public class BasicValuesInspector {
         RadioButton unsignedRadioButton = view.findViewById(R.id.radioButtonUnsigned);
         unsignedRadioButton.setOnCheckedChangeListener((buttonView, isChecked) -> updateValues());
 
-        ((CheckBox) view.findViewById(R.id.checkBoxBit0)).setOnCheckedChangeListener((buttonView, isChecked) -> binaryCheckBox0ActionPerformed());
-        ((CheckBox) view.findViewById(R.id.checkBoxBit1)).setOnCheckedChangeListener((buttonView, isChecked) -> binaryCheckBox1ActionPerformed());
-        ((CheckBox) view.findViewById(R.id.checkBoxBit2)).setOnCheckedChangeListener((buttonView, isChecked) -> binaryCheckBox2ActionPerformed());
-        ((CheckBox) view.findViewById(R.id.checkBoxBit3)).setOnCheckedChangeListener((buttonView, isChecked) -> binaryCheckBox3ActionPerformed());
-        ((CheckBox) view.findViewById(R.id.checkBoxBit4)).setOnCheckedChangeListener((buttonView, isChecked) -> binaryCheckBox4ActionPerformed());
-        ((CheckBox) view.findViewById(R.id.checkBoxBit5)).setOnCheckedChangeListener((buttonView, isChecked) -> binaryCheckBox5ActionPerformed());
-        ((CheckBox) view.findViewById(R.id.checkBoxBit6)).setOnCheckedChangeListener((buttonView, isChecked) -> binaryCheckBox6ActionPerformed());
-        ((CheckBox) view.findViewById(R.id.checkBoxBit7)).setOnCheckedChangeListener((buttonView, isChecked) -> binaryCheckBox7ActionPerformed());
+        ((CheckBox) view.findViewById(R.id.checkBoxBit0)).setOnCheckedChangeListener((buttonView, isChecked) -> binaryCheckBox0ActionPerformed(isChecked));
+        ((CheckBox) view.findViewById(R.id.checkBoxBit1)).setOnCheckedChangeListener((buttonView, isChecked) -> binaryCheckBox1ActionPerformed(isChecked));
+        ((CheckBox) view.findViewById(R.id.checkBoxBit2)).setOnCheckedChangeListener((buttonView, isChecked) -> binaryCheckBox2ActionPerformed(isChecked));
+        ((CheckBox) view.findViewById(R.id.checkBoxBit3)).setOnCheckedChangeListener((buttonView, isChecked) -> binaryCheckBox3ActionPerformed(isChecked));
+        ((CheckBox) view.findViewById(R.id.checkBoxBit4)).setOnCheckedChangeListener((buttonView, isChecked) -> binaryCheckBox4ActionPerformed(isChecked));
+        ((CheckBox) view.findViewById(R.id.checkBoxBit5)).setOnCheckedChangeListener((buttonView, isChecked) -> binaryCheckBox5ActionPerformed(isChecked));
+        ((CheckBox) view.findViewById(R.id.checkBoxBit6)).setOnCheckedChangeListener((buttonView, isChecked) -> binaryCheckBox6ActionPerformed(isChecked));
+        ((CheckBox) view.findViewById(R.id.checkBoxBit7)).setOnCheckedChangeListener((buttonView, isChecked) -> binaryCheckBox7ActionPerformed(isChecked));
 
         ((EditText) view.findViewById(R.id.editTextByte)).setOnEditorActionListener(this::byteTextFieldKeyReleased);
         ((EditText) view.findViewById(R.id.editTextWord)).setOnEditorActionListener(this::wordTextFieldKeyReleased);
@@ -119,64 +119,64 @@ public class BasicValuesInspector {
         ((EditText) view.findViewById(R.id.editTextString)).setOnEditorActionListener(this::stringTextFieldKeyReleased);
     }
 
-    private void binaryCheckBox0ActionPerformed() {
-        if (!valuesUpdater.isUpdateInProgress() && ((valuesCache[0] & 0x80) > 0 != view.findViewById(R.id.checkBoxBit0).isSelected())) {
+    private void binaryCheckBox0ActionPerformed(boolean checked) {
+        if (!valuesUpdater.isUpdateInProgress() && ((valuesCache[0] & 0x80) > 0 != checked)) {
             valuesCache[0] = (byte) (valuesCache[0] ^ 0x80);
             modifyValues(1);
         }
     }
 
-    private void binaryCheckBox1ActionPerformed() {
-        if (!valuesUpdater.isUpdateInProgress() && ((valuesCache[0] & 0x40) > 0 != view.findViewById(R.id.checkBoxBit1).isSelected())) {
+    private void binaryCheckBox1ActionPerformed(boolean checked) {
+        if (!valuesUpdater.isUpdateInProgress() && ((valuesCache[0] & 0x40) > 0 != checked)) {
             valuesCache[0] = (byte) (valuesCache[0] ^ 0x40);
             modifyValues(1);
         }
     }
 
-    private void binaryCheckBox2ActionPerformed() {
-        if (!valuesUpdater.isUpdateInProgress() && ((valuesCache[0] & 0x20) > 0 != view.findViewById(R.id.checkBoxBit2).isSelected())) {
+    private void binaryCheckBox2ActionPerformed(boolean checked) {
+        if (!valuesUpdater.isUpdateInProgress() && ((valuesCache[0] & 0x20) > 0 != checked)) {
             valuesCache[0] = (byte) (valuesCache[0] ^ 0x20);
             modifyValues(1);
         }
     }
 
-    private void binaryCheckBox3ActionPerformed() {
-        if (!valuesUpdater.isUpdateInProgress() && ((valuesCache[0] & 0x10) > 0 != view.findViewById(R.id.checkBoxBit3).isSelected())) {
+    private void binaryCheckBox3ActionPerformed(boolean checked) {
+        if (!valuesUpdater.isUpdateInProgress() && ((valuesCache[0] & 0x10) > 0 != checked)) {
             valuesCache[0] = (byte) (valuesCache[0] ^ 0x10);
             modifyValues(1);
         }
     }
 
-    private void binaryCheckBox4ActionPerformed() {
-        if (!valuesUpdater.isUpdateInProgress() && ((valuesCache[0] & 0x8) > 0 != view.findViewById(R.id.checkBoxBit4).isSelected())) {
+    private void binaryCheckBox4ActionPerformed(boolean checked) {
+        if (!valuesUpdater.isUpdateInProgress() && ((valuesCache[0] & 0x8) > 0 != checked)) {
             valuesCache[0] = (byte) (valuesCache[0] ^ 0x8);
             modifyValues(1);
         }
     }
 
-    private void binaryCheckBox5ActionPerformed() {
-        if (!valuesUpdater.isUpdateInProgress() && ((valuesCache[0] & 0x4) > 0 != view.findViewById(R.id.checkBoxBit5).isSelected())) {
+    private void binaryCheckBox5ActionPerformed(boolean checked) {
+        if (!valuesUpdater.isUpdateInProgress() && ((valuesCache[0] & 0x4) > 0 != checked)) {
             valuesCache[0] = (byte) (valuesCache[0] ^ 0x4);
             modifyValues(1);
         }
     }
 
-    private void binaryCheckBox6ActionPerformed() {
-        if (!valuesUpdater.isUpdateInProgress() && ((valuesCache[0] & 0x2) > 0 != view.findViewById(R.id.checkBoxBit6).isSelected())) {
+    private void binaryCheckBox6ActionPerformed(boolean checked) {
+        if (!valuesUpdater.isUpdateInProgress() && ((valuesCache[0] & 0x2) > 0 != checked)) {
             valuesCache[0] = (byte) (valuesCache[0] ^ 0x2);
             modifyValues(1);
         }
     }
 
-    private void binaryCheckBox7ActionPerformed() {
-        if (!valuesUpdater.isUpdateInProgress() && ((valuesCache[0] & 0x1) > 0 != view.findViewById(R.id.checkBoxBit7).isSelected())) {
+    private void binaryCheckBox7ActionPerformed(boolean checked) {
+        if (!valuesUpdater.isUpdateInProgress() && ((valuesCache[0] & 0x1) > 0 != checked)) {
             valuesCache[0] = (byte) (valuesCache[0] ^ 0x1);
             modifyValues(1);
         }
     }
 
     private boolean byteTextFieldKeyReleased(TextView v, int actionId, KeyEvent event) {
-        if (actionId == EditorInfo.IME_ACTION_SEND && isEditable()) {
+        if (isEnterValue(actionId, event) && isEditable()) {
             try {
                 int intValue = Integer.parseInt(((EditText) view.findViewById(R.id.editTextByte)).getText().toString());
                 if (isSigned()) {
@@ -201,7 +201,7 @@ public class BasicValuesInspector {
     }
 
     private boolean wordTextFieldKeyReleased(TextView v, int actionId, KeyEvent event) {
-        if (actionId == EditorInfo.IME_ACTION_SEND && isEditable()) {
+        if (isEnterValue(actionId, event) && isEditable()) {
             try {
                 int intValue = Integer.parseInt(((EditText) view.findViewById(R.id.editTextWord)).getText().toString());
                 if (isSigned()) {
@@ -232,7 +232,7 @@ public class BasicValuesInspector {
     }
 
     private boolean intTextFieldKeyReleased(TextView v, int actionId, KeyEvent event) {
-        if (actionId == EditorInfo.IME_ACTION_SEND && isEditable()) {
+        if (isEnterValue(actionId, event) && isEditable()) {
             try {
                 long longValue = Long.parseLong(((EditText) view.findViewById(R.id.editTextInteger)).getText().toString());
                 if (isSigned()) {
@@ -267,7 +267,7 @@ public class BasicValuesInspector {
     }
 
     private boolean longTextFieldKeyReleased(TextView v, int actionId, KeyEvent event) {
-        if (actionId == EditorInfo.IME_ACTION_SEND && isEditable()) {
+        if (isEnterValue(actionId, event) && isEditable()) {
             try {
                 ByteOrder byteOrder = getByteOrder();
                 if (isSigned()) {
@@ -311,7 +311,7 @@ public class BasicValuesInspector {
     }
 
     private boolean floatTextFieldKeyReleased(TextView v, int actionId, KeyEvent event) {
-        if (actionId == EditorInfo.IME_ACTION_SEND && isEditable()) {
+        if (isEnterValue(actionId, event) && isEditable()) {
             try {
                 ByteOrder byteOrder = getByteOrder();
                 float floatValue = Float.parseFloat(((EditText) view.findViewById(R.id.editTextFloat)).getText().toString());
@@ -334,7 +334,7 @@ public class BasicValuesInspector {
     }
 
     private boolean doubleTextFieldKeyReleased(TextView v, int actionId, KeyEvent event) {
-        if (actionId == EditorInfo.IME_ACTION_SEND && isEditable()) {
+        if (isEnterValue(actionId, event) && isEditable()) {
             try {
                 ByteOrder byteOrder = getByteOrder();
                 double doubleValue = Double.parseDouble(((EditText) view.findViewById(R.id.editTextDouble)).getText().toString());
@@ -357,7 +357,7 @@ public class BasicValuesInspector {
     }
 
     private boolean characterTextFieldKeyReleased(TextView v, int actionId, KeyEvent event) {
-        if (actionId == EditorInfo.IME_ACTION_SEND && isEditable()) {
+        if (isEnterValue(actionId, event) && isEditable()) {
             try {
                 String characterText = ((EditText) view.findViewById(R.id.editTextCharacter)).getText().toString();
                 if (characterText.isEmpty()) {
@@ -382,7 +382,7 @@ public class BasicValuesInspector {
     }
 
     private boolean stringTextFieldKeyReleased(TextView v, int actionId, KeyEvent event) {
-        if (actionId == EditorInfo.IME_ACTION_SEND && isEditable()) {
+        if (isEnterValue(actionId, event) && isEditable()) {
             try {
                 String characterText = ((EditText) view.findViewById(R.id.editTextString)).getText().toString();
                 if (characterText.isEmpty()) {
@@ -403,6 +403,10 @@ public class BasicValuesInspector {
         }
 
         return false;
+    }
+    
+    private boolean isEnterValue(int actionId, @Nullable KeyEvent event) {
+        return actionId > EditorInfo.IME_ACTION_NONE || (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER);
     }
 
     public void enableUpdate() {
@@ -444,14 +448,14 @@ public class BasicValuesInspector {
         view.findViewById(R.id.checkBoxBit5).setEnabled(editable);
         view.findViewById(R.id.checkBoxBit6).setEnabled(editable);
         view.findViewById(R.id.checkBoxBit7).setEnabled(editable);
-/*        ((EditText) view.findViewById(R.id.editTextByte)).setInputType(editable ? Num);
-        view.findViewById(R.id.editTextWord).setEditable(editable);
-        view.findViewById(R.id.editTextInteger).setEditable(editable);
-        view.findViewById(R.id.editTextLong).setEditable(editable);
-        view.findViewById(R.id.editTextFloat).setEditable(editable);
-        view.findViewById(R.id.editTextDouble).setEditable(editable);
-        view.findViewById(R.id.editTextCharacter).setEditable(editable);
-        view.findViewById(R.id.editTextString).setEditable(editable); */
+        view.findViewById(R.id.editTextByte).setEnabled(editable);
+        view.findViewById(R.id.editTextWord).setEnabled(editable);
+        view.findViewById(R.id.editTextInteger).setEnabled(editable);
+        view.findViewById(R.id.editTextLong).setEnabled(editable);
+        view.findViewById(R.id.editTextFloat).setEnabled(editable);
+        view.findViewById(R.id.editTextDouble).setEnabled(editable);
+        view.findViewById(R.id.editTextCharacter).setEnabled(editable);
+        view.findViewById(R.id.editTextString).setEnabled(editable);
     }
 
     public void updateValues() {
@@ -502,7 +506,7 @@ public class BasicValuesInspector {
     }
 
     private boolean isSigned() {
-        return view.findViewById(R.id.radioButtonSigned).isSelected();
+        return ((RadioButton) view.findViewById(R.id.radioButtonSigned)).isChecked();
     }
 
     private boolean isEditable() {
@@ -511,7 +515,7 @@ public class BasicValuesInspector {
 
     @Nonnull
     private ByteOrder getByteOrder() {
-        return view.findViewById(R.id.radioButtonLittleEndian).isSelected() ? ByteOrder.LITTLE_ENDIAN : ByteOrder.BIG_ENDIAN;
+        return ((RadioButton) view.findViewById(R.id.radioButtonLittleEndian)).isChecked() ? ByteOrder.LITTLE_ENDIAN : ByteOrder.BIG_ENDIAN;
     }
 
     private void showException(Exception ex) {
@@ -745,35 +749,35 @@ public class BasicValuesInspector {
         private void clearField(ValuesPanelField valuesPanelField) {
             switch (valuesPanelField) {
                 case BINARY0: {
-                    view.findViewById(R.id.checkBoxBit0).setSelected(false);
+                    ((CheckBox) view.findViewById(R.id.checkBoxBit0)).setChecked(false);
                     break;
                 }
                 case BINARY1: {
-                    view.findViewById(R.id.checkBoxBit1).setSelected(false);
+                    ((CheckBox) view.findViewById(R.id.checkBoxBit1)).setChecked(false);
                     break;
                 }
                 case BINARY2: {
-                    view.findViewById(R.id.checkBoxBit2).setSelected(false);
+                    ((CheckBox) view.findViewById(R.id.checkBoxBit2)).setChecked(false);
                     break;
                 }
                 case BINARY3: {
-                    view.findViewById(R.id.checkBoxBit3).setSelected(false);
+                    ((CheckBox) view.findViewById(R.id.checkBoxBit3)).setChecked(false);
                     break;
                 }
                 case BINARY4: {
-                    view.findViewById(R.id.checkBoxBit4).setSelected(false);
+                    ((CheckBox) view.findViewById(R.id.checkBoxBit4)).setChecked(false);
                     break;
                 }
                 case BINARY5: {
-                    view.findViewById(R.id.checkBoxBit5).setSelected(false);
+                    ((CheckBox) view.findViewById(R.id.checkBoxBit5)).setChecked(false);
                     break;
                 }
                 case BINARY6: {
-                    view.findViewById(R.id.checkBoxBit6).setSelected(false);
+                    ((CheckBox) view.findViewById(R.id.checkBoxBit6)).setChecked(false);
                     break;
                 }
                 case BINARY7: {
-                    view.findViewById(R.id.checkBoxBit7).setSelected(false);
+                    ((CheckBox) view.findViewById(R.id.checkBoxBit7)).setChecked(false);
                     break;
                 }
                 case BYTE: {
