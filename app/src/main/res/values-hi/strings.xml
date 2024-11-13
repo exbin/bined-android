@@ -28,6 +28,7 @@
     <string name="action_select_all">सभी का चयन करें</string>
     <string name="action_exit">बाहर निकलें</string>
 
+    <string name="action_open_main_menu">मुख्य मेन्यू</string>
     <string name="view_menu">देखे</string>
     <string name="visual_theme">दृश्य थीम</string>
     <string name="language">भाषा</string>

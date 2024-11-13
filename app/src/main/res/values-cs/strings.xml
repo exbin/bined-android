@@ -27,6 +27,7 @@
     <string name="action_select_all">Vybrat vše</string>
     <string name="action_exit">Ukončit</string>
 
+    <string name="action_open_main_menu">Hlavní menu</string>
     <string name="view_menu">Zobrazit</string>
     <string name="visual_theme">Vizuální motiv</string>
     <string name="language">Jazyk</string>

@@ -1,4 +1,4 @@
-0.2.3
+0.2.3 (2024-11-13)
 - Added basic data inspector
 - Support for partial file opening
 - Support for D-Pad / Android TV

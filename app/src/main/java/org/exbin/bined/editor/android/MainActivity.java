@@ -133,6 +133,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     private static final int SELECT_ALL_ACTION_POPUP_ID = 8;
     private static final int COPY_AS_CODE_ACTION_POPUP_ID = 9;
     private static final int PASTE_FROM_CODE_ACTION_POPUP_ID = 10;
+    private static final int OPEN_MAIN_MENU_ID = 11;
 
     private static final int STORAGE_PERMISSION_CODE = 1;
 
@@ -552,25 +553,34 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        menu.add(0, SELECTION_START_POPUP_ID, 0, getResources().getString(R.string.action_selection_start));
-        menu.add(0, SELECTION_END_POPUP_ID, 1, getResources().getString(R.string.action_selection_end));
-        menu.add(0, CLEAR_SELECTION_POPUP_ID, 2, getResources().getString(R.string.action_clear_selection));
-        MenuItem cutMenuItem = menu.add(1, CUT_ACTION_POPUP_ID, 3, getResources().getString(R.string.action_cut));
+        int order = 0;
+        if (isGoogleTV(codeArea.getContext())) {
+            menu.add(0, OPEN_MAIN_MENU_ID, order, getResources().getString(R.string.action_open_main_menu));
+            order++;
+        }
+        menu.add(0, SELECTION_START_POPUP_ID, order, getResources().getString(R.string.action_selection_start));
+        menu.add(0, SELECTION_END_POPUP_ID, order + 1, getResources().getString(R.string.action_selection_end));
+        menu.add(0, CLEAR_SELECTION_POPUP_ID, order + 2, getResources().getString(R.string.action_clear_selection));
+        MenuItem cutMenuItem = menu.add(1, CUT_ACTION_POPUP_ID, order + 3, getResources().getString(R.string.action_cut));
         cutMenuItem.setEnabled(codeArea.isEditable() && codeArea.hasSelection());
-        MenuItem copyMenuItem = menu.add(1, COPY_ACTION_POPUP_ID, 4, getResources().getString(R.string.action_copy));
+        MenuItem copyMenuItem = menu.add(1, COPY_ACTION_POPUP_ID, order + 4, getResources().getString(R.string.action_copy));
         copyMenuItem.setEnabled(codeArea.hasSelection());
-        menu.add(1, COPY_AS_CODE_ACTION_POPUP_ID, 5, getResources().getString(R.string.action_copy_as_code));
-        MenuItem pasteMenuItem = menu.add(1, PASTE_ACTION_POPUP_ID, 6, getResources().getString(R.string.action_paste));
+        menu.add(1, COPY_AS_CODE_ACTION_POPUP_ID, order + 5, getResources().getString(R.string.action_copy_as_code));
+        MenuItem pasteMenuItem = menu.add(1, PASTE_ACTION_POPUP_ID, order + 6, getResources().getString(R.string.action_paste));
         pasteMenuItem.setEnabled(codeArea.isEditable() && codeArea.canPaste());
-        menu.add(1, PASTE_FROM_CODE_ACTION_POPUP_ID, 5, getResources().getString(R.string.action_paste_from_code));
-        MenuItem deleteMenuItem = menu.add(1, DELETE_ACTION_POPUP_ID, 7, getResources().getString(R.string.action_delete));
+        menu.add(1, PASTE_FROM_CODE_ACTION_POPUP_ID, order + 7, getResources().getString(R.string.action_paste_from_code));
+        MenuItem deleteMenuItem = menu.add(1, DELETE_ACTION_POPUP_ID, order + 8, getResources().getString(R.string.action_delete));
         deleteMenuItem.setEnabled(codeArea.isEditable() && codeArea.hasSelection());
-        menu.add(1, SELECT_ALL_ACTION_POPUP_ID, 8, getResources().getString(R.string.action_select_all));
+        menu.add(1, SELECT_ALL_ACTION_POPUP_ID, order + 9, getResources().getString(R.string.action_select_all));
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case OPEN_MAIN_MENU_ID: {
+                toolbar.showOverflowMenu();
+                break;
+            }
             case SELECTION_START_POPUP_ID: {
                 SelectionRange selection = codeArea.getSelection();
                 CodeAreaCaretPosition touchCaretPosition = codeArea.mousePositionToClosestCaretPosition((int) codeArea.getTouchPositionX(), (int) codeArea.getTouchPositionY(), CaretOverlapMode.PARTIAL_OVERLAP);
@@ -1320,13 +1330,15 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
                     editable.clear();
                     if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_DPAD_CENTER) {
                         if (keyEvent.getEventTime() - keyEvent.getDownTime() > TimeUnit.SECONDS.toMillis(1)) {
-                            codeArea.showContextMenu();
-                        } else {
                             View keyStripeView = findViewById(R.id.button0);
                             keyStripeView.requestFocus();
+                        } else {
+                            codeArea.showContextMenu();
                         }
                     } else if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_BACK && isGoogleTV(codeArea.getContext())) {
-                        toolbar.showOverflowMenu();
+                        releaseFile(() -> {
+                            System.exit(0);
+                        });
                     } else {
                         codeArea.getCommandHandler().keyPressed(keyEvent);
                     }
