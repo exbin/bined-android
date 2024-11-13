@@ -1,0 +1,5 @@
+- Added basic data inspector
+- Support for partial file opening
+- Support for D-Pad / Android TV
+- Options for button size in keys panel
+- Fix for button 9

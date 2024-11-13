@@ -218,6 +218,6 @@ public class BasicCodeAreaColorsProfile implements CodeAreaColorsProfile {
     }
 
     private boolean isDarkMode() {
-        return context != null && (context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) > 0;
+        return context != null && (context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_YES) > 0;
     }
 }

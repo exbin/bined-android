@@ -16,7 +16,6 @@
 package org.exbin.auxiliary.binary_data.delta.file;
 
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Nonnull;
@@ -50,23 +49,22 @@ public class DeltaDataPageWindow {
     private void loadPage(int index) {
         long pageIndex = dataPages[index].pageIndex;
         long pagePosition = pageIndex * PAGE_SIZE;
-        RandomAccessFile file = data.getAccessFile();
         try {
-            long fileLength = file.length();
+            long fileLength = data.getDataLength();
             byte[] page = dataPages[index].page;
             int offset = 0;
             int toRead = PAGE_SIZE;
             if (pagePosition + PAGE_SIZE > fileLength) {
                 toRead = (int) (fileLength - pagePosition);
             }
-            file.seek(pagePosition);
             while (toRead > 0) {
-                int red = file.read(page, offset, toRead);
+                int red = data.read(pagePosition, page, offset, toRead);
                 if (red == -1) {
                     throw new IOException("Unexpected read error ");
                 }
                 toRead -= red;
                 offset += red;
+                pagePosition += red;
             }
         } catch (IOException ex) {
             Logger.getLogger(DeltaDataPageWindow.class.getName()).log(Level.SEVERE, null, ex);

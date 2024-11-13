@@ -5,17 +5,20 @@
     <item
         android:id="@+id/action_search"
         android:icon="@drawable/ic_search_24"
+        android:iconTint="@color/menu_icon_state"
         android:title="@string/action_search"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_undo"
         android:icon="@drawable/ic_undo_24"
+        android:iconTint="@color/menu_icon_state"
         android:title="@string/action_undo"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_redo"
         android:icon="@drawable/ic_redo_24"
+        android:iconTint="@color/menu_icon_state"
         android:title="@string/action_redo"
         app:showAsAction="ifRoom" />
     <item

@@ -8,8 +8,8 @@ android {
         applicationId "org.exbin.bined.editor.android"
         minSdk 24
         targetSdk 34
-        versionCode 8
-        versionName "0.2.3-SNAPSHOT"
+        versionCode 9
+        versionName "0.2.3"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         vectorDrawables.generatedDensities = []
     }

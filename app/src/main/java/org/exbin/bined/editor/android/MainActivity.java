@@ -23,7 +23,6 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -473,7 +472,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         EditorPreferences editorPreferences = appPreferences.getEditorPreferences();
         setupKeyPanel(editorPreferences.getKeysPanelMode());
         DataInspectorMode dataInspectorMode = editorPreferences.getDataInspectorMode();
-        boolean showDataInspector = dataInspectorMode == DataInspectorMode.SHOW || (dataInspectorMode == DataInspectorMode.HORIZONTAL && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
+        boolean showDataInspector = dataInspectorMode == DataInspectorMode.SHOW || (dataInspectorMode == DataInspectorMode.LANDSCAPE && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
         if (showDataInspector != dataInspectorShown) {
             LinearLayout mainHorizontalLayout = findViewById(R.id.mainHorizontalLayout);
             if (showDataInspector) {
@@ -487,7 +486,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             dataInspectorShown = showDataInspector;
         }
 
-        boolean isDarkMode = (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) > 0;
+        boolean isDarkMode = (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_YES) > 0;
         basicValuesPositionColorModifier.setDarkMode(isDarkMode);
 
         updateStatus();
@@ -1293,6 +1292,21 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
         @Override
         public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+            if (!codeArea.isFocused()) {
+                if (keyEvent.getAction() == KeyEvent.ACTION_UP) {
+                    if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_BACK && isGoogleTV(codeArea.getContext())) {
+                        codeArea.post(codeArea::requestFocus);
+                        return true;
+                    }
+                }
+                View currentFocus = getCurrentFocus();
+                if (currentFocus != null) {
+                    return currentFocus.dispatchKeyEvent(keyEvent);
+                }
+
+                return false;
+            }
+
             try {
                 if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
                     if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_DEL || keyEvent.getKeyCode() == KeyEvent.KEYCODE_FORWARD_DEL) {
@@ -1308,7 +1322,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
                         if (keyEvent.getEventTime() - keyEvent.getDownTime() > TimeUnit.SECONDS.toMillis(1)) {
                             codeArea.showContextMenu();
                         } else {
-                            View keyStripeView = findViewById(R.id.keyPanel);
+                            View keyStripeView = findViewById(R.id.button0);
                             keyStripeView.requestFocus();
                         }
                     } else if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_BACK && isGoogleTV(codeArea.getContext())) {

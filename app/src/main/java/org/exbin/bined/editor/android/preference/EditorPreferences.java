@@ -122,7 +122,7 @@ public class EditorPreferences implements EditorOptions {
     @Nonnull
     @Override
     public DataInspectorMode getDataInspectorMode() {
-        DataInspectorMode defaultDataInspectorMode = DataInspectorMode.HIDE;
+        DataInspectorMode defaultDataInspectorMode = DataInspectorMode.LANDSCAPE;
         try {
             return DataInspectorMode.valueOf(preferences.get(PREFERENCES_DATA_INSPECTOR_MODE, defaultDataInspectorMode.name()).toUpperCase());
         } catch (IllegalArgumentException ex) {
