@@ -678,7 +678,7 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
     }
 
     private void pasteBinaryData(BinaryData pastedData) {
-        BinaryData data = CodeAreaUtils.requireNonNullContentData(codeArea.getContentData());
+        BinaryData data = codeArea.getContentData();
         EditMode editMode = ((EditModeCapable) codeArea).getEditMode();
         EditOperation editOperation = ((EditModeCapable) codeArea).getActiveOperation();
 
@@ -690,23 +690,23 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
         DefaultCodeAreaCaret caret = (DefaultCodeAreaCaret) ((CaretCapable) codeArea).getCodeAreaCaret();
         long dataPosition = caret.getDataPosition();
 
-        long dataSize = pastedData.getDataSize();
-        long toRemove = dataSize;
+        long clipDataSize = pastedData.getDataSize();
+        long toReplace = clipDataSize;
         if (editMode == EditMode.INPLACE) {
-            if (dataPosition + toRemove > codeArea.getDataSize()) {
-                toRemove = codeArea.getDataSize() - dataPosition;
+            if (dataPosition + toReplace > codeArea.getDataSize()) {
+                toReplace = codeArea.getDataSize() - dataPosition;
             }
-            ((EditableBinaryData) data).replace(dataPosition, pastedData, 0, toRemove);
+            ((EditableBinaryData) data).replace(dataPosition, pastedData, 0, toReplace);
         } else {
             if (editMode == EditMode.EXPANDING && editOperation == EditOperation.OVERWRITE) {
-                if (dataPosition + toRemove > codeArea.getDataSize()) {
-                    toRemove = codeArea.getDataSize() - dataPosition;
+                if (dataPosition + toReplace > codeArea.getDataSize()) {
+                    toReplace = codeArea.getDataSize() - dataPosition;
                 }
-                ((EditableBinaryData) data).remove(dataPosition, toRemove);
+                ((EditableBinaryData) data).remove(dataPosition, toReplace);
             }
 
             ((EditableBinaryData) data).insert(dataPosition, pastedData);
-            caret.setCaretPosition(caret.getDataPosition() + dataSize);
+            caret.setCaretPosition(caret.getDataPosition() + clipDataSize);
             updateSelection(SelectingMode.NONE, caret.getCaretPosition());
         }
 

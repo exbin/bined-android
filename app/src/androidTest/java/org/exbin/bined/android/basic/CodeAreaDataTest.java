@@ -16,9 +16,6 @@
 package org.exbin.bined.android.basic;
 
 import org.exbin.bined.CodeAreaTest;
-import org.exbin.bined.android.CodeAreaCore;
-import org.junit.Assert;
-import org.junit.Test;
 
 /**
  * Tests for CodeArea component.

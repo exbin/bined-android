@@ -15,29 +15,24 @@
  */
 package org.exbin.bined.android.basic;
 
-import android.content.Context;
-import android.util.AttributeSet;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import androidx.test.core.app.ApplicationProvider;
-
-import org.exbin.bined.android.CodeAreaCore;
-
-import javax.annotation.Nonnull;
+import org.exbin.bined.editor.android.MainActivity;
+import org.junit.Rule;
+import org.junit.runner.RunWith;
 
 /**
  * Tests for CodeArea component.
  *
  * @author ExBin Project (https://exbin.org)
  */
+@RunWith(AndroidJUnit4.class)
 public class CodeAreaComponentTest {
 
-    public CodeAreaComponentTest() {
-    }
+    @Rule
+    public ActivityScenarioRule<MainActivity> rule = new ActivityScenarioRule<>(MainActivity.class);
 
-    @Nonnull
-    public CodeAreaCore createCodeArea() {
-        Context applicationContext = ApplicationProvider.getApplicationContext();
-        AttributeSet attributeSet = null;
-        return new CodeArea(applicationContext, attributeSet);
+    public CodeAreaComponentTest() {
     }
 }
