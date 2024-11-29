@@ -8,5 +8,5 @@
     <color name="gray_400">#FFBDBDBD</color>
     <color name="gray_600">#FF757575</color>
     <color name="icon_tint">#FF202020</color>
-    <color name="disabled_icon_tint">#FF4F4F4F</color>
+    <color name="disabled_icon_tint">#FF9F9F9F</color>
 </resources>
