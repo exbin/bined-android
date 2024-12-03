@@ -75,13 +75,16 @@ public class DefaultCodeAreaCharAssessor implements CodeAreaCharAssessor {
 
     @Override
     public char getPreviewCharacter(long rowDataPosition, int byteOnRow, int charOnRow, CodeAreaSection section) {
+        if (byteOnRow >= rowData.length) {
+            return ' ';
+        }
+
         if (maxBytesPerChar > 1) {
             decoder.reset();
 
             if (rowDataPosition + maxBytesPerChar > dataSize) {
-                int charDataLength = (int) (dataSize - rowDataPosition);
                 byteBuffer.clear();
-                byteBuffer.put(rowData, byteOnRow, charDataLength);
+                byteBuffer.put(rowData, byteOnRow, (int) (dataSize - rowDataPosition));
             } else {
                 byteBuffer.rewind();
                 byteBuffer.put(rowData, byteOnRow, maxBytesPerChar);
@@ -135,7 +138,6 @@ public class DefaultCodeAreaCharAssessor implements CodeAreaCharAssessor {
     public Optional<CodeAreaCharAssessor> getParentCharAssessor() {
         return Optional.ofNullable(parentAssessor);
     }
-
     /**
      * Precomputes widths for basic ascii characters.
      */
