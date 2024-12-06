@@ -40,8 +40,8 @@ dependencies {
     implementation project(':file_picker')
 //    implementation 'org.exbin.bined:bined-core:0.3.0-SNAPSHOT'
 //    implementation 'org.exbin.bined:bined-operation:0.3.0-SNAPSHOT'
-    implementation 'org.exbin.auxiliary:binary_data:0.2.1'
-    implementation 'org.exbin.auxiliary:binary_data-paged:0.2.1'
+//    implementation 'org.exbin.auxiliary:binary_data:0.2.1'
+//    implementation 'org.exbin.auxiliary:binary_data-array:0.2.1'
 //    implementation 'org.exbin.auxiliary:binary_data-delta:0.2.1'
 
     testCompileOnly group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'

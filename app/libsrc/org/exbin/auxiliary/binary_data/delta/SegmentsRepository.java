@@ -29,8 +29,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import org.exbin.auxiliary.binary_data.BinaryData;
 import org.exbin.auxiliary.binary_data.delta.list.DefaultDoublyLinkedList;
 import org.exbin.auxiliary.binary_data.delta.list.DoublyLinkedItem;
+import org.exbin.auxiliary.binary_data.paged.ByteArrayPagedData;
 import org.exbin.auxiliary.binary_data.paged.DataPageProvider;
-import org.exbin.auxiliary.binary_data.paged.PagedData;
 
 /**
  * Repository of delta segments.
@@ -68,7 +68,7 @@ public class SegmentsRepository {
 
     @Nonnull
     public MemoryDataSource openMemorySource() {
-        PagedData pagedData = new PagedData();
+        ByteArrayPagedData pagedData = new ByteArrayPagedData();
         if (dataPageProvider != null) {
             pagedData.setDataPageProvider(dataPageProvider);
         }

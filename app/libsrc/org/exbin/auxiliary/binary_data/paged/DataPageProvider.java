@@ -13,49 +13,43 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.bined.android;
+package org.exbin.auxiliary.binary_data.paged;
 
-import android.graphics.Canvas;
-
-import org.exbin.bined.basic.CodeAreaScrollPosition;
-
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
+import org.exbin.auxiliary.binary_data.BinaryData;
 
 /**
- * Code area android control.
+ * Data page provider.
  *
  * @author ExBin Project (https://exbin.org)
  */
 @ParametersAreNonnullByDefault
-public interface CodeAreaAndroidControl {
+public interface DataPageProvider {
 
     /**
-     * Paints the main component.
-     */
-    void paintComponent(Canvas g);
-
-    /**
-     * Rebuilds colors after UIManager change.
-     */
-    void resetColors();
-
-    /**
-     * Resets painter state for new painting.
-     */
-    void reset();
-
-    /**
-     * Requests update of the component layout.
-     * <p>
-     * Notifies code area, that change of parameters will affect layout and it
-     * should be recomputed and updated if necessary.
-     */
-    void updateLayout();
-
-    /**
-     * Updates scroll position.
+     * Creates new instance of the empty data page.
      *
-     * @param scrollPosition scroll position
+     * @return data page
      */
-    void updateScrollPosition(CodeAreaScrollPosition scrollPosition);
+    @Nonnull
+    BinaryData createPage();
+
+    /**
+     * Creates new instance of the data page.
+     *
+     * @param sourceData data used as source
+     * @return data page
+     */
+    @Nonnull
+    BinaryData createPage(BinaryData sourceData);
+
+    /**
+     * Creates new instance of the data page.
+     *
+     * @param sourceData data used as source
+     * @return data page
+     */
+    @Nonnull
+    BinaryData createPage(byte[] sourceData);
 }

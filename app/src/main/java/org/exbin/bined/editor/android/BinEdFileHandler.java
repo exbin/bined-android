@@ -23,6 +23,7 @@ import org.exbin.auxiliary.binary_data.ByteArrayEditableData;
 import org.exbin.auxiliary.binary_data.EditableBinaryData;
 import org.exbin.auxiliary.binary_data.delta.DeltaDocument;
 import org.exbin.auxiliary.binary_data.delta.SegmentsRepository;
+import org.exbin.auxiliary.binary_data.paged.ByteArrayPagedData;
 import org.exbin.auxiliary.binary_data.paged.PagedData;
 import org.exbin.bined.EditOperation;
 import org.exbin.bined.android.CodeAreaPainter;
@@ -82,7 +83,7 @@ public class BinEdFileHandler {
         if (fileHandlingMode == FileHandlingMode.DELTA) {
             codeArea.setContentData(segmentsRepository.createDocument());
         } else {
-            codeArea.setContentData(new PagedData());
+            codeArea.setContentData(new ByteArrayPagedData());
         }
 
         undoRedo.clear();
@@ -103,7 +104,7 @@ public class BinEdFileHandler {
             } else {
                 BinaryData data = oldData;
                 if (!(data instanceof PagedData)) {
-                    data = new PagedData();
+                    data = new ByteArrayPagedData();
                     oldData.dispose();
                 }
                 InputStream inputStream = contentResolver.openInputStream(fileUri);
