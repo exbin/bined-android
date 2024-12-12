@@ -87,6 +87,7 @@
     <string name="unsigned_radio_button">Uns</string>
     <string name="error_invalid_input">Neplatný vstup</string>
 
+    <string name="error_exception">Neočekávaná chyba</string>
     <string name="pref_header_appearance">Vzhled</string>
     <string name="pref_view_header">Zobrazit</string>
 </resources>

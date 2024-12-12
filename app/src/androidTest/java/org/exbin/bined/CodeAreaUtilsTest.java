@@ -17,7 +17,7 @@ package org.exbin.bined;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import org.exbin.auxiliary.binary_data.BinaryData;
-import org.exbin.auxiliary.binary_data.ByteArrayEditableData;
+import org.exbin.auxiliary.binary_data.BufferEditableData;
 import org.exbin.auxiliary.binary_data.EditableBinaryData;
 import org.junit.Assert;
 import org.junit.Test;
@@ -38,11 +38,11 @@ public class CodeAreaUtilsTest {
         }
         expectedData[32] = (byte) 0xff;
 
-        EditableBinaryData resultData = new ByteArrayEditableData();
+        EditableBinaryData resultData = new BufferEditableData();
         CodeAreaUtils.insertHexStringIntoData("00 01 02 03 04 05 06 07 08 9 0A 0b c 0D E 0f 10 11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f ff", resultData, CodeType.HEXADECIMAL);
         checkResultData(expectedData, resultData);
 
-        resultData = new ByteArrayEditableData();
+        resultData = new BufferEditableData();
         CodeAreaUtils.insertHexStringIntoData("000102030405060708090A0b0c0D0E0f101112131415161718191a1b1c1d1e1fFf", resultData, CodeType.HEXADECIMAL);
         checkResultData(expectedData, resultData);
     }
@@ -57,7 +57,7 @@ public class CodeAreaUtilsTest {
         expectedData[21] = (byte) 200;
         expectedData[22] = (byte) 255;
 
-        EditableBinaryData resultData = new ByteArrayEditableData();
+        EditableBinaryData resultData = new BufferEditableData();
         CodeAreaUtils.insertHexStringIntoData("00 01 02 03 04 05 06 07 08 9 10 11 12 13 14 15 16 17 18 19 100 200 255", resultData, CodeType.DECIMAL);
         checkResultData(expectedData, resultData);
     }

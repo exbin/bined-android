@@ -428,12 +428,16 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
                 Uri fileUri = intent.getData();
                 if (fileUri != null) {
                     releaseFile(() -> {
-                        fileHandler.openFile(getContentResolver(), fileUri, appPreferences.getEditorPreferences().getFileHandlingMode());
-                        // Content should be opened as unspecified file
-                        if (ContentResolver.SCHEME_CONTENT.equals(scheme)) {
-                            fileHandler.clearFileUri();
+                        try {
+                            fileHandler.openFile(getContentResolver(), fileUri, appPreferences.getEditorPreferences().getFileHandlingMode());
+                            // Content should be opened as unspecified file
+                            if (ContentResolver.SCHEME_CONTENT.equals(scheme)) {
+                                fileHandler.clearFileUri();
+                            }
+                            updateStatus();
+                        } catch (Throwable tw) {
+                            reportException(tw);
                         }
-                        updateStatus();
                     });
                 }
             }
@@ -610,11 +614,19 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
                 break;
             }
             case COPY_ACTION_POPUP_ID: {
-                codeArea.copy();
+                try {
+                    codeArea.copy();
+                } catch (Throwable tw) {
+                    reportException(tw);
+                }
                 break;
             }
             case PASTE_ACTION_POPUP_ID: {
-                codeArea.paste();
+                try {
+                    codeArea.paste();
+                } catch (Throwable tw) {
+                    reportException(tw);
+                }
                 break;
             }
             case DELETE_ACTION_POPUP_ID: {
@@ -626,11 +638,19 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
                 break;
             }
             case COPY_AS_CODE_ACTION_POPUP_ID: {
-                codeArea.copyAsCode();
+                try {
+                    codeArea.copyAsCode();
+                } catch (Throwable tw) {
+                    reportException(tw);
+                }
                 break;
             }
             case PASTE_FROM_CODE_ACTION_POPUP_ID: {
-                codeArea.pasteFromCode();
+                try {
+                    codeArea.pasteFromCode();
+                } catch (Throwable tw) {
+                    reportException(tw);
+                }
                 break;
             }
 
@@ -664,7 +684,12 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             if (currentFileUri == null) {
                 saveAs();
             } else {
-                fileHandler.saveFile(getContentResolver(), currentFileUri);
+                try {
+                    fileHandler.saveFile(getContentResolver(), currentFileUri);
+                } catch (Throwable tw) {
+                    reportException(tw);
+                    return false;
+                }
             }
 
             return true;
@@ -806,22 +831,38 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             appPreferences.getCodeAreaPreferences().setCodeColorization(!checked);
             return true;
         } else if (id == R.id.action_undo) {
-            fileHandler.getUndoRedo().performUndo();
+            try {
+                fileHandler.getUndoRedo().performUndo();
+            } catch (Throwable tw) {
+                reportException(tw);
+            }
             // TODO fix operations instead of validating
             codeArea.validateCaret();
             return true;
         } else if (id == R.id.action_redo) {
-            fileHandler.getUndoRedo().performRedo();
+            try {
+                fileHandler.getUndoRedo().performRedo();
+            } catch (Throwable tw) {
+                reportException(tw);
+            }
             codeArea.validateCaret();
             return true;
         } else if (id == R.id.action_cut) {
             codeArea.cut();
             return true;
         } else if (id == R.id.action_copy) {
-            codeArea.copy();
+            try {
+                codeArea.copy();
+            } catch (Throwable tw) {
+                reportException(tw);
+            }
             return true;
         } else if (id == R.id.action_paste) {
-            codeArea.paste();
+            try {
+                codeArea.paste();
+            } catch (Throwable tw) {
+                reportException(tw);
+            }
             return true;
         } else if (id == R.id.action_search) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -882,7 +923,11 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             if (currentFileUri == null) {
                 saveAs();
             } else {
-                fileHandler.saveFile(getContentResolver(), currentFileUri);
+                try {
+                    fileHandler.saveFile(getContentResolver(), currentFileUri);
+                } catch (Throwable tw) {
+                    reportException(tw);
+                }
             }
             postReleaseAction.run();
         });
@@ -959,6 +1004,8 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             saveFileLauncher.launch(Intent.createChooser(intent, getResources().getString(R.string.save_as_file)));
         } catch (ActivityNotFoundException ex) {
             fallBackSaveAs();
+        } catch (Throwable tw) {
+            reportException(tw);
         }
     }
 
@@ -1109,8 +1156,12 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             return;
         }
 
-        fileHandler.openFile(getContentResolver(), data.getData(), appPreferences.getEditorPreferences().getFileHandlingMode());
-        updateStatus();
+        try {
+            fileHandler.openFile(getContentResolver(), data.getData(), appPreferences.getEditorPreferences().getFileHandlingMode());
+            updateStatus();
+        } catch (Throwable tw) {
+            reportException(tw);
+        }
     }
 
     private void saveFileResultCallback(ActivityResult activityResult) {
@@ -1120,10 +1171,14 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             return;
         }
 
+        try {
         fileHandler.saveFile(getContentResolver(), data.getData());
-        if (postSaveAsAction != null) {
-            postSaveAsAction.run();
-            postSaveAsAction = null;
+            if (postSaveAsAction != null) {
+                postSaveAsAction.run();
+                postSaveAsAction = null;
+            }
+        } catch (Throwable tw) {
+            reportException(tw);
         }
     }
 
@@ -1136,13 +1191,21 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     @Override
     public void onFileSelected(FileDialog dialog, File file) {
         if (dialog instanceof OpenFileDialog) {
-            fileHandler.openFile(getContentResolver(), Uri.fromFile(file), appPreferences.getEditorPreferences().getFileHandlingMode());
-            updateStatus();
+            try {
+                fileHandler.openFile(getContentResolver(), Uri.fromFile(file), appPreferences.getEditorPreferences().getFileHandlingMode());
+                updateStatus();
+            } catch (Throwable tw) {
+                reportException(tw);
+            }
         } else {
-            fileHandler.saveFile(getContentResolver(), Uri.fromFile(file));
-            if (postSaveAsAction != null) {
-                postSaveAsAction.run();
-                postSaveAsAction = null;
+            try {
+                fileHandler.saveFile(getContentResolver(), Uri.fromFile(file));
+                if (postSaveAsAction != null) {
+                    postSaveAsAction.run();
+                    postSaveAsAction = null;
+                }
+            } catch (Throwable tw) {
+                reportException(tw);
             }
         }
     }
@@ -1362,5 +1425,14 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
                 editable.clear();
             }
         }
+    }
+
+    private void reportException(Throwable exception) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.error_exception);
+        builder.setMessage(exception.getLocalizedMessage());
+        builder.setNegativeButton(R.string.button_close, null);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }

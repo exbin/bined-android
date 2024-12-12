@@ -19,11 +19,11 @@ import android.content.ContentResolver;
 import android.net.Uri;
 
 import org.exbin.auxiliary.binary_data.BinaryData;
-import org.exbin.auxiliary.binary_data.ByteArrayEditableData;
+import org.exbin.auxiliary.binary_data.BufferEditableData;
 import org.exbin.auxiliary.binary_data.EditableBinaryData;
 import org.exbin.auxiliary.binary_data.delta.DeltaDocument;
 import org.exbin.auxiliary.binary_data.delta.SegmentsRepository;
-import org.exbin.auxiliary.binary_data.paged.ByteArrayPagedData;
+import org.exbin.auxiliary.binary_data.paged.BufferPagedData;
 import org.exbin.auxiliary.binary_data.paged.PagedData;
 import org.exbin.bined.EditOperation;
 import org.exbin.bined.android.CodeAreaPainter;
@@ -66,7 +66,7 @@ public class BinEdFileHandler {
     public BinEdFileHandler(CodeArea codeArea) {
         // ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         this.codeArea = codeArea;
-        codeArea.setContentData(new ByteArrayEditableData());
+        codeArea.setContentData(new BufferEditableData());
         codeArea.setEditOperation(EditOperation.INSERT);
         undoRedo = new CodeAreaUndoRedo(codeArea);
 
@@ -83,7 +83,7 @@ public class BinEdFileHandler {
         if (fileHandlingMode == FileHandlingMode.DELTA) {
             codeArea.setContentData(segmentsRepository.createDocument());
         } else {
-            codeArea.setContentData(new ByteArrayPagedData());
+            codeArea.setContentData(new BufferPagedData());
         }
 
         undoRedo.clear();
@@ -104,7 +104,7 @@ public class BinEdFileHandler {
             } else {
                 BinaryData data = oldData;
                 if (!(data instanceof PagedData)) {
-                    data = new ByteArrayPagedData();
+                    data = new BufferPagedData();
                     oldData.dispose();
                 }
                 InputStream inputStream = contentResolver.openInputStream(fileUri);

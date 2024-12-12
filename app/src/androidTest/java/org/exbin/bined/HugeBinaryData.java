@@ -21,7 +21,7 @@ import java.io.OutputStream;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import org.exbin.auxiliary.binary_data.BinaryData;
-import org.exbin.auxiliary.binary_data.ByteArrayData;
+import org.exbin.auxiliary.binary_data.BufferData;
 
 /**
  * Simulation of huge binary data source.
@@ -60,7 +60,7 @@ public class HugeBinaryData implements BinaryData {
         }
         byte[] dataArray = new byte[(int) length];
         copyToArray(startFrom, dataArray, 0, (int) length);
-        return new ByteArrayData(dataArray);
+        return new BufferData(dataArray);
     }
 
     @Override

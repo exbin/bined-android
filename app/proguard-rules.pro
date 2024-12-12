@@ -14,6 +14,10 @@
 -keep class kotlinx.coroutines.CoroutineExceptionHandler
 -keep class kotlinx.coroutines.internal.MainDispatcherFactory
 
+-dontwarn java.awt.*
+-keep class com.sun.jna.* { *; }
+-keepclassmembers class * extends com.sun.jna.* { public *; }
+
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
 #-keepattributes SourceFile,LineNumberTable

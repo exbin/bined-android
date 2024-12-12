@@ -19,22 +19,19 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.ByteBuffer;
 import java.security.InvalidParameterException;
-import java.util.Arrays;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
- * Basic implementation of editable binary data interface using byte array.
- * <p>
- * This implementation is highly inefficient with resources and is not
- * recommended for frequently changed data as each change creates copy of data.
+ * Implementation of editable binary data interface using byte buffer.
  *
  * @author ExBin Project (https://exbin.org)
  */
 @ParametersAreNonnullByDefault
-public class ByteArrayEditableData extends ByteArrayData implements EditableBinaryData {
+public class BufferEditableData extends BufferData implements EditableBinaryData {
 
     public static final int BUFFER_SIZE = 1024;
     public static final int MAX_ARRAY_LENGTH = Integer.MAX_VALUE - 5;
@@ -43,11 +40,19 @@ public class ByteArrayEditableData extends ByteArrayData implements EditableBina
     private static final String WRONG_REPLACE_POSITION_ERROR = "Data can be replaced only inside or at the end";
     private static final String ARRAY_OVERFLOW_ERROR = "Maximum array size overflow";
 
-    public ByteArrayEditableData() {
-        this(null);
+    public BufferEditableData() {
+        this((ByteBuffer) null);
     }
 
-    public ByteArrayEditableData(@Nullable byte[] data) {
+    public BufferEditableData(int dataSize) {
+        super(dataSize);
+    }
+
+    public BufferEditableData(@Nullable ByteBuffer data) {
+        super(data);
+    }
+
+    public BufferEditableData(@Nullable byte[] data) {
         super(data);
     }
 
@@ -57,12 +62,22 @@ public class ByteArrayEditableData extends ByteArrayData implements EditableBina
             throw new InvalidParameterException("Size cannot be negative");
         }
 
-        if (data.length != size) {
-            if (size < data.length) {
-                data = Arrays.copyOfRange(data, 0, (int) size);
+        int oldSize = data.capacity();
+        if (oldSize != size) {
+            ByteBuffer newData = allocateBuffer((int) size);
+            if (size < oldSize) {
+                if (size > 0) {
+                    data.rewind();
+                    data.limit((int) size);
+                    newData.put(data);
+                    data.limit(oldSize);
+                }
+                data = newData;
             } else {
-                byte[] newData = new byte[(int) size];
-                System.arraycopy(data, 0, newData, 0, data.length);
+                if (oldSize > 0) {
+                    data.rewind();
+                    newData.put(data);
+                }
                 data = newData;
             }
         }
@@ -71,138 +86,130 @@ public class ByteArrayEditableData extends ByteArrayData implements EditableBina
     @Override
     public void setByte(long position, byte value) {
         try {
-            data[(int) position] = value;
-        } catch (ArrayIndexOutOfBoundsException ex) {
+            data.put((int) position, value);
+        } catch (IndexOutOfBoundsException ex) {
             throw new OutOfBoundsException(ex);
         }
     }
 
     @Override
     public void insertUninitialized(long startFrom, long length) {
-        if (startFrom > data.length) {
+        if (startFrom > data.capacity()) {
             throw new OutOfBoundsException(WRONG_INSERTION_POSITION_ERROR);
         }
-        if (length > MAX_ARRAY_LENGTH - data.length) {
+        if (length > MAX_ARRAY_LENGTH - data.capacity()) {
             throw new DataOverflowException(ARRAY_OVERFLOW_ERROR);
         }
 
         if (length > 0) {
-            byte[] newData = new byte[(int) (data.length + length)];
-            System.arraycopy(data, 0, newData, 0, (int) startFrom);
-            System.arraycopy(data, (int) (startFrom), newData, (int) (startFrom + length), (int) (data.length - startFrom));
+            ByteBuffer newData = allocateBuffer((int) (data.capacity() + length));
+            BufferEditableData.put(newData, 0, data, 0, (int) startFrom);
+            BufferEditableData.put(newData, (int) (startFrom + length), data, (int) startFrom, (int) (data.capacity() - startFrom));
             data = newData;
         }
     }
 
     @Override
     public void insert(long startFrom, long length) {
-        if (startFrom > data.length) {
+        if (startFrom > data.capacity()) {
             throw new OutOfBoundsException(WRONG_INSERTION_POSITION_ERROR);
         }
-        if (length > MAX_ARRAY_LENGTH - data.length) {
+        if (length > MAX_ARRAY_LENGTH - data.capacity()) {
             throw new DataOverflowException(ARRAY_OVERFLOW_ERROR);
         }
 
         if (length > 0) {
-            byte[] newData = new byte[(int) (data.length + length)];
-            System.arraycopy(data, 0, newData, 0, (int) startFrom);
-            System.arraycopy(data, (int) (startFrom), newData, (int) (startFrom + length), (int) (data.length - startFrom));
+            ByteBuffer newData = allocateBuffer((int) (data.capacity() + length));
+            BufferEditableData.put(newData, 0, data, 0, (int) startFrom);
+            BufferEditableData.put(newData, (int) (startFrom + length), data, (int) startFrom, (int) (data.capacity() - startFrom));
             data = newData;
         }
     }
 
     @Override
     public void insert(long startFrom, byte[] insertedData) {
-        if (startFrom > data.length) {
+        if (startFrom > data.capacity()) {
             throw new OutOfBoundsException(WRONG_INSERTION_POSITION_ERROR);
         }
-        if (insertedData.length > MAX_ARRAY_LENGTH - data.length) {
+        if (insertedData.length > MAX_ARRAY_LENGTH - data.capacity()) {
             throw new DataOverflowException(ARRAY_OVERFLOW_ERROR);
         }
 
         int length = insertedData.length;
         if (length > 0) {
-            byte[] newData = new byte[data.length + length];
-            System.arraycopy(data, 0, newData, 0, (int) startFrom);
+            ByteBuffer newData = allocateBuffer((int) (data.capacity() + length));
+            BufferEditableData.put(newData, 0, data, 0, (int) startFrom);
             try {
-                System.arraycopy(insertedData, 0, newData, (int) startFrom, length);
-            } catch (ArrayIndexOutOfBoundsException ex) {
+                newData.position((int) startFrom);
+                newData.put(insertedData);
+                BufferEditableData.put(newData, (int) (startFrom + length), data, (int) startFrom, (int) (data.capacity() - startFrom));
+            } catch (IndexOutOfBoundsException ex) {
                 throw new OutOfBoundsException(ex);
             }
-            System.arraycopy(data, (int) (startFrom), newData, (int) (startFrom + length), (int) (data.length - startFrom));
             data = newData;
         }
     }
 
     @Override
     public void insert(long startFrom, byte[] insertedData, int insertedDataOffset, int length) {
-        if (startFrom > data.length) {
+        if (startFrom > data.capacity()) {
             throw new OutOfBoundsException(WRONG_INSERTION_POSITION_ERROR);
         }
-        if (length > MAX_ARRAY_LENGTH - data.length) {
+        if (length > MAX_ARRAY_LENGTH - data.capacity()) {
             throw new DataOverflowException(ARRAY_OVERFLOW_ERROR);
         }
 
         if (length > 0) {
-            byte[] newData = new byte[data.length + length];
-            System.arraycopy(data, 0, newData, 0, (int) startFrom);
+            ByteBuffer newData = allocateBuffer((int) (data.capacity() + length));
+            BufferEditableData.put(newData, 0, data, 0, (int) startFrom);
             try {
-                System.arraycopy(insertedData, insertedDataOffset, newData, (int) startFrom, length);
-            } catch (ArrayIndexOutOfBoundsException ex) {
+                newData.position((int) startFrom);
+                newData.put(insertedData, insertedDataOffset, length);
+                BufferEditableData.put(newData, (int) (startFrom + length), data, (int) startFrom, (int) (data.capacity() - startFrom));
+            } catch (IndexOutOfBoundsException ex) {
                 throw new OutOfBoundsException(ex);
             }
-            System.arraycopy(data, (int) (startFrom), newData, (int) (startFrom + length), (int) (data.length - startFrom));
             data = newData;
         }
     }
 
     @Override
     public void insert(long startFrom, BinaryData insertedData) {
-        if (startFrom > data.length) {
+        if (startFrom > data.capacity()) {
             throw new OutOfBoundsException(WRONG_INSERTION_POSITION_ERROR);
         }
-        if (insertedData.getDataSize() > MAX_ARRAY_LENGTH - data.length) {
+        if (insertedData.getDataSize() > MAX_ARRAY_LENGTH - data.capacity()) {
             throw new DataOverflowException(ARRAY_OVERFLOW_ERROR);
         }
 
-        if (insertedData instanceof ByteArrayData) {
-            insert(startFrom, ((ByteArrayData) insertedData).data);
-        } else {
-            insert(startFrom, insertedData, 0, insertedData.getDataSize());
-        }
+        insert(startFrom, insertedData, 0, insertedData.getDataSize());
     }
 
     @Override
     public void insert(long startFrom, BinaryData insertedData, long insertedDataOffset, long insertedDataLength) {
-        if (startFrom > data.length) {
+        if (startFrom > data.capacity()) {
             throw new OutOfBoundsException(WRONG_INSERTION_POSITION_ERROR);
         }
-        if (insertedDataLength > MAX_ARRAY_LENGTH - data.length) {
+        if (insertedDataLength > MAX_ARRAY_LENGTH - data.capacity()) {
             throw new DataOverflowException(ARRAY_OVERFLOW_ERROR);
         }
 
-        if (insertedData instanceof ByteArrayData) {
-            if (insertedDataOffset > Integer.MAX_VALUE || insertedDataLength > Integer.MAX_VALUE) {
-                throw new OutOfBoundsException("Out of range");
+        long length = insertedDataLength;
+        if (length > 0) {
+            ByteBuffer newData = allocateBuffer((int) (data.capacity() + length));
+            BufferEditableData.put(newData, 0, data, 0, (int) startFrom);
+            for (int i = 0; i < length; i++) {
+                newData.position((int) startFrom + i);
+                newData.put(insertedData.getByte(insertedDataOffset + i));
             }
-            insert(startFrom, ((ByteArrayData) insertedData).data, (int) insertedDataOffset, (int) insertedDataLength);
-        } else {
-            long length = insertedDataLength;
-            if (length > 0) {
-                byte[] newData = new byte[(int) (data.length + length)];
-                System.arraycopy(data, 0, newData, 0, (int) startFrom);
-                for (int i = 0; i < length; i++) {
-                    newData[(int) (startFrom + i)] = insertedData.getByte(insertedDataOffset + i);
-                }
-                System.arraycopy(data, (int) (startFrom), newData, (int) (startFrom + length), (int) (data.length - startFrom));
-                data = newData;
-            }
+            BufferEditableData.put(newData, (int) (startFrom + length), data, (int) startFrom, (int) (data.capacity() - startFrom));
+            data = newData;
         }
     }
 
     @Override
     public long insert(long startFrom, InputStream inputStream, long dataSize) throws IOException {
-        if (dataSize > MAX_ARRAY_LENGTH - data.length) {
+        if (dataSize > MAX_ARRAY_LENGTH - data.capacity()) {
             throw new DataOverflowException(ARRAY_OVERFLOW_ERROR);
         }
 
@@ -240,8 +247,10 @@ public class ByteArrayEditableData extends ByteArrayData implements EditableBina
     public void fillData(long startFrom, long length, byte fill) {
         if (length > 0) {
             try {
-                Arrays.fill(data, (int) startFrom, (int) (startFrom + length), fill);
-            } catch (ArrayIndexOutOfBoundsException ex) {
+                for (int i = (int) startFrom; i < startFrom + length; i++) {
+                    data.put(i, fill);
+                }
+            } catch (IndexOutOfBoundsException ex) {
                 throw new OutOfBoundsException(ex);
             }
         }
@@ -258,15 +267,11 @@ public class ByteArrayEditableData extends ByteArrayData implements EditableBina
             throw new OutOfBoundsException(WRONG_REPLACE_POSITION_ERROR);
         }
 
-        if (replacingData instanceof ByteArrayData) {
-            replace(targetPosition, ((ByteArrayData) replacingData).data, (int) startFrom, (int) replacingLength);
-        } else {
-            while (replacingLength > 0) {
-                setByte(targetPosition, replacingData.getByte(startFrom));
-                targetPosition++;
-                startFrom++;
-                replacingLength--;
-            }
+        while (replacingLength > 0) {
+            setByte(targetPosition, replacingData.getByte(startFrom));
+            targetPosition++;
+            startFrom++;
+            replacingLength--;
         }
     }
 
@@ -282,46 +287,50 @@ public class ByteArrayEditableData extends ByteArrayData implements EditableBina
         }
 
         try {
-            System.arraycopy(replacingData, replacingDataOffset, data, (int) targetPosition, length);
-        } catch (ArrayIndexOutOfBoundsException ex) {
+            data.position((int) targetPosition);
+            data.put(replacingData, replacingDataOffset, length);
+        } catch (IndexOutOfBoundsException ex) {
             throw new OutOfBoundsException(ex);
         }
     }
 
     @Override
     public void remove(long startFrom, long length) {
-        if (startFrom + length > data.length) {
+        if (startFrom + length > data.capacity()) {
             throw new OutOfBoundsException("Cannot remove from " + startFrom + " with length " + length);
         }
+
         if (length > 0) {
-            byte[] newData = new byte[(int) (data.length - length)];
-            System.arraycopy(data, 0, newData, 0, (int) startFrom);
-            System.arraycopy(data, (int) (startFrom + length), newData, (int) startFrom, (int) (data.length - startFrom - length));
+            ByteBuffer newData = allocateBuffer((int) (data.capacity() - length));
+            BufferEditableData.put(newData, 0, data, 0, (int) startFrom);
+            BufferEditableData.put(newData, (int) startFrom, data, (int) (startFrom + length), (int) (data.capacity() - startFrom - length));
             data = newData;
         }
     }
 
     @Nonnull
     @Override
-    public ByteArrayEditableData copy() {
-        byte[] copy = Arrays.copyOf(data, data.length);
-        return new ByteArrayEditableData(copy);
+    public BufferEditableData copy() {
+        ByteBuffer copy = allocateBuffer(data.capacity());
+        copy.put(data);
+        return new BufferEditableData(copy);
     }
 
     @Nonnull
     @Override
-    public ByteArrayEditableData copy(long startFrom, long length) {
-        if (startFrom + length > data.length) {
+    public BufferEditableData copy(long startFrom, long length) {
+        if (startFrom + length > data.capacity()) {
             throw new OutOfBoundsException("Attemt to copy outside of data");
         }
 
-        byte[] copy = Arrays.copyOfRange(data, (int) startFrom, (int) (startFrom + length));
-        return new ByteArrayEditableData(copy);
+        ByteBuffer copy = allocateBuffer((int) length);
+        BufferEditableData.put(copy, 0, data, (int) startFrom, (int) length);
+        return new BufferEditableData(copy);
     }
 
     @Override
     public void clear() {
-        data = new byte[0];
+        data = allocateBuffer(0);
     }
 
     @Override
@@ -335,7 +344,9 @@ public class ByteArrayEditableData extends ByteArrayData implements EditableBina
                     output.write(buffer, 0, read);
                 }
             } while (read > 0);
-            data = output.toByteArray();
+            byte[] byteArray = output.toByteArray();
+            data = allocateBuffer(byteArray.length);
+            data.put(byteArray);
         }
     }
 
@@ -343,5 +354,38 @@ public class ByteArrayEditableData extends ByteArrayData implements EditableBina
     @Override
     public OutputStream getDataOutputStream() {
         return new BinaryDataOutputStream(this);
+    }
+
+    public static void put(ByteBuffer target, int position, ByteBuffer source, int offset, int length) throws IndexOutOfBoundsException {
+        if (target == source) {
+            byte[] buffer = new byte[BUFFER_SIZE];
+            if (position < offset) {
+                while (length > 0) {
+                    int block = length > BUFFER_SIZE ? BUFFER_SIZE : length;
+                    source.position(offset);
+                    source.get(buffer, 0, block);
+                    target.position(position);
+                    target.put(buffer, 0, block);
+                    offset += block;
+                    position += block;
+                    length -= block;
+                }
+            } else if (position > offset) {
+                while (length > 0) {
+                    int block = length > BUFFER_SIZE ? BUFFER_SIZE : length;
+                    source.position(offset + length - block);
+                    source.get(buffer, 0, block);
+                    target.position(position + length - block);
+                    target.put(buffer, 0, block);
+                    length -= block;
+                }
+            }
+        } else {
+            source.position(offset);
+            source.limit(offset + length);
+            target.position(position);
+            target.put(source);
+            source.limit(source.capacity());
+        }
     }
 }

@@ -36,6 +36,15 @@ public interface DataPageProvider {
     BinaryData createPage();
 
     /**
+     * Creates new instance with specified size.
+     *
+     * @param dataSize data size
+     * @return data page
+     */
+    @Nonnull
+    BinaryData createPage(int dataSize);
+
+    /**
      * Creates new instance of the data page.
      *
      * @param sourceData data used as source

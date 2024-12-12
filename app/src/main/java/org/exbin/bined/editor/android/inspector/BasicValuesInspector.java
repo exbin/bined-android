@@ -28,7 +28,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 
 import org.exbin.auxiliary.binary_data.BinaryData;
-import org.exbin.auxiliary.binary_data.ByteArrayEditableData;
+import org.exbin.auxiliary.binary_data.BufferEditableData;
 import org.exbin.auxiliary.binary_data.EditableBinaryData;
 import org.exbin.bined.CodeAreaCaretListener;
 import org.exbin.bined.CodeAreaCaretPosition;
@@ -476,25 +476,25 @@ public class BasicValuesInspector {
     }
 
     private void modifyValues(int bytesCount) {
-        ByteArrayEditableData byteArrayData = new ByteArrayEditableData();
-        byteArrayData.insert(0, valuesCache, 0, bytesCount);
+        EditableBinaryData binaryData = new BufferEditableData();
+        binaryData.insert(0, valuesCache, 0, bytesCount);
         long oldDataPosition = dataPosition;
         if (dataPosition == codeArea.getDataSize()) {
-            InsertDataCommand insertCommand = new InsertDataCommand(codeArea, dataPosition, ((CaretCapable) codeArea).getCodeOffset(), byteArrayData);
+            InsertDataCommand insertCommand = new InsertDataCommand(codeArea, dataPosition, ((CaretCapable) codeArea).getCodeOffset(), binaryData);
             if (undoRedo != null) {
                 undoRedo.execute(insertCommand);
             }
         } else {
             BinaryDataCommand command;
-            if (dataPosition + byteArrayData.getDataSize() > codeArea.getDataSize()) {
+            if (dataPosition + binaryData.getDataSize() > codeArea.getDataSize()) {
                 long modifiedDataSize = codeArea.getDataSize() - dataPosition;
-                EditableBinaryData modifiedData = (EditableBinaryData) byteArrayData.copy(0, modifiedDataSize);
-                EditableBinaryData insertedData = (EditableBinaryData) byteArrayData.copy(modifiedDataSize, byteArrayData.getDataSize() - modifiedDataSize);
+                EditableBinaryData modifiedData = (EditableBinaryData) binaryData.copy(0, modifiedDataSize);
+                EditableBinaryData insertedData = (EditableBinaryData) binaryData.copy(modifiedDataSize, binaryData.getDataSize() - modifiedDataSize);
                 command = new CodeAreaCompoundCommand(codeArea);
                 ((CodeAreaCompoundCommand) command).addCommand(new ModifyDataCommand(codeArea, dataPosition, modifiedData));
                 ((CodeAreaCompoundCommand) command).addCommand(new InsertDataCommand(codeArea, dataPosition + modifiedDataSize, ((CaretCapable) codeArea).getCodeOffset(), insertedData));
             } else {
-                command = new ModifyDataCommand(codeArea, dataPosition, byteArrayData);
+                command = new ModifyDataCommand(codeArea, dataPosition, binaryData);
             }
 
             if (undoRedo != null) {

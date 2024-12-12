@@ -21,6 +21,7 @@ import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import org.exbin.auxiliary.binary_data.BinaryData;
 import org.exbin.auxiliary.binary_data.EditableBinaryData;
 
 /**
@@ -36,6 +37,8 @@ public class CodeAreaUtils {
     private static final int CODE_BUFFER_LENGTH = 16;
 
     public static final String MIME_CLIPBOARD_BINARY = "application/octet-stream";
+    public static final String BINED_CLIPBOARD_MIME = "application/x-bined";
+    public static final String BINED_CLIPBOARD_MIME_FULL = BINED_CLIPBOARD_MIME + "; class=" + BinaryData.class.getCanonicalName();
     public static final String CONTENT_DATA_ERROR = "Content data is null";
     public static final String NULL_FIELD_ERROR = "Field cannot be null";
 

@@ -37,6 +37,7 @@ dependencies {
     compileOnly group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
     implementation 'com.google.android.material:material:1.12.0'
     implementation 'androidx.preference:preference:1.2.1'
+    implementation 'net.java.dev.jna:jna:5.15.0@aar'
     implementation project(':file_picker')
 //    implementation 'org.exbin.bined:bined-core:0.3.0-SNAPSHOT'
 //    implementation 'org.exbin.bined:bined-operation:0.3.0-SNAPSHOT'

@@ -22,8 +22,8 @@ import android.content.Context;
 import android.view.KeyEvent;
 
 import org.exbin.auxiliary.binary_data.BinaryData;
-import org.exbin.auxiliary.binary_data.ByteArrayData;
-import org.exbin.auxiliary.binary_data.ByteArrayEditableData;
+import org.exbin.auxiliary.binary_data.BufferData;
+import org.exbin.auxiliary.binary_data.BufferEditableData;
 import org.exbin.bined.CaretOverlapMode;
 import org.exbin.bined.ClipboardHandlingMode;
 import org.exbin.bined.CodeAreaCaretPosition;
@@ -673,7 +673,7 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
                 CharSequence clipboardData = clipItem.getText();
                 if (clipboardData != null) {
                     byte[] bytes = clipboardData.toString().getBytes(Charset.forName(CodeAreaAndroidUtils.DEFAULT_ENCODING));
-                    BinaryData pastedData = new ByteArrayData(bytes);
+                    BinaryData pastedData = new BufferData(bytes);
                     pasteBinaryData(pastedData);
                 }
             }
@@ -707,7 +707,7 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
             if (toReplace > 0) {
                 modifyCommand = new ModifyDataCommand(codeArea, dataPosition, pastedData.copy(0, toReplace));
             }
-            pastedData = new ByteArrayData();
+            pastedData = new BufferData();
         } else {
             if (editMode == EditMode.EXPANDING && editOperation == EditOperation.OVERWRITE) {
                 BinaryData modifiedData;
@@ -724,7 +724,7 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
                         pastedData = pastedData.copy(replacedPartSize, clipDataSize - replacedPartSize);
                         insertionPosition += replacedPartSize;
                     } else {
-                        pastedData = new ByteArrayData();
+                        pastedData = new BufferData();
                     }
                 }
             }
@@ -792,10 +792,10 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
                     CodeType codeType = ((CodeTypeCapable) codeArea).getCodeType();
 
                     String insertedString = clipboardData.toString();
-                    ByteArrayEditableData clipData = new ByteArrayEditableData();
+                    BufferEditableData clipData = new BufferEditableData();
                     CodeAreaUtils.insertHexStringIntoData(insertedString, clipData, codeType);
 
-                    ByteArrayEditableData pastedData = new ByteArrayEditableData();
+                    BufferEditableData pastedData = new BufferEditableData();
                     pastedData.insert(0, clipData);
                     long pastedDataSize = pastedData.getDataSize();
                     long insertionPosition = dataPosition;
@@ -808,7 +808,7 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
                     if (replacedPartSize > 0) {
                         modifyCommand = new ModifyDataCommand(codeArea, dataPosition, modifiedData);
                         if (pastedDataSize > replacedPartSize) {
-                            pastedData = (ByteArrayEditableData) pastedData.copy(replacedPartSize, pastedDataSize - replacedPartSize);
+                            pastedData = pastedData.copy(replacedPartSize, pastedDataSize - replacedPartSize);
                             insertionPosition += replacedPartSize;
                         } else {
                             pastedData.clear();

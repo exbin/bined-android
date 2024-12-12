@@ -90,6 +90,7 @@
 
     <!-- Preference Titles -->
 
+    <string name="error_exception">अप्रत्याशित त्रुटि</string>
     <string name="pref_header_appearance">दृश्यता</string>
     <string name="pref_view_header">दृश्य</string>
 

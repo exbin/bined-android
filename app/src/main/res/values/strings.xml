@@ -87,6 +87,7 @@
     <string name="signed_radio_button">Sign</string>
     <string name="unsigned_radio_button">Uns</string>
     <string name="error_invalid_input">Invalid Input</string>
+    <string name="error_exception">Unexpected Error</string>
 
     <!-- Preference Titles -->
 
