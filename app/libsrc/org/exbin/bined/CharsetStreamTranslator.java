@@ -38,6 +38,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class CharsetStreamTranslator extends InputStream {
 
+    private static final String UNMAPPABLE_CHARACTER_ERROR = "Unmappable character should be handled automatically";
+    private static final String MALFORMED_CHARACTER_ERROR = "Malformed character should be handled automatically";
+
     public static final String DEFAULT_ENCODING = "UTF-8";
     public static final int DEFAULT_MAX_BYTES_PER_CHAR = 8;
     public static final int BYTE_BUFFER_SIZE = 16;
@@ -162,9 +165,9 @@ public class CharsetStreamTranslator extends InputStream {
                     inputBuffer.position(inputBuffer.position() + 1);
                 }
             } else if (decodeResult.isUnmappable()) {
-                throw new IllegalStateException("Unmappable character should be handled automatically");
+                throw new IllegalStateException(UNMAPPABLE_CHARACTER_ERROR);
             } else if (decodeResult.isMalformed()) {
-                throw new IllegalStateException("Malformed character should be handled automatically");
+                throw new IllegalStateException(MALFORMED_CHARACTER_ERROR);
             }
         } while (charBuffer.position() == 0);
 
@@ -182,9 +185,9 @@ public class CharsetStreamTranslator extends InputStream {
             } else if (encodeResult.isError()) {
                 throw new IllegalStateException("Unexpected error character");
             } else if (encodeResult.isUnmappable()) {
-                throw new IllegalStateException("Unmappable character should be handled automatically");
+                throw new IllegalStateException(UNMAPPABLE_CHARACTER_ERROR);
             } else if (encodeResult.isMalformed()) {
-                throw new IllegalStateException("Malformed character should be handled automatically");
+                throw new IllegalStateException(MALFORMED_CHARACTER_ERROR);
             }
         }
 

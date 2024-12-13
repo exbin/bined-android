@@ -70,8 +70,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
 
-    public static final String BINED_CLIPBOARD_MIME = "application/x-bined";
-    public static final String BINED_CLIPBOARD_MIME_FULL = BINED_CLIPBOARD_MIME + "; class=" + BinaryData.class.getCanonicalName();
     public static final int LAST_CONTROL_CODE = 31;
     private static final char DELETE_CHAR = (char) 0x7f;
 
@@ -107,7 +105,7 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
             }
         });
 
-        binedDataFlavor = new ClipDescription("BinEd Data", new String[] { BINED_CLIPBOARD_MIME });
+        binedDataFlavor = new ClipDescription("BinEd Data", new String[] { CodeAreaUtils.BINED_CLIPBOARD_MIME });
         binaryDataFlavor = new ClipDescription("Binary Data", new String[] { CodeAreaUtils.MIME_CLIPBOARD_BINARY });
 //        try {
 //            clipboard.addFlavorListener((FlavorEvent e) -> {
@@ -568,7 +566,6 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
         }
     }
 
-    @Override
     public void copyAsCode() {
         SelectionRange selection = ((SelectionCapable) codeArea).getSelection();
         if (!selection.isEmpty()) {
@@ -640,7 +637,7 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
 
             ClipDescription description = primaryClip.getDescription();
             try {
-                if (!description.hasMimeType(BINED_CLIPBOARD_MIME) && !description.hasMimeType(CodeAreaUtils.MIME_CLIPBOARD_BINARY) && !description.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
+                if (!description.hasMimeType(CodeAreaUtils.BINED_CLIPBOARD_MIME) && !description.hasMimeType(CodeAreaUtils.MIME_CLIPBOARD_BINARY) && !description.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
                     return;
                 }
             } catch (IllegalStateException ex) {
@@ -648,7 +645,7 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
             }
 
             ClipData.Item clipItem = primaryClip.getItemAt(0);
-            if (description.hasMimeType(BINED_CLIPBOARD_MIME)) {
+            if (description.hasMimeType(CodeAreaUtils.BINED_CLIPBOARD_MIME)) {
                 ContentResolver contentResolver = context.getContentResolver();
 //                ContentProviderClient contentProviderClient = contentResolver.acquireContentProviderClient(clipItem.getUri());
 //                Object clipboardData = clipboard.getData(binedDataFlavor);
@@ -718,7 +715,6 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
         clearSelection();
     }
 
-    @Override
     public void pasteFromCode() {
         if (!checkEditAllowed()) {
             return;

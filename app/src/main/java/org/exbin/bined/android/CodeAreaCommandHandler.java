@@ -79,11 +79,6 @@ public interface CodeAreaCommandHandler {
     void copy();
 
     /**
-     * Copies selection to clipboard as code string.
-     */
-    void copyAsCode();
-
-    /**
      * Cuts selection to clipboard.
      */
     void cut();
@@ -92,11 +87,6 @@ public interface CodeAreaCommandHandler {
      * Pastes content of clipboard to cursor area.
      */
     void paste();
-
-    /**
-     * Pastes content of clipboard to cursor area analyzing string code.
-     */
-    void pasteFromCode();
 
     /**
      * Returns true if paste action is possible.

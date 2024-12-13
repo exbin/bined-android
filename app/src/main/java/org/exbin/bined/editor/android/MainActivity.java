@@ -98,6 +98,7 @@ import org.exbin.bined.editor.android.search.SearchCondition;
 import org.exbin.bined.editor.android.search.SearchParameters;
 import org.exbin.bined.highlight.android.NonAsciiCodeAreaColorAssessor;
 import org.exbin.bined.highlight.android.NonprintablesCodeAreaAssessor;
+import org.exbin.bined.operation.android.CodeAreaOperationCommandHandler;
 import org.exbin.bined.operation.undo.BinaryDataUndoRedoChangeListener;
 import org.exbin.framework.bined.BinEdCodeAreaAssessor;
 import org.exbin.framework.bined.BinaryStatusApi;
@@ -262,12 +263,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         codeArea.addEditModeChangedListener(codeAreaEditModeChangedListener);
         codeArea.setOnKeyListener(codeAreaOnKeyListener);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            codeAreaOnUnhandledKeyListener = new View.OnUnhandledKeyEventListener() {
-                @Override
-                public boolean onUnhandledKeyEvent(View view, KeyEvent event) {
-                    return codeAreaOnKeyListener.onKey(view, KeyEvent.KEYCODE_UNKNOWN, event);
-                }
-            };
+            codeAreaOnUnhandledKeyListener = (View.OnUnhandledKeyEventListener) (view, event) -> codeAreaOnKeyListener.onKey(view, KeyEvent.KEYCODE_UNKNOWN, event);
             codeArea.addOnUnhandledKeyEventListener((View.OnUnhandledKeyEventListener) codeAreaOnUnhandledKeyListener);
         }
         basicValuesInspector.setCodeArea(codeArea, fileHandler.getUndoRedo(), findViewById(R.id.basic_values_inspector));
@@ -639,7 +635,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             }
             case COPY_AS_CODE_ACTION_POPUP_ID: {
                 try {
-                    codeArea.copyAsCode();
+                    ((CodeAreaOperationCommandHandler) codeArea.getCommandHandler()).copyAsCode();
                 } catch (Throwable tw) {
                     reportException(tw);
                 }
@@ -647,7 +643,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             }
             case PASTE_FROM_CODE_ACTION_POPUP_ID: {
                 try {
-                    codeArea.pasteFromCode();
+                    ((CodeAreaOperationCommandHandler) codeArea.getCommandHandler()).pasteFromCode();
                 } catch (Throwable tw) {
                     reportException(tw);
                 }
@@ -1172,7 +1168,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         }
 
         try {
-        fileHandler.saveFile(getContentResolver(), data.getData());
+            fileHandler.saveFile(getContentResolver(), data.getData());
             if (postSaveAsAction != null) {
                 postSaveAsAction.run();
                 postSaveAsAction = null;

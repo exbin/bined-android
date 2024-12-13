@@ -17,6 +17,7 @@ package org.exbin.bined;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Selection between two positions where begin represents origin point and end
@@ -24,6 +25,7 @@ import javax.annotation.Nullable;
  *
  * @author ExBin Project (https://exbin.org)
  */
+@ParametersAreNonnullByDefault
 public class CodeAreaSelection {
 
     private long start;

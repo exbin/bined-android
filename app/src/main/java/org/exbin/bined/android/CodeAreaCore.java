@@ -115,10 +115,6 @@ public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl 
         commandHandler.copy();
     }
 
-    public void copyAsCode() {
-        commandHandler.copyAsCode();
-    }
-
     @Override
     public void cut() {
         commandHandler.cut();
@@ -127,10 +123,6 @@ public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl 
     @Override
     public void paste() {
         commandHandler.paste();
-    }
-
-    public void pasteFromCode() {
-        commandHandler.pasteFromCode();
     }
 
     @Override
@@ -201,14 +193,16 @@ public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl 
     }
 
     public void repaint() {
-        Activity activity = (Activity) getContext();
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
+        Context context = getContext();
+        if (context instanceof Activity) {
+            ((Activity) context).runOnUiThread(() -> {
                 invalidate();
                 primaryView.invalidate();
-            }
-        });
+            });
+        } else {
+            invalidate();
+            primaryView.invalidate();
+        }
     }
 
     @Override
