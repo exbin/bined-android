@@ -22,7 +22,6 @@ import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.graphics.Typeface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -92,6 +91,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
  */
 @ParametersAreNonnullByDefault
 public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapableCodeAreaPainter, CodeAreaPaintState, ColorAssessorPainterCapable, CharAssessorPainterCapable {
+
+    protected static final int maximumHeight = Integer.MAX_VALUE / 4;
 
     @Nonnull
     protected final CodeAreaCore codeArea;
@@ -169,7 +170,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
 
                 scrolling.updateHorizontalScrollBarValue(horizontal, metrics.getCharacterWidth());
 
-                int maxValue = Integer.MAX_VALUE; // - scrollPanel.getVerticalScrollBar().getVisibleAmount();
+                int maxValue = maximumHeight; // - scrollPanel.getVerticalScrollBar().getVisibleAmount();
                 long rowsPerDocumentToLastPage = structure.getRowsPerDocument() - dimensions.getRowsPerRect();
                 scrolling.updateVerticalScrollBarValue(vertical, metrics.getRowHeight(), maxValue, rowsPerDocumentToLastPage);
 
@@ -1525,9 +1526,9 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
             long rowsPerData = (structure.getDataSize() / structure.getBytesPerRow()) + 1;
 
             int documentDataHeight;
-            if (rowsPerData > Integer.MAX_VALUE / rowHeight) {
+            if (rowsPerData > maximumHeight / rowHeight) {
                 scrolling.setScrollBarVerticalScale(ScrollBarVerticalScale.SCALED);
-                documentDataHeight = Integer.MAX_VALUE;
+                documentDataHeight = maximumHeight;
             } else {
                 scrolling.setScrollBarVerticalScale(ScrollBarVerticalScale.NORMAL);
                 documentDataHeight = (int) (rowsPerData * rowHeight);

@@ -1138,7 +1138,6 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         boolean canUndo = fileHandler.getUndoRedo().canUndo();
         MenuItem undoMenuItem = menu.findItem(R.id.action_undo);
         undoMenuItem.setEnabled(canUndo);
-        // TODO undoMenuItem.setIconTintList(new ColorStateList(ColorStateList.));
 
         boolean canRedo = fileHandler.getUndoRedo().canRedo();
         MenuItem redoMenuItem = menu.findItem(R.id.action_redo);

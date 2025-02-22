@@ -112,8 +112,8 @@ public class TwoDimensionScrollView extends FrameLayout {
             View child = getChildAt(0);
             // TODO For some reason child size resets to zero, disabling this as workaround :-/
             if (child.getWidth() > 0 && child.getHeight() > 0) {
-                x = clamp(x, getWidth() - getPaddingRight() - getPaddingLeft(), child.getWidth());
-                y = clamp(y, getHeight() - getPaddingBottom() - getPaddingTop(), child.getHeight());
+            x = clamp(x, getWidth() - getPaddingRight() - getPaddingLeft(), child.getWidth());
+            y = clamp(y, getHeight() - getPaddingBottom() - getPaddingTop(), child.getHeight());
             }
             if (x != getScrollX() || y != getScrollY()) {
                 super.scrollTo(x, y);
@@ -161,13 +161,13 @@ public class TwoDimensionScrollView extends FrameLayout {
              */
             return 0;
         }
-        if ((my+n) > child) {
+        if ((my + n) > child) {
             /* this case:
              *                    |------ me ------|
              *     |------ child ------|
              *     |-- mScrollX --|
              */
-            return child-my;
+            return child - my;
         }
         return n;
     }
@@ -236,7 +236,7 @@ public class TwoDimensionScrollView extends FrameLayout {
                 float deltaY = mLastTouchY - y;
                 float deltaX = mLastTouchX - x;
                 //Check for slop on direct events
-                if (!mDragging && (Math.abs(deltaY) > mTouchSlop || Math.abs(deltaX) > mTouchSlop) ) {
+                if (!mDragging && (Math.abs(deltaY) > mTouchSlop || Math.abs(deltaX) > mTouchSlop)) {
                     mDragging = true;
                 }
                 if (mDragging) {
@@ -259,18 +259,13 @@ public class TwoDimensionScrollView extends FrameLayout {
                 // Compute the current velocity and start a fling if it is above
                 // the minimum threshold.
                 mVelocityTracker.computeCurrentVelocity(1000, mMaximumVelocity);
-                int velocityX = (int)mVelocityTracker.getXVelocity();
-                int velocityY = (int)mVelocityTracker.getYVelocity();
+                int velocityX = (int) mVelocityTracker.getXVelocity();
+                int velocityY = (int) mVelocityTracker.getYVelocity();
                 if (Math.abs(velocityX) > mMinimumVelocity || Math.abs(velocityY) > mMinimumVelocity) {
                     fling(-velocityX, -velocityY);
                 }
                 break;
         }
         return super.onTouchEvent(event);
-    }
-
-    @Override
-    public void draw(Canvas canvas) {
-        super.draw(canvas);
     }
 }
