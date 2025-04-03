@@ -468,7 +468,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         } catch (Exception ex) {
             Logger.getLogger(MainActivity.class.getName()).log(Level.SEVERE, null, ex);
         }
-        binaryStatus.setEncoding(codeArea.getCharset().toString());
+        binaryStatus.setEncoding(codeArea.getCharset().name());
 
         EditorPreferences editorPreferences = appPreferences.getEditorPreferences();
         setupKeyPanel(editorPreferences.getKeysPanelMode());
@@ -764,7 +764,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             EncodingPreference.showEncodingSelectionDialog(this, codeArea.getCharset().name(), encoding -> {
                 codeArea.setCharset(Charset.forName(encoding));
                 appPreferences.getEncodingPreferences().setDefaultEncoding(encoding);
-                binaryStatus.setEncoding(codeArea.getCharset().toString());
+                binaryStatus.setEncoding(codeArea.getCharset().name());
             });
             return true;
         } else if (id == R.id.font) {
