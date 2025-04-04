@@ -935,7 +935,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     }
 
     public void openFile() {
-        if (MainActivity.isGoogleTV(this)) {
+        if (MainActivity.isGoogleTV(this) || Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             fallBackOpenFile();
             return;
         }
@@ -978,7 +978,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     public void saveAs(@Nullable Runnable postSaveAsAction) {
         this.postSaveAsAction = postSaveAsAction;
 
-        if (MainActivity.isGoogleTV(this)) {
+        if (MainActivity.isGoogleTV(this) || Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             fallBackSaveAs();
             return;
         }
