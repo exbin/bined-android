@@ -269,7 +269,9 @@ public class CodeAreaUndoRedo implements BinaryDataUndoRedo, BinaryDataAppendabl
 
     private void undoUpdated() {
         codeArea.notifyDataChanged();
-        listeners.forEach(BinaryDataUndoRedoChangeListener::undoChanged);
+        for (BinaryDataUndoRedoChangeListener listener : listeners) {
+            listener.undoChanged();
+        }
     }
 
     @Override

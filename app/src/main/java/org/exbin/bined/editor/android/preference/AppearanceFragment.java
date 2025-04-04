@@ -18,13 +18,13 @@ package org.exbin.bined.editor.android.preference;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.os.LocaleList;
 
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.os.LocaleListCompat;
 import androidx.preference.ListPreference;
 import androidx.preference.PreferenceFragmentCompat;
 
+import org.exbin.bined.editor.android.CompatUtils;
 import org.exbin.bined.editor.android.MainActivity;
 import org.exbin.bined.editor.android.R;
 import org.exbin.bined.editor.android.SettingsActivity;
@@ -55,13 +55,17 @@ public class AppearanceFragment extends PreferenceFragmentCompat {
             String language = (String) newValue;
             // Dynamically change language
             LocaleListCompat locales = MainActivity.getLanguageLocaleList("default".equals(language) ? "" : language);
-            AppCompatDelegate.setApplicationLocales(locales);
+            CompatUtils.setApplicationLocales(locales);
 
-            // Update title for possibly switched language
             Resources resources = getResources();
-            Configuration configuration = resources.getConfiguration();
-            configuration.setLocales((LocaleList) AppCompatDelegate.getApplicationLocales().unwrap());
-            resources = getContext().createConfigurationContext(configuration).getResources();
+            try {
+                // Update title for possibly switched language
+                Configuration configuration = resources.getConfiguration();
+                configuration.setLocales((android.os.LocaleList) CompatUtils.getApplicationLocales().unwrap());
+                resources = getContext().createConfigurationContext(configuration).getResources();
+            } catch (Throwable tw) {
+                // Might fail on older versions with: Could not find class 'android.os.LocaleList'
+            }
 
             activity.setTitle(resources.getString(R.string.pref_header_appearance));
 

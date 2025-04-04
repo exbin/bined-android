@@ -11,6 +11,7 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
 -keep class kotlinx.coroutines.CoroutineExceptionHandler
 -keep class kotlinx.coroutines.internal.MainDispatcherFactory
 
@@ -26,7 +27,7 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 -dontobfuscate
-#-dontusemixedcaseclassnames
+-dontusemixedcaseclassnames
 #-dontpreverify
 #-optimizations !code/simplification/arithmetic,!code/simplification/cast,!field/*,!class/merging/*
 #-optimizationpasses 5

@@ -2,16 +2,27 @@ plugins {
     id 'com.android.application'
 }
 
+def materialVersion = '1.6.1'
+
 android {
     compileSdk 34
     defaultConfig {
         applicationId "org.exbin.bined.editor.android"
+
+        multiDexEnabled true
+        minSdk 14
+        targetSdk 14
+        /*
+        // Playstore
         minSdk 24
         targetSdk 34
+        materialVersion = '1.12.0'
+         */
+
         versionCode 11
         versionName "0.2.4-SNAPSHOT"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
-        vectorDrawables.generatedDensities = []
+        // vectorDrawables.generatedDensities = []
     }
     buildTypes {
         release {
@@ -19,8 +30,18 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    lintOptions {
+        checkReleaseBuilds false
+    }
     sourceSets {
         main.java.srcDirs += 'libsrc'
+    }
+    compileOptions {
+        // Flag to enable support for the new language APIs
+//        coreLibraryDesugaringEnabled true
+
+        // sourceCompatibility JavaVersion.VERSION_1_8
+        // targetCompatibility JavaVersion.VERSION_1_8
     }
     namespace 'org.exbin.bined.editor.android'
 }
@@ -35,7 +56,9 @@ dependencies {
 //    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
     compileOnly group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
-    implementation 'com.google.android.material:material:1.12.0'
+    implementation "com.google.android.material:material:${materialVersion}"
+    implementation "androidx.multidex:multidex:2.0.1"
+//    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
     implementation 'androidx.preference:preference:1.2.1'
     implementation 'net.java.dev.jna:jna:5.15.0@aar'
     implementation project(':file_picker')

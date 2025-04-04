@@ -1,5 +1,6 @@
 0.2.4
-- Changed to use direct buffer allocation
+- Direct buffer allocation
+- Compatibility up to sdk14
 
 0.2.3 (2024-11-13)
 - Added basic data inspector

@@ -30,7 +30,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
  * @author ExBin Project (https://exbin.org)
  */
 @ParametersAreNonnullByDefault
-public class DefaultCodeAreaMouseListener implements View.OnTouchListener, View.OnLongClickListener, View.OnContextClickListener {
+public class DefaultCodeAreaMouseListener implements View.OnTouchListener, View.OnLongClickListener {
 
     public static final int MOUSE_SCROLL_LINES = 3;
 
@@ -69,7 +69,6 @@ public class DefaultCodeAreaMouseListener implements View.OnTouchListener, View.
         return codeArea.showContextMenu();
     }
 
-    @Override
     public boolean onContextClick(View v) {
         return codeArea.performContextClick();
     }

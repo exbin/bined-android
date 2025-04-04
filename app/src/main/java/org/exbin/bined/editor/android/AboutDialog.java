@@ -19,6 +19,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -62,7 +63,15 @@ public class AboutDialog extends AppCompatDialogFragment {
         View aboutView = inflater.inflate(R.layout.about_view, null);
         TextView textView = aboutView.findViewById(R.id.textView);
         String htmlString = String.format(getResources().getString(R.string.app_about), appVersion).replace("\n", "<br/>");
-        textView.setText(Html.fromHtml(htmlString, Html.FROM_HTML_MODE_COMPACT));
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                textView.setText(Html.fromHtml(htmlString, Html.FROM_HTML_MODE_COMPACT));
+            } else {
+                textView.setText(Html.fromHtml(htmlString));
+            }
+        } catch (NoSuchMethodError ex) {
+            textView.setText(htmlString, TextView.BufferType.SPANNABLE);
+        }
         textView.setMovementMethod(LinkMovementMethod.getInstance());
         builder.setView(aboutView);
         builder.setPositiveButton(getResources().getString(R.string.button_close), (dialog, which) -> {

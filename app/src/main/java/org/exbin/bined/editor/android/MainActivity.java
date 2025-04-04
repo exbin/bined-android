@@ -26,7 +26,6 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.LocaleList;
 import android.provider.DocumentsContract;
 import android.text.Editable;
 import android.text.InputType;
@@ -242,7 +241,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             contentView.addView(codeArea);
         }
 
-        AppCompatDelegate.setApplicationLocales(getLanguageLocaleList());
+        CompatUtils.setApplicationLocales(getLanguageLocaleList());
 
         BasicCodeAreaColorsProfile basicColors = codeArea.getBasicColors().orElse(null);
         if (basicColors == null) {
@@ -448,7 +447,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             return LocaleListCompat.getEmptyLocaleList();
         }
 
-        return LocaleListCompat.create(Locale.forLanguageTag(language));
+        return LocaleListCompat.forLanguageTags(language);
     }
 
     private void applySettings() {
@@ -945,7 +944,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("*/*");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.putExtra(Intent.EXTRA_LOCALE_LIST, (LocaleList) getLanguageLocaleList().unwrap());
+            intent.putExtra(Intent.EXTRA_LOCALE_LIST, (android.os.Parcelable) getLanguageLocaleList().unwrap());
         }
 
         Uri pickerInitialUri = fileHandler.getPickerInitialUri();
@@ -988,7 +987,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("*/*");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.putExtra(Intent.EXTRA_LOCALE_LIST, (LocaleList) getLanguageLocaleList().unwrap());
+            intent.putExtra(Intent.EXTRA_LOCALE_LIST, (android.os.Parcelable) getLanguageLocaleList().unwrap());
         }
 
         Uri pickerInitialUri = fileHandler.getPickerInitialUri();
@@ -1345,7 +1344,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             return LocaleListCompat.getEmptyLocaleList();
         }
 
-        return LocaleListCompat.create(Locale.forLanguageTag(language));
+        return LocaleListCompat.forLanguageTags(language);
     }
 
     @ParametersAreNonnullByDefault

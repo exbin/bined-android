@@ -106,9 +106,9 @@ public class FileDataSource implements DataSource {
      */
     @Override
     public void clearCache() {
-        listeners.forEach(listener -> {
+        for (CacheClearListener listener : listeners) {
             listener.clearCache();
-        });
+        };
     }
 
     @Override

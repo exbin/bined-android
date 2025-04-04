@@ -207,7 +207,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         codeArea.addView(scrollPanel, wrapLayout);
         dataView.setOnTouchListener(codeAreaMouseListener);
         dataView.setOnLongClickListener(codeAreaMouseListener);
-        dataView.setOnContextClickListener(codeAreaMouseListener);
+//        dataView.setOnContextClickListener(codeAreaMouseListener);
         codeArea.addDataChangedListener(codeAreaDataChangeListener);
     }
 
@@ -216,7 +216,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         this.codeArea.removeView(scrollPanel);
         dataView.setOnTouchListener(null);
         dataView.setOnLongClickListener(null);
-        dataView.setOnContextClickListener(null);
+//        dataView.setOnContextClickListener(null);
         codeArea.removeDataChangedListener(codeAreaDataChangeListener);
     }
 

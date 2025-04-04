@@ -365,7 +365,9 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
         }
 
         Optional<CodeAreaScrollPosition> revealScrollPosition = painter.computeRevealScrollPosition(caretPosition);
-        revealScrollPosition.ifPresent(this::setScrollPosition);
+        if (revealScrollPosition.isPresent()) {
+            setScrollPosition(revealScrollPosition.get());
+        }
     }
 
     public void revealPosition(long dataPosition, int dataOffset, CodeAreaSection section) {
@@ -385,7 +387,9 @@ public class CodeArea extends CodeAreaCore implements DefaultCodeArea, CodeAreaA
         }
 
         Optional<CodeAreaScrollPosition> centerOnScrollPosition = painter.computeCenterOnScrollPosition(caretPosition);
-        centerOnScrollPosition.ifPresent(this::setScrollPosition);
+        if (centerOnScrollPosition.isPresent()) {
+            setScrollPosition(centerOnScrollPosition.get());
+        }
     }
 
     public void centerOnPosition(long dataPosition, int dataOffset, CodeAreaSection section) {
