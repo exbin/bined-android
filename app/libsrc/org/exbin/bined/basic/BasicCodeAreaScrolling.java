@@ -54,7 +54,7 @@ public class BasicCodeAreaScrolling {
     @Nonnull
     private final CodeAreaScrollPosition maximumScrollPosition = new CodeAreaScrollPosition();
 
-    private static final long ROW_POSITION_LIMIT = Long.MAX_VALUE / Integer.MAX_VALUE;
+    private int maximumScrollBarHeight = Integer.MAX_VALUE >> 2;
 
     @Nullable
     private Runnable verticalExtentChangeListener = null;
@@ -147,9 +147,9 @@ public class BasicCodeAreaScrolling {
         int scrollViewHeight = 0;
         switch (verticalScrollUnit) {
             case PIXEL: {
-                if (rowsPerData > Integer.MAX_VALUE / rowHeight) {
+                if (rowsPerData > maximumScrollBarHeight / rowHeight) {
                     scrollBarVerticalScale = ScrollBarVerticalScale.SCALED;
-                    scrollViewHeight = Integer.MAX_VALUE;
+                    scrollViewHeight = maximumScrollBarHeight;
                     changeVerticalExtentDifference(0);
                 } else {
                     scrollBarVerticalScale = ScrollBarVerticalScale.NORMAL;
@@ -159,9 +159,9 @@ public class BasicCodeAreaScrolling {
                 break;
             }
             case ROW: {
-                if (rowsPerData > (Integer.MAX_VALUE - dataViewHeight)) {
+                if (rowsPerData > (maximumScrollBarHeight - dataViewHeight)) {
                     scrollBarVerticalScale = ScrollBarVerticalScale.SCALED;
-                    scrollViewHeight = Integer.MAX_VALUE;
+                    scrollViewHeight = maximumScrollBarHeight;
                     changeVerticalExtentDifference(0);
                 } else {
                     scrollBarVerticalScale = ScrollBarVerticalScale.NORMAL;
@@ -219,7 +219,7 @@ public class BasicCodeAreaScrolling {
                             long rest = rowsPerDocumentToLastPage % maxValue;
                             targetRow += (rest * scrollBarValue) / maxValue;
                         } else {
-                            targetRow = (scrollBarValue * rowsPerDocumentToLastPage) / Integer.MAX_VALUE;
+                            targetRow = (scrollBarValue * rowsPerDocumentToLastPage) / maximumScrollBarHeight;
                         }
                         scrollPosition.setRowPosition(targetRow);
                     }
@@ -245,7 +245,7 @@ public class BasicCodeAreaScrolling {
                             long rest = rowsPerDocumentToLastPage % maxValue;
                             targetRow += (rest * scrollBarValue) / maxValue;
                         } else {
-                            targetRow = (scrollBarValue * rowsPerDocumentToLastPage) / Integer.MAX_VALUE;
+                            targetRow = (scrollBarValue * rowsPerDocumentToLastPage) / maximumScrollBarHeight;
                         }
                         scrollPosition.setRowPosition(targetRow);
                     }
@@ -270,10 +270,10 @@ public class BasicCodeAreaScrolling {
             case PIXEL: {
                 if (scrollBarVerticalScale == ScrollBarVerticalScale.SCALED) {
                     int scrollValue;
-                    if (scrollPosition.getRowPosition() < ROW_POSITION_LIMIT) {
-                        scrollValue = (int) ((scrollPosition.getRowPosition() * Integer.MAX_VALUE) / rowsPerDocument);
+                    if (scrollPosition.getRowPosition() < Long.MAX_VALUE / maximumScrollBarHeight) {
+                        scrollValue = (int) ((scrollPosition.getRowPosition() * maximumScrollBarHeight) / rowsPerDocument);
                     } else {
-                        scrollValue = (int) (scrollPosition.getRowPosition() / (rowsPerDocument / Integer.MAX_VALUE));
+                        scrollValue = (int) (scrollPosition.getRowPosition() / (rowsPerDocument / maximumScrollBarHeight));
                     }
                     return scrollValue;
                 }
@@ -282,10 +282,10 @@ public class BasicCodeAreaScrolling {
             case ROW: {
                 if (scrollBarVerticalScale == ScrollBarVerticalScale.SCALED) {
                     int scrollValue;
-                    if (scrollPosition.getRowPosition() < ROW_POSITION_LIMIT) {
-                        scrollValue = (int) ((scrollPosition.getRowPosition() * Integer.MAX_VALUE) / rowsPerDocument);
+                    if (scrollPosition.getRowPosition() < Long.MAX_VALUE / maximumScrollBarHeight) {
+                        scrollValue = (int) ((scrollPosition.getRowPosition() * maximumScrollBarHeight) / rowsPerDocument);
                     } else {
-                        scrollValue = (int) (scrollPosition.getRowPosition() / (rowsPerDocument / Integer.MAX_VALUE));
+                        scrollValue = (int) (scrollPosition.getRowPosition() / (rowsPerDocument / maximumScrollBarHeight));
                     }
                     return scrollValue;
                 }
@@ -313,6 +313,14 @@ public class BasicCodeAreaScrolling {
 
     public void setHorizontalExtentChangeListener(Runnable horizontalExtentChangeListener) {
         this.horizontalExtentChangeListener = horizontalExtentChangeListener;
+    }
+
+    public int getMaximumScrollBarHeight() {
+        return maximumScrollBarHeight;
+    }
+
+    public void setMaximumScrollBarHeight(int maximumScrollBarHeight) {
+        this.maximumScrollBarHeight = maximumScrollBarHeight;
     }
 
     @Nonnull

@@ -19,6 +19,13 @@
 -keep class com.sun.jna.* { *; }
 -keepclassmembers class * extends com.sun.jna.* { public *; }
 
+-keep class androidx.appcompat.view.menu.MenuBuilder {
+    void setOptionalIconsVisible(boolean);
+}
+-keepclassmembernames class androidx.appcompat.view.menu.MenuBuilder {
+    void setOptionalIconsVisible(boolean);
+}
+
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
 #-keepattributes SourceFile,LineNumberTable
@@ -27,7 +34,7 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 -dontobfuscate
--dontusemixedcaseclassnames
+#-dontusemixedcaseclassnames
 #-dontpreverify
 #-optimizations !code/simplification/arithmetic,!code/simplification/cast,!field/*,!class/merging/*
 #-optimizationpasses 5

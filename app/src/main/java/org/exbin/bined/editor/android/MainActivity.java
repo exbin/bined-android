@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -80,7 +81,6 @@ import org.exbin.bined.android.basic.color.BasicCodeAreaColorsProfile;
 import org.exbin.bined.android.capability.ColorAssessorPainterCapable;
 import org.exbin.bined.basic.BasicCodeAreaSection;
 import org.exbin.bined.basic.CodeAreaViewMode;
-import org.exbin.bined.capability.EditModeCapable;
 import org.exbin.bined.editor.android.inspector.BasicValuesInspector;
 import org.exbin.bined.editor.android.inspector.BasicValuesPositionColorModifier;
 import org.exbin.bined.editor.android.options.DataInspectorMode;
@@ -105,7 +105,6 @@ import org.exbin.framework.bined.BinaryStatusApi;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -552,25 +551,26 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
+        Resources resources = getResources();
         int order = 0;
         if (isGoogleTV(codeArea.getContext())) {
-            menu.add(0, OPEN_MAIN_MENU_ID, order, getResources().getString(R.string.action_open_main_menu));
+            menu.add(0, OPEN_MAIN_MENU_ID, order, resources.getString(R.string.action_open_main_menu));
             order++;
         }
-        menu.add(0, SELECTION_START_POPUP_ID, order, getResources().getString(R.string.action_selection_start));
-        menu.add(0, SELECTION_END_POPUP_ID, order + 1, getResources().getString(R.string.action_selection_end));
-        menu.add(0, CLEAR_SELECTION_POPUP_ID, order + 2, getResources().getString(R.string.action_clear_selection));
-        MenuItem cutMenuItem = menu.add(1, CUT_ACTION_POPUP_ID, order + 3, getResources().getString(R.string.action_cut));
+        menu.add(0, SELECTION_START_POPUP_ID, order, resources.getString(R.string.action_selection_start));
+        menu.add(0, SELECTION_END_POPUP_ID, order + 1, resources.getString(R.string.action_selection_end));
+        menu.add(0, CLEAR_SELECTION_POPUP_ID, order + 2, resources.getString(R.string.action_clear_selection));
+        MenuItem cutMenuItem = menu.add(1, CUT_ACTION_POPUP_ID, order + 3, resources.getString(R.string.action_cut));
         cutMenuItem.setEnabled(codeArea.isEditable() && codeArea.hasSelection());
-        MenuItem copyMenuItem = menu.add(1, COPY_ACTION_POPUP_ID, order + 4, getResources().getString(R.string.action_copy));
+        MenuItem copyMenuItem = menu.add(1, COPY_ACTION_POPUP_ID, order + 4, resources.getString(R.string.action_copy));
         copyMenuItem.setEnabled(codeArea.hasSelection());
-        menu.add(1, COPY_AS_CODE_ACTION_POPUP_ID, order + 5, getResources().getString(R.string.action_copy_as_code));
-        MenuItem pasteMenuItem = menu.add(1, PASTE_ACTION_POPUP_ID, order + 6, getResources().getString(R.string.action_paste));
+        menu.add(1, COPY_AS_CODE_ACTION_POPUP_ID, order + 5, resources.getString(R.string.action_copy_as_code));
+        MenuItem pasteMenuItem = menu.add(1, PASTE_ACTION_POPUP_ID, order + 6, resources.getString(R.string.action_paste));
         pasteMenuItem.setEnabled(codeArea.isEditable() && codeArea.canPaste());
-        menu.add(1, PASTE_FROM_CODE_ACTION_POPUP_ID, order + 7, getResources().getString(R.string.action_paste_from_code));
-        MenuItem deleteMenuItem = menu.add(1, DELETE_ACTION_POPUP_ID, order + 8, getResources().getString(R.string.action_delete));
+        menu.add(1, PASTE_FROM_CODE_ACTION_POPUP_ID, order + 7, resources.getString(R.string.action_paste_from_code));
+        MenuItem deleteMenuItem = menu.add(1, DELETE_ACTION_POPUP_ID, order + 8, resources.getString(R.string.action_delete));
         deleteMenuItem.setEnabled(codeArea.isEditable() && codeArea.hasSelection());
-        menu.add(1, SELECT_ALL_ACTION_POPUP_ID, order + 9, getResources().getString(R.string.action_select_all));
+        menu.add(1, SELECT_ALL_ACTION_POPUP_ID, order + 9, resources.getString(R.string.action_select_all));
     }
 
     @Override
@@ -1072,7 +1072,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         }
 
         BinaryStatusApi.MemoryMode newMemoryMode = BinaryStatusApi.MemoryMode.RAM_MEMORY;
-        if (((EditModeCapable) codeArea).getEditMode() == EditMode.READ_ONLY) {
+        if (codeArea.getEditMode() == EditMode.READ_ONLY) {
             newMemoryMode = BinaryStatusApi.MemoryMode.READ_ONLY;
         } else if (codeArea.getContentData() instanceof DeltaDocument) {
             newMemoryMode = BinaryStatusApi.MemoryMode.DELTA_MODE;

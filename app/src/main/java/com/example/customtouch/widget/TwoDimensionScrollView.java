@@ -1,8 +1,7 @@
-package com.examples.customtouch.widget;
+package com.example.customtouch.widget;
 /*from  w  w  w. j a v a 2  s .  c  o  m*/
 
 import android.content.Context;
-import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;

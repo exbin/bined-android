@@ -18,7 +18,7 @@ package org.exbin.bined.android.basic;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import com.examples.customtouch.widget.TwoDimensionScrollView;
+import com.example.customtouch.widget.TwoDimensionScrollView;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 

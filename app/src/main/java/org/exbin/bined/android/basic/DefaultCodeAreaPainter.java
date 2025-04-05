@@ -92,8 +92,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapableCodeAreaPainter, CodeAreaPaintState, ColorAssessorPainterCapable, CharAssessorPainterCapable {
 
-    protected static final int maximumHeight = Integer.MAX_VALUE / 4;
-
     @Nonnull
     protected final CodeAreaCore codeArea;
     protected volatile boolean initialized = false;
@@ -170,7 +168,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
 
                 scrolling.updateHorizontalScrollBarValue(horizontal, metrics.getCharacterWidth());
 
-                int maxValue = maximumHeight; // - scrollPanel.getVerticalScrollBar().getVisibleAmount();
+                int maxValue = scrolling.getMaximumScrollBarHeight(); // - scrollPanel.getVerticalScrollBar().getVisibleAmount();
                 long rowsPerDocumentToLastPage = structure.getRowsPerDocument() - dimensions.getRowsPerRect();
                 scrolling.updateVerticalScrollBarValue(vertical, metrics.getRowHeight(), maxValue, rowsPerDocumentToLastPage);
 
@@ -1526,9 +1524,9 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
             long rowsPerData = (structure.getDataSize() / structure.getBytesPerRow()) + 1;
 
             int documentDataHeight;
-            if (rowsPerData > maximumHeight / rowHeight) {
+            if (rowsPerData > scrolling.getMaximumScrollBarHeight() / rowHeight) {
                 scrolling.setScrollBarVerticalScale(ScrollBarVerticalScale.SCALED);
-                documentDataHeight = maximumHeight;
+                documentDataHeight = scrolling.getMaximumScrollBarHeight();
             } else {
                 scrolling.setScrollBarVerticalScale(ScrollBarVerticalScale.NORMAL);
                 documentDataHeight = (int) (rowsPerData * rowHeight);
