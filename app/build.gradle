@@ -11,7 +11,7 @@ android {
 
         multiDexEnabled true
         minSdk 14
-        targetSdk 14
+        targetSdk 34
         /*
         // Playstore
         minSdk 24

@@ -10,7 +10,7 @@ android {
 
         multiDexEnabled true
         minSdk 14
-        targetSdk 14
+        targetSdk 34
         /*
         // Playstore
         minSdk 24
@@ -44,5 +44,5 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     compileOnly group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
     implementation "com.google.android.material:material:${materialVersion}"
-    implementation "androidx.multidex:multidex:2.0.1"
+//    implementation "androidx.multidex:multidex:2.0.1"
 }

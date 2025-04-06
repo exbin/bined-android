@@ -26,6 +26,8 @@
     void setOptionalIconsVisible(boolean);
 }
 
+-keep class java.util.Optional { *; }
+
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
 #-keepattributes SourceFile,LineNumberTable
