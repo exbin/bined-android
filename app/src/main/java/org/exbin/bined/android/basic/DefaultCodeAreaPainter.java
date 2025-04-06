@@ -177,7 +177,9 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
                 dataViewOffsetX = scrollOffsetX - dimensions.getScrollPanelX();
                 dataViewOffsetY = scrollOffsetY - dimensions.getScrollPanelY();
 
-                ((ScrollingCapable) codeArea).setScrollPosition(scrolling.getScrollPosition());
+                if (!adjusting) {
+                    ((ScrollingCapable) codeArea).setScrollPosition(scrolling.getScrollPosition());
+                }
             }
         };
         scrollPanel.setLongClickable(true);
