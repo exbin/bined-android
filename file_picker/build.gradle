@@ -7,16 +7,16 @@ android {
     compileSdk 34
 
     defaultConfig {
-
+        
         multiDexEnabled true
         minSdk 14
-        targetSdk 34
         /*
         // Playstore
         minSdk 24
-        targetSdk 34
         materialVersion = '1.12.0'
-         */
+        */
+
+        targetSdk 34
     }
     lintOptions {
         checkReleaseBuilds false
@@ -44,5 +44,4 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     compileOnly group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
     implementation "com.google.android.material:material:${materialVersion}"
-//    implementation "androidx.multidex:multidex:2.0.1"
 }
