@@ -102,13 +102,13 @@ public class FileDataSource implements DataSource {
     }
 
     /**
-     * Clears cache windows.
+     * Clears cache window.
      */
     @Override
     public void clearCache() {
         for (CacheClearListener listener : listeners) {
             listener.clearCache();
-        };
+        }
     }
 
     @Override

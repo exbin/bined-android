@@ -31,7 +31,15 @@ import javax.annotation.concurrent.Immutable;
 @Immutable
 public class EmptyBinaryData implements BinaryData {
 
-    public static final EmptyBinaryData INSTANCE = new EmptyBinaryData();
+    private static final class Singleton {
+
+        private static final EmptyBinaryData INSTANCE = new EmptyBinaryData();
+    }
+
+    @Nonnull
+    public static EmptyBinaryData getInstance() {
+        return Singleton.INSTANCE;
+    }
 
     @Override
     public boolean isEmpty() {

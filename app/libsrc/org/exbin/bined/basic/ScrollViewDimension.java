@@ -15,22 +15,22 @@
  */
 package org.exbin.bined.basic;
 
-import javax.annotation.concurrent.Immutable;
-
 /**
  * Scrolling view dimensions.
  *
  * @author ExBin Project (https://exbin.org)
  */
-@Immutable
 public class ScrollViewDimension {
 
-    private final int dataViewWidth;
-    private final int dataViewHeight;
-    private final int width;
-    private final int height;
+    private int dataViewWidth;
+    private int dataViewHeight;
+    private int width;
+    private int height;
 
-    public ScrollViewDimension(int dataViewWidth, int dataViewHeight, int width, int height) {
+    public ScrollViewDimension() {
+    }
+
+    public void setDimension(int dataViewWidth, int dataViewHeight, int width, int height) {
         this.dataViewWidth = dataViewWidth;
         this.dataViewHeight = dataViewHeight;
         this.width = width;

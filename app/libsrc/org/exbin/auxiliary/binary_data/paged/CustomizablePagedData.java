@@ -37,8 +37,9 @@ public interface CustomizablePagedData extends PagedData {
     Optional<DataPageProvider> getDataPageProvider();
 
     /**
+     * Sets data page provider.
      *
-     * @param dataPageProvider
+     * @param dataPageProvider data page provider
      */
     void setDataPageProvider(@Nullable DataPageProvider dataPageProvider);
 }

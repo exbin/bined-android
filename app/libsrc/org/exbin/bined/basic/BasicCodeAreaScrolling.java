@@ -73,8 +73,7 @@ public class BasicCodeAreaScrolling {
         this.verticalScrollBarWidth = verticalScrollBarWidth;
     }
 
-    @Nonnull
-    public ScrollViewDimension computeViewDimension(int dataViewWidth, int dataViewHeight, BasicCodeAreaLayout layout, BasicCodeAreaStructure structure, int characterWidth, int rowHeight) {
+    public void computeViewDimension(ScrollViewDimension outputDimension, int dataViewWidth, int dataViewHeight, BasicCodeAreaLayout layout, BasicCodeAreaStructure structure, int characterWidth, int rowHeight) {
         int charsPerRow = structure.getCharactersPerRow();
         int dataWidth = layout.computePositionX(charsPerRow, characterWidth);
         boolean fitsHorizontally = computeFitsHorizontally(dataViewWidth, dataWidth);
@@ -105,8 +104,7 @@ public class BasicCodeAreaScrolling {
             height = recomputeScrollViewHeight(dataViewHeight, rowHeight, rowsPerData);
         }
 
-        // TODO avoid creation of instance
-        return new ScrollViewDimension(dataViewWidth, dataViewHeight, width, height);
+        outputDimension.setDimension(dataViewWidth, dataViewHeight, width, height);
     }
 
     private boolean computeFitsHorizontally(int dataViewWidth, int dataWidth) {

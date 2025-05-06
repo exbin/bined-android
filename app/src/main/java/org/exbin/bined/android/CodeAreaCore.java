@@ -50,7 +50,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl {
 
     @Nonnull
-    protected BinaryData contentData = EmptyBinaryData.INSTANCE;
+    protected BinaryData contentData = EmptyBinaryData.getInstance();
 
     @Nonnull
     protected final PrimaryView primaryView;
@@ -165,7 +165,7 @@ public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl 
     }
 
     public void setContentData(@Nullable BinaryData contentData) {
-        this.contentData = contentData == null ? EmptyBinaryData.INSTANCE : contentData;
+        this.contentData = contentData == null ? EmptyBinaryData.getInstance() : contentData;
         notifyDataChanged();
         repaint();
     }

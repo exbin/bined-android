@@ -135,6 +135,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
     protected EditOperation editOperation;
     @Nullable
     protected BasicBackgroundPaintMode backgroundPaintMode;
+    protected final ScrollViewDimension viewDimension = new ScrollViewDimension();
     protected boolean showMirrorCursor;
 
     protected int rowPositionLength;
@@ -1516,7 +1517,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
 
         if (rowHeight > 0 && characterWidth > 0) {
             scrolling.updateCache(codeArea, getHorizontalScrollBarSize(), getVerticalScrollBarSize());
-            ScrollViewDimension viewDimension = scrolling.computeViewDimension(codeArea.getWidth(), codeArea.getHeight(), layout, structure, characterWidth, rowHeight);
+            scrolling.computeViewDimension(viewDimension, codeArea.getWidth(), codeArea.getHeight(), layout, structure, characterWidth, rowHeight);
             dataView.setMinimumWidth(viewDimension.getWidth());
             dataView.setMinimumHeight(viewDimension.getHeight());
 

@@ -76,7 +76,12 @@ public class ViewFragment extends PreferenceFragmentCompat {
         fontPreferences.setFontSize(Integer.parseInt(((FontPreference) findPreference(FONT_KEY)).getText()));
         TextEncodingPreferences encodingPreferences = appPreferences.getEncodingPreferences();
         encodingPreferences.setDefaultEncoding(((EncodingPreference) findPreference(ENCODING_KEY)).getText());
-        codeAreaPreferences.setMaxBytesPerRow(Integer.parseInt(((ListPreference) findPreference(BYTES_PER_ROW_KEY)).getValue()));
+        String bytesPerRowMode = ((ListPreference) findPreference(BYTES_PER_ROW_KEY)).getValue();
+        if (bytesPerRowMode.equals("custom")) {
+            // TODO Add support for custom
+            bytesPerRowMode = "0";
+        }
+        codeAreaPreferences.setMaxBytesPerRow(Integer.parseInt(bytesPerRowMode));
         codeAreaPreferences.setViewMode(CodeAreaViewMode.valueOf(((ListPreference) findPreference(VIEW_MODE_KEY)).getValue().toUpperCase()));
         codeAreaPreferences.setCodeType(CodeType.valueOf(((ListPreference) findPreference(CODE_TYPE_KEY)).getValue().toUpperCase()));
         codeAreaPreferences.setCodeCharactersCase(CodeCharactersCase.valueOf(((ListPreference) findPreference(HEX_CHARACTERS_CASE)).getValue().toUpperCase()));
