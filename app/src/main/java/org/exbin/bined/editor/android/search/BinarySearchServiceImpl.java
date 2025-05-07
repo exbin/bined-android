@@ -28,6 +28,7 @@ import org.exbin.bined.highlight.android.SearchMatch;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -197,6 +198,7 @@ public class BinarySearchServiceImpl implements BinarySearchService {
         }
         byte[] charData = new byte[maxBytesPerChar];
         long dataSize = data.getDataSize();
+        long lastPosition = position;
         while (position >= 0 && position <= dataSize - searchDataSize) {
             int matchCharLength = 0;
             int matchLength = 0;
@@ -210,7 +212,20 @@ public class BinarySearchServiceImpl implements BinarySearchService {
                 if (searchPosition + bytesToUse > dataSize) {
                     bytesToUse = (int) (dataSize - searchPosition);
                 }
-                data.copyToArray(searchPosition, charData, 0, bytesToUse);
+
+                if (searchPosition == lastPosition + 1) {
+                    System.arraycopy(charData, 1, charData, 0, maxBytesPerChar - 1);
+                    charData[bytesToUse - 1] = data.getByte(searchPosition + bytesToUse - 1);
+                } else if (searchPosition == lastPosition - 1) {
+                    System.arraycopy(charData, 0, charData, 1, maxBytesPerChar - 1);
+                    charData[0] = data.getByte(searchPosition);
+                } else {
+                    data.copyToArray(searchPosition, charData, 0, bytesToUse);
+                }
+                if (bytesToUse < maxBytesPerChar) {
+                    Arrays.fill(charData, bytesToUse, maxBytesPerChar, (byte) 0);
+                }
+                lastPosition = searchPosition;
                 char singleChar = new String(charData, charset).charAt(0);
 
                 if (searchParameters.isMatchCase()) {

@@ -123,6 +123,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class MainActivity extends AppCompatActivity implements FileDialog.OnFileSelectedListener {
 
+    private static final int DOUBLE_BACK_KEY_INTERVAL = 3000;
     private static final int SELECTION_START_POPUP_ID = 1;
     private static final int SELECTION_END_POPUP_ID = 2;
     private static final int CLEAR_SELECTION_POPUP_ID = 3;
@@ -152,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     private Runnable postSaveAsAction = null;
     private boolean keyboardShown = false;
     private boolean dataInspectorShown = true;
+    private long lastBackKeyPressTime = -1;
     BasicValuesPositionColorModifier basicValuesPositionColorModifier = new BasicValuesPositionColorModifier();
 
     private final BinarySearchService.SearchStatusListener searchStatusListener = new BinarySearchService.SearchStatusListener() {
@@ -716,9 +718,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
             return true;
         } else if (id == R.id.action_exit) {
-            releaseFile(() -> {
-                System.exit(0);
-            });
+            releaseFile(this::finish);
 
             return true;
         } else if (id == R.id.code_type) {
@@ -1395,11 +1395,19 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
                         } else {
                             codeArea.showContextMenu();
                         }
-                    } else if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_BACK && isGoogleTV(codeArea.getContext())) {
-                        releaseFile(() -> {
-                            System.exit(0);
-                        });
-                    } else {
+                    } else if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+                        if (fileHandler.isModified()) {
+                            releaseFile(MainActivity.this::finish);
+                        } else {
+                            if (System.currentTimeMillis() - lastBackKeyPressTime < DOUBLE_BACK_KEY_INTERVAL) {
+                                finish();
+                            } else {
+                                lastBackKeyPressTime = System.currentTimeMillis();
+                                Toast.makeText(MainActivity.this, getResources().getText(R.string.confirm_exit), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    } else if (keyEvent.getKeyCode() != KeyEvent.KEYCODE_DEL && keyEvent.getKeyCode() != KeyEvent.KEYCODE_FORWARD_DEL) {
+                        // TODO Do this on key up?
                         codeArea.getCommandHandler().keyPressed(keyEvent);
                     }
                 } else {

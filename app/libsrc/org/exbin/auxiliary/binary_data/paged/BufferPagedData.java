@@ -89,9 +89,8 @@ public class BufferPagedData implements PagedData {
                 BufferData page = getPage(lastPage);
                 int nextPageSize = remaining + lastPageSize > pageSize ? pageSize : (int) remaining + lastPageSize;
                 BufferData newPage = createNewPage(nextPageSize);
-                ByteBuffer pageData = page.getData();
-                pageData.rewind();
-                pageData.put(page.getData());
+                page.getData().rewind();
+                newPage.getData().put(page.getData());
                 setPage(lastPage, newPage);
                 remaining -= (nextPageSize - lastPageSize);
                 lastPage++;
