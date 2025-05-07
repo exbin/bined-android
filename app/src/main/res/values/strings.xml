@@ -61,6 +61,7 @@
     <string name="save_as_file">Save as file</string>
     <string name="file_modified">File was modified</string>
     <string name="confirm_exit">Press again to exit</string>
+    <string name="confirm_discard">Press again to discard changes</string>
     <string name="storage_permission_is_not_granted">Storage permission is not granted</string>
     <string name="storage_permission_request">Need to enable storage permissions</string>
 

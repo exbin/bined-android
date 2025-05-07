@@ -154,6 +154,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     private boolean keyboardShown = false;
     private boolean dataInspectorShown = true;
     private long lastBackKeyPressTime = -1;
+    private long lastReleaseBackKeyPressTime = -1;
     BasicValuesPositionColorModifier basicValuesPositionColorModifier = new BasicValuesPositionColorModifier();
 
     private final BinarySearchService.SearchStatusListener searchStatusListener = new BinarySearchService.SearchStatusListener() {
@@ -718,7 +719,10 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
             return true;
         } else if (id == R.id.action_exit) {
-            releaseFile(this::finish);
+            releaseFile(() -> {
+                finish();
+                System.exit(0);
+            });
 
             return true;
         } else if (id == R.id.code_type) {
@@ -933,6 +937,18 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             postReleaseAction.run();
         });
         builder.setNegativeButton(R.string.button_cancel, null);
+        builder.setOnKeyListener((dialog, keyCode, event) -> {
+            if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+                if (System.currentTimeMillis() - lastReleaseBackKeyPressTime < DOUBLE_BACK_KEY_INTERVAL) {
+                    postReleaseAction.run();
+                } else {
+                    lastReleaseBackKeyPressTime = System.currentTimeMillis();
+                    Toast.makeText(MainActivity.this, getResources().getText(R.string.confirm_discard), Toast.LENGTH_SHORT).show();
+                }
+                return true;
+            }
+            return false;
+        });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }

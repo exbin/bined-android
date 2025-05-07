@@ -138,7 +138,7 @@ public class SearchCodeAreaColorAssessor implements CodeAreaColorAssessor {
     @Nullable
     @Override
     public Integer getPositionBackgroundColor(long rowDataPosition, int byteOnRow, int charOnRow, CodeAreaSection section, boolean inSelection) {
-        if (!matches.isEmpty() && charOnRow < charactersPerRow - 1) {
+        if (!matches.isEmpty() && charOnRow < charactersPerRow) {
             long dataPosition = rowDataPosition + byteOnRow;
             if (currentMatchIndex >= 0) {
                 SearchMatch currentMatch = matches.get(currentMatchIndex);

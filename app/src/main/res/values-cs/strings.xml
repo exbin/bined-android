@@ -60,6 +60,7 @@
     <string name="save_as_file">Uložit jako soubor</string>
     <string name="file_modified">Soubor byl upraven</string>
     <string name="confirm_exit">Stiskněte znovu pro ukončení</string>
+    <string name="confirm_discard">Stiskněte znovu pro zahození změn</string>
     <string name="storage_permission_is_not_granted">Není uděleno oprávnění k úložišti</string>
     <string name="storage_permission_request">Je třeba povolit oprávnění úložiště</string>
 

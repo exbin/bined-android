@@ -60,7 +60,8 @@
     <string name="select_file">एक फ़ाइल चुनें</string>
     <string name="save_as_file">फ़ाइल के रूप में सहेजें</string>
     <string name="file_modified">फ़ाइल को संशोधित किया गया</string>
-    <string name="confirm_exit">Press again to exit</string>
+    <string name="confirm_exit">बाहर निकलने के लिए फिर से दबाएँ</string>
+    <string name="confirm_discard">परिवर्तनों को त्यागने के लिए पुनः दबाएँ</string>
     <string name="storage_permission_is_not_granted">स्टोरेज अनुमति नहीं दी गई</string>
     <string name="storage_permission_request">स्टोरेज अनुमतियाँ सक्षम करने की आवश्यकता है</string>
 
