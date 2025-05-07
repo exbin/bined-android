@@ -201,6 +201,10 @@ public class BinarySearchServiceImpl implements BinarySearchService {
             int matchCharLength = 0;
             int matchLength = 0;
             while (matchCharLength < searchDataSize) {
+                if (Thread.interrupted()) {
+                    return;
+                }
+
                 long searchPosition = position + matchLength;
                 int bytesToUse = maxBytesPerChar;
                 if (searchPosition + bytesToUse > dataSize) {
@@ -208,16 +212,15 @@ public class BinarySearchServiceImpl implements BinarySearchService {
                 }
                 data.copyToArray(searchPosition, charData, 0, bytesToUse);
                 char singleChar = new String(charData, charset).charAt(0);
-                String singleCharString = String.valueOf(singleChar);
-                int characterLength = singleCharString.getBytes(charset).length;
 
                 if (searchParameters.isMatchCase()) {
                     if (singleChar != findText.charAt(matchCharLength)) {
                         break;
                     }
-                } else if (singleCharString.toLowerCase().charAt(0) != findText.charAt(matchCharLength)) {
+                } else if (Character.toLowerCase(singleChar) != findText.charAt(matchCharLength)) {
                     break;
                 }
+                int characterLength = String.valueOf(singleChar).getBytes(charset).length;
                 matchCharLength++;
                 matchLength += characterLength;
             }
@@ -249,6 +252,10 @@ public class BinarySearchServiceImpl implements BinarySearchService {
                 default:
                     throw CodeAreaUtils.getInvalidTypeException(searchParameters.getSearchDirection());
             }
+        }
+
+        if (Thread.interrupted()) {
+            return;
         }
 
         searchAssessor.setMatches(foundMatches);

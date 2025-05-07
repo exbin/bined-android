@@ -312,7 +312,10 @@ public class BufferEditableData extends BufferData implements EditableBinaryData
     @Override
     public BufferEditableData copy() {
         ByteBuffer copy = allocateBuffer(data.capacity());
-        copy.put(data);
+        synchronized (this) {
+            data.rewind();
+            copy.put(data);
+        }
         return new BufferEditableData(copy);
     }
 
@@ -324,8 +327,10 @@ public class BufferEditableData extends BufferData implements EditableBinaryData
         }
 
         ByteBuffer copy = allocateBuffer((int) length);
-        BufferEditableData.put(copy, 0, data, (int) startFrom, (int) length);
-        return new BufferEditableData(copy);
+        synchronized (this) {
+            BufferEditableData.put(copy, 0, data, (int) startFrom, (int) length);
+            return new BufferEditableData(copy);
+        }
     }
 
     @Override

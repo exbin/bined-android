@@ -22,13 +22,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Implementation of binary data interface using byte buffer.
+ * <p>
+ * To allow parallel reading, read operations must be synchronized due to split
+ * nature of the ByteBuffer position and depending operation.
  *
  * @author ExBin Project (https://exbin.org)
  */
@@ -98,7 +100,7 @@ public class BufferData implements BinaryData {
     }
 
     @Override
-    public byte getByte(long position) {
+    public synchronized byte getByte(long position) {
         try {
             return data.get((int) position);
         } catch (IndexOutOfBoundsException ex) {
@@ -110,8 +112,10 @@ public class BufferData implements BinaryData {
     @Override
     public BufferData copy() {
         ByteBuffer copy = allocateBuffer(data.capacity());
-        data.rewind();
-        copy.put(data);
+        synchronized (this) {
+            data.rewind();
+            copy.put(data);
+        }
         return new BufferData(copy);
     }
 
@@ -126,15 +130,17 @@ public class BufferData implements BinaryData {
         }
 
         ByteBuffer copy = allocateBuffer((int) length);
-        data.position((int) startFrom);
-        data.limit((int) (startFrom + length));
-        copy.put(data);
-        data.limit(data.capacity());
-        return new BufferData(copy);
+        synchronized (this) {
+            data.position((int) startFrom);
+            data.limit((int) (startFrom + length));
+            copy.put(data);
+            data.clear();
+            return new BufferData(copy);
+        }
     }
 
     @Override
-    public void copyToArray(long startFrom, byte[] target, int offset, int length) {
+    public synchronized void copyToArray(long startFrom, byte[] target, int offset, int length) {
         try {
             data.position((int) startFrom);
             data.get(target, offset, length);
@@ -150,8 +156,10 @@ public class BufferData implements BinaryData {
         int position = 0;
         while (remaining > 0) {
             int length = remaining > BUFFER_SIZE ? BUFFER_SIZE : remaining;
-            data.position(position);
-            data.get(buffer, 0, length);
+            synchronized (this) {
+                data.position(position);
+                data.get(buffer, 0, length);
+            }
             outputStream.write(buffer, 0, length);
             position += length;
             remaining -= length;
@@ -165,7 +173,7 @@ public class BufferData implements BinaryData {
     }
 
     @Override
-    public int hashCode() {
+    public synchronized int hashCode() {
         return data.hashCode();
     }
 
@@ -188,9 +196,11 @@ public class BufferData implements BinaryData {
         }
 
         final BufferData other = (BufferData) obj;
-        other.data.rewind();
-        data.rewind();
-        return other.data.compareTo(data) == 0;
+        synchronized (this) {
+            other.data.rewind();
+            data.rewind();
+            return other.data.compareTo(data) == 0;
+        }
     }
 
     public boolean compareTo(BinaryData other) {

@@ -89,8 +89,9 @@ public class BufferPagedData implements PagedData {
                 BufferData page = getPage(lastPage);
                 int nextPageSize = remaining + lastPageSize > pageSize ? pageSize : (int) remaining + lastPageSize;
                 BufferData newPage = createNewPage(nextPageSize);
-                page.getData().rewind();
-                newPage.getData().put(page.getData());
+                ByteBuffer pageData = page.getData();
+                pageData.rewind();
+                pageData.put(page.getData());
                 setPage(lastPage, newPage);
                 remaining -= (nextPageSize - lastPageSize);
                 lastPage++;
@@ -348,12 +349,8 @@ public class BufferPagedData implements PagedData {
                 copySize = length;
             }
 
-            try {
-                page.getData().position(pageOffset);
-                page.getData().get(target, offset, copySize);
-            } catch (IndexOutOfBoundsException ex) {
-                throw new OutOfBoundsException(ex);
-            }
+            page.copyToArray(pageOffset, target, offset, copySize);
+
             length -= copySize;
             offset += copySize;
             startFrom += copySize;

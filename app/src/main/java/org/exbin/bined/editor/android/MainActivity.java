@@ -91,6 +91,7 @@ import org.exbin.bined.editor.android.preference.EditorPreferences;
 import org.exbin.bined.editor.android.preference.EncodingPreference;
 import org.exbin.bined.editor.android.preference.FontPreference;
 import org.exbin.bined.editor.android.preference.MainPreferences;
+import org.exbin.bined.editor.android.search.BinarySearch;
 import org.exbin.bined.editor.android.search.BinarySearchService;
 import org.exbin.bined.editor.android.search.BinarySearchServiceImpl;
 import org.exbin.bined.editor.android.search.SearchCondition;
@@ -147,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     private Menu menu;
     private SearchView searchView;
     private final BinaryStatusHandler binaryStatus = new BinaryStatusHandler(this);
-    private BinarySearchService searchService;
+    private BinarySearch binarySearch;
     private Runnable postSaveAsAction = null;
     private boolean keyboardShown = false;
     private boolean dataInspectorShown = true;
@@ -250,7 +251,8 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         basicColors.reinitialize();
         codeArea.resetColors();
 
-        searchService = new BinarySearchServiceImpl(codeArea);
+        binarySearch = new BinarySearch();
+        binarySearch.setBinarySearchService(new BinarySearchServiceImpl(codeArea));
 
         registerForContextMenu(codeArea);
 
@@ -530,7 +532,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                searchService.performFindAgain(searchStatusListener);
+                binarySearch.performFindAgain(searchStatusListener);
                 return true;
             }
 
@@ -540,7 +542,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
                 searchCondition.setSearchText(newText);
                 SearchParameters searchParameters = new SearchParameters();
                 searchParameters.setCondition(searchCondition);
-                searchService.performFind(searchParameters, searchStatusListener);
+                binarySearch.performFind(searchParameters, searchStatusListener);
                 return true;
             }
         });
@@ -864,7 +866,8 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             builder.setTitle(R.string.action_search);
             searchView.setIconifiedByDefault(false);
             builder.setNegativeButton(R.string.button_cancel, (dialog, which) -> {
-                searchService.clearMatches();
+                binarySearch.cancelSearch();
+                binarySearch.clearSearch();
             });
             builder.setView(searchView);
             AlertDialog alertDialog = builder.create();
