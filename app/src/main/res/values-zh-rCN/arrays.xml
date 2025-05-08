@@ -5,26 +5,6 @@
         <item>暗色</item>
     </string-array>
 
-    <string-array name="theme_values" translatable="false">
-        <item>default</item>
-        <item>light</item>
-        <item>dark</item>
-    </string-array>
-
-    <string-array name="language_entries" translatable="false">
-        <item>Default (system)</item>
-        <item>English</item>
-        <item>Česky</item>
-        <item>हिंदी</item>
-    </string-array>
-
-    <string-array name="language_values" translatable="false">
-        <item>default</item>
-        <item>en</item>
-        <item>cs</item>
-        <item>hi</item>
-    </string-array>
-
     <string-array name="bytes_per_row_entries">
         <item>Fill Screen</item>
         <item>4 Bytes</item>
@@ -34,25 +14,10 @@
         <item>自定义</item>
     </string-array>
 
-    <string-array name="bytes_per_row_values" translatable="false">
-        <item>0</item>
-        <item>4</item>
-        <item>8</item>
-        <item>12</item>
-        <item>16</item>
-        <item>custom</item>
-    </string-array>
-
     <string-array name="view_mode_entries">
         <item>双列</item>
         <item>代码矩阵</item>
         <item>文本预览</item>
-    </string-array>
-
-    <string-array name="view_mode_values" translatable="false">
-        <item>dual</item>
-        <item>code_matrix</item>
-        <item>text_preview</item>
     </string-array>
 
     <string-array name="code_type_entries">
@@ -62,31 +27,14 @@
         <item>十六进制</item>
     </string-array>
 
-    <string-array name="code_type_values" translatable="false">
-        <item>binary</item>
-        <item>octal</item>
-        <item>decimal</item>
-        <item>hexadecimal</item>
-    </string-array>
-
     <string-array name="hex_chars_case_entries">
         <item>小写</item>
         <item>大写</item>
     </string-array>
 
-    <string-array name="hex_chars_case_values" translatable="false">
-        <item>lower</item>
-        <item>upper</item>
-    </string-array>
-
     <string-array name="file_handling_mode_entries">
         <item>加载整个文件</item>
         <item>仅加载不同部分</item>
-    </string-array>
-
-    <string-array name="file_handling_mode_values" translatable="false">
-        <item>memory</item>
-        <item>delta</item>
     </string-array>
 
     <string-array name="keys_panel_mode_entries">
@@ -96,22 +44,9 @@
         <item>较大</item>
     </string-array>
 
-    <string-array name="keys_panel_mode_values" translatable="false">
-        <item>hide</item>
-        <item>small</item>
-        <item>medium</item>
-        <item>big</item>
-    </string-array>
-
     <string-array name="data_inspector_mode_entries">
         <item>隐藏</item>
         <item>显示</item>
         <item>置于底部</item>
-    </string-array>
-
-    <string-array name="data_inspector_mode_values" translatable="false">
-        <item>hide</item>
-        <item>show</item>
-        <item>landscape</item>
     </string-array>
 </resources>
