@@ -1,0 +1,99 @@
+<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="en">
+    <string name="app_name">BinEd</string>
+    <string name="app_about">应用名称: BinEd - Binary/Hex Editor\n版本: %1$s\n上游: &lt;a href=https://exbin.org&gt;ExBin Project&lt;/a&gt;\n开源许可证: &lt;a href=https://www.apache.org/licenses/LICENSE-2.0&gt;Apache License, Version 2.0&lt;/a&gt;\n主页: &lt;a href=https://bined.exbin.org/android&gt;https://bined.exbin.org/android&lt;/a&gt;\n\n贡献者:</string>
+    <string name="bined_logo_description">BinEd徽标</string>
+
+    <!-- Actions & menu -->
+
+    <string name="title_activity_settings">设置</string>
+
+    <string name="action_new">新建文件</string>
+    <string name="action_open">打开文件</string>
+    <string name="action_save">保存</string>
+    <string name="action_save_as">另存为</string>
+    <string name="action_settings">设置</string>
+    <string name="action_about">关于</string>
+    <string name="action_search">搜索</string>
+    <string name="action_undo">撤销</string>
+    <string name="action_redo">重做</string>
+    <string name="action_selection_start">设置此处为选区开始处</string>
+    <string name="action_selection_end">设置此处为选区开始处</string>
+    <string name="action_clear_selection">取消选择</string>
+    <string name="action_cut">剪切</string>
+    <string name="action_copy">复制</string>
+    <string name="action_copy_as_code">以代码形式复制（Copy As Code）</string>
+    <string name="action_paste">粘贴</string>
+    <string name="action_paste_from_code">以代码形式粘贴（Paste From Code）</string>
+    <string name="action_delete">删除</string>
+    <string name="action_select_all">全选</string>
+    <string name="action_exit">退出</string>
+    <string name="action_open_main_menu">主菜单</string>
+
+    <string name="view_menu">查看</string>
+    <string name="visual_theme">主题</string>
+    <string name="language">语言</string>
+    <string name="view_mode">视图模式</string>
+    <string name="code_type">代码类型</string>
+    <string name="hex_characters_case">十六进制字母大小写</string>
+    <string name="encoding">编码</string>
+    <string name="code_colorization">代码高亮</string>
+    <string name="file_handling_mode">文件处理模式</string>
+    <string name="keys_panel_mode">按键面板</string>
+    <string name="data_inspector_mode">数据显示模式</string>
+    <string name="nonprintable_characters">非打印字符</string>
+    <string name="go_to_position">转到指定位置</string>
+    <string name="edit_selection">编辑选区</string>
+    <string name="insert_data">插入数据</string>
+    <string name="convert_data">转换数据</string>
+    <string name="edit_menu">编辑</string>
+    <string name="font">字体</string>
+    <string name="bytes_per_row">单行数据量</string>
+    <string name="bytes_per_row_fill">适应屏幕</string>
+    <string name="bytes_per_row_4">4 Bytes</string>
+    <string name="bytes_per_row_8">8 Bytes</string>
+    <string name="bytes_per_row_12">12 Bytes</string>
+    <string name="bytes_per_row_16">16 Bytes</string>
+    <string name="bytes_per_row_custom">自定义</string>
+    <string name="tools_menu">工具</string>
+
+    <string name="application_about">关于应用</string>
+    <string name="select_file">选取文件</string>
+    <string name="save_as_file">另存为文件</string>
+    <string name="file_modified">文件已更改</string>
+    <string name="confirm_exit">再按一次退出</string>
+    <string name="confirm_discard">再按一次即丢弃更改</string>
+    <string name="storage_permission_is_not_granted">未授予存储权限</string>
+    <string name="storage_permission_request">需要授予存储权限</string>
+
+    <string name="button_ok">确认</string>
+    <string name="button_close">关闭</string>
+    <string name="button_donate">捐赠</string>
+    <string name="button_cancel">取消</string>
+    <string name="button_set">设置</string>
+    <string name="button_go_to">转到...</string>
+    <string name="button_save">保存</string>
+    <string name="button_discard">丢弃</string>
+    <string name="button_request">授予</string>
+
+    <string name="value_label_binary">Binary</string>
+    <string name="value_label_byte">Byte</string>
+    <string name="value_label_word">Word</string>
+    <string name="value_label_integer">Integer</string>
+    <string name="value_label_long">Long</string>
+    <string name="value_label_float">Float</string>
+    <string name="value_label_double">Double</string>
+    <string name="value_label_character">Character</string>
+    <string name="value_label_string">String</string>
+    <string name="big_endian_radio_button">大端序（BE）</string>
+    <string name="little_endian_radio_button">小端序（LE）</string>
+    <string name="signed_radio_button">Sign</string>
+    <string name="unsigned_radio_button">Uns</string>
+    <string name="error_invalid_input">无效输入</string>
+    <string name="error_exception">意外错误</string>
+
+    <!-- Preference Titles -->
+
+    <string name="pref_header_appearance">外观</string>
+    <string name="pref_view_header">视图</string>
+
+</resources>
