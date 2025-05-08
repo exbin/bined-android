@@ -16,7 +16,7 @@
         <item>English</item>
         <item>Česky</item>
         <item>हिंदी</item>
-        <item>中国人</item>
+        <item>简体中文</item>
     </string-array>
 
     <string-array name="language_values" translatable="false">
