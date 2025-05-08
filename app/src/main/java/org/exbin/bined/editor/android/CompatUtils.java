@@ -15,11 +15,17 @@
  */
 package org.exbin.bined.editor.android;
 
+import android.app.LocaleManager;
+import android.content.Context;
+import android.os.Build;
+import android.os.LocaleList;
+
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.os.LocaleListCompat;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Objects;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -35,7 +41,12 @@ public class CompatUtils {
     private CompatUtils() {
     }
 
-    public static void setApplicationLocales(LocaleListCompat languageLocaleList) {
+    public static void setApplicationLocales(Context context, LocaleListCompat languageLocaleList) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            context.getSystemService(LocaleManager.class).setApplicationLocales((LocaleList) Objects.requireNonNull(languageLocaleList.unwrap()));
+            return;
+        }
+
         try {
             Method setApplicationLocalesMethod = AppCompatDelegate.class.getMethod("setApplicationLocales", LocaleListCompat.class);
             setApplicationLocalesMethod.invoke(null, languageLocaleList);
@@ -45,7 +56,12 @@ public class CompatUtils {
     }
 
     @Nonnull
-    public static LocaleListCompat getApplicationLocales() {
+    public static LocaleListCompat getApplicationLocales(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            LocaleList localeList = context.getSystemService(LocaleManager.class).getApplicationLocales();
+            return LocaleListCompat.wrap(localeList);
+        }
+
         try {
             Method getApplicationLocalesMethod = AppCompatDelegate.class.getMethod("getApplicationLocales");
             Object result = getApplicationLocalesMethod.invoke(null);

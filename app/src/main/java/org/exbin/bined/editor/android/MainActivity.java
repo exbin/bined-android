@@ -244,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             contentView.addView(codeArea);
         }
 
-        CompatUtils.setApplicationLocales(getLanguageLocaleList());
+        CompatUtils.setApplicationLocales(this, CompatUtils.getApplicationLocales(this));
 
         BasicCodeAreaColorsProfile basicColors = codeArea.getBasicColors().orElse(null);
         if (basicColors == null) {

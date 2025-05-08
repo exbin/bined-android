@@ -55,13 +55,13 @@ public class AppearanceFragment extends PreferenceFragmentCompat {
             String language = (String) newValue;
             // Dynamically change language
             LocaleListCompat locales = MainActivity.getLanguageLocaleList("default".equals(language) ? "" : language);
-            CompatUtils.setApplicationLocales(locales);
+            CompatUtils.setApplicationLocales(activity, locales);
 
             Resources resources = getResources();
             try {
                 // Update title for possibly switched language
                 Configuration configuration = resources.getConfiguration();
-                configuration.setLocales((android.os.LocaleList) CompatUtils.getApplicationLocales().unwrap());
+                configuration.setLocales((android.os.LocaleList) CompatUtils.getApplicationLocales(activity).unwrap());
                 resources = getContext().createConfigurationContext(configuration).getResources();
             } catch (Throwable tw) {
                 // Might fail on older versions with: Could not find class 'android.os.LocaleList'
