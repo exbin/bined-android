@@ -17,8 +17,6 @@ Screenshot
 Features
 --------
 
-UNDER DEVELOPMENT  
-
   * Visualize data as numerical (hexadecimal) codes and text representation
   * Codes can be also binary, octal or decimal
   * Support for Unicode, UTF-8 and other charsets
@@ -30,8 +28,20 @@ UNDER DEVELOPMENT
 Compiling
 ---------
 
-To build this project, Android Studio is recommended.
+To compile project and build apk install JDK 17 run:
+
+    ./gradlew assembleRelease
+
+or on Windows:
+
+    gradlew.bat assembleRelease
+
+To modify this project, Android Studio is recommended.  
 https://developer.android.com/studio/  
+
+When using android studio modify following line in build.gradle file to avoid legacy errors:
+
+    def playStore = true
 
 License
 -------
