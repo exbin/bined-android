@@ -28,7 +28,7 @@ Features
 Compiling
 ---------
 
-To compile project and build apk install JDK 17 run:
+To compile project and build apk you need installed Java JDK 17 or later and run:
 
     ./gradlew assembleRelease
 
@@ -39,7 +39,7 @@ or on Windows:
 To modify this project, Android Studio is recommended.  
 https://developer.android.com/studio/  
 
-When using android studio modify following line in build.gradle file to avoid legacy errors:
+When using Android Studio modify following line in build.gradle file to avoid legacy errors:
 
     def playStore = true
 
