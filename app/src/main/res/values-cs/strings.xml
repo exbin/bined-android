@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">BinEd</string>
     <string name="app_about">Název: BinEd – binární/hexadecimální editor\nVerze: %1$s\nDodavatel: &lt;a href="https://exbin.org"&gt;Projekt ExBin&lt;/a&gt;\nLicence: &lt;a href="https://www.apache.org/licenses/LICENSE-2.0"&gt;Licence Apache, verze 2.0&lt;/a&gt;\nDomovská stránka: &lt;a href="https://bined.exbin.org/android "&gt;https://bined.exbin.org/android&lt;/a&gt;\n\nPřispěvatelé:</string>
@@ -26,8 +25,9 @@
     <string name="action_delete">Smazat</string>
     <string name="action_select_all">Vybrat vše</string>
     <string name="action_exit">Ukončit</string>
-
     <string name="action_open_main_menu">Hlavní menu</string>
+    <string name="action_go_to_side_panel">Boční panel</string>
+
     <string name="view_menu">Zobrazit</string>
     <string name="visual_theme">Vizuální motiv</string>
     <string name="language">Jazyk</string>

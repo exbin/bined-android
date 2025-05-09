@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="en">
+<resources>
     <string name="app_name">BinEd</string>
     <string name="app_about">应用名称: BinEd - Binary/Hex Editor\n版本: %1$s\n上游: &lt;a href=https://exbin.org&gt;ExBin Project&lt;/a&gt;\n开源许可证: &lt;a href=https://www.apache.org/licenses/LICENSE-2.0&gt;Apache License, Version 2.0&lt;/a&gt;\n主页: &lt;a href=https://bined.exbin.org/android&gt;https://bined.exbin.org/android&lt;/a&gt;\n\n贡献者:</string>
     <string name="bined_logo_description">BinEd徽标</string>
@@ -28,6 +28,7 @@
     <string name="action_select_all">全选</string>
     <string name="action_exit">退出</string>
     <string name="action_open_main_menu">主菜单</string>
+    <string name="action_go_to_side_panel">侧面板</string>
 
     <string name="view_menu">查看</string>
     <string name="visual_theme">主题</string>

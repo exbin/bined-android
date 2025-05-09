@@ -134,7 +134,8 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     private static final int SELECT_ALL_ACTION_POPUP_ID = 8;
     private static final int COPY_AS_CODE_ACTION_POPUP_ID = 9;
     private static final int PASTE_FROM_CODE_ACTION_POPUP_ID = 10;
-    private static final int OPEN_MAIN_MENU_ID = 11;
+    private static final int GO_TO_SIDE_PANEL_POPUP_ID = 11;
+    private static final int OPEN_MAIN_MENU_POPUP_ID = 12;
 
     private static final int STORAGE_PERMISSION_CODE = 1;
 
@@ -269,11 +270,13 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             codeAreaOnUnhandledKeyListener = (View.OnUnhandledKeyEventListener) (view, event) -> codeAreaOnKeyListener.onKey(view, KeyEvent.KEYCODE_UNKNOWN, event);
             codeArea.addOnUnhandledKeyEventListener((View.OnUnhandledKeyEventListener) codeAreaOnUnhandledKeyListener);
         }
-        basicValuesInspector.setCodeArea(codeArea, fileHandler.getUndoRedo(), findViewById(R.id.basic_values_inspector));
+        basicValuesInspector.setCodeArea(codeArea, fileHandler.getUndoRedo(), basicValuesInspectorView);
         basicValuesInspector.enableUpdate();
         BinEdCodeAreaAssessor codeAreaAssessor = fileHandler.getCodeAreaAssessor();
         codeAreaAssessor.addColorModifier(basicValuesPositionColorModifier);
         basicValuesInspector.registerFocusPainter(basicValuesPositionColorModifier);
+
+        basicValuesInspectorView.setNextFocusUpId(R.id.toolbar);
 
         applySettings();
 
@@ -559,7 +562,9 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         Resources resources = getResources();
         int order = 0;
         if (isGoogleTV(codeArea.getContext())) {
-            menu.add(0, OPEN_MAIN_MENU_ID, order, resources.getString(R.string.action_open_main_menu));
+            menu.add(0, GO_TO_SIDE_PANEL_POPUP_ID, order, resources.getString(R.string.action_go_to_side_panel));
+            order++;
+            menu.add(0, OPEN_MAIN_MENU_POPUP_ID, order, resources.getString(R.string.action_open_main_menu));
             order++;
         }
         menu.add(0, SELECTION_START_POPUP_ID, order, resources.getString(R.string.action_selection_start));
@@ -581,7 +586,19 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case OPEN_MAIN_MENU_ID: {
+            case GO_TO_SIDE_PANEL_POPUP_ID: {
+                LinearLayout mainView = findViewById(R.id.main);
+                int keyPanelIndex = mainView.indexOfChild(keyPanel);
+                if (keyPanelIndex >= 0) {
+                    View downButton = findViewById(R.id.buttonDown);
+                    downButton.requestFocus();
+                } else {
+                    View editTextByte = findViewById(R.id.editTextByte);
+                    editTextByte.requestFocus();
+                }
+                break;
+            }
+            case OPEN_MAIN_MENU_POPUP_ID: {
                 toolbar.showOverflowMenu();
                 break;
             }
@@ -1406,8 +1423,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
                     editable.clear();
                     if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_DPAD_CENTER) {
                         if (keyEvent.getEventTime() - keyEvent.getDownTime() > TimeUnit.SECONDS.toMillis(1)) {
-                            View keyStripeView = findViewById(R.id.button0);
-                            keyStripeView.requestFocus();
+                            toolbar.showOverflowMenu();
                         } else {
                             codeArea.showContextMenu();
                         }
