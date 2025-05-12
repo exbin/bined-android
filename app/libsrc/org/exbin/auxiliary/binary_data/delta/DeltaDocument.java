@@ -66,7 +66,7 @@ public class DeltaDocument implements EditableBinaryData {
 
     /**
      * Method for accessing data pages.
-     *
+     * <p>
      * Use only if you know what you are doing.
      *
      * @return segments
@@ -78,7 +78,7 @@ public class DeltaDocument implements EditableBinaryData {
 
     /**
      * Returns segment starting at or before given position and ending after it.
-     *
+     * <p>
      * Returns null if position is at the end or after then end of the document.
      *
      * @param position requested position
@@ -281,7 +281,7 @@ public class DeltaDocument implements EditableBinaryData {
 
     @Override
     public void copyToArray(long startFrom, byte[] target, int offset, int length) {
-        // TODO optimalization later
+        // TODO optimization later
         for (int i = 0; i < length; i++) {
             target[offset + i] = getByte(startFrom + i);
         }

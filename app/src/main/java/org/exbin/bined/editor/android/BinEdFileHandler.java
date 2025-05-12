@@ -19,11 +19,11 @@ import android.content.ContentResolver;
 import android.net.Uri;
 
 import org.exbin.auxiliary.binary_data.BinaryData;
-import org.exbin.auxiliary.binary_data.BufferEditableData;
+import org.exbin.auxiliary.binary_data.buffer.BufferEditableData;
 import org.exbin.auxiliary.binary_data.EditableBinaryData;
 import org.exbin.auxiliary.binary_data.delta.DeltaDocument;
 import org.exbin.auxiliary.binary_data.delta.SegmentsRepository;
-import org.exbin.auxiliary.binary_data.paged.BufferPagedData;
+import org.exbin.auxiliary.binary_data.buffer.paged.BufferPagedData;
 import org.exbin.auxiliary.binary_data.paged.PagedData;
 import org.exbin.bined.EditOperation;
 import org.exbin.bined.android.CodeAreaPainter;

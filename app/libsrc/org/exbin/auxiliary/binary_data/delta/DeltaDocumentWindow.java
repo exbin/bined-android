@@ -570,7 +570,7 @@ public class DeltaDocumentWindow {
 
     /**
      * Focuses segment starting at or before given position and ending after it.
-     *
+     * <p>
      * Returns null if position is at the end of the document and throws out of
      * bounds exception otherwise.
      *

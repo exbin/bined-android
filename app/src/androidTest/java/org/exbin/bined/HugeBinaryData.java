@@ -21,7 +21,7 @@ import java.io.OutputStream;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import org.exbin.auxiliary.binary_data.BinaryData;
-import org.exbin.auxiliary.binary_data.BufferData;
+import org.exbin.auxiliary.binary_data.buffer.BufferData;
 
 /**
  * Simulation of huge binary data source.

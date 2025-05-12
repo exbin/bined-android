@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.auxiliary.binary_data;
+package org.exbin.auxiliary.binary_data.buffer;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -24,6 +24,12 @@ import javax.annotation.ParametersAreNonnullByDefault;
  */
 @ParametersAreNonnullByDefault
 public enum BufferAllocationType {
+    /**
+     * Use ByteBuffer.allocate method.
+     */
     HEAP,
+    /**
+     * Use ByteBuffer.directAllocate method.
+     */
     DIRECT
 }

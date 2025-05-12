@@ -26,7 +26,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public interface DeltaDocumentChangedListener {
 
     /**
-     * Change in data occured.
+     * Change in data occurred.
      *
      * @param window updated window for reference
      */

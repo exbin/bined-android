@@ -17,7 +17,7 @@ package org.exbin.bined;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import org.exbin.auxiliary.binary_data.BinaryData;
-import org.exbin.auxiliary.binary_data.BufferEditableData;
+import org.exbin.auxiliary.binary_data.buffer.BufferEditableData;
 import org.exbin.auxiliary.binary_data.EditableBinaryData;
 import org.junit.Assert;
 import org.junit.Test;

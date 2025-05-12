@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.auxiliary.binary_data;
-
-import com.sun.jna.Memory;
+package org.exbin.auxiliary.binary_data.buffer;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,6 +23,9 @@ import java.nio.ByteBuffer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import org.exbin.auxiliary.binary_data.BinaryData;
+import org.exbin.auxiliary.binary_data.BinaryDataInputStream;
+import org.exbin.auxiliary.binary_data.OutOfBoundsException;
 
 /**
  * Implementation of binary data interface using byte buffer.
@@ -126,7 +127,7 @@ public class BufferData implements BinaryData {
             throw new OutOfBoundsException("Buffer data is limited by integer length");
         }
         if (startFrom + length > data.capacity()) {
-            throw new OutOfBoundsException("Attemt to copy outside of data");
+            throw new OutOfBoundsException("Attempt to copy outside of data");
         }
 
         ByteBuffer copy = allocateBuffer((int) length);
@@ -248,28 +249,7 @@ public class BufferData implements BinaryData {
             case HEAP:
                 return ByteBuffer.allocate(capacity);
             case DIRECT:
-                if (capacity == 0) {
-                    return ByteBuffer.allocateDirect(capacity);
-                }
-
-                // TODO Check for memory limit:
-                // https://stackoverflow.com/questions/2298208/how-do-i-discover-memory-usage-of-my-application-in-android
-                // possibly? long nativeHeapFreeSize = Debug.getNativeHeapFreeSize();
-                try {
-                    return new Memory(capacity).getByteBuffer(0, capacity);
-                } catch (Throwable tw) {
-                    // Fallback to regular byte buffer
-                    return ByteBuffer.allocateDirect(capacity);
-                }
-                /* long lPtr = Native.malloc(capacity);
-                if (lPtr == 0)
-                    throw new Error("Failed to allocate direct byte buffer memory");
-                return Memory.getByteBuffer(lPtr, capacity);
-
-                buffer.clear();
-                Pointer javaPointer = Native.getDirectBufferPointer(buffer);
-                long lPtr = Pointer.nativeValue(javaPointer);
-                Native.free(lPtr); */
+                return ByteBuffer.allocateDirect(capacity);
             default:
                 throw new IllegalStateException();
         }

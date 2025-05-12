@@ -18,6 +18,7 @@ package org.exbin.auxiliary.binary_data.paged;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import org.exbin.auxiliary.binary_data.BinaryData;
+import org.exbin.auxiliary.binary_data.EditableBinaryData;
 
 /**
  * Data page provider.
@@ -33,7 +34,7 @@ public interface DataPageProvider {
      * @return data page
      */
     @Nonnull
-    BinaryData createPage();
+    EditableBinaryData createPage();
 
     /**
      * Creates new instance with specified size.
@@ -42,7 +43,7 @@ public interface DataPageProvider {
      * @return data page
      */
     @Nonnull
-    BinaryData createPage(int dataSize);
+    EditableBinaryData createPage(int dataSize);
 
     /**
      * Creates new instance of the data page.
@@ -51,7 +52,7 @@ public interface DataPageProvider {
      * @return data page
      */
     @Nonnull
-    BinaryData createPage(BinaryData sourceData);
+    EditableBinaryData createPage(BinaryData sourceData);
 
     /**
      * Creates new instance of the data page.
@@ -60,5 +61,5 @@ public interface DataPageProvider {
      * @return data page
      */
     @Nonnull
-    BinaryData createPage(byte[] sourceData);
+    EditableBinaryData createPage(byte[] sourceData);
 }

@@ -27,9 +27,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import org.exbin.auxiliary.binary_data.BinaryData;
+import org.exbin.auxiliary.binary_data.EditableBinaryData;
 import org.exbin.auxiliary.binary_data.delta.list.DefaultDoublyLinkedList;
 import org.exbin.auxiliary.binary_data.delta.list.DoublyLinkedItem;
-import org.exbin.auxiliary.binary_data.paged.BufferPagedData;
+import org.exbin.auxiliary.binary_data.array.paged.ByteArrayPagedData;
 import org.exbin.auxiliary.binary_data.paged.DataPageProvider;
 
 /**
@@ -68,11 +69,13 @@ public class SegmentsRepository {
 
     @Nonnull
     public MemoryDataSource openMemorySource() {
-        BufferPagedData pagedData = new BufferPagedData();
+        EditableBinaryData binaryData;
         if (dataPageProvider != null) {
-            pagedData.setDataPageProvider(dataPageProvider);
+            binaryData = dataPageProvider.createPage();
+        } else {
+            binaryData = new ByteArrayPagedData();
         }
-        MemoryDataSource memorySource = new MemoryDataSource(pagedData);
+        MemoryDataSource memorySource = new MemoryDataSource(binaryData);
         memorySources.put(memorySource, new DataSegmentsMap());
         return memorySource;
     }
@@ -163,7 +166,7 @@ public class SegmentsRepository {
         }
 
         // Save all remaining segments
-        // Loads overlaping areas to memory before next segment is saved
+        // Loads overlapping areas to memory before next segment is saved
         {
             DataSegment segment = segments.first();
             long segmentDocumentPosition = 0;
@@ -410,7 +413,7 @@ public class SegmentsRepository {
                 long sectionProcessed = 0;
 
                 if (source == dataSource && targetPosition > sectionPosition && sectionPosition + sectionLength >= targetPosition) {
-                    // Saved segment overlaps itself, reverse writting is needed
+                    // Saved segment overlaps itself, reverse writing is needed
                     byte[] buffer = new byte[PROCESSING_LIMIT];
                     while (sectionLength > 0) {
                         int length = sectionLength < PROCESSING_LIMIT ? (int) sectionLength : PROCESSING_LIMIT;
@@ -455,7 +458,7 @@ public class SegmentsRepository {
 
     /**
      * Transforms all file segments to after save location.
-     *
+     * <p>
      * Process all segments in given document and for file segments from the
      * target document transform all overlaying parts to new positions.
      *
@@ -576,7 +579,6 @@ public class SegmentsRepository {
         return memorySegment;
     }
 
-    @Nonnull
     public void updateSegment(DataSegment segment, long position, long length) {
         if (segment instanceof MemorySegment) {
             DataSegmentsMap segmentsMap = memorySources.get(((MemorySegment) segment).getSource());
@@ -620,7 +622,7 @@ public class SegmentsRepository {
 
     /**
      * Sets byte to given segment.
-     *
+     * <p>
      * Handles shared memory between multiple segments.
      *
      * @param memorySegment memory segment
@@ -754,7 +756,7 @@ public class SegmentsRepository {
     /**
      * Shift all segments after given position in given direction except given
      * segment.
-     *
+     * <p>
      * Operation assumes there are no collisions.
      *
      * @param memorySegment memory segment to keep
@@ -834,8 +836,8 @@ public class SegmentsRepository {
 
     /**
      * Mapping of segments to data source.
-     *
-     * Segments are suppose to be kept ordered by start position and length with
+     * <p>
+     * Segments are supposed to be kept ordered by start position and length with
      * max position computed.
      */
     @ParametersAreNonnullByDefault
@@ -935,7 +937,7 @@ public class SegmentsRepository {
         }
 
         private void updateSegment(DataSegment segment, long position, long length) {
-            // TODO optimalization - update only affected records without removing current record
+            // TODO optimization - update only affected records without removing current record
             SegmentRecord record = findRecord(segment);
             if (record.dataSegment == segment) {
                 removeRecord(record);
@@ -954,7 +956,7 @@ public class SegmentsRepository {
         }
 
         private void updateSegmentLength(DataSegment segment, long length) {
-            // TODO optimalization - update only affected records without removing current record
+            // TODO optimization - update only affected records without removing current record
             SegmentRecord record = findRecord(segment);
             if (record.dataSegment == segment) {
                 removeRecord(record);

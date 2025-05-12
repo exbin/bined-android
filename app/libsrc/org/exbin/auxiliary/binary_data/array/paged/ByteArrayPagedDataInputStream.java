@@ -13,34 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.auxiliary.binary_data;
+package org.exbin.auxiliary.binary_data.array.paged;
 
 import java.io.IOException;
 import java.io.InputStream;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
+import org.exbin.auxiliary.binary_data.FinishableStream;
+import org.exbin.auxiliary.binary_data.SeekableStream;
 
 /**
- * Input stream for binary data.
+ * Input stream for paged data.
  *
  * @author ExBin Project (https://exbin.org)
  */
 @ParametersAreNonnullByDefault
-public class BinaryDataInputStream extends InputStream implements SeekableStream, FinishableStream {
+public class ByteArrayPagedDataInputStream extends InputStream implements SeekableStream, FinishableStream {
 
     @Nonnull
-    private final BinaryData data;
+    private final ByteArrayPagedData data;
     private long position = 0;
     private long mark = 0;
 
-    public BinaryDataInputStream(BinaryData data) {
+    public ByteArrayPagedDataInputStream(ByteArrayPagedData data) {
         this.data = data;
     }
 
     @Override
     public int read() throws IOException {
         try {
-            return data.getByte(position++) & 0xFF;
+            return data.getByte(position++);
         } catch (ArrayIndexOutOfBoundsException ex) {
             return -1;
         }
@@ -52,16 +54,31 @@ public class BinaryDataInputStream extends InputStream implements SeekableStream
             return 0;
         }
 
-        long dataSize = data.getDataSize();
-        if (position > dataSize - len) {
-            if (position >= dataSize) {
-                return -1;
+        int length = len;
+        int offset = off;
+        while (length > 0) {
+            int pageIndex = (int) (position / data.getPageSize());
+            if (pageIndex >= data.getPagesCount()) {
+                return offset == off ? -1 : offset - off;
             }
-            len = (int) (dataSize - position);
+
+            byte[] page = data.getPage(pageIndex).getData();
+            int srcPos = (int) (position % data.getPageSize());
+            int copyLength = page.length - srcPos;
+            if (copyLength > length) {
+                copyLength = length;
+            }
+
+            if (copyLength == 0) {
+                return len == length ? -1 : len - length;
+            }
+
+            System.arraycopy(page, srcPos, output, offset, copyLength);
+            length -= copyLength;
+            position += copyLength;
+            offset += copyLength;
         }
 
-        data.copyToArray(position, output, off, len);
-        position += len;
         return len;
     }
 

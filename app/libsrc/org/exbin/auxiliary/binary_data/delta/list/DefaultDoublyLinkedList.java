@@ -245,12 +245,12 @@ public class DefaultDoublyLinkedList<T extends DoublyLinkedItem<T>> implements D
 
     /**
      * Adds item after given listItem.
-     *
+     * <p>
      * ListItem must be part of the list otherwise list will become broken. Item
      * should not be member of other list
      *
      * @param listItem item from the current list
-     * @param item newly addded item
+     * @param item newly added item
      */
     public void addAfter(T listItem, T item) {
         T listItemNext = listItem.getNext();
@@ -426,16 +426,19 @@ public class DefaultDoublyLinkedList<T extends DoublyLinkedItem<T>> implements D
         return -1;
     }
 
+    @Nonnull
     @Override
     public ListIterator<T> listIterator() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Nonnull
     @Override
     public ListIterator<T> listIterator(int index) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Nonnull
     @Override
     public List<T> subList(int fromIndex, int toIndex) {
         throw new UnsupportedOperationException("Not supported yet.");
