@@ -2,7 +2,7 @@ plugins {
     id 'com.android.application'
 }
 
-def playStore = true
+def playStore = false
 def materialVersion = '1.6.1'
 
 android {
@@ -60,7 +60,7 @@ dependencies {
     implementation "com.google.android.material:material:${materialVersion}"
 //    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
     implementation 'androidx.preference:preference:1.2.1'
-    implementation 'net.java.dev.jna:jna:5.15.0@aar'
+    implementation 'net.java.dev.jna:jna:5.17.0@aar'
     implementation project(':file_picker')
 //    implementation 'org.exbin.bined:bined-core:0.3.0-SNAPSHOT'
 //    implementation 'org.exbin.bined:bined-operation:0.3.0-SNAPSHOT'

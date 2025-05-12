@@ -15,6 +15,8 @@
  */
 package org.exbin.auxiliary.binary_data.buffer;
 
+import com.sun.jna.Memory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -38,7 +40,7 @@ import org.exbin.auxiliary.binary_data.OutOfBoundsException;
 @ParametersAreNonnullByDefault
 public class BufferData implements BinaryData {
 
-    private static final int BUFFER_SIZE = 4096;
+    private static final int BUFFER_SIZE = 16384;
     private BufferAllocationType bufferAllocationType = BufferAllocationType.DIRECT;
 
     @Nonnull
@@ -249,7 +251,28 @@ public class BufferData implements BinaryData {
             case HEAP:
                 return ByteBuffer.allocate(capacity);
             case DIRECT:
-                return ByteBuffer.allocateDirect(capacity);
+                if (capacity == 0) {
+                    return ByteBuffer.allocateDirect(capacity);
+                }
+
+                // TODO Check for memory limit:
+                // https://stackoverflow.com/questions/2298208/how-do-i-discover-memory-usage-of-my-application-in-android
+                // possibly? long nativeHeapFreeSize = Debug.getNativeHeapFreeSize();
+                try {
+                    return new Memory(capacity).getByteBuffer(0, capacity);
+                } catch (Throwable tw) {
+                    // Fallback to regular byte buffer
+                    return ByteBuffer.allocateDirect(capacity);
+                }
+                /* long lPtr = Native.malloc(capacity);
+                if (lPtr == 0)
+                    throw new Error("Failed to allocate direct byte buffer memory");
+                return Memory.getByteBuffer(lPtr, capacity);
+
+                buffer.clear();
+                Pointer javaPointer = Native.getDirectBufferPointer(buffer);
+                long lPtr = Pointer.nativeValue(javaPointer);
+                Native.free(lPtr); */
             default:
                 throw new IllegalStateException();
         }

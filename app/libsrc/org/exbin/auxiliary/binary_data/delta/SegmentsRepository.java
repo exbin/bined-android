@@ -30,7 +30,7 @@ import org.exbin.auxiliary.binary_data.BinaryData;
 import org.exbin.auxiliary.binary_data.EditableBinaryData;
 import org.exbin.auxiliary.binary_data.delta.list.DefaultDoublyLinkedList;
 import org.exbin.auxiliary.binary_data.delta.list.DoublyLinkedItem;
-import org.exbin.auxiliary.binary_data.array.paged.ByteArrayPagedData;
+import org.exbin.auxiliary.binary_data.buffer.paged.BufferPagedData;
 import org.exbin.auxiliary.binary_data.paged.DataPageProvider;
 
 /**
@@ -73,7 +73,7 @@ public class SegmentsRepository {
         if (dataPageProvider != null) {
             binaryData = dataPageProvider.createPage();
         } else {
-            binaryData = new ByteArrayPagedData();
+            binaryData = new BufferPagedData();
         }
         MemoryDataSource memorySource = new MemoryDataSource(binaryData);
         memorySources.put(memorySource, new DataSegmentsMap());
