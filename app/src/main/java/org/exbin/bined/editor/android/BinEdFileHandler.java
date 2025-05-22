@@ -19,11 +19,11 @@ import android.content.ContentResolver;
 import android.net.Uri;
 
 import org.exbin.auxiliary.binary_data.BinaryData;
-import org.exbin.auxiliary.binary_data.buffer.BufferEditableData;
 import org.exbin.auxiliary.binary_data.EditableBinaryData;
 import org.exbin.auxiliary.binary_data.delta.DeltaDocument;
 import org.exbin.auxiliary.binary_data.delta.SegmentsRepository;
-import org.exbin.auxiliary.binary_data.buffer.paged.BufferPagedData;
+import org.exbin.auxiliary.binary_data.jna.JnaBufferEditableData;
+import org.exbin.auxiliary.binary_data.jna.paged.JnaBufferPagedData;
 import org.exbin.auxiliary.binary_data.paged.PagedData;
 import org.exbin.bined.EditOperation;
 import org.exbin.bined.android.CodeAreaPainter;
@@ -66,7 +66,20 @@ public class BinEdFileHandler {
     public BinEdFileHandler(CodeArea codeArea) {
         // ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         this.codeArea = codeArea;
-        codeArea.setContentData(new BufferEditableData());
+
+        // TODO Check for memory limit:
+        // https://stackoverflow.com/questions/2298208/how-do-i-discover-memory-usage-of-my-application-in-android
+        // possibly? long nativeHeapFreeSize = Debug.getNativeHeapFreeSize();
+        /* long lPtr = Native.malloc(capacity);
+        if (lPtr == 0)
+            throw new Error("Failed to allocate direct byte buffer memory");
+        return Memory.getByteBuffer(lPtr, capacity);
+
+        buffer.clear();
+        Pointer javaPointer = Native.getDirectBufferPointer(buffer);
+        long lPtr = Pointer.nativeValue(javaPointer);
+        Native.free(lPtr); */
+        codeArea.setContentData(new JnaBufferEditableData());
         codeArea.setEditOperation(EditOperation.INSERT);
         undoRedo = new CodeAreaUndoRedo(codeArea);
 
@@ -83,7 +96,7 @@ public class BinEdFileHandler {
         if (fileHandlingMode == FileHandlingMode.DELTA) {
             codeArea.setContentData(segmentsRepository.createDocument());
         } else {
-            codeArea.setContentData(new BufferPagedData());
+            codeArea.setContentData(new JnaBufferPagedData());
         }
 
         undoRedo.clear();
@@ -104,7 +117,7 @@ public class BinEdFileHandler {
             } else {
                 BinaryData data = oldData;
                 if (!(data instanceof PagedData)) {
-                    data = new BufferPagedData();
+                    data = new JnaBufferPagedData();
                     oldData.dispose();
                 }
                 InputStream inputStream = contentResolver.openInputStream(fileUri);

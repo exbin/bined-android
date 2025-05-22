@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
- * Paged data with support for customizable page provider.
+ * Paged data with support for customizable page creator.
  *
  * @author ExBin Project (https://exbin.org)
  */
@@ -29,17 +29,17 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public interface CustomizablePagedData extends PagedData {
 
     /**
-     * Returns data page provider.
+     * Returns data page creator.
      *
-     * @return data page provider
+     * @return data page creator
      */
     @Nonnull
-    Optional<DataPageProvider> getDataPageProvider();
+    Optional<DataPageCreator> getDataPageCreator();
 
     /**
-     * Sets data page provider.
+     * Sets data page creator.
      *
-     * @param dataPageProvider data page provider
+     * @param dataPageCreator data page creator
      */
-    void setDataPageProvider(@Nullable DataPageProvider dataPageProvider);
+    void setDataPageCreator(@Nullable DataPageCreator dataPageCreator);
 }

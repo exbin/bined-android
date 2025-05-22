@@ -28,8 +28,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 
 import org.exbin.auxiliary.binary_data.BinaryData;
-import org.exbin.auxiliary.binary_data.buffer.BufferEditableData;
 import org.exbin.auxiliary.binary_data.EditableBinaryData;
+import org.exbin.auxiliary.binary_data.jna.JnaBufferEditableData;
 import org.exbin.bined.CodeAreaCaretListener;
 import org.exbin.bined.CodeAreaCaretPosition;
 import org.exbin.bined.DataChangedListener;
@@ -476,7 +476,7 @@ public class BasicValuesInspector {
     }
 
     private void modifyValues(int bytesCount) {
-        EditableBinaryData binaryData = new BufferEditableData();
+        EditableBinaryData binaryData = new JnaBufferEditableData();
         binaryData.insert(0, valuesCache, 0, bytesCount);
         long oldDataPosition = dataPosition;
         if (dataPosition == codeArea.getDataSize()) {

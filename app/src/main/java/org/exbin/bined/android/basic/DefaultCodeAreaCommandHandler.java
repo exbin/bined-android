@@ -23,8 +23,8 @@ import android.content.Context;
 
 import android.view.KeyEvent;
 
-import org.exbin.auxiliary.binary_data.buffer.BufferData;
-import org.exbin.auxiliary.binary_data.buffer.BufferEditableData;
+import org.exbin.auxiliary.binary_data.jna.JnaBufferData;
+import org.exbin.auxiliary.binary_data.jna.JnaBufferEditableData;
 import org.exbin.bined.CaretOverlapMode;
 import org.exbin.bined.ClipboardHandlingMode;
 import org.exbin.bined.android.CodeAreaAndroidUtils;
@@ -665,7 +665,7 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
                 CharSequence clipboardData = clipItem.getText();
                 if (clipboardData != null) {
                     byte[] bytes = clipboardData.toString().getBytes(Charset.forName(CodeAreaAndroidUtils.DEFAULT_ENCODING));
-                    BinaryData pastedData = new BufferData(bytes);
+                    BinaryData pastedData = new JnaBufferData(bytes);
                     pasteBinaryData(pastedData);
                 }
             }
@@ -755,7 +755,7 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
                     long dataPosition = caret.getDataPosition();
 
                     CodeType codeType = getCodeType();
-                    BufferEditableData pastedData = new BufferEditableData();
+                    EditableBinaryData pastedData = new JnaBufferEditableData();
                     CodeAreaUtils.insertHexStringIntoData((String) insertedData, pastedData, codeType);
 
                     long length = pastedData.getDataSize();

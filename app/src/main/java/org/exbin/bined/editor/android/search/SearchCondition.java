@@ -16,8 +16,8 @@
 package org.exbin.bined.editor.android.search;
 
 import org.exbin.auxiliary.binary_data.BinaryData;
-import org.exbin.auxiliary.binary_data.buffer.BufferEditableData;
 import org.exbin.auxiliary.binary_data.EditableBinaryData;
+import org.exbin.auxiliary.binary_data.jna.JnaBufferEditableData;
 import org.exbin.bined.CodeAreaUtils;
 
 import java.util.Objects;
@@ -49,7 +49,7 @@ public class SearchCondition {
     public SearchCondition(SearchCondition source) {
         searchMode = source.getSearchMode();
         searchText = source.getSearchText();
-        binaryData = new BufferEditableData();
+        binaryData = new JnaBufferEditableData();
         if (source.getBinaryData() != null) {
             binaryData.insert(0, source.getBinaryData());
         }

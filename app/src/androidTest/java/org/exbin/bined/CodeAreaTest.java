@@ -21,8 +21,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
-import org.exbin.auxiliary.binary_data.buffer.BufferEditableData;
 import org.exbin.auxiliary.binary_data.EditableBinaryData;
+import org.exbin.auxiliary.binary_data.jna.JnaBufferEditableData;
 
 /**
  * Tests for codeArea component.
@@ -42,7 +42,7 @@ public class CodeAreaTest {
 
     @Nonnull
     public static EditableBinaryData getSampleData(String dataPath) {
-        BufferEditableData data = new BufferEditableData();
+        JnaBufferEditableData data = new JnaBufferEditableData();
         try (InputStream stream = CodeAreaTest.class.getResourceAsStream(dataPath)) {
             data.loadFromStream(stream);
         } catch (IOException ex) {

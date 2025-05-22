@@ -127,6 +127,7 @@ public class DefaultDoublyLinkedList<T extends DoublyLinkedItem<T>> implements D
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public boolean containsAll(Collection<?> items) {
         for (Object item : items) {
             if (!contains((T) item)) {
@@ -183,6 +184,7 @@ public class DefaultDoublyLinkedList<T extends DoublyLinkedItem<T>> implements D
 
     @Nonnull
     @Override
+    @SuppressWarnings("unchecked")
     public <X> X[] toArray(X[] template) {
         int count = last == null ? 0 : indexOf(last);
         X[] result = template.length >= count ? template : Arrays.copyOf(template, count);

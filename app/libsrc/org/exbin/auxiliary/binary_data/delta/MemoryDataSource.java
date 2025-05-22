@@ -22,7 +22,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import org.exbin.auxiliary.binary_data.BinaryData;
 import org.exbin.auxiliary.binary_data.EditableBinaryData;
-import org.exbin.auxiliary.binary_data.buffer.paged.BufferPagedData;
 
 /**
  * Data source for binary data stored in memory.
@@ -35,17 +34,8 @@ public class MemoryDataSource implements EditableBinaryData {
     @Nonnull
     private final EditableBinaryData data;
 
-    public MemoryDataSource() {
-        data = new BufferPagedData();
-    }
-
     public MemoryDataSource(EditableBinaryData data) {
         this.data = data;
-    }
-
-    public MemoryDataSource(byte[] data) {
-        this.data = new BufferPagedData();
-        this.data.insert(0, data);
     }
 
     @Override

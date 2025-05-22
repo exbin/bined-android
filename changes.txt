@@ -1,8 +1,9 @@
 0.2.6
 - Added Chinese translation
+- Bug fixes
 
 0.2.5 (2025-05-07)
-- Double back key press exists app
+- Double back key press exits app
 - Threaded search
 - Bug fixes
 

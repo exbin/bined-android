@@ -17,49 +17,22 @@ package org.exbin.auxiliary.binary_data.paged;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
-import org.exbin.auxiliary.binary_data.BinaryData;
 import org.exbin.auxiliary.binary_data.EditableBinaryData;
 
 /**
- * Data page provider.
+ * Data page creator.
  *
  * @author ExBin Project (https://exbin.org)
  */
 @ParametersAreNonnullByDefault
-public interface DataPageProvider {
+public interface DataPageCreator {
 
     /**
-     * Creates new instance of the empty data page.
-     *
-     * @return data page
-     */
-    @Nonnull
-    EditableBinaryData createPage();
-
-    /**
-     * Creates new instance with specified size.
+     * Creates new data page with specified size.
      *
      * @param dataSize data size
      * @return data page
      */
     @Nonnull
     EditableBinaryData createPage(int dataSize);
-
-    /**
-     * Creates new instance of the data page.
-     *
-     * @param sourceData data used as source
-     * @return data page
-     */
-    @Nonnull
-    EditableBinaryData createPage(BinaryData sourceData);
-
-    /**
-     * Creates new instance of the data page.
-     *
-     * @param sourceData data used as source
-     * @return data page
-     */
-    @Nonnull
-    EditableBinaryData createPage(byte[] sourceData);
 }

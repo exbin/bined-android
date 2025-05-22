@@ -13,23 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.auxiliary.binary_data.buffer;
+package org.exbin.auxiliary.binary_data.delta;
 
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
+import org.exbin.auxiliary.binary_data.EditableBinaryData;
 
 /**
- * Enumeration of buffer allocation types.
+ * Memory segment creator.
  *
  * @author ExBin Project (https://exbin.org)
  */
 @ParametersAreNonnullByDefault
-public enum BufferAllocationType {
+public interface MemorySegmentCreator {
+
     /**
-     * Use ByteBuffer.allocate method.
+     * Creates new memory segment.
+     *
+     * @return data page
      */
-    HEAP,
-    /**
-     * Use ByteBuffer.directAllocate method.
-     */
-    DIRECT
+    @Nonnull
+    EditableBinaryData createSegment();
 }
