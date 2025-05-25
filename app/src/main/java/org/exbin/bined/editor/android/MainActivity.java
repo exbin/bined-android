@@ -157,6 +157,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     private long lastBackKeyPressTime = -1;
     private long lastReleaseBackKeyPressTime = -1;
     BasicValuesPositionColorModifier basicValuesPositionColorModifier = new BasicValuesPositionColorModifier();
+    private FallbackFileType fallbackFileType = FallbackFileType.FILE;
 
     private final BinarySearchService.SearchStatusListener searchStatusListener = new BinarySearchService.SearchStatusListener() {
         @Override
@@ -206,6 +207,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     private final EditModeChangedListener codeAreaEditModeChangedListener = binaryStatus::setEditMode;
 
     private final ActivityResultLauncher<Intent> openFileLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), this::openFileResultCallback);
+    private final ActivityResultLauncher<Intent> openTableFileLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), this::openTableFileResultCallback);
     private final ActivityResultLauncher<Intent> saveFileLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), this::saveFileResultCallback);
     private final ActivityResultLauncher<Intent> settingsLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), this::settingsResultCallback);
 
@@ -696,6 +698,10 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             releaseFile(this::openFile);
 
             return true;
+        } else if (id == R.id.action_open_table_file) {
+            openTableFile();
+
+            return true;
         } else if (id == R.id.action_save) {
             Uri currentFileUri = fileHandler.getCurrentFileUri();
             if (currentFileUri == null) {
@@ -972,7 +978,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
     public void openFile() {
         if (MainActivity.isGoogleTV(this) || Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-            fallBackOpenFile();
+            fallBackOpenFile(FallbackFileType.FILE);
             return;
         }
 
@@ -991,11 +997,32 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         try {
             openFileLauncher.launch(Intent.createChooser(intent, getResources().getString(R.string.select_file)));
         } catch (ActivityNotFoundException ex) {
-            fallBackOpenFile();
+            fallBackOpenFile(FallbackFileType.FILE);
         }
     }
 
-    private void fallBackOpenFile() {
+    public void openTableFile() {
+        if (MainActivity.isGoogleTV(this) || Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            fallBackOpenFile(FallbackFileType.TABLE_FILE);
+            return;
+        }
+
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("*/*");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.putExtra(Intent.EXTRA_LOCALE_LIST, (android.os.Parcelable) getLanguageLocaleList().unwrap());
+        }
+
+        try {
+            openTableFileLauncher.launch(Intent.createChooser(intent, getResources().getString(R.string.select_file)));
+        } catch (ActivityNotFoundException ex) {
+            fallBackOpenFile(FallbackFileType.TABLE_FILE);
+        }
+    }
+
+    private void fallBackOpenFile(FallbackFileType fallbackFileType) {
+        this.fallbackFileType = fallbackFileType;
         boolean permissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
         if (!permissionGranted) {
             requestWriteExternalStoragePermission();
@@ -1194,6 +1221,23 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         }
     }
 
+    private void openTableFileResultCallback(ActivityResult activityResult) {
+        CodeAreaTableMapAssessor codeAreaTableMapAssessor = fileHandler.getCodeAreaTableMapAssessor();
+        int resultCode = activityResult.getResultCode();
+        Intent data = activityResult.getData();
+        if (resultCode != MainActivity.RESULT_OK || data == null || data.getData() == null) {
+            codeAreaTableMapAssessor.setUseTable(false);
+            return;
+        }
+
+        try {
+            codeAreaTableMapAssessor.openFile(getContentResolver(), data.getData());
+            fileHandler.getCodeArea().repaint();
+        } catch (Throwable tw) {
+            reportException(tw);
+        }
+    }
+
     private void saveFileResultCallback(ActivityResult activityResult) {
         int resultCode = activityResult.getResultCode();
         Intent data = activityResult.getData();
@@ -1221,11 +1265,23 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     @Override
     public void onFileSelected(FileDialog dialog, File file) {
         if (dialog instanceof OpenFileDialog) {
-            try {
-                fileHandler.openFile(getContentResolver(), Uri.fromFile(file), appPreferences.getEditorPreferences().getFileHandlingMode());
-                updateStatus();
-            } catch (Throwable tw) {
-                reportException(tw);
+            switch (fallbackFileType) {
+                case FILE:
+                    try {
+                        fileHandler.openFile(getContentResolver(), Uri.fromFile(file), appPreferences.getEditorPreferences().getFileHandlingMode());
+                        updateStatus();
+                    } catch (Throwable tw) {
+                        reportException(tw);
+                    }
+                    break;
+                case TABLE_FILE:
+                    try {
+                        fileHandler.getCodeAreaTableMapAssessor().openFile(getContentResolver(), Uri.fromFile(file));
+                        fileHandler.getCodeArea().repaint();
+                    } catch (Throwable tw) {
+                        reportException(tw);
+                    }
+                    break;
             }
         } else {
             try {
@@ -1471,5 +1527,9 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         builder.setNegativeButton(R.string.button_close, null);
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    public enum FallbackFileType {
+        FILE, TABLE_FILE
     }
 }

@@ -93,6 +93,9 @@
                 android:checked="true"
                 android:enabled="true"
                 android:title="@string/nonprintable_characters" />
+            <item
+                android:id="@+id/action_open_table_file"
+                android:title="@string/action_open_table_file" />
         </menu>
     </item>
     <item

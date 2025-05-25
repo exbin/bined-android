@@ -2,7 +2,7 @@ plugins {
     id 'com.android.application'
 }
 
-def playStore = true
+def playStore = false
 def materialVersion = '1.6.1'
 
 android {

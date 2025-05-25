@@ -58,6 +58,7 @@ public class BinEdFileHandler {
     private CodeArea codeArea;
     private CodeAreaUndoRedo undoRedo;
     private BinEdCodeAreaAssessor codeAreaAssessor;
+    private CodeAreaTableMapAssessor codeAreaTableMapAssessor = new CodeAreaTableMapAssessor();
 
     private long documentOriginalSize = 0;
     private Uri currentFileUri = null;
@@ -86,10 +87,15 @@ public class BinEdFileHandler {
         CodeAreaOperationCommandHandler commandHandler = new CodeAreaOperationCommandHandler(codeArea.getContext(), codeArea, undoRedo);
         codeArea.setCommandHandler(commandHandler);
         CodeAreaPainter painter = codeArea.getPainter();
-        codeAreaAssessor = new BinEdCodeAreaAssessor(((ColorAssessorPainterCapable) painter).getColorAssessor(), ((CharAssessorPainterCapable) painter).getCharAssessor());
+        codeAreaAssessor = new BinEdCodeAreaAssessor(((ColorAssessorPainterCapable) painter).getColorAssessor(), codeAreaTableMapAssessor); // ((CharAssessorPainterCapable) painter).getCharAssessor()
         ((ColorAssessorPainterCapable) painter).setColorAssessor(codeAreaAssessor);
         ((CharAssessorPainterCapable) painter).setCharAssessor(codeAreaAssessor);
         codeArea.setPainter(painter);
+    }
+
+    @Nonnull
+    public CodeAreaTableMapAssessor getCodeAreaTableMapAssessor() {
+        return codeAreaTableMapAssessor;
     }
 
     public void setNewData(FileHandlingMode fileHandlingMode) {
