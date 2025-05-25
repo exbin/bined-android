@@ -133,22 +133,22 @@ public class BasicCodeAreaDimensions {
         return BasicCodeAreaZone.CODE_AREA;
     }
 
-    private int computeCharactersPerRectangle(BasicCodeAreaMetrics metrics) {
+    protected int computeCharactersPerRectangle(BasicCodeAreaMetrics metrics) {
         int characterWidth = metrics.getCharacterWidth();
         return characterWidth == 0 ? 0 : (dataViewWidth + characterWidth - 1) / characterWidth;
     }
 
-    private int computeCharactersPerPage(BasicCodeAreaMetrics metrics) {
+    protected int computeCharactersPerPage(BasicCodeAreaMetrics metrics) {
         int characterWidth = metrics.getCharacterWidth();
         return characterWidth == 0 ? 0 : dataViewWidth / characterWidth;
     }
 
-    private int computeRowsPerRectangle(BasicCodeAreaMetrics metrics) {
+    protected int computeRowsPerRectangle(BasicCodeAreaMetrics metrics) {
         int rowHeight = metrics.getRowHeight();
         return rowHeight == 0 ? 0 : (dataViewHeight + rowHeight - 1) / rowHeight;
     }
 
-    private int computeRowsPerPage(BasicCodeAreaMetrics metrics) {
+    protected int computeRowsPerPage(BasicCodeAreaMetrics metrics) {
         int rowHeight = metrics.getRowHeight();
         return rowHeight == 0 ? 0 : dataViewHeight / rowHeight;
     }

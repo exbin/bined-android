@@ -15,8 +15,6 @@
  */
 package org.exbin.bined.android.basic.color;
 
-import org.exbin.bined.android.basic.color.BasicCodeAreaColorsProfile;
-
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 

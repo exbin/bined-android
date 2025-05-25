@@ -33,22 +33,22 @@ import org.exbin.bined.capability.ViewModeCapable;
 @ParametersAreNonnullByDefault
 public class BasicCodeAreaStructure {
 
-    private final BasicCodeAreaLayout layout = new BasicCodeAreaLayout();
+    protected final BasicCodeAreaLayout layout = new BasicCodeAreaLayout();
     @Nonnull
-    private CodeAreaViewMode viewMode = CodeAreaViewMode.DUAL;
+    protected CodeAreaViewMode viewMode = CodeAreaViewMode.DUAL;
 
     @Nonnull
-    private CodeType codeType = CodeType.HEXADECIMAL;
+    protected CodeType codeType = CodeType.HEXADECIMAL;
 
-    private long dataSize;
+    protected long dataSize;
     @Nonnull
-    private RowWrappingMode rowWrapping = RowWrappingMode.NO_WRAPPING;
-    private int maxBytesPerLine;
-    private int wrappingBytesGroupSize;
+    protected RowWrappingMode rowWrapping = RowWrappingMode.NO_WRAPPING;
+    protected int maxBytesPerLine;
+    protected int wrappingBytesGroupSize;
 
-    private long rowsPerDocument;
-    private int bytesPerRow;
-    private int charactersPerRow;
+    protected long rowsPerDocument;
+    protected int bytesPerRow;
+    protected int charactersPerRow;
 
     public BasicCodeAreaStructure() {
     }

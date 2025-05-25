@@ -28,7 +28,7 @@ import org.exbin.bined.basic.CodeAreaViewMode;
 public interface ViewModeCapable {
 
     /**
-     * Returns curret view mode.
+     * Returns current view mode.
      *
      * @return view mode
      */

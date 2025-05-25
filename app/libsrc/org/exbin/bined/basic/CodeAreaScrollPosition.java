@@ -30,22 +30,22 @@ public class CodeAreaScrollPosition {
     /**
      * Scrollbar document row position.
      */
-    private long rowPosition = 0;
+    protected long rowPosition = 0;
 
     /**
      * Scrollbar document row pixel offset position.
      */
-    private int rowOffset = 0;
+    protected int rowOffset = 0;
 
     /**
      * Scrollbar document character position.
      */
-    private int charPosition = 0;
+    protected int charPosition = 0;
 
     /**
      * Scrollbar document character pixel offset position.
      */
-    private int charOffset = 0;
+    protected int charOffset = 0;
 
     public CodeAreaScrollPosition() {
     }

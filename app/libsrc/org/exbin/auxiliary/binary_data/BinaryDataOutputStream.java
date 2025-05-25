@@ -29,8 +29,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class BinaryDataOutputStream extends OutputStream implements SeekableStream, FinishableStream {
 
     @Nonnull
-    private final EditableBinaryData data;
-    private long position = 0;
+    protected final EditableBinaryData data;
+    protected long position = 0;
 
     public BinaryDataOutputStream(EditableBinaryData data) {
         this.data = data;

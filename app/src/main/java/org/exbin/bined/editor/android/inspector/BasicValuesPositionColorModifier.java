@@ -17,10 +17,15 @@ package org.exbin.bined.editor.android.inspector;
 
 import android.graphics.Color;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import org.exbin.bined.CodeAreaSection;
+import org.exbin.bined.android.CodeAreaColorAssessor;
+import org.exbin.bined.android.CodeAreaPaintState;
 import org.exbin.framework.bined.BinEdCodeAreaAssessor;
+
+import java.util.Optional;
 
 /**
  * Basic values inspector position color modifier.
@@ -28,15 +33,20 @@ import org.exbin.framework.bined.BinEdCodeAreaAssessor;
  * @author ExBin Project (https://exbin.org)
  */
 @ParametersAreNonnullByDefault
-public class BasicValuesPositionColorModifier implements BinEdCodeAreaAssessor.PositionColorModifier {
+public class BasicValuesPositionColorModifier implements CodeAreaColorAssessor {
 
-    private long position = -1;
-    private long length;
-    private Integer color;
-    private boolean darkMode = false;
+    protected CodeAreaColorAssessor parentAssessor;
+    protected long position = -1;
+    protected long length;
+    protected Integer color;
+    protected boolean darkMode = false;
 
     public BasicValuesPositionColorModifier() {
-        resetColors();
+        this(null);
+    }
+
+    public BasicValuesPositionColorModifier(@Nullable CodeAreaColorAssessor parentAssessor) {
+        this.parentAssessor = parentAssessor;
     }
 
     @Nullable
@@ -52,6 +62,12 @@ public class BasicValuesPositionColorModifier implements BinEdCodeAreaAssessor.P
         return null;
     }
 
+    @Nonnull
+    @Override
+    public Optional<CodeAreaColorAssessor> getParentColorAssessor() {
+        return Optional.ofNullable(parentAssessor);
+    }
+
     @Nullable
     @Override
     public Integer getPositionTextColor(long rowDataPosition, int byteOnRow, int charOnRow, CodeAreaSection section, boolean inSelection) {
@@ -59,7 +75,7 @@ public class BasicValuesPositionColorModifier implements BinEdCodeAreaAssessor.P
     }
 
     @Override
-    public void resetColors() {
+    public void startPaint(CodeAreaPaintState codeAreaPaintState) {
         color = darkMode ? 0xFF444400 : Color.YELLOW;
     }
 

@@ -22,10 +22,10 @@ package org.exbin.bined.basic;
  */
 public class ScrollViewDimension {
 
-    private int dataViewWidth;
-    private int dataViewHeight;
-    private int width;
-    private int height;
+    protected int dataViewWidth;
+    protected int dataViewHeight;
+    protected int width;
+    protected int height;
 
     public ScrollViewDimension() {
     }

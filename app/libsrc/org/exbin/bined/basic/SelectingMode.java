@@ -21,5 +21,12 @@ package org.exbin.bined.basic;
  * @author ExBin Project (https://exbin.org)
  */
 public enum SelectingMode {
-    NONE, SELECTING
+    /**
+     * Selection is not updated.
+     */
+    NONE,
+    /**
+     * Selection is updated.
+     */
+    SELECTING
 }

@@ -107,11 +107,11 @@ public interface CaretCapable {
      *
      * @param positionX x-coordinate
      * @param positionY y-coordinate
-     * @param overflowMode overflow mode
+     * @param overlapMode caret overlapping mode
      * @return mouse position
      */
     @Nonnull
-    CodeAreaCaretPosition mousePositionToClosestCaretPosition(int positionX, int positionY, CaretOverlapMode overflowMode);
+    CodeAreaCaretPosition mousePositionToClosestCaretPosition(int positionX, int positionY, CaretOverlapMode overlapMode);
 
     /**
      * Returns if cursor should be visible in other sections.

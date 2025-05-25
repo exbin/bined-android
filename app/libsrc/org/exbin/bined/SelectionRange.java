@@ -49,10 +49,10 @@ public class SelectionRange {
 
     /**
      * Creates selection range from start to end including the start and not
-     * including the end position.
+     * including character at the end position.
      *
      * @param start selection start position
-     * @param end selection end position without actual end position itself
+     * @param end selection end position without character at the end position
      */
     public SelectionRange(long start, long end) {
         if (start < 0) {
@@ -67,10 +67,20 @@ public class SelectionRange {
         this.end = end;
     }
 
+    /**
+     * Returns selection start position.
+     *
+     * @return selection start position.
+     */
     public long getStart() {
         return start;
     }
 
+    /**
+     * Returns selection end position where selection is not including character at the end position.
+     *
+     * @return selection end position.
+     */
     public long getEnd() {
         return end;
     }

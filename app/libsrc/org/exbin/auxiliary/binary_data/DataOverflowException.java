@@ -16,7 +16,6 @@
 package org.exbin.auxiliary.binary_data;
 
 import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Exception for overflow situation where more data is inserted/added than it is
@@ -24,7 +23,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
  *
  * @author ExBin Project (https://exbin.org)
  */
-@ParametersAreNonnullByDefault
 public class DataOverflowException extends RuntimeException {
 
     public DataOverflowException() {

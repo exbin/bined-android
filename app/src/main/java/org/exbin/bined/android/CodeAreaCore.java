@@ -31,6 +31,7 @@ import org.exbin.auxiliary.binary_data.EmptyBinaryData;
 import org.exbin.bined.CodeAreaControl;
 import org.exbin.bined.DataChangedListener;
 import org.exbin.bined.android.basic.DefaultCodeAreaCommandHandler;
+import org.exbin.bined.basic.SelectingMode;
 import org.exbin.bined.capability.ScrollingCapable;
 import org.exbin.bined.capability.SelectionCapable;
 
@@ -215,7 +216,7 @@ public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl 
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        commandHandler.moveCaret((int) event.getX(), (int) event.getY(), CodeAreaCommandHandler.SelectingMode.NONE);
+        commandHandler.moveCaret((int) event.getX(), (int) event.getY(), SelectingMode.NONE);
         ((ScrollingCapable) this).revealCursor();
 
         return true;

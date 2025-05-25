@@ -19,7 +19,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import org.exbin.bined.operation.BinaryDataCommand;
 
 /**
- * Undoable command sequence with suppord for appendable commands.
+ * Undoable command sequence with support for appendable commands.
  *
  * @author ExBin Project (https://exbin.org)
  */
@@ -30,7 +30,7 @@ public interface BinaryDataAppendableUndoRedo extends BinaryDataUndoRedo {
      * Attempts to execute command as an append to existing command.
      *
      * @param command command
-     * @return true if sucessfully appended
+     * @return true if successfully appended
      */
     boolean appendExecute(BinaryDataCommand command);
 }

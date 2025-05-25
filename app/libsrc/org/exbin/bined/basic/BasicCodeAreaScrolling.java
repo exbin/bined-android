@@ -33,28 +33,28 @@ import org.exbin.bined.capability.BasicScrollingCapable;
 public class BasicCodeAreaScrolling {
 
     @Nonnull
-    private final CodeAreaScrollPosition scrollPosition = new CodeAreaScrollPosition();
+    protected final CodeAreaScrollPosition scrollPosition = new CodeAreaScrollPosition();
     @Nonnull
-    private ScrollBarVerticalScale scrollBarVerticalScale = ScrollBarVerticalScale.NORMAL;
-    private int horizontalExtentDifference;
-    private int verticalExtentDifference;
-    private int horizontalScrollBarHeight;
-    private int verticalScrollBarWidth;
+    protected ScrollBarVerticalScale scrollBarVerticalScale = ScrollBarVerticalScale.NORMAL;
+    protected int horizontalExtentDifference;
+    protected int verticalExtentDifference;
+    protected int horizontalScrollBarHeight;
+    protected int verticalScrollBarWidth;
 
-    private int lastVerticalScrollingValue = -1;
+    protected int lastVerticalScrollingValue = -1;
 
     @Nonnull
-    private VerticalScrollUnit verticalScrollUnit = VerticalScrollUnit.ROW;
+    protected VerticalScrollUnit verticalScrollUnit = VerticalScrollUnit.ROW;
     @Nonnull
-    private ScrollBarVisibility verticalScrollBarVisibility = ScrollBarVisibility.IF_NEEDED;
+    protected ScrollBarVisibility verticalScrollBarVisibility = ScrollBarVisibility.IF_NEEDED;
     @Nonnull
-    private HorizontalScrollUnit horizontalScrollUnit = HorizontalScrollUnit.PIXEL;
+    protected HorizontalScrollUnit horizontalScrollUnit = HorizontalScrollUnit.PIXEL;
     @Nonnull
-    private ScrollBarVisibility horizontalScrollBarVisibility = ScrollBarVisibility.IF_NEEDED;
+    protected ScrollBarVisibility horizontalScrollBarVisibility = ScrollBarVisibility.IF_NEEDED;
     @Nonnull
-    private final CodeAreaScrollPosition maximumScrollPosition = new CodeAreaScrollPosition();
+    protected final CodeAreaScrollPosition maximumScrollPosition = new CodeAreaScrollPosition();
 
-    private int maximumScrollBarHeight = Integer.MAX_VALUE >> 2;
+    protected int maximumScrollBarHeight = Integer.MAX_VALUE;
 
     @Nullable
     private Runnable verticalExtentChangeListener = null;
@@ -107,11 +107,11 @@ public class BasicCodeAreaScrolling {
         outputDimension.setDimension(dataViewWidth, dataViewHeight, width, height);
     }
 
-    private boolean computeFitsHorizontally(int dataViewWidth, int dataWidth) {
+    protected boolean computeFitsHorizontally(int dataViewWidth, int dataWidth) {
         return dataWidth <= dataViewWidth;
     }
 
-    private boolean computeFitsVertically(int dataViewHeight, long rowsPerData, int rowHeight) {
+    protected boolean computeFitsVertically(int dataViewHeight, long rowsPerData, int rowHeight) {
         int availableRows = (dataViewHeight + rowHeight - 1) / rowHeight;
         if (rowsPerData > availableRows) {
             return false;
@@ -120,7 +120,7 @@ public class BasicCodeAreaScrolling {
         return rowsPerData * rowHeight <= dataViewHeight;
     }
 
-    private int recomputeScrollViewWidth(int dataViewWidth, int characterWidth, int dataWidth, int charsPerRow) {
+    protected int recomputeScrollViewWidth(int dataViewWidth, int characterWidth, int dataWidth, int charsPerRow) {
         int scrollViewWidth = 0;
         switch (horizontalScrollUnit) {
             case PIXEL: {
@@ -141,7 +141,7 @@ public class BasicCodeAreaScrolling {
         return scrollViewWidth;
     }
 
-    private int recomputeScrollViewHeight(int dataViewHeight, int rowHeight, long rowsPerData) {
+    protected int recomputeScrollViewHeight(int dataViewHeight, int rowHeight, long rowsPerData) {
         int scrollViewHeight = 0;
         switch (verticalScrollUnit) {
             case PIXEL: {
@@ -475,7 +475,7 @@ public class BasicCodeAreaScrolling {
     }
 
     @Nonnull
-    private PositionScrollVisibility checkTopScrollVisibility(long rowPosition) {
+    protected PositionScrollVisibility checkTopScrollVisibility(long rowPosition) {
         if (verticalScrollUnit == VerticalScrollUnit.ROW) {
             return rowPosition < scrollPosition.getRowPosition() ? PositionScrollVisibility.NOT_VISIBLE : PositionScrollVisibility.VISIBLE;
         }
@@ -491,7 +491,7 @@ public class BasicCodeAreaScrolling {
     }
 
     @Nonnull
-    private PositionScrollVisibility checkBottomScrollVisibility(long rowPosition, int rowsPerPage, int rowOffset, int rowHeight) {
+    protected PositionScrollVisibility checkBottomScrollVisibility(long rowPosition, int rowsPerPage, int rowOffset, int rowHeight) {
         int sumOffset = scrollPosition.getRowOffset() + rowOffset;
 
         long lastFullRow = scrollPosition.getRowPosition() + rowsPerPage;
@@ -513,7 +513,7 @@ public class BasicCodeAreaScrolling {
     }
 
     @Nonnull
-    private PositionScrollVisibility checkLeftScrollVisibility(int charsPosition) {
+    protected PositionScrollVisibility checkLeftScrollVisibility(int charsPosition) {
         int charPos = scrollPosition.getCharPosition();
         if (horizontalScrollUnit != HorizontalScrollUnit.PIXEL) {
             return charsPosition < charPos ? PositionScrollVisibility.NOT_VISIBLE : PositionScrollVisibility.VISIBLE;
@@ -530,7 +530,7 @@ public class BasicCodeAreaScrolling {
     }
 
     @Nonnull
-    private PositionScrollVisibility checkRightScrollVisibility(int charsPosition, int charsPerPage, int charOffset, int characterWidth) {
+    protected PositionScrollVisibility checkRightScrollVisibility(int charsPosition, int charsPerPage, int charOffset, int characterWidth) {
         int sumOffset = scrollPosition.getCharOffset() + charOffset;
 
         int lastFullChar = scrollPosition.getCharPosition() + charsPerPage;
@@ -634,7 +634,7 @@ public class BasicCodeAreaScrolling {
         }
     }
 
-    private void setHorizontalScrollPosition(CodeAreaScrollPosition scrollPosition, int charPos, int pixelOffset, int characterWidth) {
+    protected void setHorizontalScrollPosition(CodeAreaScrollPosition scrollPosition, int charPos, int pixelOffset, int characterWidth) {
         switch (horizontalScrollUnit) {
             case CHARACTER: {
                 scrollPosition.setCharPosition(charPos);
@@ -725,7 +725,7 @@ public class BasicCodeAreaScrolling {
         lastVerticalScrollingValue = -1;
     }
 
-    private void changeVerticalExtentDifference(int newDifference) {
+    protected void changeVerticalExtentDifference(int newDifference) {
         if (verticalExtentDifference != newDifference) {
             verticalExtentDifference = newDifference;
             if (verticalExtentChangeListener != null) {
@@ -734,7 +734,7 @@ public class BasicCodeAreaScrolling {
         }
     }
 
-    private void changeHorizontalExtentDifference(int newDifference) {
+    protected void changeHorizontalExtentDifference(int newDifference) {
         if (horizontalExtentDifference != newDifference) {
             horizontalExtentDifference = newDifference;
             if (horizontalExtentChangeListener != null) {

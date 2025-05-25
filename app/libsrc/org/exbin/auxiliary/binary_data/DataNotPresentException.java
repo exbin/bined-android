@@ -18,7 +18,6 @@ package org.exbin.auxiliary.binary_data;
 import java.util.Optional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Exception for data reading or writing when range of data is not present.
@@ -28,11 +27,10 @@ import javax.annotation.ParametersAreNonnullByDefault;
  *
  * @author ExBin Project (https://exbin.org)
  */
-@ParametersAreNonnullByDefault
 public class DataNotPresentException extends RuntimeException {
 
     @Nullable
-    private final DataRange dataRange;
+    protected final DataRange dataRange;
 
     public DataNotPresentException() {
         dataRange = null;

@@ -18,8 +18,8 @@ package org.exbin.bined.android.basic;
 import android.view.MotionEvent;
 import android.view.View;
 
-import org.exbin.bined.android.CodeAreaCommandHandler.SelectingMode;
 import org.exbin.bined.android.CodeAreaCore;
+import org.exbin.bined.basic.SelectingMode;
 import org.exbin.bined.capability.ScrollingCapable;
 
 import javax.annotation.ParametersAreNonnullByDefault;

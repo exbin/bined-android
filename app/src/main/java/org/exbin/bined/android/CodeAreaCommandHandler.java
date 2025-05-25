@@ -17,6 +17,9 @@ package org.exbin.bined.android;
 
 import android.view.KeyEvent;
 
+import org.exbin.bined.ScrollBarOrientation;
+import org.exbin.bined.basic.SelectingMode;
+
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -120,7 +123,7 @@ public interface CodeAreaCommandHandler {
      * @param scrollSize number of scroll units (positive or negative)
      * @param orientation scrollbar orientation
      */
-    void wheelScroll(int scrollSize, ScrollbarOrientation orientation);
+    void wheelScroll(int scrollSize, ScrollBarOrientation orientation);
 
     /**
      * Checks whether edit is allowed.
@@ -128,14 +131,6 @@ public interface CodeAreaCommandHandler {
      * @return true if allowed
      */
     boolean checkEditAllowed();
-
-    enum ScrollbarOrientation {
-        HORIZONTAL, VERTICAL
-    }
-
-    enum SelectingMode {
-        NONE, SELECTING
-    }
 
     @ParametersAreNonnullByDefault
     interface CodeAreaCommandHandlerFactory {

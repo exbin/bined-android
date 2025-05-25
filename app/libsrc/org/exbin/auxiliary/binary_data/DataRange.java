@@ -25,8 +25,8 @@ import javax.annotation.concurrent.Immutable;
 @Immutable
 public class DataRange {
 
-    private final long startPosition;
-    private final long endPosition;
+    protected final long startPosition;
+    protected final long endPosition;
 
     public DataRange(long startPosition, long endPosition) {
         this.startPosition = startPosition;

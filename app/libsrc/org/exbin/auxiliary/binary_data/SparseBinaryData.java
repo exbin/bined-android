@@ -15,19 +15,15 @@
  */
 package org.exbin.auxiliary.binary_data;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
 /**
  * Interface for binary data with missing segments / segments where no data are
  * present.
  * <p>
  * Expected use is to either check presence per position or segments or to read
- * data and handle presence only when {@link DataNotPresentException} is
- * thrown.
+ * data and handle presence only when {@link DataNotPresentException} is thrown.
  *
  * @author ExBin Project (https://exbin.org)
  */
-@ParametersAreNonnullByDefault
 public interface SparseBinaryData {
 
     /**

@@ -46,22 +46,22 @@ public class CharsetStreamTranslator extends InputStream {
     public static final int BYTE_BUFFER_SIZE = 16;
 
     @Nonnull
-    private final CharsetEncoder encoder;
+    protected final CharsetEncoder encoder;
     @Nonnull
-    private final CharsetDecoder decoder;
+    protected final CharsetDecoder decoder;
     @Nonnull
-    private final InputStream source;
+    protected final InputStream source;
 
     @Nonnull
-    private final ByteBuffer inputBuffer;
+    protected final ByteBuffer inputBuffer;
     @Nonnull
-    private final ByteBuffer outputBuffer;
+    protected final ByteBuffer outputBuffer;
     @Nonnull
-    private final CharBuffer charBuffer;
-    private boolean endOfInput = false;
+    protected final CharBuffer charBuffer;
+    protected boolean endOfInput = false;
 
-    private int maxInputCharSize;
-    private int maxOutputCharSize;
+    protected int maxInputCharSize;
+    protected int maxOutputCharSize;
 
     public CharsetStreamTranslator(Charset inputCharset, Charset outputCharset, InputStream source, int bufferSize) {
         this.source = source;
@@ -113,7 +113,7 @@ public class CharsetStreamTranslator extends InputStream {
             }
         }
 
-        return outputBuffer.get();
+        return outputBuffer.get() & 0xFF;
     }
 
     @Override

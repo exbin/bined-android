@@ -34,6 +34,7 @@ import org.exbin.bined.CodeCharactersCase;
 import org.exbin.bined.CodeType;
 import org.exbin.bined.EditMode;
 import org.exbin.bined.EditOperation;
+import org.exbin.bined.ScrollBarOrientation;
 import org.exbin.bined.SelectionRange;
 import org.exbin.bined.android.CodeAreaAndroidUtils;
 import org.exbin.bined.android.CodeAreaCommandHandler;
@@ -45,6 +46,7 @@ import org.exbin.bined.basic.CodeAreaViewMode;
 import org.exbin.bined.basic.EnterKeyHandlingMode;
 import org.exbin.bined.basic.MovementDirection;
 import org.exbin.bined.basic.ScrollingDirection;
+import org.exbin.bined.basic.SelectingMode;
 import org.exbin.bined.basic.TabKeyHandlingMode;
 import org.exbin.bined.capability.CaretCapable;
 import org.exbin.bined.capability.CharsetCapable;
@@ -807,7 +809,7 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
     }
 
     @Override
-    public void wheelScroll(int scrollSize, ScrollbarOrientation orientation) {
+    public void wheelScroll(int scrollSize, ScrollBarOrientation orientation) {
         if (scrollSize < 0) {
             for (int i = 0; i < -scrollSize; i++) {
                 scroll(ScrollingDirection.UP);

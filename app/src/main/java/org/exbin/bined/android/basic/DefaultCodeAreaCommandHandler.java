@@ -27,6 +27,7 @@ import org.exbin.auxiliary.binary_data.jna.JnaBufferData;
 import org.exbin.auxiliary.binary_data.jna.JnaBufferEditableData;
 import org.exbin.bined.CaretOverlapMode;
 import org.exbin.bined.ClipboardHandlingMode;
+import org.exbin.bined.ScrollBarOrientation;
 import org.exbin.bined.android.CodeAreaAndroidUtils;
 import org.exbin.bined.basic.BasicCodeAreaSection;
 import org.exbin.bined.CodeAreaCaretPosition;
@@ -43,6 +44,7 @@ import org.exbin.bined.basic.CodeAreaScrollPosition;
 import org.exbin.bined.basic.EnterKeyHandlingMode;
 import org.exbin.bined.basic.MovementDirection;
 import org.exbin.bined.basic.ScrollingDirection;
+import org.exbin.bined.basic.SelectingMode;
 import org.exbin.bined.basic.TabKeyHandlingMode;
 import org.exbin.bined.capability.CaretCapable;
 import org.exbin.bined.capability.CharsetCapable;
@@ -76,20 +78,20 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
     private final int metaMask = KeyEvent.META_CTRL_MASK;
 
     @Nonnull
-    private final CodeAreaCore codeArea;
+    protected final CodeAreaCore codeArea;
     @Nonnull
-    private EnterKeyHandlingMode enterKeyHandlingMode = EnterKeyHandlingMode.PLATFORM_SPECIFIC;
+    protected EnterKeyHandlingMode enterKeyHandlingMode = EnterKeyHandlingMode.PLATFORM_SPECIFIC;
     @Nonnull
-    private TabKeyHandlingMode tabKeyHandlingMode = TabKeyHandlingMode.PLATFORM_SPECIFIC;
-    private final boolean codeTypeSupported;
-    private final boolean viewModeSupported;
+    protected TabKeyHandlingMode tabKeyHandlingMode = TabKeyHandlingMode.PLATFORM_SPECIFIC;
+    protected final boolean codeTypeSupported;
+    protected final boolean viewModeSupported;
 
-    private Context context;
-    private ClipboardManager clipboard;
-    private boolean canPaste = false;
-    private ClipDescription binedDataFlavor;
-    private ClipDescription binaryDataFlavor;
-    private ClipData currentClipboardData = null;
+    protected Context context;
+    protected ClipboardManager clipboard;
+    protected boolean canPaste = false;
+    protected ClipDescription binedDataFlavor;
+    protected ClipDescription binaryDataFlavor;
+    protected ClipData currentClipboardData = null;
 
     public DefaultCodeAreaCommandHandler(Context context, CodeAreaCore codeArea) {
         this.context = context;
@@ -213,21 +215,8 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
                 break;
             }
             case KeyEvent.KEYCODE_INSERT: {
-                EditMode editMode = ((EditModeCapable) codeArea).getEditMode();
-                if (editMode == EditMode.EXPANDING || editMode == EditMode.CAPPED) {
-                    EditOperation editOperation = ((EditModeCapable) codeArea).getEditOperation();
-                    switch (editOperation) {
-                        case INSERT: {
-                            ((EditModeCapable) codeArea).setEditOperation(EditOperation.OVERWRITE);
-//                            keyEvent.consume();
-                            break;
-                        }
-                        case OVERWRITE: {
-                            ((EditModeCapable) codeArea).setEditOperation(EditOperation.INSERT);
-//                            keyEvent.consume();
-                            break;
-                        }
-                    }
+                if (changeEditOperation()) {
+                    // keyEvent.consume();
                 }
                 break;
             }
@@ -444,10 +433,6 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
     }
 
     public void tabPressed(SelectingMode selectingMode) {
-        if (!checkEditAllowed()) {
-            return;
-        }
-
         if (tabKeyHandlingMode == TabKeyHandlingMode.PLATFORM_SPECIFIC || tabKeyHandlingMode == TabKeyHandlingMode.CYCLE_TO_NEXT_SECTION || tabKeyHandlingMode == TabKeyHandlingMode.CYCLE_TO_PREVIOUS_SECTION) {
             if (viewModeSupported && ((ViewModeCapable) codeArea).getViewMode() == CodeAreaViewMode.DUAL) {
                 move(selectingMode, MovementDirection.SWITCH_SECTION);
@@ -462,6 +447,7 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
             }
         }
     }
+
     @Override
     public void backSpacePressed() {
         if (!checkEditAllowed()) {
@@ -475,16 +461,17 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
         } else {
             DefaultCodeAreaCaret caret = (DefaultCodeAreaCaret) ((CaretCapable) codeArea).getCodeAreaCaret();
             long dataPosition = ((CaretCapable) codeArea).getDataPosition();
-            if (dataPosition > 0 && dataPosition <= codeArea.getDataSize()) {
-                caret.setCodeOffset(0);
-                move(SelectingMode.NONE, MovementDirection.LEFT);
-                caret.setCodeOffset(0);
-                ((EditableBinaryData) data).remove(dataPosition - 1, 1);
-                codeArea.notifyDataChanged();
-                ((CaretCapable) codeArea).setActiveCaretPosition(caret.getCaretPosition());
-                revealCursor();
-                clearSelection();
+            if (dataPosition == 0 || dataPosition > codeArea.getDataSize()) {
+                return;
             }
+            caret.setCodeOffset(0);
+            move(SelectingMode.NONE, MovementDirection.LEFT);
+            caret.setCodeOffset(0);
+            ((EditableBinaryData) data).remove(dataPosition - 1, 1);
+            codeArea.notifyDataChanged();
+            ((CaretCapable) codeArea).setActiveCaretPosition(caret.getCaretPosition());
+            revealCursor();
+            clearSelection();
         }
     }
 
@@ -502,16 +489,17 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
             BinaryData data = CodeAreaUtils.requireNonNullContentData(codeArea.getContentData());
             DefaultCodeAreaCaret caret = (DefaultCodeAreaCaret) ((CaretCapable) codeArea).getCodeAreaCaret();
             long dataPosition = caret.getDataPosition();
-            if (dataPosition < codeArea.getDataSize()) {
-                ((EditableBinaryData) data).remove(dataPosition, 1);
-                codeArea.notifyDataChanged();
-                if (caret.getCodeOffset() > 0) {
-                    caret.setCodeOffset(0);
-                }
-                ((CaretCapable) codeArea).setActiveCaretPosition(caret.getCaretPosition());
-                clearSelection();
-                revealCursor();
+            if (dataPosition >= codeArea.getDataSize()) {
+                return;
             }
+            ((EditableBinaryData) data).remove(dataPosition, 1);
+            codeArea.notifyDataChanged();
+            if (caret.getCodeOffset() > 0) {
+                caret.setCodeOffset(0);
+            }
+            ((CaretCapable) codeArea).setActiveCaretPosition(caret.getCaretPosition());
+            clearSelection();
+            revealCursor();
         }
     }
 
@@ -843,7 +831,7 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
     @Override
     public void moveCaret(int positionX, int positionY, SelectingMode selecting) {
         CodeAreaCaretPosition caretPosition = ((CaretCapable) codeArea).mousePositionToClosestCaretPosition(positionX, positionY, CaretOverlapMode.PARTIAL_OVERLAP);
-        ((CaretCapable) codeArea).getCodeAreaCaret().setCaretPosition(caretPosition);
+        ((CaretCapable) codeArea).setActiveCaretPosition(caretPosition);
         updateSelection(selecting, caretPosition);
 
         sequenceBreak();
@@ -856,6 +844,8 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
         if (!caretPosition.equals(movePosition)) {
             ((CaretCapable) codeArea).setActiveCaretPosition(movePosition);
             updateSelection(selectingMode, movePosition);
+        } else if (selectingMode == SelectingMode.NONE){
+            clearSelection();
         }
     }
 
@@ -869,7 +859,7 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
     }
 
     @Override
-    public void wheelScroll(int scrollSize, ScrollbarOrientation direction) {
+    public void wheelScroll(int scrollSize, ScrollBarOrientation direction) {
         // TODO
         scroll(ScrollingDirection.UP);
 
@@ -922,6 +912,26 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
 //        }
     }
 
+    public boolean changeEditOperation() {
+        EditMode editMode = ((EditModeCapable) codeArea).getEditMode();
+        if (editMode == EditMode.EXPANDING || editMode == EditMode.CAPPED) {
+            EditOperation editOperation = ((EditModeCapable) codeArea).getEditOperation();
+            switch (editOperation) {
+                case INSERT: {
+                    ((EditModeCapable) codeArea).setEditOperation(EditOperation.OVERWRITE);
+                    break;
+                }
+                case OVERWRITE: {
+                    ((EditModeCapable) codeArea).setEditOperation(EditOperation.INSERT);
+                    break;
+                }
+            }
+            return true;
+        }
+
+        return false;
+    }
+
     public boolean isValidChar(char value) {
         return ((CharsetCapable) codeArea).getCharset().canEncode();
     }
@@ -935,7 +945,7 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
     }
 
     @Nonnull
-    private CodeType getCodeType() {
+    protected CodeType getCodeType() {
         if (codeTypeSupported) {
             return ((CodeTypeCapable) codeArea).getCodeType();
         }
@@ -943,7 +953,7 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
         return CodeType.HEXADECIMAL;
     }
 
-    private void revealCursor() {
+    protected void revealCursor() {
         ((ScrollingCapable) codeArea).revealCursor();
         codeArea.repaint();
     }
@@ -954,7 +964,7 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
     }
 
     @Nonnull
-    private static SelectingMode isSelectingMode(KeyEvent keyEvent) {
+    protected static SelectingMode isSelectingMode(KeyEvent keyEvent) {
         return (keyEvent.getModifiers() & KeyEvent.META_SHIFT_MASK) > 0 ? SelectingMode.SELECTING : SelectingMode.NONE;
     }
 }

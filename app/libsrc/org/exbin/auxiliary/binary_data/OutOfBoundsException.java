@@ -16,14 +16,12 @@
 package org.exbin.auxiliary.binary_data;
 
 import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Exception for out of bounds issues with binary data manipulation operations.
  *
  * @author ExBin Project (https://exbin.org)
  */
-@ParametersAreNonnullByDefault
 public class OutOfBoundsException extends RuntimeException {
 
     public OutOfBoundsException() {

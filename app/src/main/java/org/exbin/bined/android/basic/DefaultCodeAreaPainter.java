@@ -289,13 +289,13 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         layoutChanged = false;
     }
 
-    private void updateCaret() {
+    protected void updateCaret() {
         editOperation = ((EditModeCapable) codeArea).getActiveOperation();
 
         caretChanged = false;
     }
 
-    private void validateCaret() {
+    protected void validateCaret() {
         CodeAreaCaret caret = ((CaretCapable) codeArea).getCodeAreaCaret();
         CodeAreaCaretPosition caretPosition = caret.getCaretPosition();
         if (caretPosition.getDataPosition() > codeArea.getDataSize()) {
@@ -303,7 +303,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         }
     }
 
-    private void validateSelection() {
+    protected void validateSelection() {
         CodeAreaSelection selectionHandler = ((SelectionCapable) codeArea).getSelectionHandler();
         if (!selectionHandler.isEmpty()) {
             long dataSize = codeArea.getDataSize();
@@ -329,7 +329,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         }
     }
 
-    private void recomputeDimensions() {
+    protected void recomputeDimensions() {
         int verticalScrollBarSize = getVerticalScrollBarSize();
         int horizontalScrollBarSize = getHorizontalScrollBarSize();
         int componentWidth = codeArea.getWidth();
@@ -342,7 +342,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         updateRowDataCache();
     }
 
-    private void updateRowDataCache() {
+    protected void updateRowDataCache() {
         if (rowDataCache == null) {
             rowDataCache = new RowDataCache();
         }
@@ -373,7 +373,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         initialized = true;
     }
 
-    private void recomputeScrollState() {
+    protected void recomputeScrollState() {
         scrolling.setScrollPosition(((ScrollingCapable) codeArea).getScrollPosition());
         int characterWidth = metrics.getCharacterWidth();
 
@@ -715,7 +715,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         }
     }
 
-    private void prepareRowData(long dataPosition) {
+    protected void prepareRowData(long dataPosition) {
         int maxBytesPerChar = metrics.getMaxBytesPerChar();
         CodeAreaViewMode viewMode = structure.getViewMode();
         int bytesPerRow = structure.getBytesPerRow();
@@ -1319,7 +1319,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         return new Point(caretX, caretY);
     }
 
-    private void updateMirrorCursorRect(long dataPosition, CodeAreaSection section) {
+    protected void updateMirrorCursorRect(long dataPosition, CodeAreaSection section) {
         CodeType codeType = structure.getCodeType();
         Point mirrorCursorPoint = getPositionPoint(dataPosition, 0, section == BasicCodeAreaSection.CODE_MATRIX ? BasicCodeAreaSection.TEXT_PREVIEW : BasicCodeAreaSection.CODE_MATRIX);
         if (mirrorCursorPoint == null) {
@@ -1356,8 +1356,8 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
     }
 
     @Override
-    public void setBasicColors(BasicCodeAreaColorsProfile colors) {
-        this.colorsProfile = colors;
+    public void setBasicColors(BasicCodeAreaColorsProfile colorsProfile) {
+        this.colorsProfile = colorsProfile;
     }
 
     /**
@@ -1418,7 +1418,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         g.drawText(drawnChars, charOffset, length, positionX, positionY, paint);
     }
 
-    private int getRowPositionLength() {
+    protected int getRowPositionLength() {
         if (minRowPositionLength > 0 && minRowPositionLength == maxRowPositionLength) {
             return minRowPositionLength;
         }
@@ -1467,7 +1467,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
      * <p>
      * Doesn't include character at offset end.
      */
-    private void renderBackgroundSequence(Canvas g, int startOffset, int endOffset, int rowPositionX, int positionY) {
+    protected void renderBackgroundSequence(Canvas g, int startOffset, int endOffset, int rowPositionX, int positionY) {
         int characterWidth = metrics.getCharacterWidth();
         int rowHeight = metrics.getRowHeight();
         g.drawRect(dataViewOffsetX + rowPositionX + startOffset * characterWidth, dataViewOffsetY + 1 + positionY - rowHeight, dataViewOffsetX + rowPositionX + endOffset * characterWidth, dataViewOffsetY + 1 + positionY, paint);
@@ -1570,7 +1570,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         updateScrollBars();
     }
 
-    private void dataChanged() {
+    protected void dataChanged() {
         validateCaret();
         validateSelection();
         recomputeLayout();
@@ -1637,7 +1637,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         return ((SelectionCapable) codeArea).getSelectionHandler();
     }
 
-    private int getHorizontalScrollBarSize() {
+    protected int getHorizontalScrollBarSize() {
 //        JScrollBar horizontalScrollBar = scrollPanel.getHorizontalScrollBar();
 //        int size;
 //        if (horizontalScrollBar.isVisible()) {
@@ -1650,7 +1650,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         return 10;
     }
 
-    private int getVerticalScrollBarSize() {
+    protected int getVerticalScrollBarSize() {
 //        JScrollBar verticalScrollBar = scrollPanel.getVerticalScrollBar();
 //        int size;
 //        if (verticalScrollBar.isVisible()) {
@@ -1663,7 +1663,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         return 10;
     }
 
-    private static class RowDataCache {
+    protected static class RowDataCache {
 
         char[] headerChars;
         byte[] rowData;
@@ -1671,7 +1671,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         char[] rowCharacters;
     }
 
-    private static class CursorDataCache {
+    protected static class CursorDataCache {
 
         Rect caretRect = new Rect();
         Rect mirrorCursorRect = new Rect();

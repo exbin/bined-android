@@ -18,14 +18,12 @@ package org.exbin.auxiliary.binary_data.paged;
 import java.util.Optional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Paged data with support for customizable page creator.
  *
  * @author ExBin Project (https://exbin.org)
  */
-@ParametersAreNonnullByDefault
 public interface CustomizablePagedData extends PagedData {
 
     /**

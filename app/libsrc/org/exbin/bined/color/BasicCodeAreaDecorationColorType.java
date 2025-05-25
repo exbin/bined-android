@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
- * Enumeration of unprintable color types.
+ * Enumeration of decoration color types.
  *
  * @author ExBin Project (https://exbin.org)
  */

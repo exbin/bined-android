@@ -63,6 +63,9 @@ public class BufferPagedData implements PagedData {
     }
 
     public BufferPagedData(int pageSize) {
+        if (pageSize < 1) {
+            throw new InvalidParameterException("Page size cannot be less than 1");
+        }
         this.pageSize = pageSize;
     }
 

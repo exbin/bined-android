@@ -21,7 +21,9 @@ import org.exbin.bined.CharsetStreamTranslator;
 
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
+import java.util.Optional;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -79,9 +81,9 @@ public class BasicCodeAreaMetrics {
         return rowHeight != 0 && characterWidth != 0;
     }
 
-    @Nullable
-    public Paint getFontMetrics() {
-        return fontMetrics;
+    @Nonnull
+    public Optional<Paint> getFontMetrics() {
+        return Optional.ofNullable(fontMetrics);
     }
 
     public int getCharWidth(char value) {

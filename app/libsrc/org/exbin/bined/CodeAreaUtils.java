@@ -342,7 +342,7 @@ public class CodeAreaUtils {
      * @param keyValue keyboard key value
      * @param codeOffset current code offset
      * @param codeType current code type
-     * @return true if key value value is valid
+     * @return true if key value is valid
      */
     public static boolean isValidCodeKeyValue(char keyValue, int codeOffset, CodeType codeType) {
         boolean validKey = false;

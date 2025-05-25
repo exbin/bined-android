@@ -22,7 +22,7 @@ package org.exbin.bined.basic;
  */
 public enum TabKeyHandlingMode {
     /**
-     * Handle enter using java platform detection (default).
+     * Handle tab key using java platform detection (default).
      */
     PLATFORM_SPECIFIC,
     /**

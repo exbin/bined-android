@@ -60,7 +60,7 @@ public interface BasicScrollingCapable {
     void setVerticalScrollUnit(VerticalScrollUnit verticalScrollUnit);
 
     /**
-     * Returns horizotal scrollbar visibility mode.
+     * Returns horizontal scrollbar visibility mode.
      *
      * @return scrollbar visibility mode
      */
@@ -68,7 +68,7 @@ public interface BasicScrollingCapable {
     ScrollBarVisibility getHorizontalScrollBarVisibility();
 
     /**
-     * Sets horizotal scrollbar visibility mode.
+     * Sets horizontal scrollbar visibility mode.
      *
      * @param horizontalScrollBarVisibility scrollbar visibility mode
      */
