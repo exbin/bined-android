@@ -30,6 +30,7 @@ import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.text.Editable;
 import android.text.InputType;
+import android.text.Selection;
 import android.text.method.KeyListener;
 import android.text.method.TextKeyListener;
 import android.view.ContextMenu;
@@ -1447,6 +1448,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
         public CodeAreaKeyListener() {
             editable.clear();
+            Selection.setSelection(editable, 0, 0);
         }
 
         @Override

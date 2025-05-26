@@ -65,6 +65,7 @@ public class CodeAreaTableMapAssessor implements CodeAreaCharAssessor {
 
     protected boolean useTable = false;
     protected final Map<Integer, Character> characterTable = new HashMap<>();
+    protected final Map<Character, Integer> keyPressTable = new HashMap<>();
 
     public CodeAreaTableMapAssessor() {
         parentAssessor = null;
@@ -136,7 +137,7 @@ public class CodeAreaTableMapAssessor implements CodeAreaCharAssessor {
             }
         } else {
             if (useTable) {
-                Character character = characterTable.get(rowData[byteOnRow] & 0xFF);
+                Character character = characterTable.get(rowData[byteOnRow] & 0xff);
                 if (character != null) {
                     return character;
                 }
@@ -146,7 +147,7 @@ public class CodeAreaTableMapAssessor implements CodeAreaCharAssessor {
                 buildCharMapping();
             }
 
-            return charMapping[rowData[byteOnRow] & 0xFF];
+            return charMapping[rowData[byteOnRow] & 0xff];
         }
 
         return ' ';
@@ -165,8 +166,8 @@ public class CodeAreaTableMapAssessor implements CodeAreaCharAssessor {
 
             if (useTable) {
                 byteBuffer.rewind();
-                int value0 = byteBuffer.get(0);
-                int value1 = byteBuffer.get(1) * 256 + value0;
+                int value0 = byteBuffer.get(0) & 0xff;
+                int value1 = ((byteBuffer.get(1) & 0xff) << 8) + value0;
                 Character character = characterTable.get(value1);
                 if (character != null) {
                     return character;
@@ -190,7 +191,7 @@ public class CodeAreaTableMapAssessor implements CodeAreaCharAssessor {
             }
         } else {
             if (useTable) {
-                Character character = characterTable.get(cursorData[0] & 0xFF);
+                Character character = characterTable.get(cursorData[0] & 0xff);
                 if (character != null) {
                     return character;
                 }
@@ -200,7 +201,7 @@ public class CodeAreaTableMapAssessor implements CodeAreaCharAssessor {
                 buildCharMapping();
             }
 
-            return charMapping[cursorData[0] & 0xFF];
+            return charMapping[cursorData[0] & 0xff];
         }
 
         return ' ';
@@ -251,6 +252,9 @@ public class CodeAreaTableMapAssessor implements CodeAreaCharAssessor {
 
                     if (line.length() > valuePos) {
                         characterTable.put(code, line.charAt(valuePos));
+                        if (line.length() == valuePos + 1) {
+                            keyPressTable.put(line.charAt(valuePos), code);
+                        }
                     }
                     line = reader.readLine();
                 }
@@ -264,6 +268,25 @@ public class CodeAreaTableMapAssessor implements CodeAreaCharAssessor {
     @Nonnull
     public Map<Integer, Character> getCharacterTable() {
         return characterTable;
+    }
+
+    @Nullable
+    public byte[] translateKey(char key) {
+        Integer code = keyPressTable.get(key);
+        if (code == null) {
+            return null;
+        }
+
+        byte[] result;
+        if (code > 256) {
+            result = new byte[2];
+            result[1] = (byte) ((code >> 8) & 0xff);
+        }  else {
+            result = new byte[1];
+        }
+        result[0] = (byte) (code & 0xff);
+
+        return result;
     }
 
     /**

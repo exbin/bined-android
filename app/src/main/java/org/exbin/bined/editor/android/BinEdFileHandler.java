@@ -85,6 +85,7 @@ public class BinEdFileHandler {
         undoRedo = new CodeAreaUndoRedo(codeArea);
 
         CodeAreaOperationCommandHandler commandHandler = new CodeAreaOperationCommandHandler(codeArea.getContext(), codeArea, undoRedo);
+        commandHandler.setCodeAreaTableMapAssessor(codeAreaTableMapAssessor);
         codeArea.setCommandHandler(commandHandler);
         CodeAreaPainter painter = codeArea.getPainter();
         codeAreaAssessor = new BinEdCodeAreaAssessor(((ColorAssessorPainterCapable) painter).getColorAssessor(), codeAreaTableMapAssessor); // ((CharAssessorPainterCapable) painter).getCharAssessor()
