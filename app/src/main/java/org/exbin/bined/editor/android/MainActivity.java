@@ -873,7 +873,11 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             codeArea.validateCaret();
             return true;
         } else if (id == R.id.action_cut) {
-            codeArea.cut();
+            try {
+                codeArea.cut();
+            } catch (Throwable tw) {
+                reportException(tw);
+            }
             return true;
         } else if (id == R.id.action_copy) {
             try {

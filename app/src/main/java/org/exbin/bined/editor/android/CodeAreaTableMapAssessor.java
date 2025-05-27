@@ -223,6 +223,7 @@ public class CodeAreaTableMapAssessor implements CodeAreaCharAssessor {
 
     public void openFile(ContentResolver contentResolver, Uri fileUri) {
         characterTable.clear();
+        keyPressTable.clear();
         try {
             try (InputStream inputStream = contentResolver.openInputStream(fileUri); BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"))) {
                 String line = reader.readLine();

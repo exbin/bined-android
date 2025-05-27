@@ -1,5 +1,6 @@
 0.2.6
 - Added Chinese translation
+- Added crude charset table support
 - Bug fixes
 
 0.2.5 (2025-05-07)
