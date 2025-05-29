@@ -1,0 +1,3 @@
+- Added Chinese translation
+- Added crude charset table support
+- Bug fixes
