@@ -17,6 +17,7 @@
         <item>Česky</item>
         <item>हिंदी</item>
         <item>简体中文</item>
+        <item>Português</item>
     </string-array>
 
     <string-array name="language_values" translatable="false">
@@ -25,6 +26,7 @@
         <item>cs</item>
         <item>hi</item>
         <item>zh-CN</item>
+        <item>pt</item>
     </string-array>
 
     <string-array name="bytes_per_row_entries">

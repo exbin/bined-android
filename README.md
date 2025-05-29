@@ -23,7 +23,7 @@ Features
   * Insert and overwrite edit modes
   * TODO: Searching for text / hexadecimal code with matching highlighting
   * Support for undo/redo
-  * Support for files with size up to exabytes
+  * Support for files with size up to exabytes (in partial file mode)
 
 Compiling
 ---------

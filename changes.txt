@@ -1,3 +1,6 @@
+0.2.7
+- Added Portuguese translation
+
 0.2.6 (2025-05-29)
 - Added Chinese translation
 - Added crude charset table support

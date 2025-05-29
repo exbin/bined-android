@@ -1,0 +1,52 @@
+<resources>
+    <string-array name="theme_entries">
+        <item>Automático (sistema)</item>
+        <item>Claro</item>
+        <item>Escuro</item>
+    </string-array>
+
+    <string-array name="bytes_per_row_entries">
+        <item>Preencher Tela</item>
+        <item>4 Bytes</item>
+        <item>8 Bytes</item>
+        <item>12 Bytes</item>
+        <item>16 Bytes</item>
+        <item>Personalizado</item>
+    </string-array>
+
+    <string-array name="view_mode_entries">
+        <item>Duplo</item>
+        <item>Apenas Código</item>
+        <item>Apenas Texto</item>
+    </string-array>
+
+    <string-array name="code_type_entries">
+        <item>Binary</item>
+        <item>Octal</item>
+        <item>Decimal</item>
+        <item>Hexadecimal</item>
+    </string-array>
+
+    <string-array name="hex_chars_case_entries">
+        <item>Minúsculas</item>
+        <item>Maiúsculas</item>
+    </string-array>
+
+    <string-array name="file_handling_mode_entries">
+        <item>Carregar arquivo completo</item>
+        <item>Apenas alterações</item>
+    </string-array>
+
+    <string-array name="keys_panel_mode_entries">
+        <item>Ocultar</item>
+        <item>Pequeno</item>
+        <item>Médio</item>
+        <item>Grande</item>
+    </string-array>
+
+    <string-array name="data_inspector_mode_entries">
+        <item>Ocultar</item>
+        <item>Mostrar</item>
+        <item>Em Orientação Horizontal</item>
+    </string-array>
+</resources>
