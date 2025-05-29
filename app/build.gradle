@@ -20,7 +20,7 @@ android {
 
         targetSdk 34
         versionCode 15
-        versionName "0.2.6-SNAPSHOT"
+        versionName "0.2.6"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         vectorDrawables.generatedDensities = []
     }
@@ -30,9 +30,6 @@ android {
 //            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-    }
-    lintOptions {
-        checkReleaseBuilds false
     }
     sourceSets {
         main.java.srcDirs += 'libsrc'
@@ -45,6 +42,9 @@ android {
         // targetCompatibility JavaVersion.VERSION_1_8
     }
     namespace 'org.exbin.bined.editor.android'
+    lint {
+        checkReleaseBuilds false
+    }
 }
 
 tasks.withType(JavaCompile).configureEach {
