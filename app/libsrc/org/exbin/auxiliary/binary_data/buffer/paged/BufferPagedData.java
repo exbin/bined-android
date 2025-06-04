@@ -76,7 +76,7 @@ public class BufferPagedData implements PagedData {
 
     @Override
     public long getDataSize() {
-        return (data.size() > 1 ? (data.size() - 1) * pageSize : 0) + (!data.isEmpty() ? data.get(data.size() - 1).getDataSize() : 0);
+        return (data.size() > 1 ? (long) (data.size() - 1) * pageSize : 0) + (!data.isEmpty() ? data.get(data.size() - 1).getDataSize() : 0);
     }
 
     @Override
@@ -148,10 +148,10 @@ public class BufferPagedData implements PagedData {
     @Override
     public void insertUninitialized(long startFrom, long length) {
         if (length < 0) {
-            throw new IllegalArgumentException("Length of inserted block must be nonnegative");
+            throw new IllegalArgumentException("Length of inserted block must be non-negative");
         }
         if (startFrom < 0) {
-            throw new IllegalArgumentException("Position of inserted block must be nonnegative");
+            throw new IllegalArgumentException("Position of inserted block must be non-negative");
         }
         long dataSize = getDataSize();
         if (startFrom > dataSize) {
@@ -172,18 +172,22 @@ public class BufferPagedData implements PagedData {
         long targetEnd = dataSize;
         // Backward copy
         while (copyLength > 0) {
-            BufferData sourcePage = getPage((int) (sourceEnd / pageSize));
+            BufferData sourcePage;
             int sourceOffset = (int) (sourceEnd % pageSize);
             if (sourceOffset == 0) {
                 sourcePage = getPage((int) ((sourceEnd - 1) / pageSize));
                 sourceOffset = (int) sourcePage.getDataSize();
+            } else {
+                sourcePage = getPage((int) (sourceEnd / pageSize));
             }
 
-            BufferData targetPage = getPage((int) (targetEnd / pageSize));
+            BufferData targetPage;
             int targetOffset = (int) (targetEnd % pageSize);
             if (targetOffset == 0) {
                 targetPage = getPage((int) ((targetEnd - 1) / pageSize));
                 targetOffset = (int) targetPage.getDataSize();
+            } else {
+                targetPage = getPage((int) (targetEnd / pageSize));
             }
 
             int copySize = Math.min(sourceOffset, targetOffset);
