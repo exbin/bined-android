@@ -1,0 +1,100 @@
+<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="en">
+    <string name="app_name">BinEd</string>
+    <string name="app_about">Ad: BinEd - Binary/Hex Düzenleyici\nSürüm: %1$s\nSağlayan: &lt;a href="https://exbin.org"&gt;ExBin Project&lt;/a&gt;\nLisans: &lt;a href="https://www.apache.org/licenses/LICENSE-2.0"&gt;Apache License, Version 2.0&lt;/a&gt;\nAna Sayfa: &lt;a href="https://bined.exbin.org/android"&gt;https://bined.exbin.org/android&lt;/a&gt;\n\nKatkıda Bulunanlar:</string>
+    <string name="bined_logo_description">BinEd Logo</string>
+
+    <!-- Actions & menu -->
+
+    <string name="title_activity_settings">Ayarlar</string>
+
+    <string name="action_new">Yeni</string>
+    <string name="action_open">Aç</string>
+    <string name="action_save">Kaydet</string>
+    <string name="action_save_as">Farklı Kaydet</string>
+    <string name="action_settings">Ayarlar</string>
+    <string name="action_about">Hakkında</string>
+    <string name="action_search">Ara</string>
+    <string name="action_undo">Geri al</string>
+    <string name="action_redo">İleri al</string>
+    <string name="action_selection_start">Seçimi Başlat</string>
+    <string name="action_selection_end">Seçimi Sonlandır</string>
+    <string name="action_clear_selection">Seçimi Temizle</string>
+    <string name="action_cut">Kes</string>
+    <string name="action_copy">Kopyala</string>
+    <string name="action_copy_as_code">Kod Olarak Kopyala</string>
+    <string name="action_paste">Yapıştır</string>
+    <string name="action_paste_from_code">Koddan Yapıştır</string>
+    <string name="action_delete">Sil</string>
+    <string name="action_select_all">Tümünü Seç</string>
+    <string name="action_exit">Çık</string>
+    <string name="action_open_main_menu">Ana Menü</string>
+    <string name="action_go_to_side_panel">Yan Panel</string>
+
+    <string name="view_menu">Görünüm</string>
+    <string name="visual_theme">Tema</string>
+    <string name="language">Dil</string>
+    <string name="view_mode">Görünüm Modu</string>
+    <string name="code_type">Kod Türü</string>
+    <string name="hex_characters_case">Hex karakterleri harf formatı</string>
+    <string name="encoding">Şifreleme</string>
+    <string name="code_colorization">Kod Renklendirme</string>
+    <string name="file_handling_mode">Dosya Açma Modu</string>
+    <string name="keys_panel_mode">Tuş Modu</string>
+    <string name="data_inspector_mode">Veri Denetleme Modu</string>
+    <string name="nonprintable_characters">Görünmeyen Karakter</string>
+    <string name="go_to_position">Konuma Git</string>
+    <string name="edit_selection">Seçimi Düzenle</string>
+    <string name="insert_data">Veri Yerleştir</string>
+    <string name="convert_data">Veri Çevir</string>
+    <string name="edit_menu">Düzenle</string>
+    <string name="font">Font</string>
+    <string name="bytes_per_row">Satır başı byte sayısı</string>
+    <string name="bytes_per_row_fill">Ekranı Doldur</string>
+    <string name="bytes_per_row_4">4 Byte</string>
+    <string name="bytes_per_row_8">8 Byte</string>
+    <string name="bytes_per_row_12">12 Byte</string>
+    <string name="bytes_per_row_16">16 Byte</string>
+    <string name="bytes_per_row_custom">Özel</string>
+    <string name="tools_menu">Araçlar</string>
+
+    <string name="application_about">Uygulama Hakkında</string>
+    <string name="select_file">Dosya Seç</string>
+    <string name="save_as_file">Dosya Olarak Kaydet</string>
+    <string name="file_modified">Dosya Değiştirildi</string>
+    <string name="confirm_exit">Çıkmak İçin Tekrar Basın</string>
+    <string name="confirm_discard">Değişiklikleri Yok Saymak İçin Tekrar Basın</string>
+    <string name="storage_permission_is_not_granted">Depolama İzni Sağlanmadı</string>
+    <string name="storage_permission_request">Depolama İzni Lazım</string>
+
+    <string name="button_ok">TM</string>
+    <string name="button_close">Kapat</string>
+    <string name="button_donate">Bağış</string>
+    <string name="button_cancel">İptal</string>
+    <string name="button_set">Ayarla</string>
+    <string name="button_go_to">Git</string>
+    <string name="button_save">Kaydet</string>
+    <string name="button_discard">Yok Say</string>
+    <string name="button_request">İste</string>
+
+    <string name="value_label_binary">Binary</string>
+    <string name="value_label_byte">Byte</string>
+    <string name="value_label_word">Kelime</string>
+    <string name="value_label_integer">Tam Sayı</string>
+    <string name="value_label_long">Long</string>
+    <string name="value_label_float">Float</string>
+    <string name="value_label_double">Double</string>
+    <string name="value_label_character">Karakter</string>
+    <string name="value_label_string">String</string>
+    <string name="big_endian_radio_button">BE</string>
+    <string name="little_endian_radio_button">LE</string>
+    <string name="signed_radio_button">Sign</string>
+    <string name="unsigned_radio_button">Uns</string>
+    <string name="error_invalid_input">Geçersiz Girdi</string>
+    <string name="error_exception">Beklenmedik Hata</string>
+
+    <!-- Preference Titles -->
+
+    <string name="pref_header_appearance">Dış Görünüm</string>
+    <string name="pref_view_header">Görünüm</string>
+
+</resources>

@@ -1,0 +1,53 @@
+<resources>
+    <string-array name="theme_entries">
+        <item>Otomatik (sistem)</item>
+        <item>Açık</item>
+        <item>Koyu</item>
+    </string-array>
+
+    <string-array name="bytes_per_row_entries">
+        <item>Ekranı Doldur</item>
+        <item>4 Byte</item>
+        <item>8 Byte</item>
+        <item>12 Byte</item>
+        <item>16 Byte</item>
+        <item>Özel</item>
+    </string-array>
+
+    <string-array name="view_mode_entries">
+        <item>Çift</item>
+        <item>Kod Tablosu</item>
+        <item>Metin Önizleme</item>
+    </string-array>
+
+    <string-array name="code_type_entries">
+        <item>İkili</item>
+        <item>Sekizli</item>
+        <item>Onlu</item>
+        <item>Onaltılı</item>
+    </string-array>
+
+    <string-array name="hex_chars_case_entries">
+        <item>Küçük Harf</item>
+        <item>Büyük Harf</item>
+    </string-array>
+
+    <string-array name="file_handling_mode_entries">
+        <item>Tüm Dosyayı Yükle</item>
+        <item>Sadece Değişiklikler</item>
+    </string-array>
+
+    <string-array name="keys_panel_mode_entries">
+        <item>Sakla</item>
+        <item>Küçük</item>
+        <item>Orta</item>
+        <item>Büyük</item>
+    </string-array>
+
+    <string-array name="data_inspector_mode_entries">
+        <item>Sakla</item>
+        <item>Göster</item>
+        <item>Yatay modda</item>
+    </string-array>
+
+</resources>
