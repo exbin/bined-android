@@ -1,5 +1,7 @@
 0.2.7
 - Added Portuguese translation
+- Added Turkish translation
+- Bug fixes
 
 0.2.6 (2025-05-29)
 - Added Chinese translation

@@ -18,6 +18,7 @@
         <item>हिंदी</item>
         <item>简体中文</item>
         <item>Português</item>
+        <item>Türkçe</item>
     </string-array>
 
     <string-array name="language_values" translatable="false">
@@ -27,6 +28,7 @@
         <item>hi</item>
         <item>zh-CN</item>
         <item>pt</item>
+        <item>tr</item>
     </string-array>
 
     <string-array name="bytes_per_row_entries">
