@@ -921,14 +921,18 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             inputNumber.setText(String.valueOf(codeArea.getDataPosition()));
             builder.setView(inputNumber);
             builder.setPositiveButton(R.string.button_go_to, (dialog, which) -> {
-                DefaultCodeAreaCaretPosition caretPosition = new DefaultCodeAreaCaretPosition();
-                caretPosition.setCodeOffset(0);
-                caretPosition.setPosition(codeArea.getActiveCaretPosition());
-                long targetPosition = Long.parseLong(inputNumber.getText().toString());
-                caretPosition.setDataPosition(Math.min(targetPosition, codeArea.getDataSize()));
-                codeArea.setActiveCaretPosition(caretPosition);
-                codeArea.validateCaret();
-                codeArea.centerOnCursor();
+                try {
+                    DefaultCodeAreaCaretPosition caretPosition = new DefaultCodeAreaCaretPosition();
+                    caretPosition.setCodeOffset(0);
+                    caretPosition.setPosition(codeArea.getActiveCaretPosition());
+                    long targetPosition = Long.parseLong(inputNumber.getText().toString());
+                    caretPosition.setDataPosition(Math.min(targetPosition, codeArea.getDataSize()));
+                    codeArea.setActiveCaretPosition(caretPosition);
+                    codeArea.validateCaret();
+                    codeArea.centerOnCursor();
+                } catch (NumberFormatException ex) {
+                    reportException(ex);
+                }
             });
             builder.setNegativeButton(R.string.button_cancel, null);
             AlertDialog alertDialog = builder.create();
