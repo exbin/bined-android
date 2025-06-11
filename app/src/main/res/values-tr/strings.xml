@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:locale="en">
     <string name="app_name">BinEd</string>
-    <string name="app_about">Ad: BinEd - Binary/Hex Düzenleyici\nSürüm: %1$s\nSağlayan: &lt;a href="https://exbin.org"&gt;ExBin Project&lt;/a&gt;\nLisans: &lt;a href="https://www.apache.org/licenses/LICENSE-2.0"&gt;Apache License, Version 2.0&lt;/a&gt;\nAna Sayfa: &lt;a href="https://bined.exbin.org/android"&gt;https://bined.exbin.org/android&lt;/a&gt;\n\nKatkıda Bulunanlar:</string>
+    <string name="app_about">Ad: BinEd - Binary/Hex Düzenleyici\nSürüm: %1$s\nSağlayan: &lt;a href="%2$s"&gt;ExBin Project&lt;/a&gt;\nLisans: &lt;a href="%3$s"&gt;Apache License, Version 2.0&lt;/a&gt;\nAna Sayfa: &lt;a href="%4$s"&gt;%4$s&lt;/a&gt;\n\nKatkıda Bulunanlar:</string>
     <string name="bined_logo_description">BinEd Logo</string>
 
     <!-- Actions & menu -->
@@ -97,4 +97,11 @@
     <string name="pref_header_appearance">Dış Görünüm</string>
     <string name="pref_view_header">Görünüm</string>
 
+    <string name="search_label">Ara</string>
+    <string name="search_text">Metin</string>
+    <string name="search_binary">İkili</string>
+    <string name="search_from_cursor">İmleçten ara</string>
+    <string name="search_match_case">Büyük/küçük harf eşleştir</string>
+    <string name="search_show_multiple_matches">Birden fazla eşleşmeyi göster</string>
+    <string name="search_backward_direction">Geriye doğru ara</string>
 </resources>

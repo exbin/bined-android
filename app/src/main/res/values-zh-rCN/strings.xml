@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">BinEd</string>
-    <string name="app_about">应用名称: BinEd - Binary/Hex Editor\n版本: %1$s\n上游: &lt;a href=https://exbin.org&gt;ExBin Project&lt;/a&gt;\n开源许可证: &lt;a href=https://www.apache.org/licenses/LICENSE-2.0&gt;Apache License, Version 2.0&lt;/a&gt;\n主页: &lt;a href=https://bined.exbin.org/android&gt;https://bined.exbin.org/android&lt;/a&gt;\n\n贡献者:</string>
+    <string name="app_about">应用名称: BinEd - Binary/Hex Editor\n版本: %1$s\n上游: &lt;a href="%2$s"&gt;ExBin Project&lt;/a&gt;\n开源许可证: &lt;a href="%3$s"&gt;Apache License, Version 2.0&lt;/a&gt;\n主页: &lt;a href="%4$s"&gt;%4$s&lt;/a&gt;\n\n贡献者:</string>
     <string name="bined_logo_description">BinEd徽标</string>
 
     <!-- Actions & menu -->
@@ -97,4 +97,11 @@
     <string name="pref_header_appearance">外观</string>
     <string name="pref_view_header">视图</string>
 
+    <string name="search_label">搜索</string>
+    <string name="search_text">文本</string>
+    <string name="search_binary">二进制</string>
+    <string name="search_from_cursor">从光标处搜索</string>
+    <string name="search_match_case">大小写匹配</string>
+    <string name="search_show_multiple_matches">显示多个匹配项</string>
+    <string name="search_backward_direction">向后搜索</string>
 </resources>

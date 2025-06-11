@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/labelTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/search_label"
+            tools:layout_editor_absoluteX="17dp"
+            tools:layout_editor_absoluteY="12dp" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/search_text" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/search_binary" />
+        </com.google.android.material.tabs.TabLayout>
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/from_cursor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/search_from_cursor" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/match_case"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/search_match_case" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/multiple_matches"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/search_show_multiple_matches" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/backward_direction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/search_backward_direction" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

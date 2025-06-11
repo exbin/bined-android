@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">BinEd</string>
-    <string name="app_about">नाम: BinEd - बाइनरी/हेक्स संपादक\nवर्ज़न: %1$s\nविक्रेता: &lt;a href="https://exbin.org"&gt;ExBin प्रोजेक्ट&lt;/a&gt;\nलाइसेंस: &lt;a href="https://www.apache.org/licenses/LICENSE-2.0"&gt;Apache लाइसेंस, संस्करण 2.0&lt;/a&gt;\nमुखपृष्ठ: &lt;a href="https://bined.exbin.org/android"&gt;https://bined.exbin.org/android&lt;/a&gt;\n\nयोगदानकर्ताओं:</string>
+    <string name="app_about">नाम: BinEd - बाइनरी/हेक्स संपादक\nवर्ज़न: %1$s\nविक्रेता: &lt;a href="%2$s"&gt;ExBin प्रोजेक्ट&lt;/a&gt;\nलाइसेंस: &lt;a href="%3$s"&gt;Apache लाइसेंस, संस्करण 2.0&lt;/a&gt;\nमुखपृष्ठ: &lt;a href="%4$s"&gt;%4$s&lt;/a&gt;\n\nयोगदानकर्ताओं:</string>
     <string name="bined_logo_description">BinEd लोगो</string>
 
     <!-- Actions & menu -->
@@ -97,4 +97,11 @@
     <string name="pref_header_appearance">दृश्यता</string>
     <string name="pref_view_header">दृश्य</string>
 
+    <string name="search_label">खोज</string>
+    <string name="search_text">टेक्स्ट</string>
+    <string name="search_binary">बाइनरी</string>
+    <string name="search_from_cursor">कर्सर से खोजें</string>
+    <string name="search_match_case">मिलान केस</string>
+    <string name="search_show_multiple_matches">कई मिलान दिखाएँ</string>
+    <string name="search_backward_direction">पीछे की ओर खोजें</string>
 </resources>

@@ -62,7 +62,8 @@ public class AboutDialog extends AppCompatDialogFragment {
         // dialog layout
         View aboutView = inflater.inflate(R.layout.about_view, null);
         TextView textView = aboutView.findViewById(R.id.textView);
-        String htmlString = String.format(getResources().getString(R.string.app_about), appVersion).replace("\n", "<br/>");
+        String htmlString = String.format(getResources().getString(R.string.app_about), appVersion,
+                "https://exbin.org", "https://www.apache.org/licenses/LICENSE-2.0", "https://bined.exbin.org/android").replace("\n", "<br/>");
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 textView.setText(Html.fromHtml(htmlString, Html.FROM_HTML_MODE_COMPACT));
