@@ -13,14 +13,11 @@
             android:id="@+id/labelTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/search_label"
-            tools:layout_editor_absoluteX="17dp"
-            tools:layout_editor_absoluteY="12dp" />
+            android:text="@string/search_label" />
 
         <com.google.android.material.tabs.TabLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_height="wrap_content" >
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
@@ -32,6 +29,12 @@
                 android:layout_height="wrap_content"
                 android:text="@string/search_binary" />
         </com.google.android.material.tabs.TabLayout>
+
+        <FrameLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/from_cursor"
