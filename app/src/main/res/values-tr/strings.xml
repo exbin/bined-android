@@ -75,6 +75,7 @@
     <string name="button_save">Kaydet</string>
     <string name="button_discard">Yok Say</string>
     <string name="button_request">İste</string>
+    <string name="button_search">Ara</string>
 
     <string name="value_label_binary">Binary</string>
     <string name="value_label_byte">Byte</string>
@@ -97,7 +98,7 @@
     <string name="pref_header_appearance">Dış Görünüm</string>
     <string name="pref_view_header">Görünüm</string>
 
-    <string name="search_label">Ara</string>
+    <string name="search_title">Ara</string>
     <string name="search_text">Metin</string>
     <string name="search_binary">İkili</string>
     <string name="search_from_cursor">İmleçten ara</string>

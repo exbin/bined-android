@@ -73,6 +73,7 @@
     <string name="button_save">Uložit</string>
     <string name="button_discard">Zahodit</string>
     <string name="button_request">Vyžádat</string>
+    <string name="button_search">Hledat</string>
 
     <string name="value_label_binary">Binární</string>
     <string name="value_label_byte">Bajt</string>
@@ -93,7 +94,7 @@
     <string name="pref_header_appearance">Vzhled</string>
     <string name="pref_view_header">Zobrazit</string>
 
-    <string name="search_label">Hledat</string>
+    <string name="search_title">Hledat</string>
     <string name="search_text">Text</string>
     <string name="search_binary">Binární</string>
     <string name="search_from_cursor">Hledat od pozice kurzoru</string>

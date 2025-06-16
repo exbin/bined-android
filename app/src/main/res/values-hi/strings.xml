@@ -75,6 +75,7 @@
     <string name="button_save">सहेजें</string>
     <string name="button_discard">खारिज करें</string>
     <string name="button_request">अनुरोध करें</string>
+    <string name="button_search">खोजें</string>
 
     <string name="value_label_binary">Binary</string>
     <string name="value_label_byte">Byte</string>
@@ -97,7 +98,7 @@
     <string name="pref_header_appearance">दृश्यता</string>
     <string name="pref_view_header">दृश्य</string>
 
-    <string name="search_label">खोज</string>
+    <string name="search_title">खोज</string>
     <string name="search_text">टेक्स्ट</string>
     <string name="search_binary">बाइनरी</string>
     <string name="search_from_cursor">कर्सर से खोजें</string>

@@ -1,4 +1,5 @@
 0.2.7
+- Added basic binary search
 - Added Portuguese translation
 - Added Turkish translation
 - Bug fixes

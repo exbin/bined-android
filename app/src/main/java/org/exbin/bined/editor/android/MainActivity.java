@@ -51,7 +51,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -95,7 +94,7 @@ import org.exbin.bined.editor.android.preference.MainPreferences;
 import org.exbin.bined.editor.android.search.BinarySearch;
 import org.exbin.bined.editor.android.search.BinarySearchService;
 import org.exbin.bined.editor.android.search.BinarySearchServiceImpl;
-import org.exbin.bined.editor.android.search.SearchCondition;
+import org.exbin.bined.editor.android.search.SearchDialog;
 import org.exbin.bined.editor.android.search.SearchParameters;
 import org.exbin.bined.highlight.android.NonAsciiCodeAreaColorAssessor;
 import org.exbin.bined.highlight.android.NonprintablesCodeAreaAssessor;
@@ -107,7 +106,6 @@ import org.exbin.framework.bined.BinaryStatusApi;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -149,9 +147,9 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     private View keyPanel;
     private View basicValuesInspectorView;
     private Menu menu;
-    private SearchView searchView;
     private final BinaryStatusHandler binaryStatus = new BinaryStatusHandler(this);
     private BinarySearch binarySearch;
+    private SearchParameters searchParameters = null;
     private Runnable postSaveAsAction = null;
     private boolean keyboardShown = false;
     private boolean dataInspectorShown = true;
@@ -535,27 +533,6 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         updateEditActionsState();
         updateViewActionsState();
 
-        MenuItem searchMenuItem = menu.findItem(R.id.action_search);
-        searchView = Objects.requireNonNull((SearchView) searchMenuItem.getActionView());
-        searchView.setSubmitButtonEnabled(true);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                binarySearch.performFindAgain(searchStatusListener);
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                SearchCondition searchCondition = new SearchCondition();
-                searchCondition.setSearchText(newText);
-                SearchParameters searchParameters = new SearchParameters();
-                searchParameters.setCondition(searchCondition);
-                binarySearch.performFind(searchParameters, searchStatusListener);
-                return true;
-            }
-        });
-
         return true;
     }
 
@@ -894,18 +871,14 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             }
             return true;
         } else if (id == R.id.action_search) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(R.string.action_search);
-            searchView.setIconifiedByDefault(false);
-            builder.setNegativeButton(R.string.button_cancel, (dialog, which) -> {
-                binarySearch.cancelSearch();
-                binarySearch.clearSearch();
+            SearchDialog searchDialog = new SearchDialog();
+            searchDialog.setBinarySearch(binarySearch);
+            searchDialog.setSearchParameters(searchParameters);
+            searchDialog.setTemplateCodeArea(codeArea);
+            searchDialog.setOnCloseListener(() -> {
+                searchParameters = searchDialog.getSearchParameters();
             });
-            builder.setView(searchView);
-            AlertDialog alertDialog = builder.create();
-            alertDialog.show();
-            searchView.requestFocus();
-
+            searchDialog.show(getSupportFragmentManager(), "searchDialog");
             return true;
         } else if (id == R.id.action_delete) {
             codeArea.delete();

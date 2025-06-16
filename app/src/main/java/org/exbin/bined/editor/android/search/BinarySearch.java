@@ -114,13 +114,15 @@ public class BinarySearch {
         invokeSearchThread.delay = delay;
         currentSearchOperation = searchOperation;
         currentSearchParameters.setFromParameters(searchParameters);
-        currentReplaceParameters.setFromParameters(replaceParameters);
+        if (replaceParameters != null) {
+            currentReplaceParameters.setFromParameters(replaceParameters);
+        }
         invokeSearchThread.start();
     }
 
     // TODO Move to search panel
     public void performFind(SearchParameters searchParameters, BinarySearchService.SearchStatusListener searchStatusListener) {
-        invokeSearch(SearchOperation.FIND, searchParameters, new ReplaceParameters(), 0);
+        invokeSearch(SearchOperation.FIND, searchParameters, null, 0);
     }
 
     // TODO Move to search panel

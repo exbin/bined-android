@@ -75,6 +75,7 @@
     <string name="button_save">Salvar</string>
     <string name="button_discard">Descartar</string>
     <string name="button_request">Solicitar</string>
+    <string name="button_search">Buscar</string>
 
     <string name="value_label_binary">Binary</string>
     <string name="value_label_byte">Byte</string>
@@ -95,7 +96,7 @@
     <string name="pref_header_appearance">Aparência</string>
     <string name="pref_view_header">Visualização</string>
 
-    <string name="search_label">Pesquisar</string>
+    <string name="search_title">Pesquisar</string>
     <string name="search_text">Texto</string>
     <string name="search_binary">Binário</string>
     <string name="search_from_cursor">Pesquisar a partir do cursor</string>

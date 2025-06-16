@@ -75,6 +75,7 @@
     <string name="button_save">保存</string>
     <string name="button_discard">丢弃</string>
     <string name="button_request">授予</string>
+    <string name="button_search">搜索</string>
 
     <string name="value_label_binary">Binary</string>
     <string name="value_label_byte">Byte</string>
@@ -97,7 +98,7 @@
     <string name="pref_header_appearance">外观</string>
     <string name="pref_view_header">视图</string>
 
-    <string name="search_label">搜索</string>
+    <string name="search_title">搜索</string>
     <string name="search_text">文本</string>
     <string name="search_binary">二进制</string>
     <string name="search_from_cursor">从光标处搜索</string>
