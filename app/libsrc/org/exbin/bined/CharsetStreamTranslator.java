@@ -226,15 +226,15 @@ public class CharsetStreamTranslator extends InputStream {
         int offset = position;
         while (toRead > 0) {
             try {
-                int red = source.read(buffer, offset, toRead);
-                if (red < 0) {
+                int read = source.read(buffer, offset, toRead);
+                if (read < 0) {
                     inputBuffer.limit(offset);
                     endOfInput = true;
                     break;
                 }
 
-                offset += red;
-                toRead -= red;
+                offset += read;
+                toRead -= read;
             } catch (IOException ex) {
                 Logger.getLogger(CharsetStreamTranslator.class.getName()).log(Level.SEVERE, null, ex);
             }

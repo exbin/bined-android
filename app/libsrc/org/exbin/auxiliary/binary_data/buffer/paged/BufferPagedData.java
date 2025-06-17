@@ -255,8 +255,8 @@ public class BufferPagedData implements PagedData {
     }
 
     @Override
-    public long insert(long startFrom, InputStream inputStream, long dataSize) throws IOException {
-        if (dataSize > MAX_DATA_SIZE - getDataSize()) {
+    public long insert(long startFrom, InputStream inputStream, long maximumDataSize) throws IOException {
+        if (maximumDataSize > MAX_DATA_SIZE - getDataSize()) {
             throw new DataOverflowException("Maximum array size overflow");
         }
 
@@ -267,31 +267,33 @@ public class BufferPagedData implements PagedData {
         long loadedData = 0;
         int pageOffset = (int) (startFrom % pageSize);
         byte[] buffer = new byte[pageSize];
-        while (dataSize == -1 || dataSize > 0) {
+        while (maximumDataSize == -1 || maximumDataSize > 0) {
             int dataToRead = pageSize - pageOffset;
-            if (dataSize >= 0 && dataSize < dataToRead) {
-                dataToRead = (int) dataSize;
+            if (maximumDataSize >= 0 && maximumDataSize < dataToRead) {
+                dataToRead = (int) maximumDataSize;
             }
             if (pageOffset > 0 && dataToRead > pageOffset) {
                 // Align to data pages
                 dataToRead = pageOffset;
             }
 
-            int redLength = 0;
+            int readLength = 0;
             while (dataToRead > 0) {
-                int red = inputStream.read(buffer, redLength, dataToRead);
-                if (red == -1) {
+                int read = inputStream.read(buffer, readLength, dataToRead);
+                if (read == -1) {
                     break;
-                } else {
-                    redLength += red;
-                    dataToRead -= red;
                 }
+
+                readLength += read;
+                dataToRead -= read;
             }
 
-            insert(startFrom, buffer, 0, redLength);
-            startFrom += redLength;
-            dataSize -= redLength;
-            loadedData += redLength;
+            insert(startFrom, buffer, 0, readLength);
+            startFrom += readLength;
+            if (maximumDataSize >= 0) {
+                maximumDataSize -= readLength;
+            }
+            loadedData += readLength;
             pageOffset = 0;
         }
         return loadedData;

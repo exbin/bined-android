@@ -116,8 +116,8 @@ public class MemoryDataSource implements EditableBinaryData {
     }
 
     @Override
-    public long insert(long startFrom, InputStream inputStream, long length) throws IOException {
-        return data.insert(startFrom, inputStream, length);
+    public long insert(long startFrom, InputStream inputStream, long maximumDataSize) throws IOException {
+        return data.insert(startFrom, inputStream, maximumDataSize);
     }
 
     @Override

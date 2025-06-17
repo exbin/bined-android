@@ -58,13 +58,13 @@ public class DeltaDataPageWindow {
                 toRead = (int) (fileLength - pagePosition);
             }
             while (toRead > 0) {
-                int red = data.read(pagePosition, page, offset, toRead);
-                if (red == -1) {
+                int read = data.read(pagePosition, page, offset, toRead);
+                if (read == -1) {
                     throw new IOException("Unexpected read error ");
                 }
-                toRead -= red;
-                offset += red;
-                pagePosition += red;
+                toRead -= read;
+                offset += read;
+                pagePosition += read;
             }
         } catch (IOException ex) {
             Logger.getLogger(DeltaDataPageWindow.class.getName()).log(Level.SEVERE, null, ex);

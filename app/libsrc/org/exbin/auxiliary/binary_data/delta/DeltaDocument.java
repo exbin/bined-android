@@ -150,23 +150,25 @@ public class DeltaDocument implements EditableBinaryData {
     }
 
     @Override
-    public long insert(long startFrom, InputStream inputStream, long maxDataLength) throws IOException {
+    public long insert(long startFrom, InputStream inputStream, long maximumDataSize) throws IOException {
         // TODO optimization later
         long processed = 0;
         byte[] buffer = new byte[BUFFER_SIZE];
-        if (maxDataLength > 0) {
-            int read;
-            do {
-                int toRead = maxDataLength > BUFFER_SIZE ? BUFFER_SIZE : (int) maxDataLength;
-                read = inputStream.read(buffer, 0, toRead);
-                if (read == -1) {
-                    break;
-                }
-                pointerWindow.insert(startFrom, buffer, 0, read);
-                maxDataLength -= read;
-                startFrom += read;
-                processed += read;
-            } while (maxDataLength > 0 && read > 0);
+        while (maximumDataSize == -1 || maximumDataSize > 0) {
+            int toRead = BUFFER_SIZE;
+            if (maximumDataSize >= 0 && maximumDataSize < toRead) {
+                toRead = (int) maximumDataSize;
+            }
+            int read = inputStream.read(buffer, 0, toRead);
+            if (read == -1) {
+                break;
+            }
+            pointerWindow.insert(startFrom, buffer, 0, read);
+            if (maximumDataSize >= 0) {
+                maximumDataSize -= read;
+            }
+            startFrom += read;
+            processed += read;
         }
 
         return processed;
@@ -241,14 +243,14 @@ public class DeltaDocument implements EditableBinaryData {
         byte[] buffer = new byte[BUFFER_SIZE];
 
         long position = 0;
-        int red;
+        int read;
         do {
-            red = stream.read(buffer);
-            if (red > 0) {
-                documentWindow.insert(position, buffer, 0, red);
-                position += red;
+            read = stream.read(buffer);
+            if (read > 0) {
+                documentWindow.insert(position, buffer, 0, read);
+                position += read;
             }
-        } while (red >= 0);
+        } while (read >= 0);
     }
 
     @Override

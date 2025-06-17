@@ -29,6 +29,10 @@ public class DataRange {
     protected final long endPosition;
 
     public DataRange(long startPosition, long endPosition) {
+        if (endPosition > startPosition) {
+            throw new IllegalStateException("Invalid data range");
+        }
+
         this.startPosition = startPosition;
         this.endPosition = endPosition;
     }
@@ -39,5 +43,9 @@ public class DataRange {
 
     public long getEndPosition() {
         return endPosition;
+    }
+
+    public long getLength() {
+        return endPosition - startPosition + 1;
     }
 }

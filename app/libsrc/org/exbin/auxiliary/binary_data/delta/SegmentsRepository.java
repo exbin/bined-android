@@ -406,8 +406,8 @@ public class SegmentsRepository {
                         int length = sectionLength < PROCESSING_LIMIT ? (int) sectionLength : PROCESSING_LIMIT;
                         int toProcess = length;
                         while (toProcess > 0) {
-                            int red = source.read(sectionPosition + sectionLength - toProcess, buffer, length - toProcess, toProcess);
-                            toProcess -= red;
+                            int read = source.read(sectionPosition + sectionLength - toProcess, buffer, length - toProcess, toProcess);
+                            toProcess -= read;
                         }
                         dataSource.write(targetPosition + sectionLength - length, buffer, 0, length);
 

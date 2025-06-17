@@ -201,26 +201,29 @@ public class BufferEditableData extends BufferData implements EditableBinaryData
     }
 
     @Override
-    public long insert(long startFrom, InputStream inputStream, long dataSize) throws IOException {
-        if (dataSize > MAX_ARRAY_LENGTH - data.capacity()) {
+    public long insert(long startFrom, InputStream inputStream, long maximumDataSize) throws IOException {
+        if (maximumDataSize > MAX_ARRAY_LENGTH - data.capacity()) {
             throw new DataOverflowException(ARRAY_OVERFLOW_ERROR);
         }
 
         try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
             byte[] buffer = new byte[BUFFER_SIZE];
-            if (dataSize > 0) {
-                int read;
-                do {
-                    int toRead = buffer.length;
-                    if (toRead > dataSize) {
-                        toRead = (int) dataSize;
+            while (maximumDataSize == -1 || maximumDataSize > 0) {
+                int toRead = buffer.length;
+                if (maximumDataSize >= 0 && toRead > maximumDataSize) {
+                    toRead = (int) maximumDataSize;
+                }
+                int read = inputStream.read(buffer, 0, toRead);
+                if (read == -1) {
+                    break;
+                }
+                
+                if (read > 0) {
+                    output.write(buffer, 0, read);
+                    if (maximumDataSize >= 0) {
+                        maximumDataSize -= read;
                     }
-                    read = inputStream.read(buffer, 0, toRead);
-                    if (read > 0) {
-                        output.write(buffer, 0, read);
-                        dataSize -= read;
-                    }
-                } while (read > 0 && dataSize > 0);
+                }
             }
             byte[] newData = output.toByteArray();
             if (startFrom + newData.length > getDataSize()) {
