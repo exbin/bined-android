@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">BinEd</string>
+    <string name="app_about">Название: BinEd - Двоичный/шестнадцатеричный редактор\nВерсия: %1$s\nПроизводитель: &lt;a href="%2$s"&gt;Проект ExBin&lt;/a&gt;\nЛицензия: &lt;a href="%3$s"&gt;Лицензия Apache, версия 2.0&lt;/a&gt;\nДомашняя страница: &lt;a href="%4$s"&gt;%4$s&lt;/a&gt;\n\nУчастники:</string>
+    <string name="bined_logo_description">Логотип BinEd</string>
+
+    <!-- Действия и меню -->
+
+    <string name="title_activity_settings">Настройки</string>
+
+    <string name="action_new">Новый</string>
+    <string name="action_open">Открыть</string>
+    <string name="action_save">Сохранить</string>
+    <string name="action_save_as">Сохранить как</string>
+    <string name="action_settings">Настройки</string>
+    <string name="action_about">О программе</string>
+    <string name="action_search">Поиск</string>
+    <string name="action_undo">Отменить</string>
+    <string name="action_redo">Повторить</string>
+    <string name="action_selection_start">Начало выделения</string>
+    <string name="action_selection_end">Конец выделения</string>
+    <string name="action_clear_selection">Очистить выделение</string>
+    <string name="action_cut">Вырезать</string>
+    <string name="action_copy">Копировать</string>
+    <string name="action_copy_as_code">Копировать как код</string>
+    <string name="action_paste">Вставить</string>
+    <string name="action_paste_from_code">Вставить из кода</string>
+    <string name="action_delete">Удалить</string>
+    <string name="action_select_all">Выбрать все</string>
+    <string name="action_exit">Выйти</string>
+    <string name="action_open_main_menu">Главное меню</string>
+    <string name="action_go_to_side_panel">Боковая панель</string>
+    <string name="action_open_table_file" translatable="false">Открыть файл таблицы</string>
+
+    <string name="view_menu">Вид</string>
+    <string name="visual_theme">Визуальный Тема</string>
+    <string name="language">Язык</string>
+    <string name="view_mode">Режим просмотра</string>
+    <string name="code_type">Тип кода</string>
+    <string name="hex_characters_case">Регистр шестнадцатеричных символов</string>
+    <string name="encoding">Кодировка</string>
+    <string name="code_colorization">Цветовая раскраска кода</string>
+    <string name="file_handling_mode">Режим обработки файлов</string>
+    <string name="keys_panel_mode">Панель клавиш</string>
+    <string name="data_inspector_mode">Режим инспектора данных</string>
+    <string name="nonprintable_characters">Непечатаемые символы</string>
+    <string name="go_to_position">Перейти к позиции</string>
+    <string name="edit_selection">Изменить Выбор</string>
+    <string name="insert_data">Вставить данные</string>
+    <string name="convert_data">Преобразовать данные</string>
+    <string name="edit_menu">Изменить</string>
+    <string name="font">Шрифт</string>
+    <string name="bytes_per_row">Байтов на строку</string>
+    <string name="bytes_per_row_fill">Заполнить экран</string>
+    <string name="bytes_per_row_4">4 байта</string>
+    <string name="bytes_per_row_8">8 байт</string>
+    <string name="bytes_per_row_12">12 байт</string>
+    <string name="bytes_per_row_16">16 байт</string>
+    <string name="bytes_per_row_custom">Пользовательский</string>
+    <string name="tools_menu">Инструменты</string>
+
+    <string name="application_about">О приложении</string>
+    <string name="select_file">Выберите файл</string>
+    <string name="save_as_file">Сохранить как файл</string>
+    <string name="file_modified">Файл был изменен</string>
+    <string name="confirm_exit">Нажмите еще раз, чтобы выйти</string>
+    <string name="confirm_discard">Нажмите еще раз, чтобы отменить изменения</string>
+    <string name="storage_permission_is_not_granted">Разрешение на хранение не предоставлено</string>
+    <string name="storage_permission_request">Необходимо включить разрешения на хранение</string>
+
+    <string name="button_ok">OK</string>
+    <string name="button_close">Закрыть</string>
+    <string name="button_donate">Пожертвовать</string>
+    <string name="button_cancel">Отмена</string>
+    <string name="button_set">Установить</string>
+    <string name="button_go_to">Перейти</string>
+    <string name="button_save">Сохранить</string>
+    <string name="button_discard">Отменить</string>
+    <string name="button_request">Запрос</string>
+    <string name="button_search">Поиск</string>
+
+    <string name="value_label_binary">Двоичный</string>
+    <string name="value_label_byte">Байт</string>
+    <string name="value_label_word">Слово</string>
+    <string name="value_label_integer">Целое</string>
+    <string name="value_label_long">Длинный</string>
+    <string name="value_label_float">Float</string>
+    <string name="value_label_double">Double</string>
+    <string name="value_label_character">Character</string>
+    <string name="value_label_string">String</string>
+    <string name="big_endian_radio_button">BE</string>
+    <string name="little_endian_radio_button">LE</string>
+    <string name="signed_radio_button">Sign</string>
+    <string name="unsigned_radio_button">Uns</string>
+    <string name="error_invalid_input">Недопустимый ввод</string>
+    <string name="error_exception">Неожиданная ошибка</string>
+
+    <!-- Заголовки настроек -->
+
+    <string name="pref_header_appearance">Внешний вид</string>
+    <string name="pref_view_header">Вид</string>
+
+    <string name="search_title">Поиск</string>
+    <string name="search_text">Текст</string>
+    <string name="search_binary">Двоичный</string>
+    <string name="search_from_cursor">Поиск от курсора</string>
+    <string name="search_match_case">Учитывать регистр</string>
+    <string name="search_show_multiple_matches">Показать несколько совпадений</string>
+    <string name="search_backward_direction">Поиск назад</string>
+</resources>

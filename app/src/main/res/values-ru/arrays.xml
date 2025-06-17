@@ -1,0 +1,52 @@
+<resources>
+    <string-array name="theme_entries">
+        <item>Автоматический (системный)</item>
+        <item>Светлый</item>
+        <item>Темный</item>
+    </string-array>
+
+    <string-array name="bytes_per_row_entries">
+        <item>Заполнить экран</item>
+        <item>4 байта</item>
+        <item>8 байт</item>
+        <item>12 байт</item>
+        <item>16 байт</item>
+        <item>Пользовательский</item>
+    </string-array>
+
+    <string-array name="view_mode_entries">
+        <item>Двойной</item>
+        <item>Матрица кода</item>
+        <item>Предварительный просмотр текста</item>
+    </string-array>
+
+    <string-array name="code_type_entries">
+        <item>Двоичный</item>
+        <item>Восьмеричный</item>
+        <item>Десятичный</item>
+        <item>Шестнадцатеричный</item>
+    </string-array>
+
+    <string-array name="hex_chars_case_entries">
+        <item>Нижний регистр</item>
+        <item>Верхний регистр</item>
+    </string-array>
+
+    <string-array name="file_handling_mode_entries">
+        <item>Загрузить весь файл</item>
+        <item>Только изменения</item>
+    </string-array>
+
+    <string-array name="keys_panel_mode_entries">
+        <item>Скрыть</item>
+        <item>Маленький</item>
+        <item>Средний</item>
+        <item>Большой</item>
+    </string-array>
+
+    <string-array name="data_inspector_mode_entries">
+        <item>Скрыть</item>
+        <item>Показать</item>
+        <item>В альбомной ориентации</item>
+    </string-array>
+</resources>

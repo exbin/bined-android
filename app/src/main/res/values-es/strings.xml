@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">BinEd</string>
+    <string name="app_about">Nombre: BinEd - Editor binario/hexadecimal\nVersión: %1$s\nProveedor: &lt;a href="%2$s"&gt;Proyecto ExBin&lt;/a&gt;\nLicencia: &lt;a href="%3$s"&gt;Licencia Apache, versión 2.0&lt;/a&gt;\nPágina principal: &lt;a href="%4$s"&gt;%4$s&lt;/a&gt;\n\nColaboradores:</string>
+    <string name="bined_logo_description">Logotipo de BinEd</string>
+
+    <!-- Acciones y menú -->
+
+    <string name="title_activity_settings">Configuración</string>
+
+    <string name="action_new">Nuevo</string>
+    <string name="action_open">Abrir</string>
+    <string name="action_save">Guardar</string>
+    <string name="action_save_as">Guardar como</string>
+    <string name="action_settings">Configuración</string>
+    <string name="action_about">Acerca de</string>
+    <string name="action_search">Buscar</string>
+    <string name="action_undo">Deshacer</string>
+    <string name="action_redo">Rehacer</string>
+    <string name="action_selection_start">Inicio de selección</string>
+    <string name="action_selection_end">Fin de selección</string>
+    <string name="action_clear_selection">Borrar selección</string>
+    <string name="action_cut">Cortar</string>
+    <string name="action_copy">Copiar</string>
+    <string name="action_copy_as_code">Copiar como código</string>
+    <string name="action_paste">Pegar</string>
+    <string name="action_paste_from_code">Pegar desde Código</string>
+    <string name="action_delete">Eliminar</string>
+    <string name="action_select_all">Seleccionar todo</string>
+    <string name="action_exit">Salir</string>
+    <string name="action_open_main_menu">Menú principal</string>
+    <string name="action_go_to_side_panel">Panel lateral</string>
+    <string name="action_open_table_file" translatable="false">Abrir archivo de tabla</string>
+
+    <string name="view_menu">Ver</string>
+    <string name="visual_theme">Tema visual</string>
+    <string name="language">Idioma</string>
+    <string name="view_mode">Modo de vista</string>
+    <string name="code_type">Tipo de código</string>
+    <string name="hex_characters_case">Mayúsculas y minúsculas en caracteres hexadecimales</string>
+    <string name="encoding">Codificación</string>
+    <string name="code_colorization">Código Colorización</string>
+    <string name="file_handling_mode">Modo de gestión de archivos</string>
+    <string name="keys_panel_mode">Panel de teclas</string>
+    <string name="data_inspector_mode">Modo de inspector de datos</string>
+    <string name="nonprintable_characters">Caracteres no imprimibles</string>
+    <string name="go_to_position">Ir a la posición</string>
+    <string name="edit_selection">Editar selección</string>
+    <string name="insert_data">Insertar datos</string>
+    <string name="convert_data">Convertir datos</string>
+    <string name="edit_menu">Editar</string>
+    <string name="font">Fuente</string>
+    <string name="bytes_per_row">Bytes por fila</string>
+    <string name="bytes_per_row_fill">Rellenar pantalla</string>
+    <string name="bytes_per_row_4">4 bytes</string>
+    <string name="bytes_per_row_8">8 bytes</string>
+    <string name="bytes_per_row_12">12 bytes</string>
+    <string name="bytes_per_row_16">16 bytes</string>
+    <string name="bytes_per_row_custom">Personalizado</string>
+    <string name="tools_menu">Herramientas</string>
+
+    <string name="application_about">Acerca de la aplicación</string>
+    <string name="select_file">Seleccionar un archivo</string>
+    <string name="save_as_file">Guardar como archivo</string>
+    <string name="file_modified">Archivo modificado</string>
+    <string name="confirm_exit">Pulse de nuevo para salir</string>
+    <string name="confirm_discard">Pulse de nuevo para descartar los cambios</string>
+    <string name="storage_permission_is_not_granted">No se ha concedido el permiso de almacenamiento</string>
+    <string name="storage_permission_request">Se necesitan habilitar los permisos de almacenamiento</string>
+
+    <string name="button_ok">Aceptar</string>
+    <string name="button_close">Cerrar</string>
+    <string name="button_donate">Donar</string>
+    <string name="button_cancel">Cancelar</string>
+    <string name="button_set">Establecer</string>
+    <string name="button_go_to">Ir a</string>
+    <string name="button_save">Guardar</string>
+    <string name="button_discard">Descartar</string>
+    <string name="button_request">Solicitar</string>
+    <string name="button_search">Buscar</string>
+
+    <string name="value_label_binary">Binario</string>
+    <string name="value_label_byte">Byte</string>
+    <string name="value_label_word">Palabra</string>
+    <string name="value_label_integer">Entero</string>
+    <string name="value_label_long">Largo</string>
+    <string name="value_label_float">Flotante</string>
+    <string name="value_label_double">Doble</string>
+    <string name="value_label_character">Carácter</string>
+    <string name="value_label_string">Cadena</string>
+    <string name="big_endian_radio_button">BE</string>
+    <string name="little_endian_radio_button">LE</string>
+    <string name="signed_radio_button">Signo</string>
+    <string name="unsigned_radio_button">Sin</string>
+    <string name="error_invalid_input">Entrada no válida</string>
+    <string name="error_exception">Error inesperado</string>
+
+    <!-- Títulos de preferencia -->
+
+    <string name="pref_header_appearance">Apariencia</string>
+    <string name="pref_view_header">Vista</string>
+
+    <string name="search_title">Buscar</string>
+    <string name="search_text">Texto</string>
+    <string name="search_binary">Binario</string>
+    <string name="search_from_cursor">Buscar desde el cursor</string>
+    <string name="search_match_case">Coincidir con mayúsculas y minúsculas</string>
+    <string name="search_show_multiple_matches">Mostrar múltiples coincidencias</string>
+    <string name="search_backward_direction">Buscar hacia atrás</string>
+</resources>
