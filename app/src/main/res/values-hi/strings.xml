@@ -105,4 +105,8 @@
     <string name="search_match_case">मिलान केस</string>
     <string name="search_show_multiple_matches">कई मिलान दिखाएँ</string>
     <string name="search_backward_direction">पीछे की ओर खोजें</string>
+    <string name="search_in_progress">खोज रहा है…</string>
+    <string name="search_match_none">कोई मिलान नहीं मिला.</string>
+    <string name="search_match_single">एकल मिलान मिला.</string>
+    <string name="search_match_found">"पाए गए %2$d मिलानों में से %1$d दिखाए जा रहे हैं.</string>
 </resources>

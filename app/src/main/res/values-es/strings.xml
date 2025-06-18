@@ -107,4 +107,8 @@
     <string name="search_match_case">Coincidir con mayúsculas y minúsculas</string>
     <string name="search_show_multiple_matches">Mostrar múltiples coincidencias</string>
     <string name="search_backward_direction">Buscar hacia atrás</string>
+    <string name="search_in_progress">Buscando…</string>
+    <string name="search_match_none">No se encontraron coincidencias.</string>
+    <string name="search_match_single">Solo se encontró una coincidencia.</string>
+    <string name="search_match_found">"Mostrando %1$d de %2$d coincidencias encontradas.</string>
 </resources>

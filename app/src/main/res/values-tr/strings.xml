@@ -105,4 +105,8 @@
     <string name="search_match_case">Büyük/küçük harf eşleştir</string>
     <string name="search_show_multiple_matches">Birden fazla eşleşmeyi göster</string>
     <string name="search_backward_direction">Geriye doğru ara</string>
+    <string name="search_in_progress">Aranıyor…</string>
+    <string name="search_match_none">Hiçbir eşleşme bulunamadı.</string>
+    <string name="search_match_single">Tek eşleşme bulundu.</string>
+    <string name="search_match_found">"Bulunan %2$d eşleşmeden %1$d tanesi gösteriliyor.</string>
 </resources>

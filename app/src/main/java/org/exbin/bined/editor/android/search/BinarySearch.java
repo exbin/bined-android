@@ -15,9 +15,6 @@
  */
 package org.exbin.bined.editor.android.search;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -39,7 +36,6 @@ public class BinarySearch {
     private SearchParameters.SearchDirection currentSearchDirection = SearchParameters.SearchDirection.FORWARD;
     private final SearchParameters currentSearchParameters = new SearchParameters();
     private final ReplaceParameters currentReplaceParameters = new ReplaceParameters();
-    private BinarySearchService.FoundMatches foundMatches = new BinarySearchService.FoundMatches();
 
 //    private final List<SearchCondition> searchHistory = new ArrayList<>();
 //    private final List<SearchCondition> replaceHistory = new ArrayList<>();
@@ -47,33 +43,9 @@ public class BinarySearch {
 //    private CodeAreaPopupMenuHandler codeAreaPopupMenuHandler;
     private PanelClosingListener panelClosingListener = null;
     private BinarySearchService binarySearchService;
-    private final BinarySearchService.SearchStatusListener searchStatusListener;
+    private BinarySearchService.SearchStatusListener searchStatusListener;
 
     public BinarySearch() {
-        searchStatusListener = new BinarySearchService.SearchStatusListener() {
-
-            @Override
-            public void setStatus(BinarySearchService.FoundMatches foundMatches, SearchParameters.MatchMode matchMode) {
-                BinarySearch.this.foundMatches = foundMatches;
-                updateMatchStatus();
-            }
-
-            @Override
-            public void clearStatus() {
-                BinarySearch.this.foundMatches = new BinarySearchService.FoundMatches();
-                updateMatchStatus();
-            }
-
-            private void updateMatchStatus() {
-                int matchesCount = foundMatches.getMatchesCount();
-                int matchPosition = foundMatches.getMatchPosition();
-                // TODO Search panel
-//                binarySearchPanel.updateMatchStatus(matchesCount > 0,
-//                        matchesCount > 1 && matchPosition > 0,
-//                        matchPosition < matchesCount - 1
-//                );
-            }
-        };
     }
 
     public void setBinarySearchService(BinarySearchService binarySearchService) {
@@ -122,11 +94,13 @@ public class BinarySearch {
 
     // TODO Move to search panel
     public void performFind(SearchParameters searchParameters, BinarySearchService.SearchStatusListener searchStatusListener) {
+        this.searchStatusListener = searchStatusListener;
         invokeSearch(SearchOperation.FIND, searchParameters, null, 0);
     }
 
     // TODO Move to search panel
     public void performFindAgain(BinarySearchService.SearchStatusListener searchStatusListener) {
+        this.searchStatusListener = searchStatusListener;
         invokeSearch(SearchOperation.FIND_AGAIN, currentSearchParameters, currentReplaceParameters, 0);
     }
 
@@ -143,7 +117,9 @@ public class BinarySearch {
         SearchCondition condition = currentSearchParameters.getCondition();
         condition.clear();
         binarySearchService.clearMatches();
-        searchStatusListener.clearStatus();
+        if (searchStatusListener != null) {
+            searchStatusListener.clearStatus();
+        }
     }
 
     public void dataChanged() {

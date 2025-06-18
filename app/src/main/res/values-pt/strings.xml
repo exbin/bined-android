@@ -103,4 +103,8 @@
     <string name="search_match_case">Diferenciar maiúsculas de minúsculas</string>
     <string name="search_show_multiple_matches">Mostrar correspondências múltiplas</string>
     <string name="search_backward_direction">Pesquisar para trás</string>
+    <string name="search_in_progress">Pesquisar…</string>
+    <string name="search_match_none">Não foram encontradas correspondências.</string>
+    <string name="search_match_single">Única correspondência encontrada.</string>
+    <string name="search_match_found">"A mostrar %1$d de %2$d correspondências encontradas.</string>
 </resources>

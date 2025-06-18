@@ -26,6 +26,7 @@ import android.text.method.TextKeyListener;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -65,17 +66,7 @@ public class SearchDialog extends AppCompatDialogFragment {
     private SearchParameters searchParameters = null;
 
     private BinarySearch binarySearch;
-    private final BinarySearchService.SearchStatusListener searchStatusListener = new BinarySearchService.SearchStatusListener() {
-        @Override
-        public void setStatus(BinarySearchService.FoundMatches foundMatches, SearchParameters.MatchMode matchMode) {
-            // TODO Add search status panel
-        }
-
-        @Override
-        public void clearStatus() {
-
-        }
-    };
+    private BinarySearchService.SearchStatusListener searchStatusListener;
     private final CodeAreaCaretListener codeAreaCodeAreaCaretListener = caretPosition -> {
         boolean showKeyboard = true;
         if (showKeyboard != keyboardShown) {
@@ -86,9 +77,12 @@ public class SearchDialog extends AppCompatDialogFragment {
             if (showKeyboard) {
                 // TODO im.setInputMethodAndSubtype();
                 im.showSoftInput(codeArea, InputMethodManager.SHOW_IMPLICIT);
-                // TODO refit dialog
             } else {
                 im.hideSoftInputFromWindow(codeArea.getWindowToken(), 0);
+            }
+            Dialog dialog = SearchDialog.this.getDialog();
+            if (dialog != null) {
+                dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
             }
         }
     };
@@ -111,6 +105,10 @@ public class SearchDialog extends AppCompatDialogFragment {
         this.searchParameters = searchParameters;
     }
 
+    public void setSearchStatusListener(BinarySearchService.SearchStatusListener searchStatusListener) {
+        this.searchStatusListener = searchStatusListener;
+    }
+
     @Nonnull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -120,8 +118,8 @@ public class SearchDialog extends AppCompatDialogFragment {
         codeArea.setEditOperation(EditOperation.INSERT);
         codeArea.addCaretMovedListener(codeAreaCodeAreaCaretListener);
         codeArea.setOnKeyListener(new CodeAreaKeyListener());
-        codeArea.setOnFocusChangeListener((v, hasFocus) -> {
-            if (v == codeArea) {
+        codeArea.setOnFocusChangeListener((view, hasFocus) -> {
+            if (view == codeArea) {
                 if (hasFocus) {
                     codeAreaCodeAreaCaretListener.caretMoved(codeArea.getActiveCaretPosition());
                 } else {
@@ -142,6 +140,10 @@ public class SearchDialog extends AppCompatDialogFragment {
 
         LayoutInflater inflater = activity.getLayoutInflater();
         searchView = inflater.inflate(R.layout.search_view, null);
+        TabLayout tabLayout = searchView.findViewById(R.id.tabLayout);
+
+        FrameLayout frameLayout = searchView.findViewById(R.id.frameLayout);
+        frameLayout.addView(editText);
 
         if (searchParameters != null) {
             SearchCondition condition = searchParameters.getCondition();
@@ -154,6 +156,9 @@ public class SearchDialog extends AppCompatDialogFragment {
                 data.clear();
                 data.insert(0, condition.getBinaryData());
                 codeAreaCodeAreaCaretListener.caretMoved(codeArea.getActiveCaretPosition());
+                TabLayout.Tab binaryTab = tabLayout.getTabAt(1);
+                tabLayout.selectTab(binaryTab);
+                tabSwitched(binaryTab);
             }
             SwitchCompat matchCaseSwitch = searchView.findViewById(R.id.match_case);
             matchCaseSwitch.setChecked(searchParameters.isMatchCase());
@@ -165,20 +170,10 @@ public class SearchDialog extends AppCompatDialogFragment {
             fromCursorSwitch.setChecked(searchParameters.isSearchFromCursor());
         }
 
-        FrameLayout frameLayout = searchView.findViewById(R.id.frameLayout);
-        frameLayout.addView(editText);
-        TabLayout tabLayout = searchView.findViewById(R.id.tabLayout);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                int tabPos = tab.getPosition();
-                if (tabPos != lastTab) {
-                    frameLayout.removeView(lastTab == 0 ? editText : codeArea);
-                    frameLayout.addView(tabPos == 0 ? editText : codeArea);
-                    SwitchCompat matchCaseSwitch = searchView.findViewById(R.id.match_case);
-                    matchCaseSwitch.setEnabled(tabPos == 0);
-                    lastTab = tabPos;
-                }
+                tabSwitched(tab);
             }
 
             @Override
@@ -226,6 +221,18 @@ public class SearchDialog extends AppCompatDialogFragment {
             binarySearch.clearSearch();
         });
         return builder.create();
+    }
+
+    private void tabSwitched(TabLayout.Tab tab) {
+        FrameLayout frameLayout = searchView.findViewById(R.id.frameLayout);
+        int tabPos = tab.getPosition();
+        if (tabPos != lastTab) {
+            frameLayout.removeView(lastTab == 0 ? editText : codeArea);
+            frameLayout.addView(tabPos == 0 ? editText : codeArea);
+            SwitchCompat matchCaseSwitch = searchView.findViewById(R.id.match_case);
+            matchCaseSwitch.setEnabled(tabPos == 0);
+            lastTab = tabPos;
+        }
     }
 
     public void setOnCloseListener(CloseListener closeListener) {

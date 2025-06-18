@@ -106,5 +106,8 @@
     <string name="search_match_case">Match case</string>
     <string name="search_show_multiple_matches">Show multiple matches</string>
     <string name="search_backward_direction">Search backward</string>
-
+    <string name="search_in_progress">Searching…</string>
+    <string name="search_match_none">No matches found.</string>
+    <string name="search_match_single">Single match found.</string>
+    <string name="search_match_found">"Showing %1$d of %2$d found matches.</string>
 </resources>

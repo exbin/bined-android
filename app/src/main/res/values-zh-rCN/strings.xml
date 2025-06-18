@@ -105,4 +105,8 @@
     <string name="search_match_case">大小写匹配</string>
     <string name="search_show_multiple_matches">显示多个匹配项</string>
     <string name="search_backward_direction">向后搜索</string>
+    <string name="search_in_progress">正在搜索…</string>
+    <string name="search_match_none">未找到匹配项。</string>
+    <string name="search_match_single">找到一个匹配项。</string>
+    <string name="search_match_found">显示 %1$d 个匹配项，共 %2$d 个。</string>
 </resources>

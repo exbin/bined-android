@@ -101,4 +101,8 @@
     <string name="search_match_case">Rozlišovat velikost znaků</string>
     <string name="search_show_multiple_matches">Zobrazit více výskytů</string>
     <string name="search_backward_direction">Hledat dozadu</string>
+    <string name="search_in_progress">Hledání…</string>
+    <string name="search_match_none">Žádné shody nenalezeny.</string>
+    <string name="search_match_single">Nalezen jeden výsledek.</string>
+    <string name="search_match_found">"Zobrazuje se %1$d z %2$d nalezených shod.</string>
 </resources>

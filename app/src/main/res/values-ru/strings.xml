@@ -107,4 +107,8 @@
     <string name="search_match_case">Учитывать регистр</string>
     <string name="search_show_multiple_matches">Показать несколько совпадений</string>
     <string name="search_backward_direction">Поиск назад</string>
+    <string name="search_in_progress">Поиск…</string>
+    <string name="search_match_none">Совпадений не найдено.</string>
+    <string name="search_match_single">Найдено одно совпадение.</string>
+    <string name="search_match_found">"Показано %1$d из %2$d найденных совпадений.</string>
 </resources>

@@ -35,6 +35,7 @@ import android.text.method.KeyListener;
 import android.text.method.TextKeyListener;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,6 +44,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
@@ -98,6 +100,7 @@ import org.exbin.bined.editor.android.search.SearchDialog;
 import org.exbin.bined.editor.android.search.SearchParameters;
 import org.exbin.bined.highlight.android.NonAsciiCodeAreaColorAssessor;
 import org.exbin.bined.highlight.android.NonprintablesCodeAreaAssessor;
+import org.exbin.bined.highlight.android.SearchCodeAreaColorAssessor;
 import org.exbin.bined.operation.android.CodeAreaOperationCommandHandler;
 import org.exbin.bined.operation.undo.BinaryDataUndoRedoChangeListener;
 import org.exbin.framework.bined.BinEdCodeAreaAssessor;
@@ -150,23 +153,29 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     private final BinaryStatusHandler binaryStatus = new BinaryStatusHandler(this);
     private BinarySearch binarySearch;
     private SearchParameters searchParameters = null;
+    private View searchStatusPanel;
     private Runnable postSaveAsAction = null;
     private boolean keyboardShown = false;
     private boolean dataInspectorShown = true;
     private long lastBackKeyPressTime = -1;
     private long lastReleaseBackKeyPressTime = -1;
-    BasicValuesPositionColorModifier basicValuesPositionColorModifier = new BasicValuesPositionColorModifier();
+    private BasicValuesPositionColorModifier basicValuesPositionColorModifier = new BasicValuesPositionColorModifier();
     private FallbackFileType fallbackFileType = FallbackFileType.FILE;
 
     private final BinarySearchService.SearchStatusListener searchStatusListener = new BinarySearchService.SearchStatusListener() {
         @Override
         public void setStatus(BinarySearchService.FoundMatches foundMatches, SearchParameters.MatchMode matchMode) {
-            // TODO Add search status panel
+            runOnUiThread(() -> {
+                showSearchStatusPanel();
+                updateSearchStatusPanel(foundMatches.getMatchPosition(), foundMatches.getMatchesCount());
+            });
         }
 
         @Override
         public void clearStatus() {
-
+            runOnUiThread(() -> {
+                hideSearchStatusPanel();
+            });
         }
     };
     private final BinaryDataUndoRedoChangeListener codeAreaChangeListener = () -> {
@@ -228,6 +237,8 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
         toolbar = findViewById(R.id.toolbar);
         keyPanel = findViewById(R.id.keyPanel);
+        LayoutInflater inflater = getLayoutInflater();
+        searchStatusPanel = inflater.inflate(R.layout.search_panel, null);
         basicValuesInspectorView = findViewById(R.id.basic_values_inspector);
         setSupportActionBar(toolbar);
 
@@ -298,7 +309,12 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         }
 
         if (keyPanelIndex == -1) {
-            mainView.addView(keyPanel, 2);
+            int searchStatusPanelIndex = mainView.indexOfChild(searchStatusPanel);
+            if (searchStatusPanelIndex >= 0) {
+                mainView.addView(keyPanel, 2);
+            } else {
+                mainView.addView(keyPanel, searchStatusPanelIndex + 1);
+            }
             mainView.requestLayout();
         }
 
@@ -400,6 +416,48 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         Button buttonTab = findViewById(R.id.buttonTab);
         buttonTab.setMinWidth(buttonWidth);
         buttonTab.setMinHeight(buttonHeight);
+    }
+
+    private void showSearchStatusPanel() {
+        LinearLayout mainView = findViewById(R.id.main);
+        int searchStatusPanelIndex = mainView.indexOfChild(searchStatusPanel);
+        if (searchStatusPanelIndex == -1) {
+            TextView searchStatus = searchStatusPanel.findViewById(R.id.searchStatus);
+            Button prevButton = searchStatusPanel.findViewById(R.id.previousMatchButton);
+            prevButton.setEnabled(false);
+            Button nextButton = searchStatusPanel.findViewById(R.id.nextMatchButton);
+            nextButton.setEnabled(false);
+
+            Resources resources = getResources();
+            searchStatus.setText(resources.getString(R.string.search_in_progress));
+
+            mainView.addView(searchStatusPanel, 2);
+        }
+    }
+
+    private void hideSearchStatusPanel() {
+        LinearLayout mainView = findViewById(R.id.main);
+        int searchStatusPanelIndex = mainView.indexOfChild(searchStatusPanel);
+        if (searchStatusPanelIndex >= 0) {
+            mainView.removeViewAt(searchStatusPanelIndex);
+        }
+    }
+
+    private void updateSearchStatusPanel(int matchPosition, int matchesCount) {
+        TextView searchStatus = searchStatusPanel.findViewById(R.id.searchStatus);
+        Button prevButton = searchStatusPanel.findViewById(R.id.previousMatchButton);
+        prevButton.setEnabled(matchPosition > 0 && matchesCount > 0);
+        Button nextButton = searchStatusPanel.findViewById(R.id.nextMatchButton);
+        nextButton.setEnabled(matchPosition < matchesCount - 1 && matchesCount > 0);
+
+        Resources resources = getResources();
+        if (matchesCount == 1) {
+            searchStatus.setText(resources.getString(R.string.search_match_single));
+        } else if (matchesCount > 0) {
+            searchStatus.setText(String.format(resources.getString(R.string.search_match_found), matchPosition + 1, matchesCount));
+        } else {
+            searchStatus.setText(resources.getString(R.string.search_match_none));
+        }
     }
 
     @Override
@@ -568,6 +626,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         switch (item.getItemId()) {
             case GO_TO_SIDE_PANEL_POPUP_ID: {
                 LinearLayout mainView = findViewById(R.id.main);
+                int searchStatusPanelIndex = mainView.indexOfChild(searchStatusPanel);
                 int keyPanelIndex = mainView.indexOfChild(keyPanel);
                 if (keyPanelIndex >= 0) {
                     View downButton = findViewById(R.id.buttonDown);
@@ -875,8 +934,12 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             searchDialog.setBinarySearch(binarySearch);
             searchDialog.setSearchParameters(searchParameters);
             searchDialog.setTemplateCodeArea(codeArea);
+            searchDialog.setSearchStatusListener(searchStatusListener);
             searchDialog.setOnCloseListener(() -> {
-                searchParameters = searchDialog.getSearchParameters();
+                SearchParameters usedSearchParameters = searchDialog.getSearchParameters();
+                if (usedSearchParameters != null) {
+                    searchParameters = usedSearchParameters;
+                }
             });
             searchDialog.show(getSupportFragmentManager(), "searchDialog");
             return true;
@@ -1387,6 +1450,24 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
     public void buttonActionTab(View view) {
         codeArea.getCommandHandler().keyPressed(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_TAB));
+    }
+
+    public void buttonActionPreviousMatch(View view) {
+        SearchCodeAreaColorAssessor searchAssessor = CodeAreaAndroidUtils.findColorAssessor((ColorAssessorPainterCapable) codeArea.getPainter(), SearchCodeAreaColorAssessor.class);
+        searchAssessor.setCurrentMatchIndex(searchAssessor.getCurrentMatchIndex() - 1);
+        updateSearchStatusPanel(searchAssessor.getCurrentMatchIndex(), searchAssessor.getMatches().size());
+    }
+
+    public void buttonActionNextMatch(View view) {
+        SearchCodeAreaColorAssessor searchAssessor = CodeAreaAndroidUtils.findColorAssessor((ColorAssessorPainterCapable) codeArea.getPainter(), SearchCodeAreaColorAssessor.class);
+        searchAssessor.setCurrentMatchIndex(searchAssessor.getCurrentMatchIndex() + 1);
+        updateSearchStatusPanel(searchAssessor.getCurrentMatchIndex(), searchAssessor.getMatches().size());
+    }
+
+    public void buttonActionHideSearchPanel(View view) {
+        binarySearch.cancelSearch();
+        binarySearch.clearSearch();
+        hideSearchStatusPanel();
     }
 
     public static boolean isGoogleTV(Context context) {
