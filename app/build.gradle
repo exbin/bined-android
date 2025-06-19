@@ -2,7 +2,7 @@ plugins {
     id 'com.android.application'
 }
 
-def playStore = false
+def playStore = true
 def materialVersion = '1.6.1'
 
 android {
@@ -19,8 +19,8 @@ android {
         }
 
         targetSdk 34
-        versionCode 16
-        versionName "0.2.7"
+        versionCode 17
+        versionName "0.2.8-SNAPSHOT"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         vectorDrawables.generatedDensities = []
     }

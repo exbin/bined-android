@@ -593,7 +593,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         this.menu = menu;
 
         // Currently on Google TV access to app bar icons doesn't seem to work
-        if (isGoogleTV(this)) {
+        if (isAndroidTV(this)) {
             for (int i = 0; i < menu.size(); i++) {
                 MenuItem menuItem = menu.getItem(i);
                 menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
@@ -613,7 +613,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         super.onCreateContextMenu(menu, v, menuInfo);
         Resources resources = getResources();
         int order = 0;
-        if (isGoogleTV(codeArea.getContext())) {
+        if (isAndroidTV(codeArea.getContext())) {
             menu.add(0, GO_TO_SIDE_PANEL_POPUP_ID, order, resources.getString(R.string.action_go_to_side_panel));
             order++;
             menu.add(0, OPEN_MAIN_MENU_POPUP_ID, order, resources.getString(R.string.action_open_main_menu));
@@ -1026,7 +1026,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     }
 
     public void openFile() {
-        if (MainActivity.isGoogleTV(this) || Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+        if (MainActivity.isAndroidTV(this) || Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             fallBackOpenFile(FallbackFileType.FILE);
             return;
         }
@@ -1051,7 +1051,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     }
 
     public void openTableFile() {
-        if (MainActivity.isGoogleTV(this) || Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+        if (MainActivity.isAndroidTV(this) || Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             fallBackOpenFile(FallbackFileType.TABLE_FILE);
             return;
         }
@@ -1090,7 +1090,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     public void saveAs(@Nullable Runnable postSaveAsAction) {
         this.postSaveAsAction = postSaveAsAction;
 
-        if (MainActivity.isGoogleTV(this) || Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+        if (MainActivity.isAndroidTV(this) || Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             fallBackSaveAs();
             return;
         }
@@ -1504,7 +1504,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         return codeArea;
     }
 
-    public static boolean isGoogleTV(Context context) {
+    public static boolean isAndroidTV(Context context) {
         final PackageManager pm = context.getPackageManager();
         return pm.hasSystemFeature(PackageManager.FEATURE_LEANBACK);
     }
@@ -1551,7 +1551,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
             if (!codeArea.isFocused()) {
                 if (keyEvent.getAction() == KeyEvent.ACTION_UP) {
-                    if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_BACK && isGoogleTV(codeArea.getContext())) {
+                    if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_BACK && isAndroidTV(codeArea.getContext())) {
                         codeArea.post(codeArea::requestFocus);
                         return true;
                     }

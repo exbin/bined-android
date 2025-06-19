@@ -258,7 +258,7 @@ public class SearchDialog extends AppCompatDialogFragment {
                 return false;
             }
 
-            if (keyboardShown && MainActivity.isGoogleTV(codeArea.getContext())) {
+            if (keyboardShown && MainActivity.isAndroidTV(codeArea.getContext())) {
                 return false;
             }
 
