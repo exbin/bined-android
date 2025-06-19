@@ -1,0 +1,3 @@
+- Added basic binary search
+- Added Portuguese, Turkish, Russian and Spanish translations
+- Bug fixes

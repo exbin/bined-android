@@ -22,6 +22,8 @@ import org.exbin.auxiliary.binary_data.jna.JnaBufferEditableData;
 import org.exbin.bined.android.basic.CodeArea;
 import org.exbin.bined.editor.android.preference.BinaryEditorPreferences;
 import org.exbin.bined.editor.android.preference.PreferencesWrapper;
+import org.exbin.bined.editor.android.search.BinarySearch;
+import org.exbin.bined.editor.android.search.SearchParameters;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -39,6 +41,8 @@ public class ApplicationContext extends Application {
     private final SegmentsRepository segmentsRepository = new SegmentsRepository(() -> new JnaBufferEditableData());
 
     private BinEdFileHandler fileHandler = null;
+    private boolean searchActive = false;
+    private SearchParameters searchParameters = null;
 
     @Override
     public void onCreate() {
@@ -63,5 +67,22 @@ public class ApplicationContext extends Application {
         fileHandler.setSegmentsRepository(segmentsRepository);
         fileHandler.setNewData(appPreferences.getEditorPreferences().getFileHandlingMode());
         return fileHandler;
+    }
+
+    @Nullable
+    public SearchParameters getSearchParameters() {
+        return searchParameters;
+    }
+
+    public void setSearchParameters(@Nullable SearchParameters searchParameters) {
+        this.searchParameters = searchParameters;
+    }
+
+    public boolean isSearchActive() {
+        return searchActive;
+    }
+
+    public void setSearchActive(boolean searchActive) {
+        this.searchActive = searchActive;
     }
 }

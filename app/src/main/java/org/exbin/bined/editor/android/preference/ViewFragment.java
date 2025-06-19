@@ -27,6 +27,9 @@ import org.exbin.bined.basic.CodeAreaViewMode;
 import org.exbin.bined.editor.android.R;
 import org.exbin.bined.editor.android.SettingsActivity;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
@@ -69,24 +72,28 @@ public class ViewFragment extends PreferenceFragmentCompat {
     @Override
     public void onDestroy() {
         // Save to preferences
-        SettingsActivity activity = (SettingsActivity) requireActivity();
-        BinaryEditorPreferences appPreferences = activity.getAppPreferences();
-        CodeAreaPreferences codeAreaPreferences = appPreferences.getCodeAreaPreferences();
-        TextFontPreferences fontPreferences = appPreferences.getFontPreferences();
-        fontPreferences.setFontSize(Integer.parseInt(((FontPreference) findPreference(FONT_KEY)).getText()));
-        TextEncodingPreferences encodingPreferences = appPreferences.getEncodingPreferences();
-        encodingPreferences.setDefaultEncoding(((EncodingPreference) findPreference(ENCODING_KEY)).getText());
-        String bytesPerRowMode = ((ListPreference) findPreference(BYTES_PER_ROW_KEY)).getValue();
-        if (bytesPerRowMode.equals("custom")) {
-            // TODO Add support for custom
-            bytesPerRowMode = "0";
+        try {
+            SettingsActivity activity = (SettingsActivity) requireActivity();
+            BinaryEditorPreferences appPreferences = activity.getAppPreferences();
+            CodeAreaPreferences codeAreaPreferences = appPreferences.getCodeAreaPreferences();
+            TextFontPreferences fontPreferences = appPreferences.getFontPreferences();
+            fontPreferences.setFontSize(Integer.parseInt(((FontPreference) findPreference(FONT_KEY)).getText()));
+            TextEncodingPreferences encodingPreferences = appPreferences.getEncodingPreferences();
+            encodingPreferences.setDefaultEncoding(((EncodingPreference) findPreference(ENCODING_KEY)).getText());
+            String bytesPerRowMode = ((ListPreference) findPreference(BYTES_PER_ROW_KEY)).getValue();
+            if (bytesPerRowMode.equals("custom")) {
+                // TODO Add support for custom
+                bytesPerRowMode = "0";
+            }
+            codeAreaPreferences.setMaxBytesPerRow(Integer.parseInt(bytesPerRowMode));
+            codeAreaPreferences.setViewMode(CodeAreaViewMode.valueOf(((ListPreference) findPreference(VIEW_MODE_KEY)).getValue().toUpperCase()));
+            codeAreaPreferences.setCodeType(CodeType.valueOf(((ListPreference) findPreference(CODE_TYPE_KEY)).getValue().toUpperCase()));
+            codeAreaPreferences.setCodeCharactersCase(CodeCharactersCase.valueOf(((ListPreference) findPreference(HEX_CHARACTERS_CASE)).getValue().toUpperCase()));
+            codeAreaPreferences.setCodeColorization(((TwoStatePreference) findPreference(CODE_COLORIZATION)).isChecked());
+            codeAreaPreferences.setShowNonprintables(((TwoStatePreference) findPreference(NONPRINTABLE_CHARACTERS)).isChecked());
+        } catch (IllegalArgumentException ex) {
+            Logger.getLogger(ViewFragment.class.getName()).log(Level.SEVERE, null, ex);
         }
-        codeAreaPreferences.setMaxBytesPerRow(Integer.parseInt(bytesPerRowMode));
-        codeAreaPreferences.setViewMode(CodeAreaViewMode.valueOf(((ListPreference) findPreference(VIEW_MODE_KEY)).getValue().toUpperCase()));
-        codeAreaPreferences.setCodeType(CodeType.valueOf(((ListPreference) findPreference(CODE_TYPE_KEY)).getValue().toUpperCase()));
-        codeAreaPreferences.setCodeCharactersCase(CodeCharactersCase.valueOf(((ListPreference) findPreference(HEX_CHARACTERS_CASE)).getValue().toUpperCase()));
-        codeAreaPreferences.setCodeColorization(((TwoStatePreference) findPreference(CODE_COLORIZATION)).isChecked());
-        codeAreaPreferences.setShowNonprintables(((TwoStatePreference) findPreference(NONPRINTABLE_CHARACTERS)).isChecked());
 
         super.onDestroy();
     }

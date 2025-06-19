@@ -152,14 +152,13 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     private Menu menu;
     private final BinaryStatusHandler binaryStatus = new BinaryStatusHandler(this);
     private BinarySearch binarySearch;
-    private SearchParameters searchParameters = null;
     private View searchStatusPanel;
     private Runnable postSaveAsAction = null;
     private boolean keyboardShown = false;
     private boolean dataInspectorShown = true;
     private long lastBackKeyPressTime = -1;
     private long lastReleaseBackKeyPressTime = -1;
-    private BasicValuesPositionColorModifier basicValuesPositionColorModifier = new BasicValuesPositionColorModifier();
+    private final BasicValuesPositionColorModifier basicValuesPositionColorModifier = new BasicValuesPositionColorModifier();
     private FallbackFileType fallbackFileType = FallbackFileType.FILE;
 
     private final BinarySearchService.SearchStatusListener searchStatusListener = new BinarySearchService.SearchStatusListener() {
@@ -189,6 +188,12 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 //                editorModificationListener.modified();
 //            }
         updateCurrentDocumentSize();
+        ApplicationContext application = (ApplicationContext) getApplication();
+        if (application.isSearchActive()) {
+            binarySearch.cancelSearch();
+            binarySearch.clearSearch();
+            hideSearchStatusPanel();
+        }
     };
     private final SelectionChangedListener codeAreaSelectionChangedListener = () -> {
         binaryStatus.setSelectionRange(codeArea.getSelection());
@@ -289,6 +294,11 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         basicValuesInspector.registerFocusPainter(basicValuesPositionColorModifier);
 
         basicValuesInspectorView.setNextFocusUpId(R.id.toolbar);
+        if (application.isSearchActive()) {
+            showSearchStatusPanel();
+            SearchCodeAreaColorAssessor searchAssessor = CodeAreaAndroidUtils.findColorAssessor((ColorAssessorPainterCapable) codeArea.getPainter(), SearchCodeAreaColorAssessor.class);
+            updateSearchStatusPanel(searchAssessor.getCurrentMatchIndex(), searchAssessor.getMatches().size());
+        }
 
         applySettings();
 
@@ -432,6 +442,8 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             searchStatus.setText(resources.getString(R.string.search_in_progress));
 
             mainView.addView(searchStatusPanel, 2);
+            ApplicationContext application = (ApplicationContext) getApplication();
+            application.setSearchActive(true);
         }
     }
 
@@ -440,6 +452,8 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         int searchStatusPanelIndex = mainView.indexOfChild(searchStatusPanel);
         if (searchStatusPanelIndex >= 0) {
             mainView.removeViewAt(searchStatusPanelIndex);
+            ApplicationContext application = (ApplicationContext) getApplication();
+            application.setSearchActive(false);
         }
     }
 
@@ -462,8 +476,6 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             codeArea.removeOnUnhandledKeyEventListener((View.OnUnhandledKeyEventListener) codeAreaOnUnhandledKeyListener);
         }
@@ -475,6 +487,8 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         fileHandler.getUndoRedo().removeChangeListener(codeAreaChangeListener);
         BinEdCodeAreaAssessor codeAreaAssessor = fileHandler.getCodeAreaAssessor();
         codeAreaAssessor.removeColorModifier(basicValuesPositionColorModifier);
+
+        super.onDestroy();
     }
 
     private void processIntent(Intent intent) {
@@ -931,16 +945,6 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             return true;
         } else if (id == R.id.action_search) {
             SearchDialog searchDialog = new SearchDialog();
-            searchDialog.setBinarySearch(binarySearch);
-            searchDialog.setSearchParameters(searchParameters);
-            searchDialog.setTemplateCodeArea(codeArea);
-            searchDialog.setSearchStatusListener(searchStatusListener);
-            searchDialog.setOnCloseListener(() -> {
-                SearchParameters usedSearchParameters = searchDialog.getSearchParameters();
-                if (usedSearchParameters != null) {
-                    searchParameters = usedSearchParameters;
-                }
-            });
             searchDialog.show(getSupportFragmentManager(), "searchDialog");
             return true;
         } else if (id == R.id.action_delete) {
@@ -1456,18 +1460,48 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         SearchCodeAreaColorAssessor searchAssessor = CodeAreaAndroidUtils.findColorAssessor((ColorAssessorPainterCapable) codeArea.getPainter(), SearchCodeAreaColorAssessor.class);
         searchAssessor.setCurrentMatchIndex(searchAssessor.getCurrentMatchIndex() - 1);
         updateSearchStatusPanel(searchAssessor.getCurrentMatchIndex(), searchAssessor.getMatches().size());
+        codeArea.revealPosition(searchAssessor.getCurrentMatch().getPosition(), 0, codeArea.getActiveSection());
+        codeArea.repaint();
     }
 
     public void buttonActionNextMatch(View view) {
         SearchCodeAreaColorAssessor searchAssessor = CodeAreaAndroidUtils.findColorAssessor((ColorAssessorPainterCapable) codeArea.getPainter(), SearchCodeAreaColorAssessor.class);
         searchAssessor.setCurrentMatchIndex(searchAssessor.getCurrentMatchIndex() + 1);
         updateSearchStatusPanel(searchAssessor.getCurrentMatchIndex(), searchAssessor.getMatches().size());
+        codeArea.revealPosition(searchAssessor.getCurrentMatch().getPosition(), 0, codeArea.getActiveSection());
+        codeArea.repaint();
     }
 
     public void buttonActionHideSearchPanel(View view) {
         binarySearch.cancelSearch();
         binarySearch.clearSearch();
         hideSearchStatusPanel();
+    }
+
+    @Nullable
+    public BinarySearch getBinarySearch() {
+        return binarySearch;
+    }
+
+    @Nullable
+    public SearchParameters getSearchParameters() {
+        ApplicationContext application = (ApplicationContext) getApplication();
+        return application.getSearchParameters();
+    }
+
+    public void setSearchParameters(SearchParameters searchParameters) {
+        ApplicationContext application = (ApplicationContext) getApplication();
+        application.setSearchParameters(searchParameters);
+    }
+
+    @Nullable
+    public BinarySearchService.SearchStatusListener getSearchStatusListener() {
+        return searchStatusListener;
+    }
+
+    @Nullable
+    public CodeArea getCodeArea() {
+        return codeArea;
     }
 
     public static boolean isGoogleTV(Context context) {

@@ -31,9 +31,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.appcompat.widget.SwitchCompat;
-import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.material.tabs.TabLayout;
 
@@ -41,11 +41,13 @@ import org.exbin.auxiliary.binary_data.EditableBinaryData;
 import org.exbin.auxiliary.binary_data.jna.JnaBufferEditableData;
 import org.exbin.bined.CodeAreaCaretListener;
 import org.exbin.bined.EditOperation;
+import org.exbin.bined.RowWrappingMode;
 import org.exbin.bined.android.basic.CodeArea;
+import org.exbin.bined.android.basic.color.BasicCodeAreaColorsProfile;
+import org.exbin.bined.editor.android.MainActivity;
 import org.exbin.bined.editor.android.R;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
@@ -77,46 +79,31 @@ public class SearchDialog extends AppCompatDialogFragment {
             if (showKeyboard) {
                 // TODO im.setInputMethodAndSubtype();
                 im.showSoftInput(codeArea, InputMethodManager.SHOW_IMPLICIT);
+                Dialog dialog = SearchDialog.this.getDialog();
+                if (dialog != null) {
+                    dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+                }
             } else {
                 im.hideSoftInputFromWindow(codeArea.getWindowToken(), 0);
             }
-            Dialog dialog = SearchDialog.this.getDialog();
-            if (dialog != null) {
-                dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-            }
         }
     };
-    private CloseListener closeListener = null;
-
-    public void setBinarySearch(BinarySearch binarySearch) {
-        this.binarySearch = binarySearch;
-    }
-
-    @Nullable
-    public SearchParameters getSearchParameters() {
-        return searchParameters;
-    }
-
-    public void setTemplateCodeArea(CodeArea codeArea) {
-        templateCodeArea = codeArea;
-    }
-
-    public void setSearchParameters(@Nullable SearchParameters searchParameters) {
-        this.searchParameters = searchParameters;
-    }
-
-    public void setSearchStatusListener(BinarySearchService.SearchStatusListener searchStatusListener) {
-        this.searchStatusListener = searchStatusListener;
-    }
 
     @Nonnull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        editText = new EditText(getContext());
-        codeArea = new CodeArea(getContext(), null);
+        MainActivity activity = (MainActivity) requireActivity();
+        binarySearch = activity.getBinarySearch();
+        templateCodeArea = activity.getCodeArea();
+        searchParameters = activity.getSearchParameters();
+        searchStatusListener = activity.getSearchStatusListener();
+
+        editText = new EditText(activity);
+        codeArea = new CodeArea(activity, null);
         codeArea.setContentData(new JnaBufferEditableData());
         codeArea.setEditOperation(EditOperation.INSERT);
         codeArea.addCaretMovedListener(codeAreaCodeAreaCaretListener);
+        codeArea.setRowWrapping(RowWrappingMode.WRAPPING);
         codeArea.setOnKeyListener(new CodeAreaKeyListener());
         codeArea.setOnFocusChangeListener((view, hasFocus) -> {
             if (view == codeArea) {
@@ -127,6 +114,14 @@ public class SearchDialog extends AppCompatDialogFragment {
                 }
             }
         });
+        BasicCodeAreaColorsProfile basicColors = codeArea.getBasicColors().orElse(null);
+        if (basicColors == null) {
+            throw new IllegalStateException("Missing colors profile");
+        }
+        basicColors.setContext(activity);
+        basicColors.reinitialize();
+        codeArea.resetColors();
+        codeArea.setMinimumHeight(120);
         if (templateCodeArea != null) {
             codeArea.setCodeFont(templateCodeArea.getCodeFont());
             codeArea.setCodeType(templateCodeArea.getCodeType());
@@ -134,42 +129,20 @@ public class SearchDialog extends AppCompatDialogFragment {
             codeArea.setCodeCharactersCase(templateCodeArea.getCodeCharactersCase());
         }
 
-        FragmentActivity activity = getActivity();
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle(getResources().getString(R.string.search_title));
 
         LayoutInflater inflater = activity.getLayoutInflater();
         searchView = inflater.inflate(R.layout.search_view, null);
-        TabLayout tabLayout = searchView.findViewById(R.id.tabLayout);
 
         FrameLayout frameLayout = searchView.findViewById(R.id.frameLayout);
         frameLayout.addView(editText);
 
         if (searchParameters != null) {
-            SearchCondition condition = searchParameters.getCondition();
-            if (condition.getSearchMode() == SearchCondition.SearchMode.TEXT) {
-                editText.setText(condition.getSearchText());
-                // Should work automatically, but force for now
-                keyboardShown = false;
-            } else {
-                EditableBinaryData data = (EditableBinaryData) codeArea.getContentData();
-                data.clear();
-                data.insert(0, condition.getBinaryData());
-                codeAreaCodeAreaCaretListener.caretMoved(codeArea.getActiveCaretPosition());
-                TabLayout.Tab binaryTab = tabLayout.getTabAt(1);
-                tabLayout.selectTab(binaryTab);
-                tabSwitched(binaryTab);
-            }
-            SwitchCompat matchCaseSwitch = searchView.findViewById(R.id.match_case);
-            matchCaseSwitch.setChecked(searchParameters.isMatchCase());
-            SwitchCompat backwardDirectionSwitch = searchView.findViewById(R.id.backward_direction);
-            backwardDirectionSwitch.setChecked(searchParameters.getSearchDirection() == SearchParameters.SearchDirection.BACKWARD);
-            SwitchCompat multipleMatchesSwitch = searchView.findViewById(R.id.multiple_matches);
-            multipleMatchesSwitch.setChecked(searchParameters.getMatchMode() == SearchParameters.MatchMode.MULTIPLE);
-            SwitchCompat fromCursorSwitch = searchView.findViewById(R.id.from_cursor);
-            fromCursorSwitch.setChecked(searchParameters.isSearchFromCursor());
+            loadSearchParameters();
         }
 
+        TabLayout tabLayout = searchView.findViewById(R.id.tabLayout);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -187,34 +160,8 @@ public class SearchDialog extends AppCompatDialogFragment {
 
         builder.setView(searchView);
         builder.setPositiveButton(R.string.button_search, (dialog, which) -> {
-            SearchCondition searchCondition = new SearchCondition();
-            switch (lastTab) {
-                case 0: {
-                    searchCondition.setSearchText(editText.getText().toString());
-                    break;
-                }
-                case 1: {
-                    searchCondition.setSearchMode(SearchCondition.SearchMode.BINARY);
-                    JnaBufferEditableData data = new JnaBufferEditableData();
-                    data.insert(0, codeArea.getContentData());
-                    searchCondition.setBinaryData(data);
-                    break;
-                }
-            }
-            searchParameters = new SearchParameters();
-            searchParameters.setCondition(searchCondition);
-            SwitchCompat matchCaseSwitch = searchView.findViewById(R.id.match_case);
-            searchParameters.setMatchCase(matchCaseSwitch.isChecked());
-            SwitchCompat backwardDirectionSwitch = searchView.findViewById(R.id.backward_direction);
-            searchParameters.setSearchDirection(backwardDirectionSwitch.isChecked() ? SearchParameters.SearchDirection.BACKWARD : SearchParameters.SearchDirection.FORWARD);
-            SwitchCompat multipleMatchesSwitch = searchView.findViewById(R.id.multiple_matches);
-            searchParameters.setMatchMode(multipleMatchesSwitch.isChecked() ? SearchParameters.MatchMode.MULTIPLE : SearchParameters.MatchMode.SINGLE);
-            SwitchCompat fromCursorSwitch = searchView.findViewById(R.id.from_cursor);
-            searchParameters.setSearchFromCursor(fromCursorSwitch.isChecked());
+            saveSearchParameters();
             binarySearch.performFind(searchParameters, searchStatusListener);
-            if (closeListener != null) {
-                closeListener.close();
-            }
         });
         builder.setNegativeButton(R.string.button_cancel, (dialog, which) -> {
             binarySearch.cancelSearch();
@@ -235,12 +182,58 @@ public class SearchDialog extends AppCompatDialogFragment {
         }
     }
 
-    public void setOnCloseListener(CloseListener closeListener) {
-        this.closeListener = closeListener;
+    private void loadSearchParameters() {
+        SearchCondition condition = searchParameters.getCondition();
+        editText.setText(condition.getSearchText());
+        EditableBinaryData data = (EditableBinaryData) codeArea.getContentData();
+        data.clear();
+        data.insert(0, condition.getBinaryData());
+        codeAreaCodeAreaCaretListener.caretMoved(codeArea.getActiveCaretPosition());
+
+        if (condition.getSearchMode() == SearchCondition.SearchMode.TEXT) {
+            // Should work automatically, but force for now
+            keyboardShown = false;
+        } else {
+            TabLayout tabLayout = searchView.findViewById(R.id.tabLayout);
+            TabLayout.Tab binaryTab = tabLayout.getTabAt(1);
+            tabLayout.selectTab(binaryTab);
+            tabSwitched(binaryTab);
+        }
+        SwitchCompat matchCaseSwitch = searchView.findViewById(R.id.match_case);
+        matchCaseSwitch.setChecked(searchParameters.isMatchCase());
+        SwitchCompat backwardDirectionSwitch = searchView.findViewById(R.id.backward_direction);
+        backwardDirectionSwitch.setChecked(searchParameters.getSearchDirection() == SearchParameters.SearchDirection.BACKWARD);
+        SwitchCompat multipleMatchesSwitch = searchView.findViewById(R.id.multiple_matches);
+        multipleMatchesSwitch.setChecked(searchParameters.getMatchMode() == SearchParameters.MatchMode.MULTIPLE);
+        SwitchCompat fromCursorSwitch = searchView.findViewById(R.id.from_cursor);
+        fromCursorSwitch.setChecked(searchParameters.isSearchFromCursor());
     }
 
-    public interface CloseListener {
-        void close();
+    private void saveSearchParameters() {
+        SearchCondition searchCondition = new SearchCondition();
+        searchCondition.setSearchMode(lastTab == 0 ? SearchCondition.SearchMode.TEXT : SearchCondition.SearchMode.BINARY);
+        searchCondition.setSearchText(editText.getText().toString());
+        JnaBufferEditableData data = new JnaBufferEditableData();
+        data.insert(0, codeArea.getContentData());
+        searchCondition.setBinaryData(data);
+        searchParameters = new SearchParameters();
+        searchParameters.setCondition(searchCondition);
+        SwitchCompat matchCaseSwitch = searchView.findViewById(R.id.match_case);
+        searchParameters.setMatchCase(matchCaseSwitch.isChecked());
+        SwitchCompat backwardDirectionSwitch = searchView.findViewById(R.id.backward_direction);
+        searchParameters.setSearchDirection(backwardDirectionSwitch.isChecked() ? SearchParameters.SearchDirection.BACKWARD : SearchParameters.SearchDirection.FORWARD);
+        SwitchCompat multipleMatchesSwitch = searchView.findViewById(R.id.multiple_matches);
+        searchParameters.setMatchMode(multipleMatchesSwitch.isChecked() ? SearchParameters.MatchMode.MULTIPLE : SearchParameters.MatchMode.SINGLE);
+        SwitchCompat fromCursorSwitch = searchView.findViewById(R.id.from_cursor);
+        searchParameters.setSearchFromCursor(fromCursorSwitch.isChecked());
+        MainActivity activity = (MainActivity) requireActivity();
+        activity.setSearchParameters(searchParameters);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        saveSearchParameters();
     }
 
     @ParametersAreNonnullByDefault
@@ -262,6 +255,10 @@ public class SearchDialog extends AppCompatDialogFragment {
                     return currentFocus.dispatchKeyEvent(keyEvent);
                 }
 
+                return false;
+            }
+
+            if (keyboardShown && MainActivity.isGoogleTV(codeArea.getContext())) {
                 return false;
             }
 
