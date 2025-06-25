@@ -641,14 +641,20 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             case GO_TO_SIDE_PANEL_POPUP_ID: {
                 LinearLayout mainView = findViewById(R.id.main);
                 int searchStatusPanelIndex = mainView.indexOfChild(searchStatusPanel);
+                if (searchStatusPanelIndex >= 0) {
+                    View closeButton = findViewById(R.id.closeButton);
+                    closeButton.requestFocus();
+                    break;
+                }
                 int keyPanelIndex = mainView.indexOfChild(keyPanel);
                 if (keyPanelIndex >= 0) {
                     View downButton = findViewById(R.id.buttonDown);
                     downButton.requestFocus();
-                } else {
-                    View editTextByte = findViewById(R.id.editTextByte);
-                    editTextByte.requestFocus();
+                    break;
                 }
+
+                View editTextByte = findViewById(R.id.editTextByte);
+                editTextByte.requestFocus();
                 break;
             }
             case OPEN_MAIN_MENU_POPUP_ID: {
@@ -680,7 +686,11 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
                 break;
             }
             case CUT_ACTION_POPUP_ID: {
-                codeArea.cut();
+                try {
+                    codeArea.cut();
+                } catch (Throwable tw) {
+                    reportException(tw);
+                }
                 break;
             }
             case COPY_ACTION_POPUP_ID: {
