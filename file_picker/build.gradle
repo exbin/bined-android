@@ -5,7 +5,7 @@ def materialVersion = '1.6.1'
 
 android {
     namespace = 'com.rustamg.filedialogs'
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         if (playStore) {
@@ -16,7 +16,7 @@ android {
             minSdk 14
         }
 
-        targetSdk 34
+        targetSdk 35
     }
     buildTypes {
         release {

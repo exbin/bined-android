@@ -2,11 +2,11 @@ plugins {
     id 'com.android.application'
 }
 
-def playStore = true
+def playStore = false
 def materialVersion = '1.6.1'
 
 android {
-    compileSdk 34
+    compileSdk 35
     defaultConfig {
         applicationId "org.exbin.bined.editor.android"
 
@@ -18,7 +18,7 @@ android {
             multiDexEnabled true
         }
 
-        targetSdk 34
+        targetSdk 35
         versionCode 17
         versionName "0.2.8-SNAPSHOT"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
