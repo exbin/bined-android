@@ -79,7 +79,7 @@ public class DefaultCodeAreaCharAssessor implements CodeAreaCharAssessor {
 
     @Override
     public char getPreviewCharacter(long rowDataPosition, int byteOnRow, int charOnRow, CodeAreaSection section) {
-        if (byteOnRow > rowData.length - maxBytesPerChar) {
+        if (byteOnRow > rowData.length - maxBytesPerChar || rowDataPosition >= dataSize) {
             return ' ';
         }
 

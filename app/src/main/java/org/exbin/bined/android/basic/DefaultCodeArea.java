@@ -31,7 +31,7 @@ import org.exbin.bined.android.capability.BasicColorsCapable;
 import org.exbin.bined.android.capability.FontCapable;
 
 /**
- * Code area component default interface.
+ * Code area default component interface.
  *
  * @author ExBin Project (https://exbin.org)
  */

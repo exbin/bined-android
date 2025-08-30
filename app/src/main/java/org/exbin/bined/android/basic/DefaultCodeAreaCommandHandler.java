@@ -844,7 +844,7 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
         if (!caretPosition.equals(movePosition)) {
             ((CaretCapable) codeArea).setActiveCaretPosition(movePosition);
             updateSelection(selectingMode, movePosition);
-        } else if (selectingMode == SelectingMode.NONE){
+        } else if (selectingMode == SelectingMode.NONE) {
             clearSelection();
         }
     }
