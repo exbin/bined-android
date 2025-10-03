@@ -102,7 +102,7 @@ import org.exbin.bined.highlight.android.NonAsciiCodeAreaColorAssessor;
 import org.exbin.bined.highlight.android.NonprintablesCodeAreaAssessor;
 import org.exbin.bined.highlight.android.SearchCodeAreaColorAssessor;
 import org.exbin.bined.operation.android.CodeAreaOperationCommandHandler;
-import org.exbin.bined.operation.undo.BinaryDataUndoRedoChangeListener;
+import org.exbin.bined.operation.BinaryDataUndoRedoChangeListener;
 import org.exbin.framework.bined.BinEdCodeAreaAssessor;
 import org.exbin.framework.bined.BinaryStatusApi;
 

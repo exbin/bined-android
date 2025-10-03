@@ -15,45 +15,21 @@
  */
 package org.exbin.bined.operation;
 
-import java.util.Collection;
-import java.util.List;
-import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
- * Interface for compound command.
+ * Interface for appendable binary data operation.
  *
  * @author ExBin Project (https://exbin.org)
  */
 @ParametersAreNonnullByDefault
-public interface BinaryDataCompoundCommand extends BinaryDataCommand {
+public interface BinaryDataAppendableOperation {
 
     /**
-     * Adds command to the list of commands.
+     * Attempts to append an operation.
      *
-     * @param command appended command
+     * @param operation operation
+     * @return true if sucessfully appended
      */
-    void addCommand(BinaryDataCommand command);
-
-    /**
-     * Adds list of commands to the list of commands.
-     *
-     * @param commands appended commands
-     */
-    void addCommands(Collection<BinaryDataCommand> commands);
-
-    /**
-     * Returns list of commands.
-     *
-     * @return list of commands
-     */
-    @Nonnull
-    List<BinaryDataCommand> getCommands();
-
-    /**
-     * Returns true if compound command is empty.
-     *
-     * @return true if command is empty
-     */
-    boolean isEmpty();
+    boolean appendOperation(BinaryDataOperation operation);
 }

@@ -20,13 +20,13 @@ import java.util.List;
 import java.util.Optional;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
-import org.exbin.bined.operation.BinaryDataCommand;
-import org.exbin.bined.operation.undo.BinaryDataAppendableCommand;
-import org.exbin.bined.operation.undo.BinaryDataAppendableUndoRedo;
+import org.exbin.bined.operation.command.BinaryDataCommand;
+import org.exbin.bined.operation.command.BinaryDataAppendableCommand;
+import org.exbin.bined.operation.command.BinaryDataAppendableUndoRedo;
 import org.exbin.bined.android.CodeAreaCore;
-import org.exbin.bined.operation.undo.BinaryDataUndoRedo;
-import org.exbin.bined.operation.undo.BinaryDataUndoRedoChangeListener;
-import org.exbin.bined.operation.undo.BinaryDataUndoableCommand;
+import org.exbin.bined.operation.command.BinaryDataUndoRedo;
+import org.exbin.bined.operation.BinaryDataUndoRedoChangeListener;
+import org.exbin.bined.operation.command.BinaryDataUndoableCommand;
 
 /**
  * Undo handler for binary editor.

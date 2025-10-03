@@ -36,12 +36,12 @@ import org.exbin.bined.DataChangedListener;
 import org.exbin.bined.android.basic.CodeArea;
 import org.exbin.bined.capability.CaretCapable;
 import org.exbin.bined.editor.android.R;
-import org.exbin.bined.operation.BinaryDataCommand;
+import org.exbin.bined.operation.command.BinaryDataCommand;
 import org.exbin.bined.operation.android.command.CodeAreaCompoundCommand;
 import org.exbin.bined.operation.android.command.InsertDataCommand;
 import org.exbin.bined.operation.android.command.ModifyDataCommand;
-import org.exbin.bined.operation.undo.BinaryDataUndoRedo;
-import org.exbin.bined.operation.undo.BinaryDataUndoRedoChangeListener;
+import org.exbin.bined.operation.command.BinaryDataUndoRedo;
+import org.exbin.bined.operation.BinaryDataUndoRedoChangeListener;
 
 import java.math.BigInteger;
 import java.nio.ByteBuffer;

@@ -30,7 +30,7 @@ public class RemoveDataCommand extends OpCodeAreaCommand {
 
     public RemoveDataCommand(CodeAreaCore codeArea, long position, int codeOffset, long size) {
         super(codeArea);
-        super.setOperation(new RemoveDataOperation(codeArea, position, codeOffset, size));
+        super.setOperation(new RemoveDataOperation(position, codeOffset, size));
     }
 
     @Nonnull

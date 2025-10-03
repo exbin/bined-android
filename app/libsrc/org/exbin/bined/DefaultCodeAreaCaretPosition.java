@@ -38,7 +38,7 @@ public class DefaultCodeAreaCaretPosition implements CodeAreaCaretPosition {
     public DefaultCodeAreaCaretPosition() {
     }
 
-    public DefaultCodeAreaCaretPosition(long dataPosition, int codeOffset, CodeAreaSection section) {
+    public DefaultCodeAreaCaretPosition(long dataPosition, int codeOffset, @Nullable CodeAreaSection section) {
         this.dataPosition = dataPosition;
         this.codeOffset = codeOffset;
         this.section = section;

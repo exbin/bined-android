@@ -15,13 +15,22 @@
  */
 package org.exbin.bined.operation.android.command;
 
+import org.exbin.bined.CodeAreaCaretPosition;
+import org.exbin.bined.DefaultCodeAreaCaretPosition;
+import org.exbin.bined.SelectionRange;
+import org.exbin.bined.android.CodeAreaCore;
+import org.exbin.bined.capability.CaretCapable;
+import org.exbin.bined.capability.SelectionCapable;
+import org.exbin.bined.operation.android.CodeAreaState;
+import org.exbin.bined.operation.command.BinaryDataAbstractCommand;
+
+import java.util.Optional;
+
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
-import org.exbin.bined.operation.BinaryDataAbstractCommand;
-import org.exbin.bined.android.CodeAreaCore;
 
 /**
- * Abstract class for operation on code area component.
+ * Abstract class for command on code area component.
  *
  * @author ExBin Project (https://exbin.org)
  */
@@ -30,8 +39,75 @@ public abstract class CodeAreaCommand extends BinaryDataAbstractCommand {
 
     @Nonnull
     protected final CodeAreaCore codeArea;
+    protected CodeAreaState beforeState;
+    protected CodeAreaState afterState;
 
     public CodeAreaCommand(CodeAreaCore codeArea) {
         this.codeArea = codeArea;
+    }
+
+    @Override
+    public void redo() {
+        performRedo();
+        restoreState(afterState);
+    }
+
+    @Override
+    public void execute() {
+        beforeState = fetchState();
+        performExecute();
+        afterState = fetchState();
+    }
+
+    @Override
+    public void undo() {
+        performUndo();
+        restoreState(beforeState);
+    }
+
+    /**
+     * Executes main command.
+     */
+    public void performRedo() {
+        performExecute();
+    }
+
+    /**
+     * Executes main command.
+     */
+    public abstract void performExecute();
+
+    /**
+     * Executes main undo command.
+     */
+    public abstract void performUndo();
+
+    @Nonnull
+    public Optional<CodeAreaState> getBeforeState() {
+        return Optional.ofNullable(beforeState);
+    }
+
+    @Nonnull
+    public Optional<CodeAreaState> getAfterState() {
+        return Optional.ofNullable(afterState);
+    }
+
+    @Nonnull
+    public CodeAreaState fetchState() {
+        DefaultCodeAreaCaretPosition caretPosition = new DefaultCodeAreaCaretPosition();
+        caretPosition.setPosition(((CaretCapable) codeArea).getActiveCaretPosition());
+        SelectionRange selection = ((SelectionCapable) codeArea).getSelection();
+        return new CodeAreaState(caretPosition, selection);
+    }
+
+    public void restoreState(CodeAreaState codeAreaState) {
+        CodeAreaCaretPosition caretPosition = codeAreaState.getCaretPosition();
+        ((CaretCapable) codeArea).getCodeAreaCaret().setCaretPosition(caretPosition);
+        SelectionRange selection = codeAreaState.getSelection();
+        if (selection.isEmpty()) {
+            ((SelectionCapable) codeArea).setSelection(caretPosition.getDataPosition(), caretPosition.getDataPosition());
+        } else {
+            ((SelectionCapable) codeArea).setSelection(selection);
+        }
     }
 }

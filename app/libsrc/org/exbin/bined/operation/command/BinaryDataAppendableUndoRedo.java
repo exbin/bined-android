@@ -13,23 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.bined.operation.undo;
+package org.exbin.bined.operation.command;
 
-import javax.annotation.Nonnull;
-import org.exbin.bined.operation.BinaryDataOperation;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
- * Interface for undoable binary data operation.
+ * Undoable command sequence with support for appendable commands.
  *
  * @author ExBin Project (https://exbin.org)
  */
-public interface BinaryDataUndoableOperation extends BinaryDataOperation {
+@ParametersAreNonnullByDefault
+public interface BinaryDataAppendableUndoRedo extends BinaryDataUndoRedo {
 
     /**
-     * Performs operation on given document and returns undo operation.
+     * Attempts to execute command as an append to existing command.
      *
-     * @return undo operation
+     * @param command command
+     * @return true if successfully appended
      */
-    @Nonnull
-    BinaryDataUndoableOperation executeWithUndo();
+    boolean appendExecute(BinaryDataCommand command);
 }

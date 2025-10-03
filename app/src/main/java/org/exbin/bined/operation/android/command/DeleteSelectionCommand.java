@@ -18,67 +18,40 @@ package org.exbin.bined.operation.android.command;
 import org.exbin.bined.SelectionRange;
 import org.exbin.bined.android.CodeAreaCore;
 import org.exbin.bined.capability.CaretCapable;
-import org.exbin.bined.capability.ScrollingCapable;
 import org.exbin.bined.capability.SelectionCapable;
+import org.exbin.bined.operation.android.RemoveDataOperation;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
- * Command for deleting data.
+ * Delete selection command.
  *
  * @author ExBin Project (https://exbin.org)
  */
 @ParametersAreNonnullByDefault
-public class DeleteSelectionCommand extends CodeAreaCommand {
+public class DeleteSelectionCommand extends OpCodeAreaCommand {
 
-    private final RemoveDataCommand removeCommand;
-    private final long position;
-    private final long size;
+    protected long position;
 
-    public DeleteSelectionCommand(CodeAreaCore coreArea) {
-        super(coreArea);
-        SelectionRange selection = ((SelectionCapable) coreArea).getSelection();
+    public DeleteSelectionCommand(CodeAreaCore codeArea) {
+        super(codeArea);
+        SelectionRange selection = ((SelectionCapable) codeArea).getSelection();
         position = selection.getFirst();
-        size = selection.getLast() - position + 1;
-        removeCommand = new RemoveDataCommand(coreArea, position, 0, size);
+        long size = selection.getLast() - position + 1;
+        super.setOperation(new RemoveDataOperation(position, 0, size));
     }
 
     @Override
-    public void execute() {
-        removeCommand.execute();
+    public void performExecute() {
+        super.performExecute();
         ((CaretCapable) codeArea).setActiveCaretPosition(position);
-        clearSelection();
-        ((ScrollingCapable) codeArea).revealCursor();
-        codeArea.notifyDataChanged();
-    }
-
-    @Override
-    public void redo() {
-        removeCommand.redo();
-        ((CaretCapable) codeArea).setActiveCaretPosition(position);
-        clearSelection();
-        ((ScrollingCapable) codeArea).revealCursor();
-        codeArea.notifyDataChanged();
-    }
-
-    @Override
-    public void undo() {
-        removeCommand.undo();
-        clearSelection();
-        ((CaretCapable) codeArea).setActiveCaretPosition(position + size);
-        ((ScrollingCapable) codeArea).revealCursor();
-        codeArea.notifyDataChanged();
+        ((SelectionCapable) codeArea).setSelection(position, position);
     }
 
     @Nonnull
     @Override
     public CodeAreaCommandType getType() {
         return CodeAreaCommandType.DATA_REMOVED;
-    }
-
-    private void clearSelection() {
-        long dataPosition = ((CaretCapable) codeArea).getDataPosition();
-        ((SelectionCapable) codeArea).setSelection(dataPosition, dataPosition);
     }
 }

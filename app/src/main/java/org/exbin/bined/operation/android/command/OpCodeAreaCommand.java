@@ -15,17 +15,18 @@
  */
 package org.exbin.bined.operation.android.command;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import org.exbin.auxiliary.binary_data.EditableBinaryData;
 import org.exbin.bined.CodeAreaUtils;
-import org.exbin.bined.operation.BinaryDataCommandPhase;
-import org.exbin.bined.operation.android.CodeAreaOperation;
-import org.exbin.bined.operation.undo.BinaryDataUndoableOperation;
+import org.exbin.bined.operation.command.BinaryDataCommandPhase;
+import org.exbin.bined.operation.BinaryDataUndoableOperation;
 import org.exbin.bined.android.CodeAreaCore;
 
 /**
- * Abstract class for operation on hexadecimal document.
+ * Abstract class for operation on binary document.
  *
  * @author ExBin Project (https://exbin.org)
  */
@@ -34,13 +35,14 @@ public abstract class OpCodeAreaCommand extends CodeAreaCommand {
 
     @Nullable
     protected BinaryDataUndoableOperation operation;
+    @Nonnull
     protected BinaryDataCommandPhase phase = BinaryDataCommandPhase.CREATED;
 
     public OpCodeAreaCommand(CodeAreaCore codeArea) {
         super(codeArea);
     }
 
-    public void setOperation(CodeAreaOperation operation) {
+    public void setOperation(BinaryDataUndoableOperation operation) {
         if (this.operation != null) {
             this.operation.dispose();
         }
@@ -48,37 +50,39 @@ public abstract class OpCodeAreaCommand extends CodeAreaCommand {
     }
 
     @Override
-    public void execute() {
+    public void performExecute() {
         if (phase != BinaryDataCommandPhase.CREATED) {
             throw new IllegalStateException();
         }
 
-        executeInt();
+        doCommand();
     }
 
     @Override
-    public void undo() {
+    public void performUndo() {
         if (phase != BinaryDataCommandPhase.EXECUTED) {
             throw new IllegalStateException();
         }
 
-        BinaryDataUndoableOperation redoOperation = CodeAreaUtils.requireNonNull(operation).executeWithUndo();
+        EditableBinaryData contentData = (EditableBinaryData) codeArea.getContentData();
+        BinaryDataUndoableOperation redoOperation = CodeAreaUtils.requireNonNull(operation).executeWithUndo(contentData);
         operation.dispose();
         operation = redoOperation;
         phase = BinaryDataCommandPhase.REVERTED;
     }
 
     @Override
-    public void redo() {
+    public void performRedo() {
         if (phase != BinaryDataCommandPhase.REVERTED) {
             throw new IllegalStateException();
         }
 
-        executeInt();
+        doCommand();
     }
 
-    private void executeInt() {
-        BinaryDataUndoableOperation undoOperation = CodeAreaUtils.requireNonNull(operation).executeWithUndo();
+    private void doCommand() {
+        EditableBinaryData contentData = (EditableBinaryData) codeArea.getContentData();
+        BinaryDataUndoableOperation undoOperation = CodeAreaUtils.requireNonNull(operation).executeWithUndo(contentData);
         operation.dispose();
         operation = undoOperation;
         phase = BinaryDataCommandPhase.EXECUTED;

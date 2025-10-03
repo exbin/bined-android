@@ -13,38 +13,47 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.bined.operation.android;
+package org.exbin.bined.operation.command;
 
+import java.util.Collection;
+import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
-import org.exbin.bined.CodeType;
-import org.exbin.bined.operation.BinaryDataUndoableOperation;
 
 /**
- * Abstract operation for editing data.
+ * Interface for compound command.
  *
  * @author ExBin Project (https://exbin.org)
  */
 @ParametersAreNonnullByDefault
-public abstract class CodeEditDataOperation implements BinaryDataUndoableOperation {
-
-    public CodeEditDataOperation() {
-    }
+public interface BinaryDataCompoundCommand extends BinaryDataCommand {
 
     /**
-     * Code type used for this edit operation.
+     * Adds command to the list of commands.
      *
-     * @return code type
+     * @param command appended command
+     */
+    void addCommand(BinaryDataCommand command);
+
+    /**
+     * Adds list of commands to the list of commands.
+     *
+     * @param commands appended commands
+     */
+    void addCommands(Collection<BinaryDataCommand> commands);
+
+    /**
+     * Returns list of commands.
+     *
+     * @return list of commands
      */
     @Nonnull
-    public abstract CodeType getCodeType();
+    List<BinaryDataCommand> getCommands();
 
     /**
-     * Performs dispose of the operation's resources.
-     * <p>
-     * Default dispose is empty.
+     * Returns true if compound command is empty.
+     *
+     * @return true if command is empty
      */
-    @Override
-    public void dispose() {
-    }
+    boolean isEmpty();
 }

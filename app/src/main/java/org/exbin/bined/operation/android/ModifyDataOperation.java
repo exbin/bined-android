@@ -15,12 +15,14 @@
  */
 package org.exbin.bined.operation.android;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
-import org.exbin.bined.android.CodeAreaCore;
 import org.exbin.auxiliary.binary_data.BinaryData;
 import org.exbin.auxiliary.binary_data.EditableBinaryData;
-import org.exbin.bined.operation.undo.BinaryDataUndoableOperation;
+import org.exbin.bined.CodeAreaUtils;
+import org.exbin.bined.operation.BinaryDataUndoableOperation;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Operation for modifying data.
@@ -28,40 +30,40 @@ import org.exbin.bined.operation.undo.BinaryDataUndoableOperation;
  * @author ExBin Project (https://exbin.org)
  */
 @ParametersAreNonnullByDefault
-public class ModifyDataOperation extends CodeAreaOperation {
+public class ModifyDataOperation implements BinaryDataUndoableOperation {
 
     protected final long position;
+    @Nonnull
     protected final BinaryData data;
 
-    public ModifyDataOperation(CodeAreaCore codeArea, long position, BinaryData data) {
-        super(codeArea);
+    public ModifyDataOperation(long position, BinaryData data) {
         this.position = position;
         this.data = data;
     }
 
     @Nonnull
     @Override
-    public CodeAreaOperationType getType() {
-        return CodeAreaOperationType.MODIFY_DATA;
+    public BasicBinaryDataOperationType getType() {
+        return BasicBinaryDataOperationType.MODIFY_DATA;
     }
 
     @Override
-    public void execute() {
-        execute(false);
+    public void execute(EditableBinaryData contentData) {
+        execute(contentData, false);
     }
 
     @Nonnull
     @Override
-    public BinaryDataUndoableOperation executeWithUndo() {
-        return execute(true);
+    public BinaryDataUndoableOperation executeWithUndo(EditableBinaryData contentData) {
+        return CodeAreaUtils.requireNonNull(execute(contentData, true));
     }
 
-    private CodeAreaOperation execute(boolean withUndo) {
-        CodeAreaOperation undoOperation = null;
-        EditableBinaryData contentData = (EditableBinaryData) codeArea.getContentData();
+    @Nullable
+    private BinaryDataUndoableOperation execute(EditableBinaryData contentData, boolean withUndo) {
+        BinaryDataUndoableOperation undoOperation = null;
         if (withUndo) {
             BinaryData undoData = contentData.copy(position, data.getDataSize());
-            undoOperation = new ModifyDataOperation(codeArea, position, undoData);
+            undoOperation = new ModifyDataOperation(position, undoData);
         }
         contentData.replace(position, data);
         return undoOperation;
@@ -69,7 +71,6 @@ public class ModifyDataOperation extends CodeAreaOperation {
 
     @Override
     public void dispose() {
-        super.dispose();
         data.dispose();
     }
 }

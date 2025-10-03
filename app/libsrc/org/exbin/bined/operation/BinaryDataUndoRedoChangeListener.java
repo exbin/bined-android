@@ -13,24 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.bined.operation.undo;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-import org.exbin.bined.operation.BinaryDataCommand;
+package org.exbin.bined.operation;
 
 /**
- * Interface for appendable binary data command.
+ * Binary data undo change listener.
  *
  * @author ExBin Project (https://exbin.org)
  */
-@ParametersAreNonnullByDefault
-public interface BinaryDataAppendableCommand extends BinaryDataUndoableCommand {
+public interface BinaryDataUndoRedoChangeListener {
 
     /**
-     * Attempts to execute command as an append to existing command.
-     *
-     * @param command command
-     * @return true if sucessfully appended
+     * Undo changed.
      */
-    boolean appendExecute(BinaryDataCommand command);
+    void undoChanged();
 }

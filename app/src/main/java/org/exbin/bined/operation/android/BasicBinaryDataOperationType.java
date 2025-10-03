@@ -13,17 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.bined.operation.undo;
+package org.exbin.bined.operation.android;
+
+import org.exbin.bined.operation.BinaryDataOperationType;
 
 /**
- * Binary data undo change listener.
+ * Basic binary data operation type enumeration.
  *
  * @author ExBin Project (https://exbin.org)
  */
-public interface BinaryDataUndoRedoChangeListener {
+public enum BasicBinaryDataOperationType implements BinaryDataOperationType {
 
     /**
-     * Undo changed.
+     * Insert data operation.
      */
-    void undoChanged();
+    INSERT_DATA,
+    /**
+     * Remove data operation.
+     */
+    REMOVE_DATA,
+    /**
+     * Modify data operation.
+     */
+    MODIFY_DATA,
+    /**
+     * Move data operation.
+     */
+    MOVE_DATA,
+    /**
+     * Edit data operation.
+     */
+    EDIT_DATA,
+    /**
+     * Compound operation.
+     */
+    COMPOUND;
 }

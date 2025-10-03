@@ -13,31 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.bined.operation.android.command;
-
-import org.exbin.auxiliary.binary_data.BinaryData;
-import org.exbin.bined.android.CodeAreaCore;
-import org.exbin.bined.operation.android.ModifyDataOperation;
+package org.exbin.bined.operation.android;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
+import javax.annotation.concurrent.Immutable;
+import org.exbin.bined.CodeAreaCaretPosition;
+import org.exbin.bined.SelectionRange;
 
 /**
- * Command for modifying data.
+ * Code area state for operation purposes.
  *
  * @author ExBin Project (https://exbin.org)
  */
 @ParametersAreNonnullByDefault
-public class ModifyDataCommand extends OpCodeAreaCommand {
+@Immutable
+public class CodeAreaState {
 
-    public ModifyDataCommand(CodeAreaCore codeArea, long position, BinaryData data) {
-        super(codeArea);
-        super.setOperation(new ModifyDataOperation(position, data));
+    private final CodeAreaCaretPosition caretPosition;
+    private final SelectionRange selection;
+
+    public CodeAreaState(CodeAreaCaretPosition caretPosition, SelectionRange selection) {
+        this.caretPosition = caretPosition;
+        this.selection = selection;
     }
 
     @Nonnull
-    @Override
-    public CodeAreaCommandType getType() {
-        return CodeAreaCommandType.DATA_MODIFIED;
+    public CodeAreaCaretPosition getCaretPosition() {
+        return caretPosition;
+    }
+
+    @Nonnull
+    public SelectionRange getSelection() {
+        return selection;
     }
 }

@@ -15,30 +15,24 @@
  */
 package org.exbin.bined.operation;
 
-import org.exbin.bined.operation.undo.BinaryDataUndoableCommand;
-
 /**
- * Abstract binary data command class.
+ * Code area undo support handler.
  *
  * @author ExBin Project (https://exbin.org)
  */
-public abstract class BinaryDataAbstractCommand implements BinaryDataUndoableCommand {
-
-    public BinaryDataAbstractCommand() {
-    }
+public interface BinaryDataUndoRedoState {
 
     /**
-     * Default redo operation reexecutes command.
+     * Returns whether undo operation is available.
+     *
+     * @return true if undo possible
      */
-    @Override
-    public void redo() {
-        execute();
-    }
+    boolean canUndo();
 
     /**
-     * Default dispose method do nothing.
+     * Returns whether redo operation is available.
+     *
+     * @return true if redo possible
      */
-    @Override
-    public void dispose() {
-    }
+    boolean canRedo();
 }

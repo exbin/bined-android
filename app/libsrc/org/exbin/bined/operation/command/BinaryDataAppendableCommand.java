@@ -13,12 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.bined.operation;
+package org.exbin.bined.operation.command;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
- * Command type interface.
+ * Interface for appendable binary data command.
  *
  * @author ExBin Project (https://exbin.org)
  */
-public interface BinaryDataCommandType {
+@ParametersAreNonnullByDefault
+public interface BinaryDataAppendableCommand extends BinaryDataUndoableCommand {
+
+    /**
+     * Attempts to execute command as an append to existing command.
+     *
+     * @param command command
+     * @return true if sucessfully appended
+     */
+    boolean appendExecute(BinaryDataCommand command);
 }

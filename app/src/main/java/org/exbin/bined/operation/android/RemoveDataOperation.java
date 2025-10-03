@@ -15,28 +15,27 @@
  */
 package org.exbin.bined.operation.android;
 
+import org.exbin.auxiliary.binary_data.EditableBinaryData;
+import org.exbin.bined.CodeAreaUtils;
+import org.exbin.bined.operation.BinaryDataUndoableOperation;
+
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import org.exbin.bined.capability.CaretCapable;
-import org.exbin.bined.android.CodeAreaCore;
-import org.exbin.auxiliary.binary_data.EditableBinaryData;
-import org.exbin.bined.operation.undo.BinaryDataUndoableOperation;
-
 /**
- * Operation for deleting child block.
+ * Operation for deleting section of data.
  *
  * @author ExBin Project (https://exbin.org)
  */
 @ParametersAreNonnullByDefault
-public class RemoveDataOperation extends CodeAreaOperation {
+public class RemoveDataOperation implements BinaryDataUndoableOperation {
 
     protected final long position;
     protected final int codeOffset;
     protected final long length;
 
-    public RemoveDataOperation(CodeAreaCore codeArea, long position, int codeOffset, long length) {
-        super(codeArea);
+    public RemoveDataOperation(long position, int codeOffset, long length) {
         this.position = position;
         this.codeOffset = codeOffset;
         this.length = length;
@@ -44,30 +43,33 @@ public class RemoveDataOperation extends CodeAreaOperation {
 
     @Nonnull
     @Override
-    public CodeAreaOperationType getType() {
-        return CodeAreaOperationType.REMOVE_DATA;
+    public BasicBinaryDataOperationType getType() {
+        return BasicBinaryDataOperationType.REMOVE_DATA;
     }
 
     @Override
-    public void execute() {
-        execute(false);
+    public void execute(EditableBinaryData contentData) {
+        execute(contentData, false);
     }
 
     @Nonnull
     @Override
-    public BinaryDataUndoableOperation executeWithUndo() {
-        return execute(true);
+    public BinaryDataUndoableOperation executeWithUndo(EditableBinaryData contentData) {
+        return CodeAreaUtils.requireNonNull(execute(contentData, true));
     }
 
-    private CodeAreaOperation execute(boolean withUndo) {
-        EditableBinaryData contentData = (EditableBinaryData) codeArea.getContentData();
-        CodeAreaOperation undoOperation = null;
+    @Nullable
+    private BinaryDataUndoableOperation execute(EditableBinaryData contentData, boolean withUndo) {
+        BinaryDataUndoableOperation undoOperation = null;
         if (withUndo) {
             EditableBinaryData undoData = (EditableBinaryData) contentData.copy(position, length);
-            undoOperation = new InsertDataOperation(codeArea, position, codeOffset, undoData);
+            undoOperation = new InsertDataOperation(position, codeOffset, undoData);
         }
         contentData.remove(position, length);
-        ((CaretCapable) codeArea).setActiveCaretPosition(position, codeOffset);
         return undoOperation;
+    }
+
+    @Override
+    public void dispose() {
     }
 }

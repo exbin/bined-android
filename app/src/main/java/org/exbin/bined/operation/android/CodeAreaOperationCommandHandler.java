@@ -67,8 +67,8 @@ import org.exbin.bined.operation.android.command.EditDataCommand;
 import org.exbin.bined.operation.android.command.InsertDataCommand;
 import org.exbin.bined.operation.android.command.ModifyDataCommand;
 import org.exbin.bined.operation.android.command.PasteDataCommand;
-import org.exbin.bined.operation.undo.BinaryDataAppendableUndoRedo;
-import org.exbin.bined.operation.undo.BinaryDataUndoRedo;
+import org.exbin.bined.operation.command.BinaryDataAppendableUndoRedo;
+import org.exbin.bined.operation.command.BinaryDataUndoRedo;
 
 import java.nio.charset.Charset;
 import java.util.logging.Level;
@@ -393,7 +393,6 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
             }
 
             codeArea.notifyDataChanged();
-            move(SelectingMode.NONE, MovementDirection.RIGHT);
             revealCursor();
         }
     }
@@ -530,7 +529,7 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
         deleteAction(DELETE_CHAR);
     }
 
-    private void deleteAction(char keyChar) {
+    protected void deleteAction(char keyChar) {
         if (codeArea.hasSelection()) {
             DeleteSelectionCommand deleteSelectionCommand = new DeleteSelectionCommand(codeArea);
             undoRedo.execute(deleteSelectionCommand);
@@ -846,7 +845,7 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
         return undoRedo.getCommandPosition() != undoRedo.getSyncPosition();
     }
 
-    public void changeEditOperation() {
+    public boolean changeEditOperation() {
         EditMode editMode = ((EditModeCapable) codeArea).getEditMode();
         if (editMode == EditMode.EXPANDING || editMode == EditMode.CAPPED) {
             EditOperation editOperation = ((EditModeCapable) codeArea).getEditOperation();
@@ -860,7 +859,10 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
                     break;
                 }
             }
+            return true;
         }
+
+        return false;
     }
 
     @Nonnull

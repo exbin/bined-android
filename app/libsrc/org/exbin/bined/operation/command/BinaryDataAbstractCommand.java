@@ -13,32 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.bined.operation;
-
-import javax.annotation.Nonnull;
+package org.exbin.bined.operation.command;
 
 /**
- * Interface for code area command.
+ * Abstract binary data command class.
  *
  * @author ExBin Project (https://exbin.org)
  */
-public interface BinaryDataCommand {
+public abstract class BinaryDataAbstractCommand implements BinaryDataUndoableCommand {
+
+    public BinaryDataAbstractCommand() {
+    }
 
     /**
-     * Returns type of the command.
-     *
-     * @return command type
+     * Default redo operation reexecutes command.
      */
-    @Nonnull
-    BinaryDataCommandType getType();
+    @Override
+    public void redo() {
+        execute();
+    }
 
     /**
-     * Performs operation on given document.
+     * Default dispose method do nothing.
      */
-    void execute();
-
-    /**
-     * Disposes command.
-     */
-    void dispose();
+    @Override
+    public void dispose() {
+    }
 }

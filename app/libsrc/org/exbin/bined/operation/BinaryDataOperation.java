@@ -16,12 +16,15 @@
 package org.exbin.bined.operation;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
+import org.exbin.auxiliary.binary_data.EditableBinaryData;
 
 /**
  * Interface for binary data operation.
  *
  * @author ExBin Project (https://exbin.org)
  */
+@ParametersAreNonnullByDefault
 public interface BinaryDataOperation {
 
     /**
@@ -34,8 +37,10 @@ public interface BinaryDataOperation {
 
     /**
      * Performs operation.
+     *
+     * @param contentData content data
      */
-    void execute();
+    void execute(EditableBinaryData contentData);
 
     /**
      * Disposes of the operation's resources.

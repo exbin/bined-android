@@ -13,39 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.bined.operation.android;
+package org.exbin.bined.operation.command;
 
-import org.exbin.bined.operation.BinaryDataOperationType;
+import javax.annotation.Nonnull;
 
 /**
- * Operation type enumeration.
+ * Interface for code area command.
  *
  * @author ExBin Project (https://exbin.org)
  */
-public enum CodeAreaOperationType implements BinaryDataOperationType {
+public interface BinaryDataCommand {
 
     /**
-     * Insert data operation.
+     * Returns type of the command.
+     *
+     * @return command type
      */
-    INSERT_DATA,
+    @Nonnull
+    BinaryDataCommandType getType();
+
     /**
-     * Remove data operation.
+     * Performs operation on given document.
      */
-    REMOVE_DATA,
+    void execute();
+
     /**
-     * Modify data operation.
+     * Disposes command.
      */
-    MODIFY_DATA,
-    /**
-     * Move data operation.
-     */
-    MOVE_DATA,
-    /**
-     * Edit data operation.
-     */
-    EDIT_DATA,
-    /**
-     * Compound operation.
-     */
-    COMPOUND;
+    void dispose();
 }

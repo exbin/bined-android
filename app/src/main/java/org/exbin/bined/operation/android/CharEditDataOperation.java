@@ -16,7 +16,7 @@
 package org.exbin.bined.operation.android;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import org.exbin.bined.android.CodeAreaCore;
+import org.exbin.bined.operation.BinaryDataUndoableOperation;
 
 /**
  * Abstract operation for editing data.
@@ -24,9 +24,18 @@ import org.exbin.bined.android.CodeAreaCore;
  * @author ExBin Project (https://exbin.org)
  */
 @ParametersAreNonnullByDefault
-public abstract class CharEditDataOperation extends CodeAreaOperation {
+public abstract class CharEditDataOperation implements BinaryDataUndoableOperation {
 
-    public CharEditDataOperation(CodeAreaCore codeArea) {
-        super(codeArea);
+    public CharEditDataOperation() {
+        super();
+    }
+
+    /**
+     * Performs dispose of the operation's resources.
+     * <p>
+     * Default dispose is empty.
+     */
+    @Override
+    public void dispose() {
     }
 }

@@ -15,14 +15,15 @@
  */
 package org.exbin.bined.operation.android.command;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 import org.exbin.auxiliary.binary_data.BinaryData;
 import org.exbin.bined.EditMode;
 import org.exbin.bined.EditOperation;
+import org.exbin.bined.android.CodeAreaCore;
 import org.exbin.bined.capability.CaretCapable;
 import org.exbin.bined.capability.EditModeCapable;
-import org.exbin.bined.android.CodeAreaCore;
+
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Paste data command.
@@ -32,9 +33,9 @@ import org.exbin.bined.android.CodeAreaCore;
 @ParametersAreNonnullByDefault
 public class PasteDataCommand extends CodeAreaCommand {
 
-    private CodeAreaCommand modifyCommand = null;
-    private CodeAreaCommand insertCommand = null;
-    private BinaryData pastedData;
+    protected CodeAreaCommand modifyCommand = null;
+    protected CodeAreaCommand insertCommand = null;
+    protected BinaryData pastedData;
 
     public PasteDataCommand(CodeAreaCore codeArea, BinaryData pastedData) {
         super(codeArea);
@@ -46,7 +47,7 @@ public class PasteDataCommand extends CodeAreaCommand {
     }
 
     @Override
-    public void execute() {
+    public void performExecute() {
         long dataPosition = ((CaretCapable) codeArea).getDataPosition();
         EditMode editMode = ((EditModeCapable) codeArea).getEditMode();
         EditOperation editOperation = ((EditModeCapable) codeArea).getActiveOperation();
@@ -98,7 +99,7 @@ public class PasteDataCommand extends CodeAreaCommand {
     }
 
     @Override
-    public void redo() {
+    public void performRedo() {
         if (modifyCommand != null) {
             modifyCommand.redo();
         }
@@ -108,7 +109,7 @@ public class PasteDataCommand extends CodeAreaCommand {
     }
 
     @Override
-    public void undo() {
+    public void performUndo() {
         if (insertCommand != null) {
             insertCommand.undo();
         }

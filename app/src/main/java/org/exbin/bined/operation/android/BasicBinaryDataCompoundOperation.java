@@ -15,57 +15,53 @@
  */
 package org.exbin.bined.operation.android;
 
+import org.exbin.auxiliary.binary_data.EditableBinaryData;
+import org.exbin.bined.operation.BinaryDataCompoundOperation;
+import org.exbin.bined.operation.BinaryDataOperation;
+import org.exbin.bined.operation.BinaryDataUndoableOperation;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import org.exbin.bined.CodeAreaCaretPosition;
-import org.exbin.bined.operation.BinaryDataCompoundOperation;
-import org.exbin.bined.operation.BinaryDataOperation;
-import org.exbin.bined.operation.undo.BinaryDataUndoableOperation;
-import org.exbin.bined.android.CodeAreaCore;
 
 /**
- * Abstract class for compound operation on code area component.
+ * Compound binary data operation.
  *
  * @author ExBin Project (https://exbin.org)
  */
 @ParametersAreNonnullByDefault
-public class CodeAreaCompoundOperation extends CodeAreaOperation implements BinaryDataCompoundOperation {
+public class BasicBinaryDataCompoundOperation implements BinaryDataCompoundOperation, BinaryDataUndoableOperation {
 
     protected final List<BinaryDataOperation> operations = new ArrayList<>();
 
-    public CodeAreaCompoundOperation(CodeAreaCore codeArea) {
-        super(codeArea);
+    public BasicBinaryDataCompoundOperation() {
     }
 
-    public CodeAreaCompoundOperation(CodeAreaCore codeArea, @Nullable CodeAreaCaretPosition backPosition) {
-        super(codeArea, backPosition);
-    }
-
+    @Nonnull
     @Override
-    public BinaryDataUndoableOperation executeWithUndo() {
-        CodeAreaCompoundOperation undoOperations = new CodeAreaCompoundOperation(codeArea);
+    public BinaryDataUndoableOperation executeWithUndo(EditableBinaryData contentData) {
+        BasicBinaryDataCompoundOperation undoOperations = new BasicBinaryDataCompoundOperation();
         for (BinaryDataOperation operation : operations) {
-            BinaryDataUndoableOperation undoOperation = ((BinaryDataUndoableOperation) operation).executeWithUndo();
+            BinaryDataUndoableOperation undoOperation = ((BinaryDataUndoableOperation) operation).executeWithUndo(contentData);
             undoOperations.insertOperation(0, undoOperation);
         }
         return undoOperations;
     }
 
     @Override
-    public void execute() {
+    public void execute(EditableBinaryData contentData) {
         for (BinaryDataOperation operation : operations) {
-            operation.execute();
+            operation.execute(contentData);
         }
     }
 
     @Nonnull
     @Override
-    public CodeAreaOperationType getType() {
-        return CodeAreaOperationType.COMPOUND;
+    public BasicBinaryDataOperationType getType() {
+        return BasicBinaryDataOperationType.COMPOUND;
     }
 
     @Override
@@ -75,7 +71,7 @@ public class CodeAreaCompoundOperation extends CodeAreaOperation implements Bina
 
     @Override
     public void addOperations(Collection<BinaryDataOperation> operations) {
-        operations.addAll(operations);
+        this.operations.addAll(operations);
     }
 
     public void insertOperation(int index, BinaryDataOperation operation) {
@@ -91,5 +87,9 @@ public class CodeAreaCompoundOperation extends CodeAreaOperation implements Bina
     @Override
     public boolean isEmpty() {
         return operations.isEmpty();
+    }
+
+    @Override
+    public void dispose() {
     }
 }

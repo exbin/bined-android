@@ -13,26 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.bined.operation.undo;
+package org.exbin.bined.operation.command;
 
 /**
- * Code area undo support handler.
+ * Interface for code area command.
  *
  * @author ExBin Project (https://exbin.org)
  */
-public interface BinaryDataUndoRedoState {
+public interface BinaryDataUndoableCommand extends BinaryDataCommand {
 
     /**
-     * Returns whether undo operation is available.
-     *
-     * @return true if undo possible
+     * Performs redo on given document.
      */
-    boolean canUndo();
+    void redo();
 
     /**
-     * Returns whether redo operation is available.
-     *
-     * @return true if redo possible
+     * Performs undo operation on given document.
      */
-    boolean canRedo();
+    void undo();
 }

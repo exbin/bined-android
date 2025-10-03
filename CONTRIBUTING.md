@@ -6,7 +6,7 @@ When contributing to this repository, it's recommended to first discuss the chan
 
 Please see project's webpage for some additional information:
 
-https://bined.exbin.org/?participate
+https://bined.exbin.org/?p=participate
 
 ## Development
 
