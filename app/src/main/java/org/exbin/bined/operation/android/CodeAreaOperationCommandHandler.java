@@ -64,8 +64,6 @@ import org.exbin.bined.operation.android.command.DeleteSelectionCommand;
 import org.exbin.bined.operation.android.command.EditCharDataCommand;
 import org.exbin.bined.operation.android.command.EditCodeDataCommand;
 import org.exbin.bined.operation.android.command.EditDataCommand;
-import org.exbin.bined.operation.android.command.InsertDataCommand;
-import org.exbin.bined.operation.android.command.ModifyDataCommand;
 import org.exbin.bined.operation.android.command.PasteDataCommand;
 import org.exbin.bined.operation.command.BinaryDataAppendableUndoRedo;
 import org.exbin.bined.operation.command.BinaryDataUndoRedo;

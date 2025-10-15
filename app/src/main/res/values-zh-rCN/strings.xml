@@ -29,6 +29,7 @@
     <string name="action_exit">退出</string>
     <string name="action_open_main_menu">主菜单</string>
     <string name="action_go_to_side_panel">侧面板</string>
+    <string name="action_show_keyboard">显示键盘</string>
 
     <string name="view_menu">查看</string>
     <string name="visual_theme">主题</string>

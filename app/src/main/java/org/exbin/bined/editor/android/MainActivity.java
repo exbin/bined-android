@@ -50,6 +50,7 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -138,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     private static final int PASTE_FROM_CODE_ACTION_POPUP_ID = 10;
     private static final int GO_TO_SIDE_PANEL_POPUP_ID = 11;
     private static final int OPEN_MAIN_MENU_POPUP_ID = 12;
+    private static final int SHOW_KEYBOARD_MENU_POPUP_ID = 13;
 
     private static final int STORAGE_PERMISSION_CODE = 1;
 
@@ -204,15 +206,16 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
         boolean showKeyboard = codeArea.getActiveSection() == BasicCodeAreaSection.TEXT_PREVIEW;
         if (showKeyboard != keyboardShown) {
-
             keyboardShown = showKeyboard;
-            InputMethodManager im = (InputMethodManager) codeArea.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             codeArea.requestFocus();
-            if (showKeyboard) {
-                im.showSoftInput(codeArea, InputMethodManager.SHOW_IMPLICIT);
-            } else {
-                im.hideSoftInputFromWindow(codeArea.getWindowToken(), 0);
-            }
+            codeArea.post(() -> {
+                InputMethodManager im = (InputMethodManager) getApplication().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (showKeyboard) {
+                    im.showSoftInput(codeArea, InputMethodManager.SHOW_IMPLICIT);
+                } else {
+                    im.hideSoftInputFromWindow(codeArea.getWindowToken(), 0);
+                }
+            });
         }
     };
     private final View.OnKeyListener codeAreaOnKeyListener = new CodeAreaKeyListener();
@@ -618,6 +621,10 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             order++;
             menu.add(0, OPEN_MAIN_MENU_POPUP_ID, order, resources.getString(R.string.action_open_main_menu));
             order++;
+            if (codeArea.getCodeAreaCaret().getSection() == BasicCodeAreaSection.TEXT_PREVIEW) {
+                menu.add(0, SHOW_KEYBOARD_MENU_POPUP_ID, order, resources.getString(R.string.action_show_keyboard));
+                order++;
+            }
         }
         menu.add(0, SELECTION_START_POPUP_ID, order, resources.getString(R.string.action_selection_start));
         menu.add(0, SELECTION_END_POPUP_ID, order + 1, resources.getString(R.string.action_selection_end));
@@ -659,6 +666,15 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             }
             case OPEN_MAIN_MENU_POPUP_ID: {
                 toolbar.showOverflowMenu();
+                break;
+            }
+            case SHOW_KEYBOARD_MENU_POPUP_ID: {
+                // For some reason it keeps closing if invoked immediately
+                codeArea.postDelayed(() -> {
+                    codeArea.requestFocus();
+                    InputMethodManager im = (InputMethodManager) getApplication().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    im.showSoftInput(codeArea, InputMethodManager.SHOW_IMPLICIT);
+                }, 100);
                 break;
             }
             case SELECTION_START_POPUP_ID: {
@@ -1580,8 +1596,9 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
                         editable.clear();
                         codeArea.getCommandHandler().keyPressed(keyEvent);
                     } else {
-                        keyListener.onKeyDown(view, editable, keyCode, keyEvent);
-                        processKeys(keyEvent);
+                        if (keyListener.onKeyDown(view, editable, keyCode, keyEvent)) {
+                            processKeys(keyEvent);
+                        }
                     }
                 } else if (keyEvent.getAction() == KeyEvent.ACTION_UP) {
                     editable.clear();
@@ -1607,8 +1624,9 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
                         codeArea.getCommandHandler().keyPressed(keyEvent);
                     }
                 } else {
-                    keyListener.onKeyOther(view, editable, keyEvent);
-                    processKeys(keyEvent);
+                    if (keyListener.onKeyOther(view, editable, keyEvent)) {
+                        processKeys(keyEvent);
+                    }
                 }
                 return true;
             } catch (Exception ex) {

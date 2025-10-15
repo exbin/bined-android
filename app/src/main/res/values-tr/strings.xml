@@ -29,6 +29,7 @@
     <string name="action_exit">Çık</string>
     <string name="action_open_main_menu">Ana Menü</string>
     <string name="action_go_to_side_panel">Yan Panel</string>
+    <string name="action_show_keyboard">Klavyeyi Göster</string>
 
     <string name="view_menu">Görünüm</string>
     <string name="visual_theme">Tema</string>

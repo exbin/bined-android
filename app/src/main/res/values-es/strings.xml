@@ -30,6 +30,7 @@
     <string name="action_exit">Salir</string>
     <string name="action_open_main_menu">Menú principal</string>
     <string name="action_go_to_side_panel">Panel lateral</string>
+    <string name="action_show_keyboard">Mostrar teclado</string>
     <string name="action_open_table_file" translatable="false">Abrir archivo de tabla</string>
 
     <string name="view_menu">Ver</string>

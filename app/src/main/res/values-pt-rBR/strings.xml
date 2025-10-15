@@ -28,6 +28,7 @@
     <string name="action_exit">Sair</string>
     <string name="action_open_main_menu">Menu principal</string>
     <string name="action_go_to_side_panel">Painel lateral</string>
+    <string name="action_show_keyboard">Mostrar teclado</string>
     <string name="action_open_table_file">Abrir arquivo de tabela (.tbl)</string>
 
     <string name="view_menu">Visualização</string>

@@ -29,6 +29,7 @@
     <string name="action_exit">Exit</string>
     <string name="action_open_main_menu">Main Menu</string>
     <string name="action_go_to_side_panel">Side Panel</string>
+    <string name="action_show_keyboard">Show Keyboard</string>
     <string name="action_open_table_file" translatable="false">Open Table File</string>
 
     <string name="view_menu">View</string>

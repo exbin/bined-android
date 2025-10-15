@@ -137,6 +137,7 @@ public class SearchDialog extends AppCompatDialogFragment {
 
         FrameLayout frameLayout = searchView.findViewById(R.id.frameLayout);
         frameLayout.addView(editText);
+        frameLayout.setNextFocusDownId(editText.getId());
 
         if (searchParameters != null) {
             loadSearchParameters();
@@ -176,6 +177,7 @@ public class SearchDialog extends AppCompatDialogFragment {
         if (tabPos != lastTab) {
             frameLayout.removeView(lastTab == 0 ? editText : codeArea);
             frameLayout.addView(tabPos == 0 ? editText : codeArea);
+            frameLayout.setNextFocusDownId(tabPos == 0 ? editText.getId() : codeArea.getId());
             SwitchCompat matchCaseSwitch = searchView.findViewById(R.id.match_case);
             matchCaseSwitch.setEnabled(tabPos == 0);
             lastTab = tabPos;
@@ -258,8 +260,23 @@ public class SearchDialog extends AppCompatDialogFragment {
                 return false;
             }
 
-            if (keyboardShown && MainActivity.isAndroidTV(codeArea.getContext())) {
-                return false;
+            if (MainActivity.isAndroidTV(codeArea.getContext())) {
+                if (keyboardShown && keyEvent.getKeyCode() == KeyEvent.KEYCODE_FORWARD_DEL) {
+                    return false;
+                }
+
+                if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+                    if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_DPAD_CENTER) {
+                        InputMethodManager im = (InputMethodManager) codeArea.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        im.showSoftInput(codeArea, InputMethodManager.SHOW_IMPLICIT);
+                        return true;
+                    } else if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+                        View fromCursorView = searchView.findViewById(R.id.from_cursor);
+                        if (fromCursorView != null) {
+                            fromCursorView.requestFocus();
+                        }
+                    }
+                }
             }
 
             try {

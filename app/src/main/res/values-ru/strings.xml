@@ -30,6 +30,7 @@
     <string name="action_exit">Выйти</string>
     <string name="action_open_main_menu">Главное меню</string>
     <string name="action_go_to_side_panel">Боковая панель</string>
+    <string name="action_show_keyboard">Показать клавиатуру</string>
     <string name="action_open_table_file" translatable="false">Открыть файл таблицы</string>
 
     <string name="view_menu">Вид</string>

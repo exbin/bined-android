@@ -24,6 +24,9 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.BaseInputConnection;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputConnection;
 import android.widget.RelativeLayout;
 
 import org.exbin.auxiliary.binary_data.BinaryData;
@@ -303,5 +306,12 @@ public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl 
         public boolean performClick() {
             return super.performClick();
         }
+    }
+
+    @Override
+    public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
+        return new BaseInputConnection(this, true) {
+
+        };
     }
 }
