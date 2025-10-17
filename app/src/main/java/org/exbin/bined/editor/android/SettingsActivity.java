@@ -15,7 +15,12 @@
  */
 package org.exbin.bined.editor.android;
 
+import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.TypedValue;
+import android.view.LayoutInflater;
+import android.view.View;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -52,9 +57,28 @@ public class SettingsActivity extends AppCompatActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+//            getWindow().getDecorView().setPadding(0, getStatusBarHeight(), 0, 0);
+//        }
+
         super.onCreate(savedInstanceState);
         appPreferences = getAppPreferences();
-        setContentView(R.layout.settings_activity);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.settings_activity, null);
+        setContentView(view);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            // Calculate ActionBar height
+            TypedValue tv = new TypedValue();
+            int actionBarHeight = 0;
+            if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true))
+            {
+                actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data,getResources().getDisplayMetrics());
+            }
+
+            view.setPadding(0, getStatusBarHeight() + actionBarHeight, 0, 0);
+        }
+
         if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
@@ -140,5 +164,14 @@ public class SettingsActivity extends AppCompatActivity implements
         editorPreferences.setDataInspectorMode(DataInspectorMode.valueOf(((ListPreference) fragment.findPreference(HeaderFragment.DATA_INSPECTOR_MODE)).getValue().toUpperCase()));
 
         super.finish();
+    }
+
+    private int getStatusBarHeight() {
+        Resources resources = getResources();
+        int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            return resources.getDimensionPixelSize(resourceId);
+        }
+        return 0;
     }
 }

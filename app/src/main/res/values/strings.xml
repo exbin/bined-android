@@ -111,4 +111,12 @@
     <string name="search_match_none">No matches found.</string>
     <string name="search_match_single">Single match found.</string>
     <string name="search_match_found">"Showing %1$d of %2$d found matches.</string>
+
+    <string name="go_to_dialog_current_position">Current Position</string>
+    <string name="go_to_dialog_target_position">Target Position</string>
+    <string name="go_to_dialog_go_to_position">Go To Position</string>
+    <string name="go_to_dialog_position">Position</string>
+    <string name="go_to_dialog_from_start">Position from start</string>
+    <string name="go_to_dialog_from_end">Position from end</string>
+    <string name="go_to_dialog_relative_to_cursor">Position relative to cursor</string>
 </resources>

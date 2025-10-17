@@ -110,4 +110,12 @@
     <string name="search_match_none">Hiçbir eşleşme bulunamadı.</string>
     <string name="search_match_single">Tek eşleşme bulundu.</string>
     <string name="search_match_found">"Bulunan %2$d eşleşmeden %1$d tanesi gösteriliyor.</string>
+
+    <string name="go_to_dialog_current_position">Mevcut Konum</string>
+    <string name="go_to_dialog_target_position">Hedef Konum</string>
+    <string name="go_to_dialog_go_to_position">Konuma Git</string>
+    <string name="go_to_dialog_position">Konum</string>
+    <string name="go_to_dialog_from_start">Başlangıçtan Konum</string>
+    <string name="go_to_dialog_from_end">Bitişten Konum</string>
+    <string name="go_to_dialog_relative_to_cursor">İmlece Göre Konum</string>
 </resources>

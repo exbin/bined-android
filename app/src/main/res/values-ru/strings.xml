@@ -112,4 +112,12 @@
     <string name="search_match_none">Совпадений не найдено.</string>
     <string name="search_match_single">Найдено одно совпадение.</string>
     <string name="search_match_found">"Показано %1$d из %2$d найденных совпадений.</string>
+
+    <string name="go_to_dialog_current_position">Текущая позиция</string>
+    <string name="go_to_dialog_target_position">Целевая позиция</string>
+    <string name="go_to_dialog_go_to_position">Перейти к позиции</string>
+    <string name="go_to_dialog_position">Позиция</string>
+    <string name="go_to_dialog_from_start">Позиция от начала</string>
+    <string name="go_to_dialog_from_end">Позиция от конца</string>
+    <string name="go_to_dialog_relative_to_cursor">Позиция относительно курсора</string>
 </resources>

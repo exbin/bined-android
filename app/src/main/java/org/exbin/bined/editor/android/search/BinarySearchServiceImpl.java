@@ -215,7 +215,7 @@ public class BinarySearchServiceImpl implements BinarySearchService {
 
                 if (searchPosition == lastPosition + 1) {
                     System.arraycopy(charData, 1, charData, 0, maxBytesPerChar - 1);
-                    charData[bytesToUse - 1] = data.getByte(searchPosition + bytesToUse - 1);
+                    charData[bytesToUse - 1] = searchPosition + bytesToUse - 1 < dataSize ? data.getByte(searchPosition + bytesToUse - 1) : 0;
                 } else if (searchPosition == lastPosition - 1) {
                     System.arraycopy(charData, 0, charData, 1, maxBytesPerChar - 1);
                     charData[0] = data.getByte(searchPosition);

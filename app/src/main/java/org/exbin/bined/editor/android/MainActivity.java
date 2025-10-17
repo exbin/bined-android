@@ -29,7 +29,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.Selection;
 import android.text.method.KeyListener;
 import android.text.method.TextKeyListener;
@@ -42,7 +41,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,7 +48,6 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -84,6 +81,8 @@ import org.exbin.bined.android.basic.color.BasicCodeAreaColorsProfile;
 import org.exbin.bined.android.capability.ColorAssessorPainterCapable;
 import org.exbin.bined.basic.BasicCodeAreaSection;
 import org.exbin.bined.basic.CodeAreaViewMode;
+import org.exbin.bined.editor.android.gui.AboutDialog;
+import org.exbin.bined.editor.android.gui.GoToPositionDialog;
 import org.exbin.bined.editor.android.inspector.BasicValuesInspector;
 import org.exbin.bined.editor.android.inspector.BasicValuesPositionColorModifier;
 import org.exbin.bined.editor.android.options.DataInspectorMode;
@@ -102,8 +101,9 @@ import org.exbin.bined.editor.android.search.SearchParameters;
 import org.exbin.bined.highlight.android.NonAsciiCodeAreaColorAssessor;
 import org.exbin.bined.highlight.android.NonprintablesCodeAreaAssessor;
 import org.exbin.bined.highlight.android.SearchCodeAreaColorAssessor;
-import org.exbin.bined.operation.android.CodeAreaOperationCommandHandler;
+import org.exbin.bined.highlight.android.SearchMatch;
 import org.exbin.bined.operation.BinaryDataUndoRedoChangeListener;
+import org.exbin.bined.operation.android.CodeAreaOperationCommandHandler;
 import org.exbin.framework.bined.BinEdCodeAreaAssessor;
 import org.exbin.framework.bined.BinaryStatusApi;
 
@@ -230,6 +230,10 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            getWindow().getDecorView().setPadding(0, 0, 0, getNavigationBarHeight());
+        }
 
         ApplicationContext application = (ApplicationContext) getApplication();
         appPreferences = application.getAppPreferences();
@@ -980,19 +984,14 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             codeArea.selectAll();
             return true;
         } else if (id == R.id.go_to_position) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(R.string.go_to_position);
-            final EditText inputNumber = new EditText(this);
-            inputNumber.setInputType(InputType.TYPE_CLASS_NUMBER);
-            inputNumber.setText(String.valueOf(codeArea.getDataPosition()));
-            builder.setView(inputNumber);
-            builder.setPositiveButton(R.string.button_go_to, (dialog, which) -> {
+            GoToPositionDialog goToPositionDialog = new GoToPositionDialog();
+            goToPositionDialog.initFromCodeArea(codeArea);
+            goToPositionDialog.setPositiveListener((dialog, which) -> {
                 try {
                     DefaultCodeAreaCaretPosition caretPosition = new DefaultCodeAreaCaretPosition();
                     caretPosition.setCodeOffset(0);
                     caretPosition.setPosition(codeArea.getActiveCaretPosition());
-                    long targetPosition = Long.parseLong(inputNumber.getText().toString());
-                    caretPosition.setDataPosition(Math.min(targetPosition, codeArea.getDataSize()));
+                    caretPosition.setDataPosition(Math.min(goToPositionDialog.getTargetPosition(), codeArea.getDataSize()));
                     codeArea.setActiveCaretPosition(caretPosition);
                     codeArea.validateCaret();
                     codeArea.centerOnCursor();
@@ -1000,9 +999,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
                     reportException(ex);
                 }
             });
-            builder.setNegativeButton(R.string.button_cancel, null);
-            AlertDialog alertDialog = builder.create();
-            alertDialog.show();
+            goToPositionDialog.show(getSupportFragmentManager(), "goToPositionDialog");
 
             return true;
         }
@@ -1486,16 +1483,22 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         SearchCodeAreaColorAssessor searchAssessor = CodeAreaAndroidUtils.findColorAssessor((ColorAssessorPainterCapable) codeArea.getPainter(), SearchCodeAreaColorAssessor.class);
         searchAssessor.setCurrentMatchIndex(searchAssessor.getCurrentMatchIndex() - 1);
         updateSearchStatusPanel(searchAssessor.getCurrentMatchIndex(), searchAssessor.getMatches().size());
-        codeArea.revealPosition(searchAssessor.getCurrentMatch().getPosition(), 0, codeArea.getActiveSection());
-        codeArea.repaint();
+        SearchMatch currentMatch = searchAssessor.getCurrentMatch();
+        if (currentMatch != null) {
+            codeArea.revealPosition(currentMatch.getPosition(), 0, codeArea.getActiveSection());
+            codeArea.repaint();
+        }
     }
 
     public void buttonActionNextMatch(View view) {
         SearchCodeAreaColorAssessor searchAssessor = CodeAreaAndroidUtils.findColorAssessor((ColorAssessorPainterCapable) codeArea.getPainter(), SearchCodeAreaColorAssessor.class);
         searchAssessor.setCurrentMatchIndex(searchAssessor.getCurrentMatchIndex() + 1);
         updateSearchStatusPanel(searchAssessor.getCurrentMatchIndex(), searchAssessor.getMatches().size());
-        codeArea.revealPosition(searchAssessor.getCurrentMatch().getPosition(), 0, codeArea.getActiveSection());
-        codeArea.repaint();
+        SearchMatch currentMatch = searchAssessor.getCurrentMatch();
+        if (currentMatch != null) {
+            codeArea.revealPosition(searchAssessor.getCurrentMatch().getPosition(), 0, codeArea.getActiveSection());
+            codeArea.repaint();
+        }
     }
 
     public void buttonActionHideSearchPanel(View view) {
@@ -1657,5 +1660,14 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
     public enum FallbackFileType {
         FILE, TABLE_FILE
+    }
+
+    private int getNavigationBarHeight() {
+        Resources resources = getResources();
+        int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            return resources.getDimensionPixelSize(resourceId);
+        }
+        return 0;
     }
 }

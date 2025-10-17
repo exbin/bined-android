@@ -106,4 +106,12 @@
     <string name="search_match_none">Žádné shody nenalezeny.</string>
     <string name="search_match_single">Nalezen jeden výsledek.</string>
     <string name="search_match_found">"Zobrazuje se %1$d z %2$d nalezených shod.</string>
+
+    <string name="go_to_dialog_current_position">Aktuální pozice</string>
+    <string name="go_to_dialog_target_position">Cílová pozice</string>
+    <string name="go_to_dialog_go_to_position">Přejít na pozici</string>
+    <string name="go_to_dialog_position">Pozice</string>
+    <string name="go_to_dialog_from_start">Pozice od začátku</string>
+    <string name="go_to_dialog_from_end">Pozice od konce</string>
+    <string name="go_to_dialog_relative_to_cursor">Pozice vzhledem ke kurzoru</string>
 </resources>
