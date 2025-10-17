@@ -1,0 +1,124 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/currentPositionTextView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="false"
+                android:focusable="false"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/go_to_dialog_current_position" />
+
+            <EditText
+                android:id="@+id/currentPositionText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="none"
+                android:enabled="false"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/goToPositionTextView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:focusable="true"
+                android:linksClickable="true"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/go_to_dialog_go_to_position" />
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <RadioButton
+                    android:id="@+id/positionFromStartRadioButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="@string/go_to_dialog_from_start" />
+
+                <RadioButton
+                    android:id="@+id/positionFromEndRadioButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/go_to_dialog_from_end" />
+
+                <RadioButton
+                    android:id="@+id/positionRelativeToCursorRadioButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/go_to_dialog_relative_to_cursor" />
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/positionTextView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="false"
+                android:focusable="false"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/go_to_dialog_position" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/positionTypeButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:text="DEC" />
+
+                    <EditText
+                        android:id="@+id/positionText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:inputType="number"
+                        android:text="" />
+
+                </LinearLayout>
+
+            <TextView
+                android:id="@+id/targetPositionTextView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="false"
+                android:focusable="false"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/go_to_dialog_target_position" />
+
+            <EditText
+                android:id="@+id/targetPositionText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="none"
+                android:enabled="false"
+                android:text="" />
+        </LinearLayout>
+    </ScrollView>
+
+
+</FrameLayout>

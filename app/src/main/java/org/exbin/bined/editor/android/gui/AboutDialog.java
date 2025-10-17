@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.bined.editor.android;
+package org.exbin.bined.editor.android.gui;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -29,6 +29,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.fragment.app.FragmentActivity;
+
+import org.exbin.bined.editor.android.R;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;

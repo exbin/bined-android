@@ -26,8 +26,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-import androidx.constraintlayout.solver.widgets.Rectangle;
-
 import org.exbin.auxiliary.binary_data.BinaryData;
 import org.exbin.bined.CaretOverlapMode;
 import org.exbin.bined.CodeAreaCaret;
@@ -568,7 +566,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         long dataPosition = bytesPerRow * scrollPosition.getRowPosition();
         int positionY = headerAreaHeight + rowHeight - subFontSpace - scrollPosition.getRowOffset();
         paint.setColor(colorsProfile.getTextColor());
-        Rectangle compRect = new Rectangle();
+        // Rectangle compRect = new Rectangle();
         for (int row = 0; row <= rowsPerRect; row++) {
             if (dataPosition > dataSize) {
                 break;
@@ -578,7 +576,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
 //            if (characterRenderingMode == CharacterRenderingMode.LINE_AT_ONCE) {
 //                g.drawChars(lineNumberCode, 0, lineNumberLength, compRect.x, positionY);
 //            } else {
-            drawCenteredChars(g, rowDataCache.rowPositionCode, 0, rowPositionLength, characterWidth, compRect.x, positionY);
+            drawCenteredChars(g, rowDataCache.rowPositionCode, 0, rowPositionLength, characterWidth, 0, positionY);
 //            }
 
             positionY += rowHeight;

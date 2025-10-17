@@ -110,4 +110,12 @@
     <string name="search_match_none">कोई मिलान नहीं मिला.</string>
     <string name="search_match_single">एकल मिलान मिला.</string>
     <string name="search_match_found">"पाए गए %2$d मिलानों में से %1$d दिखाए जा रहे हैं.</string>
+
+    <string name="go_to_dialog_current_position">वर्तमान स्थिति</string>
+    <string name="go_to_dialog_target_position">लक्ष्य स्थिति</string>
+    <string name="go_to_dialog_go_to_position">स्थिति पर जाएँ</string>
+    <string name="go_to_dialog_position">स्थिति</string>
+    <string name="go_to_dialog_from_start">शुरू से स्थिति</string>
+    <string name="go_to_dialog_from_end">अंत से स्थिति</string>
+    <string name="go_to_dialog_relative_to_cursor">कर्सर के सापेक्ष स्थिति</string>
 </resources>
