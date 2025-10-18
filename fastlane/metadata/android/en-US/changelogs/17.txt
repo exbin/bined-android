@@ -1,0 +1,2 @@
+- Added go-to dialog / go-to relative position
+- Bug fixes

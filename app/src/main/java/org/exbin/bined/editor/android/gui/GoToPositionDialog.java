@@ -112,6 +112,7 @@ public class GoToPositionDialog extends AppCompatDialogFragment {
                 switchRelativePositionMode(RelativePositionMode.FROM_CURSOR);
             }
         });
+        initFocus();
 
         builder.setView(goToPositionView);
         builder.setPositiveButton(R.string.button_go_to, positionListener);
@@ -181,6 +182,12 @@ public class GoToPositionDialog extends AppCompatDialogFragment {
         this.maxPosition = maxPosition;
         // TODO positionBaseSwitchableSpinnerPanel.setMaximum(maxPosition);
         updateTargetPosition();
+    }
+
+    public void initFocus() {
+        EditText positionText = goToPositionView.findViewById(R.id.positionText);
+        positionText.requestFocus();
+        positionText.selectAll();
     }
 
     private void switchRelativePositionMode(RelativePositionMode relativePositionMode) {

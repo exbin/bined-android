@@ -1599,9 +1599,8 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
                         editable.clear();
                         codeArea.getCommandHandler().keyPressed(keyEvent);
                     } else {
-                        if (keyListener.onKeyDown(view, editable, keyCode, keyEvent)) {
-                            processKeys(keyEvent);
-                        }
+                        keyListener.onKeyDown(view, editable, keyCode, keyEvent);
+                        processKeys(keyEvent);
                     }
                 } else if (keyEvent.getAction() == KeyEvent.ACTION_UP) {
                     editable.clear();
@@ -1627,9 +1626,8 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
                         codeArea.getCommandHandler().keyPressed(keyEvent);
                     }
                 } else {
-                    if (keyListener.onKeyOther(view, editable, keyEvent)) {
-                        processKeys(keyEvent);
-                    }
+                    keyListener.onKeyOther(view, editable, keyEvent);
+                    processKeys(keyEvent);
                 }
                 return true;
             } catch (Exception ex) {
