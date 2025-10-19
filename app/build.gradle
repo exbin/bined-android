@@ -6,7 +6,11 @@ def playStore = false
 def materialVersion = '1.6.1'
 
 android {
-    compileSdk 35
+    namespace 'org.exbin.bined.editor.android'
+    compileSdk {
+        version = release(35)
+    }
+
     defaultConfig {
         applicationId "org.exbin.bined.editor.android"
 
@@ -19,11 +23,12 @@ android {
         }
 
         targetSdk 35
-        versionCode 17
-        versionName "0.2.8"
+        versionCode 18
+        versionName "0.2.9-SNAPSHOT"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         vectorDrawables.generatedDensities = []
     }
+
     buildTypes {
         release {
             minifyEnabled true
@@ -31,9 +36,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
     sourceSets {
         main.java.srcDirs += 'libsrc'
     }
+
     compileOptions {
         // Flag to enable support for the new language APIs
 //        coreLibraryDesugaringEnabled true
@@ -41,7 +48,6 @@ android {
         // sourceCompatibility JavaVersion.VERSION_1_8
         // targetCompatibility JavaVersion.VERSION_1_8
     }
-    namespace 'org.exbin.bined.editor.android'
     lint {
         checkReleaseBuilds false
     }
@@ -59,7 +65,7 @@ dependencies {
     implementation "com.google.android.material:material:${materialVersion}"
 //    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
     implementation 'androidx.preference:preference:1.2.1'
-    implementation 'net.java.dev.jna:jna:5.18.0@aar'
+    implementation 'net.java.dev.jna:jna:5.18.1@aar'
     implementation project(':file_picker')
 //    implementation 'org.exbin.bined:bined-core:0.3.0-SNAPSHOT'
 //    implementation 'org.exbin.bined:bined-operation:0.3.0-SNAPSHOT'
