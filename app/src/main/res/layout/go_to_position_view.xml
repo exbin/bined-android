@@ -1,6 +1,4 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -14,7 +12,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/currentPositionTextView"
+                android:id="@+id/currentPositionPreviewLabel"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clickable="false"
@@ -24,7 +22,7 @@
                 android:text="@string/go_to_dialog_current_position" />
 
             <EditText
-                android:id="@+id/currentPositionText"
+                android:id="@+id/currentPositionPreview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -77,30 +75,29 @@
                 android:paddingRight="10dp"
                 android:text="@string/go_to_dialog_position" />
 
-                <LinearLayout
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/positionTypeButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DEC" />
+
+                <EditText
+                    android:id="@+id/positionText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:ems="10"
+                    android:inputType="number"
+                    android:text="" />
 
-                    <Button
-                        android:id="@+id/positionTypeButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:enabled="false"
-                        android:text="DEC" />
-
-                    <EditText
-                        android:id="@+id/positionText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:inputType="number"
-                        android:text="" />
-
-                </LinearLayout>
+            </LinearLayout>
 
             <TextView
-                android:id="@+id/targetPositionTextView"
+                android:id="@+id/targetPositionPreviewLabel"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clickable="false"
@@ -110,7 +107,7 @@
                 android:text="@string/go_to_dialog_target_position" />
 
             <EditText
-                android:id="@+id/targetPositionText"
+                android:id="@+id/targetPositionPreview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -119,6 +116,4 @@
                 android:text="" />
         </LinearLayout>
     </ScrollView>
-
-
 </FrameLayout>

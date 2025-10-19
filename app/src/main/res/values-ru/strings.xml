@@ -120,4 +120,13 @@
     <string name="go_to_dialog_from_start">Позиция от начала</string>
     <string name="go_to_dialog_from_end">Позиция от конца</string>
     <string name="go_to_dialog_relative_to_cursor">Позиция относительно курсора</string>
+
+    <string name="edit_selection_dialog_current_position">Текущая позиция</string>
+    <string name="edit_selection_dialog_position">Позиция</string>
+    <string name="edit_selection_dialog_start_position">Начальная позиция</string>
+    <string name="edit_selection_dialog_end_position">Конечная позиция</string>
+    <string name="edit_selection_dialog_selection_length">Длина выделения</string>
+    <string name="edit_selection_dialog_from_start">Позиция от начала</string>
+    <string name="edit_selection_dialog_from_end">Позиция от конца</string>
+    <string name="edit_selection_dialog_relative_to_cursor">Позиция относительно курсора</string>
 </resources>

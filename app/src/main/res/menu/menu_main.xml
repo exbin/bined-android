@@ -121,7 +121,6 @@
                 android:title="@string/go_to_position" />
             <item
                 android:id="@+id/edit_selection"
-                android:enabled="false"
                 android:title="@string/edit_selection" />
             <item
                 android:id="@+id/insert_data"

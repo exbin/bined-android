@@ -27,6 +27,13 @@
         <item>Hexadecimal</item>
     </string-array>
 
+    <string-array name="code_type_short">
+        <item>BIN</item>
+        <item>OCT</item>
+        <item>DEC</item>
+        <item>HEX</item>
+    </string-array>
+
     <string-array name="hex_chars_case_entries">
         <item>Minúsculas</item>
         <item>Mayúsculas</item>

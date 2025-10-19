@@ -21,6 +21,13 @@
         <item>हैक्साडेसिमल</item>
     </string-array>
 
+    <string-array name="code_type_short">
+        <item>BIN</item>
+        <item>OCT</item>
+        <item>DEC</item>
+        <item>HEX</item>
+    </string-array>
+
     <string-array name="hex_chars_case_entries">
         <item>निम्न वर्ण</item>
         <item>उच्च वर्ण</item>

@@ -82,6 +82,7 @@ import org.exbin.bined.android.capability.ColorAssessorPainterCapable;
 import org.exbin.bined.basic.BasicCodeAreaSection;
 import org.exbin.bined.basic.CodeAreaViewMode;
 import org.exbin.bined.editor.android.gui.AboutDialog;
+import org.exbin.bined.editor.android.gui.EditSelectionDialog;
 import org.exbin.bined.editor.android.gui.GoToPositionDialog;
 import org.exbin.bined.editor.android.inspector.BasicValuesInspector;
 import org.exbin.bined.editor.android.inspector.BasicValuesPositionColorModifier;
@@ -110,6 +111,7 @@ import org.exbin.framework.bined.BinaryStatusApi;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -985,7 +987,6 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             return true;
         } else if (id == R.id.go_to_position) {
             GoToPositionDialog goToPositionDialog = new GoToPositionDialog();
-            goToPositionDialog.initFromCodeArea(codeArea);
             goToPositionDialog.setPositiveListener((dialog, which) -> {
                 try {
                     DefaultCodeAreaCaretPosition caretPosition = new DefaultCodeAreaCaretPosition();
@@ -1000,6 +1001,24 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
                 }
             });
             goToPositionDialog.show(getSupportFragmentManager(), "goToPositionDialog");
+
+            return true;
+        } else if (id == R.id.edit_selection) {
+            EditSelectionDialog editSelectionDialog = new EditSelectionDialog();
+            editSelectionDialog.setPositiveListener((dialog, which) -> {
+                try {
+                    Optional<SelectionRange> selectionRange = editSelectionDialog.getSelectionRange();
+                    if (selectionRange.isPresent()) {
+                        codeArea.setSelection(selectionRange.get());
+                    } else {
+                        codeArea.clearSelection();
+                    }
+                    codeArea.revealCursor();
+                } catch (NumberFormatException ex) {
+                    reportException(ex);
+                }
+            });
+            editSelectionDialog.show(getSupportFragmentManager(), "editSelectionDialog");
 
             return true;
         }

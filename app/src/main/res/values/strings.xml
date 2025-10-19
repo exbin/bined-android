@@ -119,4 +119,13 @@
     <string name="go_to_dialog_from_start">Position from start</string>
     <string name="go_to_dialog_from_end">Position from end</string>
     <string name="go_to_dialog_relative_to_cursor">Position relative to cursor</string>
+
+    <string name="edit_selection_dialog_current_position">Current Position</string>
+    <string name="edit_selection_dialog_position">Position</string>
+    <string name="edit_selection_dialog_start_position">Start Position</string>
+    <string name="edit_selection_dialog_end_position">End Position</string>
+    <string name="edit_selection_dialog_selection_length">Selection Length</string>
+    <string name="edit_selection_dialog_from_start">Position from start</string>
+    <string name="edit_selection_dialog_from_end">Position from end</string>
+    <string name="edit_selection_dialog_relative_to_cursor">Position relative to cursor</string>
 </resources>

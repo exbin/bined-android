@@ -21,6 +21,11 @@ import androidx.annotation.Nullable;
 import androidx.preference.ListPreference;
 import androidx.preference.PreferenceFragmentCompat;
 
+/**
+ * Single preference fragment.
+ *
+ * @author ExBin Project (https://exbin.org)
+ */
 public class SinglePreferenceFragment extends PreferenceFragmentCompat {
 
     private static final String DIALOG_FRAGMENT_TAG = "androidx.preference.PreferenceFragment.DIALOG";

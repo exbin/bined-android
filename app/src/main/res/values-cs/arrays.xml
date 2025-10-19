@@ -27,6 +27,13 @@
         <item>Hexadecimální</item>
     </string-array>
 
+    <string-array name="code_type_short">
+        <item>BIN</item>
+        <item>OSM</item>
+        <item>DES</item>
+        <item>HEX</item>
+    </string-array>
+
     <string-array name="hex_chars_case_entries">
         <item>Malá písmena</item>
         <item>Velká písmena</item>

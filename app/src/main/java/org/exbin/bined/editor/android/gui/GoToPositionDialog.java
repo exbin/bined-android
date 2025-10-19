@@ -24,6 +24,7 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 
@@ -31,9 +32,13 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.fragment.app.FragmentActivity;
 
 import org.exbin.bined.CodeAreaUtils;
+import org.exbin.bined.PositionCodeType;
 import org.exbin.bined.android.basic.CodeArea;
 import org.exbin.bined.editor.android.R;
 import org.exbin.bined.editor.android.RelativePositionMode;
+import org.exbin.bined.editor.android.SwitchableBase;
+
+import java.util.Arrays;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -51,6 +56,7 @@ public class GoToPositionDialog extends AppCompatDialogFragment {
 
     protected long cursorPosition;
     protected long maxPosition;
+    protected final SwitchableBase positionSwitchableBase = new SwitchableBase();
     protected RelativePositionMode relativePositionMode = RelativePositionMode.FROM_START;
 
     protected CodeArea codeArea;
@@ -59,14 +65,11 @@ public class GoToPositionDialog extends AppCompatDialogFragment {
         this.positionListener = positionListener;
     }
 
-    public void initFromCodeArea(CodeArea codeArea) {
-        this.codeArea = codeArea;
-    }
-
     @Nonnull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         FragmentActivity activity = getActivity();
+        codeArea = activity.findViewById(R.id.codeArea);
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle(getResources().getString(R.string.go_to_position));
         // Get the layout inflater
@@ -111,6 +114,11 @@ public class GoToPositionDialog extends AppCompatDialogFragment {
             if (b) {
                 switchRelativePositionMode(RelativePositionMode.FROM_CURSOR);
             }
+        });
+
+        Button positionTypeButton = goToPositionView.findViewById(R.id.positionTypeButton);
+        positionTypeButton.setOnClickListener(view -> {
+            selectNumBase(positionSwitchableBase.getCodeType());
         });
         initFocus();
 
@@ -174,7 +182,7 @@ public class GoToPositionDialog extends AppCompatDialogFragment {
     public void setCursorPosition(long cursorPosition) {
         this.cursorPosition = cursorPosition;
         setPositionValue(cursorPosition);
-        EditText currentPositionText =goToPositionView.findViewById(R.id.currentPositionText);
+        EditText currentPositionText =goToPositionView.findViewById(R.id.currentPositionPreview);
         currentPositionText.setText(String.valueOf(cursorPosition));
     }
 
@@ -222,10 +230,52 @@ public class GoToPositionDialog extends AppCompatDialogFragment {
         setTargetPosition(absolutePosition);
     }
 
+    private void selectNumBase(PositionCodeType codeType) {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(requireContext());
+        builder.setTitle(R.string.code_type);
+
+        CharSequence[] numBases = Arrays.copyOfRange(getResources().getTextArray(R.array.code_type_entries), 1, 4);
+        builder.setSingleChoiceItems(numBases, codeType.ordinal(), (dialog, which) -> {
+            PositionCodeType targetCodeType = PositionCodeType.values()[which];
+            switchPositionNumBase(targetCodeType);
+            dialog.dismiss();
+        });
+        builder.setNegativeButton(R.string.button_cancel, null);
+        androidx.appcompat.app.AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    private void switchPositionNumBase(PositionCodeType codeType) {
+        long value = getPositionValue();
+        CharSequence[] textArray = getResources().getTextArray(R.array.code_type_short);
+        Button positionTypeText = goToPositionView.findViewById(R.id.positionTypeButton);
+        positionTypeText.setText(textArray[codeType.ordinal() + 1]);
+        positionSwitchableBase.setCodeType(codeType);
+        setPositionValue(value);
+        EditText positionText = goToPositionView.findViewById(R.id.positionText);
+        if (codeType == PositionCodeType.HEXADECIMAL) {
+            positionText.setInputType(InputType.TYPE_CLASS_TEXT);
+        } else {
+            switch (relativePositionMode) {
+                case FROM_START:
+                case FROM_END: {
+                    positionText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                    break;
+                }
+                case FROM_CURSOR: {
+                    positionText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
+                    break;
+                }
+                default:
+                    throw CodeAreaUtils.getInvalidTypeException(relativePositionMode);
+            }
+        }
+    }
+
     private long getPositionValue() {
         try {
             EditText positionText = goToPositionView.findViewById(R.id.positionText);
-            return Long.parseLong(positionText.getText().toString());
+            return positionSwitchableBase.valueOfPosition(positionText.getText().toString());
         } catch (NumberFormatException ex) {
             return 0;
         }
@@ -233,12 +283,12 @@ public class GoToPositionDialog extends AppCompatDialogFragment {
 
     private void setPositionValue(long value) {
         EditText positionText = goToPositionView.findViewById(R.id.positionText);
-        positionText.setText(String.valueOf(value));
+        positionText.setText(positionSwitchableBase.getPositionAsString(value));
         updateTargetPosition();
     }
 
     private void updateTargetPosition() {
-        EditText targetPositionText = goToPositionView.findViewById(R.id.targetPositionText);
-        targetPositionText.setText(String.valueOf(getTargetPosition()));
+        EditText targetPositionPreview = goToPositionView.findViewById(R.id.targetPositionPreview);
+        targetPositionPreview.setText(String.valueOf(getTargetPosition()));
     }
 }
