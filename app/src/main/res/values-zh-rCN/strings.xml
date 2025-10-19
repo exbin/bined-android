@@ -118,4 +118,13 @@
     <string name="go_to_dialog_from_start">起始位置</string>
     <string name="go_to_dialog_from_end">结束位置</string>
     <string name="go_to_dialog_relative_to_cursor">相对于光标的位置</string>
+
+    <string name="edit_selection_dialog_current_position">当前位置</string>
+    <string name="edit_selection_dialog_position">位置</string>
+    <string name="edit_selection_dialog_start_position">起始位置</string>
+    <string name="edit_selection_dialog_end_position">结束位置</string>
+    <string name="edit_selection_dialog_selection_length">选择长度</string>
+    <string name="edit_selection_dialog_from_start">起始位置</string>
+    <string name="edit_selection_dialog_from_end">结束位置</string>
+    <string name="edit_selection_dialog_relative_to_cursor">相对于光标的位置</string>
 </resources>

@@ -118,4 +118,13 @@
     <string name="go_to_dialog_from_start">Başlangıçtan Konum</string>
     <string name="go_to_dialog_from_end">Bitişten Konum</string>
     <string name="go_to_dialog_relative_to_cursor">İmlece Göre Konum</string>
+
+    <string name="edit_selection_dialog_current_position">Mevcut Konum</string>
+    <string name="edit_selection_dialog_position">Konum</string>
+    <string name="edit_selection_dialog_start_position">Başlangıç Konumu</string>
+    <string name="edit_selection_dialog_end_position">Bitiş Konumu</string>
+    <string name="edit_selection_dialog_selection_length">Seçim Uzunluğu</string>
+    <string name="edit_selection_dialog_from_start">Başlangıçtan Konum</string>
+    <string name="edit_selection_dialog_from_end">Bitişten Konum</string>
+    <string name="edit_selection_dialog_relative_to_cursor">İmlece Göre Konum</string>
 </resources>

@@ -118,4 +118,13 @@
     <string name="go_to_dialog_from_start">शुरू से स्थिति</string>
     <string name="go_to_dialog_from_end">अंत से स्थिति</string>
     <string name="go_to_dialog_relative_to_cursor">कर्सर के सापेक्ष स्थिति</string>
+
+    <string name="edit_selection_dialog_current_position">वर्तमान स्थिति</string>
+    <string name="edit_selection_dialog_position">स्थिति</string>
+    <string name="edit_selection_dialog_start_position">प्रारंभ स्थिति</string>
+    <string name="edit_selection_dialog_end_position">अंतिम स्थिति</string>
+    <string name="edit_selection_dialog_selection_length">चयन लंबाई</string>
+    <string name="edit_selection_dialog_from_start">प्रारंभ से स्थिति</string>
+    <string name="edit_selection_dialog_from_end">अंत से स्थिति</string>
+    <string name="edit_selection_dialog_relative_to_cursor">कर्सर के सापेक्ष स्थिति</string>
 </resources>

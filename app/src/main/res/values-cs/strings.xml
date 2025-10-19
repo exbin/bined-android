@@ -114,4 +114,12 @@
     <string name="go_to_dialog_from_start">Pozice od začátku</string>
     <string name="go_to_dialog_from_end">Pozice od konce</string>
     <string name="go_to_dialog_relative_to_cursor">Pozice vzhledem ke kurzoru</string>
-</resources>
+
+    <string name="edit_selection_dialog_current_position">Aktuální pozice</string>
+    <string name="edit_selection_dialog_position">Pozice</string>
+    <string name="edit_selection_dialog_start_position">Počáteční pozice</string>
+    <string name="edit_selection_dialog_end_position">Koncová pozice</string>
+    <string name="edit_selection_dialog_selection_length">Délka výběru</string>
+    <string name="edit_selection_dialog_from_start">Pozice od začátku</string>
+    <string name="edit_selection_dialog_from_end">Pozice od konce</string>
+    <string name="edit_selection_dialog_relative_to_cursor">Pozice vzhledem ke kurzoru</string></resources>

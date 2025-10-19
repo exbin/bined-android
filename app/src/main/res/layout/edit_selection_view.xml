@@ -1,0 +1,235 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/currentPositionPreviewLabel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="false"
+                android:focusable="false"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/edit_selection_dialog_current_position" />
+
+            <EditText
+                android:id="@+id/currentPositionPreview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="none"
+                android:enabled="false"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/startPositionSectionTextView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:focusable="true"
+                android:linksClickable="true"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/edit_selection_dialog_start_position" />
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <RadioButton
+                    android:id="@+id/startFromStartRadioButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="@string/edit_selection_dialog_from_start" />
+
+                <RadioButton
+                    android:id="@+id/startFromEndRadioButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/edit_selection_dialog_from_end" />
+
+                <RadioButton
+                    android:id="@+id/startRelativeToCursorRadioButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/edit_selection_dialog_relative_to_cursor" />
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/startPositionTextView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="false"
+                android:focusable="false"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/edit_selection_dialog_position" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/startPositionTypeButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DEC" />
+
+                <EditText
+                    android:id="@+id/startPositionText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:text="" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/endPositionSectionTextView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:focusable="true"
+                android:linksClickable="true"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/edit_selection_dialog_end_position" />
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <RadioButton
+                    android:id="@+id/endFromStartRadioButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="@string/edit_selection_dialog_from_start" />
+
+                <RadioButton
+                    android:id="@+id/endFromEndRadioButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/edit_selection_dialog_from_end" />
+
+                <RadioButton
+                    android:id="@+id/endRelativeToCursorRadioButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/edit_selection_dialog_relative_to_cursor" />
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/endPositionTextView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="false"
+                android:focusable="false"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/edit_selection_dialog_position" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/endPositionTypeButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DEC" />
+
+                <EditText
+                    android:id="@+id/endPositionText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:text="" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/selectionLengthTextView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="false"
+                android:focusable="false"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/edit_selection_dialog_selection_length" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/selectionLengthTypeButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DEC" />
+
+                <EditText
+                    android:id="@+id/selectionLengthText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:text="" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/startPositionPreviewLabel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="false"
+                android:focusable="false"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/edit_selection_dialog_start_position" />
+
+            <EditText
+                android:id="@+id/startPositionPreview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="none"
+                android:enabled="false"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/endPositionPreviewLabel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="false"
+                android:focusable="false"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/edit_selection_dialog_end_position" />
+
+            <EditText
+                android:id="@+id/endPositionPreview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="none"
+                android:enabled="false"
+                android:text="" />
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

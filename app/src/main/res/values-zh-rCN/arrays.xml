@@ -27,6 +27,13 @@
         <item>十六进制</item>
     </string-array>
 
+    <string-array name="code_type_short">
+        <item>二进制</item>
+        <item>八进制</item>
+        <item>十进制</item>
+        <item>十六进制</item>
+    </string-array>
+
     <string-array name="hex_chars_case_entries">
         <item>小写</item>
         <item>大写</item>
