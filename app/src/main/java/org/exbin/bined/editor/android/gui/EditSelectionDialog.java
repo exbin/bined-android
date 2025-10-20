@@ -104,6 +104,11 @@ public class EditSelectionDialog extends AppCompatDialogFragment {
                 @Override
                 public void afterTextChanged(Editable editable) {
                     if (!activeUpdate) {
+                        activeUpdate = true;
+                        long length = getEndPositionValue() - getStartPositionValue();
+                        EditText selectionLengthText = editSelectionView.findViewById(R.id.selectionLengthText);
+                        selectionLengthText.setText(lengthSwitchableBase.getPositionAsString(length));
+                        activeUpdate = false;
                         updateStartTargetPosition();
                     }
                 }
@@ -124,6 +129,11 @@ public class EditSelectionDialog extends AppCompatDialogFragment {
                 @Override
                 public void afterTextChanged(Editable editable) {
                     if (!activeUpdate) {
+                        activeUpdate = true;
+                        long length = getEndPositionValue() - getStartPositionValue();
+                        EditText selectionLengthText = editSelectionView.findViewById(R.id.selectionLengthText);
+                        selectionLengthText.setText(lengthSwitchableBase.getPositionAsString(length));
+                        activeUpdate = false;
                         updateEndTargetPosition();
                     }
                 }
@@ -144,7 +154,12 @@ public class EditSelectionDialog extends AppCompatDialogFragment {
                 @Override
                 public void afterTextChanged(Editable editable) {
                     if (!activeUpdate) {
-                        updateLengthTargetPosition();
+                        activeUpdate = true;
+                        long endPosition = getStartPositionValue() + getSelectionLengthValue();
+                        EditText endPositionText = editSelectionView.findViewById(R.id.endPositionText);
+                        endPositionText.setText(endSwitchableBase.getPositionAsString(endPosition));
+                        activeUpdate = false;
+                        updateEndTargetPosition();
                     }
                 }
             });
@@ -331,15 +346,6 @@ public class EditSelectionDialog extends AppCompatDialogFragment {
     private void updateEndTargetPosition() {
         EditText endPositionPreview = editSelectionView.findViewById(R.id.endPositionPreview);
         endPositionPreview.setText(String.valueOf(getEndTargetPosition()));
-    }
-
-    private void updateLengthTargetPosition() {
-        activeUpdate = true;
-        long endPosition = getStartPositionValue() + getSelectionLengthValue();
-        EditText positionText = editSelectionView.findViewById(R.id.endPositionText);
-        positionText.setText(endSwitchableBase.getPositionAsString(endPosition));
-        activeUpdate = false;
-        updateEndTargetPosition();
     }
 
     public void initFocus() {
