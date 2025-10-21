@@ -76,16 +76,18 @@ public class SearchDialog extends AppCompatDialogFragment {
             keyboardShown = showKeyboard;
             InputMethodManager im = (InputMethodManager) codeArea.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             codeArea.requestFocus();
-            if (showKeyboard) {
-                // TODO im.setInputMethodAndSubtype();
-                im.showSoftInput(codeArea, InputMethodManager.SHOW_IMPLICIT);
-                Dialog dialog = SearchDialog.this.getDialog();
-                if (dialog != null) {
-                    dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+            codeArea.postDelayed(() -> {
+                if (showKeyboard) {
+                    // TODO im.setInputMethodAndSubtype();
+                    im.showSoftInput(codeArea, InputMethodManager.SHOW_IMPLICIT);
+                    Dialog dialog = SearchDialog.this.getDialog();
+                    if (dialog != null) {
+                        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+                    }
+                } else {
+                    im.hideSoftInputFromWindow(codeArea.getWindowToken(), 0);
                 }
-            } else {
-                im.hideSoftInputFromWindow(codeArea.getWindowToken(), 0);
-            }
+            }, 100);
         }
     };
 
@@ -267,8 +269,10 @@ public class SearchDialog extends AppCompatDialogFragment {
 
                 if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
                     if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_DPAD_CENTER) {
-                        InputMethodManager im = (InputMethodManager) codeArea.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        im.showSoftInput(codeArea, InputMethodManager.SHOW_IMPLICIT);
+                        codeArea.postDelayed(() -> {
+                            InputMethodManager im = (InputMethodManager) codeArea.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            im.showSoftInput(codeArea, InputMethodManager.SHOW_IMPLICIT);
+                        }, 100);
                         return true;
                     } else if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_BACK) {
                         View fromCursorView = searchView.findViewById(R.id.from_cursor);

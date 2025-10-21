@@ -2,13 +2,17 @@ plugins {
     id 'com.android.application'
 }
 
-def playStore = false
+def playStore = rootProject.ext.playstore
 def materialVersion = '1.6.1'
 
 android {
     namespace 'org.exbin.bined.editor.android'
-    compileSdk {
-        version = release(35)
+    if (playstore) {
+        compileSdk {
+            version = release(35)
+        }
+    } else {
+        compileSdk 35
     }
 
     defaultConfig {

@@ -308,10 +308,9 @@ public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl 
         }
     }
 
+    @Nonnull
     @Override
     public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
-        return new BaseInputConnection(this, true) {
-
-        };
+        return new BaseInputConnection(this, true);
     }
 }

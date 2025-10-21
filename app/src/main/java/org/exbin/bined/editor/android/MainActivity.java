@@ -210,14 +210,14 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         if (showKeyboard != keyboardShown) {
             keyboardShown = showKeyboard;
             codeArea.requestFocus();
-            codeArea.post(() -> {
+            codeArea.postDelayed(() -> {
                 InputMethodManager im = (InputMethodManager) getApplication().getSystemService(Context.INPUT_METHOD_SERVICE);
                 if (showKeyboard) {
                     im.showSoftInput(codeArea, InputMethodManager.SHOW_IMPLICIT);
                 } else {
                     im.hideSoftInputFromWindow(codeArea.getWindowToken(), 0);
                 }
-            });
+            }, 100);
         }
     };
     private final View.OnKeyListener codeAreaOnKeyListener = new CodeAreaKeyListener();

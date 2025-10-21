@@ -39,9 +39,9 @@ or on Windows:
 To modify this project, Android Studio is recommended.  
 https://developer.android.com/studio/  
 
-When using Android Studio modify following line in build.gradle file to avoid legacy errors:
+When using Android Studio modify `playStore = false` line in build.gradle file to avoid legacy errors:
 
-    def playStore = true
+    playStore = true
 
 License
 -------

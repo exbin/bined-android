@@ -1,16 +1,22 @@
 apply plugin: 'com.android.library'
 
-def playStore = false
+def playStore = rootProject.ext.playstore
 def materialVersion = '1.6.1'
 
 android {
     namespace = 'com.rustamg.filedialogs'
-    compileSdk 35
+    if (playstore) {
+        compileSdk {
+            version = release(35)
+        }
+    } else {
+        compileSdk 35
+    }
 
     defaultConfig {
         if (playStore) {
             minSdk 24
-            materialVersion = '1.12.0'
+            materialVersion = '1.13.0'
         } else {
             multiDexEnabled true
             minSdk 14
