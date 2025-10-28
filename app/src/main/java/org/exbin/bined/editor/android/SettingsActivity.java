@@ -59,7 +59,7 @@ public class SettingsActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
             CompatUtils.enableEdgeToEdge(this);
-//            getWindow().getDecorView().setPadding(0, getStatusBarHeight(), 0, 0);
+            getWindow().getDecorView().setPadding(0, 0, 0, getNavigationBarHeight());
         }
 
         super.onCreate(savedInstanceState);
@@ -67,18 +67,6 @@ public class SettingsActivity extends AppCompatActivity implements
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.settings_activity, null);
         setContentView(view);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-            // Calculate ActionBar height
-            TypedValue tv = new TypedValue();
-            int actionBarHeight = 0;
-            if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true))
-            {
-                actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data,getResources().getDisplayMetrics());
-            }
-
-            view.setPadding(0, getStatusBarHeight() + actionBarHeight, 0, 0);
-        }
 
         if (savedInstanceState == null) {
             getSupportFragmentManager()
@@ -167,9 +155,9 @@ public class SettingsActivity extends AppCompatActivity implements
         super.finish();
     }
 
-    private int getStatusBarHeight() {
+    private int getNavigationBarHeight() {
         Resources resources = getResources();
-        int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
+        int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
         if (resourceId > 0) {
             return resources.getDimensionPixelSize(resourceId);
         }
