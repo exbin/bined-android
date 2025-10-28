@@ -20,6 +20,7 @@ import android.content.Context;
 import android.os.Build;
 import android.os.LocaleList;
 
+import androidx.activity.ComponentActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.os.LocaleListCompat;
 
@@ -72,5 +73,15 @@ public class CompatUtils {
             // No switching available
         }
         return LocaleListCompat.getEmptyLocaleList();
+    }
+
+    public static void enableEdgeToEdge(ComponentActivity activity) {
+        try {
+            Class<?> edgeClass = Class.forName("androidx.activity.EdgeToEdge");
+            Method getApplicationLocalesMethod = edgeClass.getMethod("enable", ComponentActivity.class);
+            Object result = getApplicationLocalesMethod.invoke(null, activity);
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException | ClassNotFoundException e) {
+            // No switching available
+        }
     }
 }

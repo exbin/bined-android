@@ -45,7 +45,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -233,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-            EdgeToEdge.enable(this);
+            CompatUtils.enableEdgeToEdge(this);
             getWindow().getDecorView().setPadding(0, 0, 0, getNavigationBarHeight());
         }
 
