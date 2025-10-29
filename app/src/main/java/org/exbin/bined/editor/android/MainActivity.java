@@ -214,6 +214,9 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
                 InputMethodManager im = (InputMethodManager) getApplication().getSystemService(Context.INPUT_METHOD_SERVICE);
                 if (showKeyboard) {
                     im.showSoftInput(codeArea, InputMethodManager.SHOW_IMPLICIT);
+//                    if (CompatUtils.isAndroidTV(this)) {
+//                        im.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
+//                    }
                 } else {
                     im.hideSoftInputFromWindow(codeArea.getWindowToken(), 0);
                 }
@@ -603,7 +606,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         this.menu = menu;
 
         // Currently on Google TV access to app bar icons doesn't seem to work
-        if (isAndroidTV(this)) {
+        if (CompatUtils.isAndroidTV(this)) {
             for (int i = 0; i < menu.size(); i++) {
                 MenuItem menuItem = menu.getItem(i);
                 menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
@@ -623,7 +626,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         super.onCreateContextMenu(menu, v, menuInfo);
         Resources resources = getResources();
         int order = 0;
-        if (isAndroidTV(codeArea.getContext())) {
+        if (CompatUtils.isAndroidTV(this)) {
             menu.add(0, GO_TO_SIDE_PANEL_POPUP_ID, order, resources.getString(R.string.action_go_to_side_panel));
             order++;
             menu.add(0, OPEN_MAIN_MENU_POPUP_ID, order, resources.getString(R.string.action_open_main_menu));
@@ -677,10 +680,13 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             }
             case SHOW_KEYBOARD_MENU_POPUP_ID: {
                 // For some reason it keeps closing if invoked immediately
+                codeArea.requestFocus();
                 codeArea.postDelayed(() -> {
-                    codeArea.requestFocus();
                     InputMethodManager im = (InputMethodManager) getApplication().getSystemService(Context.INPUT_METHOD_SERVICE);
                     im.showSoftInput(codeArea, InputMethodManager.SHOW_IMPLICIT);
+//                    if (CompatUtils.isAndroidTV(this)) {
+//                        im.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
+//                    }
                 }, 100);
                 break;
             }
@@ -1069,7 +1075,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     }
 
     public void openFile() {
-        if (MainActivity.isAndroidTV(this) || Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+        if (CompatUtils.isAndroidTV(this) || Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             fallBackOpenFile(FallbackFileType.FILE);
             return;
         }
@@ -1094,7 +1100,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     }
 
     public void openTableFile() {
-        if (MainActivity.isAndroidTV(this) || Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+        if (CompatUtils.isAndroidTV(this) || Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             fallBackOpenFile(FallbackFileType.TABLE_FILE);
             return;
         }
@@ -1133,7 +1139,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     public void saveAs(@Nullable Runnable postSaveAsAction) {
         this.postSaveAsAction = postSaveAsAction;
 
-        if (MainActivity.isAndroidTV(this) || Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+        if (CompatUtils.isAndroidTV(this) || Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             fallBackSaveAs();
             return;
         }
@@ -1553,11 +1559,6 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         return codeArea;
     }
 
-    public static boolean isAndroidTV(Context context) {
-        final PackageManager pm = context.getPackageManager();
-        return pm.hasSystemFeature(PackageManager.FEATURE_LEANBACK);
-    }
-
     private void requestWriteExternalStoragePermission() {
         final String[] permissions = new String[]{
                 Manifest.permission.READ_EXTERNAL_STORAGE
@@ -1600,7 +1601,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
             if (!codeArea.isFocused()) {
                 if (keyEvent.getAction() == KeyEvent.ACTION_UP) {
-                    if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_BACK && isAndroidTV(codeArea.getContext())) {
+                    if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_BACK && CompatUtils.isAndroidTV(MainActivity.this)) {
                         codeArea.post(codeArea::requestFocus);
                         return true;
                     }

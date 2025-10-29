@@ -17,6 +17,7 @@ package org.exbin.bined.editor.android;
 
 import android.app.LocaleManager;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.LocaleList;
 
@@ -79,9 +80,14 @@ public class CompatUtils {
         try {
             Class<?> edgeClass = Class.forName("androidx.activity.EdgeToEdge");
             Method getApplicationLocalesMethod = edgeClass.getMethod("enable", ComponentActivity.class);
-            Object result = getApplicationLocalesMethod.invoke(null, activity);
+            getApplicationLocalesMethod.invoke(null, activity);
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException | ClassNotFoundException e) {
             // No switching available
         }
+    }
+
+    public static boolean isAndroidTV(Context context) {
+        final PackageManager pm = context.getPackageManager();
+        return pm.hasSystemFeature(PackageManager.FEATURE_LEANBACK);
     }
 }

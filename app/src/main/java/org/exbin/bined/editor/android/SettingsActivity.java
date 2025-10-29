@@ -18,7 +18,6 @@ package org.exbin.bined.editor.android;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -66,6 +65,12 @@ public class SettingsActivity extends AppCompatActivity implements
         appPreferences = getAppPreferences();
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.settings_activity, null);
+
+        // Fix for legacy variant, comment out for playstore release
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            view.findViewById(R.id.settings).setPadding(0, getStatusBarHeight(), 0, 0);
+        }
+
         setContentView(view);
 
         if (savedInstanceState == null) {
@@ -153,6 +158,15 @@ public class SettingsActivity extends AppCompatActivity implements
         editorPreferences.setDataInspectorMode(DataInspectorMode.valueOf(((ListPreference) fragment.findPreference(HeaderFragment.DATA_INSPECTOR_MODE)).getValue().toUpperCase()));
 
         super.finish();
+    }
+
+    private int getStatusBarHeight() {
+        Resources resources = getResources();
+        int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            return resources.getDimensionPixelSize(resourceId);
+        }
+        return 0;
     }
 
     private int getNavigationBarHeight() {

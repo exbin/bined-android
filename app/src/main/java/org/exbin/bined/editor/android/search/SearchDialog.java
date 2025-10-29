@@ -44,6 +44,7 @@ import org.exbin.bined.EditOperation;
 import org.exbin.bined.RowWrappingMode;
 import org.exbin.bined.android.basic.CodeArea;
 import org.exbin.bined.android.basic.color.BasicCodeAreaColorsProfile;
+import org.exbin.bined.editor.android.CompatUtils;
 import org.exbin.bined.editor.android.MainActivity;
 import org.exbin.bined.editor.android.R;
 
@@ -74,12 +75,15 @@ public class SearchDialog extends AppCompatDialogFragment {
         if (showKeyboard != keyboardShown) {
 
             keyboardShown = showKeyboard;
-            InputMethodManager im = (InputMethodManager) codeArea.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             codeArea.requestFocus();
             codeArea.postDelayed(() -> {
+                InputMethodManager im = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 if (showKeyboard) {
                     // TODO im.setInputMethodAndSubtype();
                     im.showSoftInput(codeArea, InputMethodManager.SHOW_IMPLICIT);
+//                    if (CompatUtils.isAndroidTV(getContext())) {
+//                        im.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
+//                    }
                     Dialog dialog = SearchDialog.this.getDialog();
                     if (dialog != null) {
                         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
@@ -262,7 +266,7 @@ public class SearchDialog extends AppCompatDialogFragment {
                 return false;
             }
 
-            if (MainActivity.isAndroidTV(codeArea.getContext())) {
+            if (CompatUtils.isAndroidTV(codeArea.getContext())) {
                 if (keyboardShown && keyEvent.getKeyCode() == KeyEvent.KEYCODE_FORWARD_DEL) {
                     return false;
                 }
@@ -271,8 +275,10 @@ public class SearchDialog extends AppCompatDialogFragment {
                     if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_DPAD_CENTER) {
                         codeArea.postDelayed(() -> {
                             InputMethodManager im = (InputMethodManager) codeArea.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                            im.showSoftInput(codeArea, InputMethodManager.SHOW_IMPLICIT);
+                            im.showSoftInput(codeArea, InputMethodManager.SHOW_IMPLICIT, null);
+//                            im.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
                         }, 100);
+
                         return true;
                     } else if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_BACK) {
                         View fromCursorView = searchView.findViewById(R.id.from_cursor);

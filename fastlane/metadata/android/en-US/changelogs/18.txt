@@ -1,0 +1,2 @@
+- Added edit selection dialog
+- Bug fixes

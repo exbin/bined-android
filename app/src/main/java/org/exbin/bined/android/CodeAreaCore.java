@@ -19,6 +19,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -92,10 +93,12 @@ public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl 
 
     private void init() {
         setContentDescription("Code area");
+        setFocusable(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            setSystemUiVisibility(getSystemUiVisibility() | View.FOCUSABLE);
+        }
         // TODO: Use swing color instead
 //        setBackgroundColor(ColorUtils.WHITE);
-//        setFocusable(true);
-//        setSystemUiVisibility(getSystemUiVisibility() | View.FOCUSABLE);
 //        setFocusTraversalKeysEnabled(false);
     }
 
@@ -248,16 +251,17 @@ public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl 
 
         public PrimaryView(Context context, AttributeSet attrs) {
             super(context, attrs);
-            setFocusable(true);
+            setContentDescription("Code area scroll view");
+            // setFocusTraversalKeysEnabled(false);
         }
 
         @Override
         protected void onDraw(@Nullable Canvas g) {
-            super.onDraw(g);
             if (g == null) {
                 return;
             }
 
+            super.onDraw(g);
             paintView(g);
         }
 
@@ -288,7 +292,9 @@ public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl 
         @Override
         protected void onFocusChanged(boolean gainFocus, int direction, @androidx.annotation.Nullable Rect previouslyFocusedRect) {
             super.onFocusChanged(gainFocus, direction, previouslyFocusedRect);
-            repaint();
+            if (gainFocus) {
+                repaint();
+            }
         }
 
         @Override
@@ -311,8 +317,6 @@ public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl 
     @Override
     public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
         outAttrs.imeOptions = EditorInfo.IME_ACTION_DONE;
-        outAttrs.inputType = EditorInfo.TYPE_TEXT_FLAG_NO_SUGGESTIONS;
-
         return new CodeAreaInputConnection(this, true);
     }
 }
