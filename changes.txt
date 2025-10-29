@@ -1,4 +1,6 @@
-0.2.9
+0.2.10
+
+0.2.9 (2025-10-29)
 - Added edit selection dialog
 - Bug fixes
 
