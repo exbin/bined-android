@@ -1,5 +1,6 @@
 0.2.9
 - Added edit selection dialog
+- Bug fixes
 
 0.2.8 (2025-10-18)
 - Added go-to dialog / go-to relative position

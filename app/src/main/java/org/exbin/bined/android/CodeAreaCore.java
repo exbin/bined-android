@@ -24,7 +24,6 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.BaseInputConnection;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.widget.RelativeLayout;
@@ -311,6 +310,9 @@ public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl 
     @Nonnull
     @Override
     public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
-        return new BaseInputConnection(this, true);
+        outAttrs.imeOptions = EditorInfo.IME_ACTION_DONE;
+        outAttrs.inputType = EditorInfo.TYPE_TEXT_FLAG_NO_SUGGESTIONS;
+
+        return new CodeAreaInputConnection(this, true);
     }
 }
