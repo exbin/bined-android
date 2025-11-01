@@ -5,38 +5,6 @@
         <item>Σκοτεινό</item>
     </string-array>
 
-    <string-array name="theme_values" translatable="false">
-        <item>default</item>
-        <item>light</item>
-        <item>dark</item>
-    </string-array>
-
-    <string-array name="language_entries" translatable="false">
-        <item>Default (system)</item>
-        <item>English</item>
-        <item>Česky</item>
-        <item>हिंदी</item>
-        <item>简体中文</item>
-        <item>Português (Brasil)</item>
-        <item>Türkçe</item>
-        <item>Русский</item>
-        <item>Español</item>
-        <item>Ελληνικά</item>
-    </string-array>
-
-    <string-array name="language_values" translatable="false">
-        <item>default</item>
-        <item>en</item>
-        <item>cs</item>
-        <item>hi</item>
-        <item>zh-CN</item>
-        <item>pt-BR</item>
-        <item>tr</item>
-        <item>ru</item>
-        <item>es</item>
-        <item>el</item>
-    </string-array>
-
     <string-array name="bytes_per_row_entries">
         <item>Γέμισμα Οθόνης</item>
         <item>4 Bytes</item>
@@ -46,25 +14,10 @@
         <item>Προσαρμοσμένο</item>
     </string-array>
 
-    <string-array name="bytes_per_row_values" translatable="false">
-        <item>0</item>
-        <item>4</item>
-        <item>8</item>
-        <item>12</item>
-        <item>16</item>
-        <item>custom</item>
-    </string-array>
-
     <string-array name="view_mode_entries">
         <item>Διπλή</item>
         <item>Κώδικας Matrix</item>
         <item>Προεπισκόπηση Κειμένου</item>
-    </string-array>
-
-    <string-array name="view_mode_values" translatable="false">
-        <item>dual</item>
-        <item>code_matrix</item>
-        <item>text_preview</item>
     </string-array>
 
     <string-array name="code_type_entries">
@@ -81,31 +34,14 @@
         <item>HEX</item>
     </string-array>
 
-    <string-array name="code_type_values" translatable="false">
-        <item>binary</item>
-        <item>octal</item>
-        <item>decimal</item>
-        <item>hexadecimal</item>
-    </string-array>
-
     <string-array name="hex_chars_case_entries">
         <item>Πεζά Γράμματα</item>
         <item>Κεφαλαία Γράμματα</item>
     </string-array>
 
-    <string-array name="hex_chars_case_values" translatable="false">
-        <item>lower</item>
-        <item>upper</item>
-    </string-array>
-
     <string-array name="file_handling_mode_entries">
         <item>Φόρτωση πλήρους αρχείου</item>
         <item>Μόνο αλλαγές</item>
-    </string-array>
-
-    <string-array name="file_handling_mode_values" translatable="false">
-        <item>memory</item>
-        <item>delta</item>
     </string-array>
 
     <string-array name="keys_panel_mode_entries">
@@ -115,22 +51,9 @@
         <item>Μεγάλος</item>
     </string-array>
 
-    <string-array name="keys_panel_mode_values" translatable="false">
-        <item>hide</item>
-        <item>small</item>
-        <item>medium</item>
-        <item>big</item>
-    </string-array>
-
     <string-array name="data_inspector_mode_entries">
         <item>Απόκρυψη</item>
         <item>Εμφάνιση</item>
         <item>Σε Οριζόντιο Προσανατολισμό</item>
-    </string-array>
-
-    <string-array name="data_inspector_mode_values" translatable="false">
-        <item>hide</item>
-        <item>show</item>
-        <item>landscape</item>
     </string-array>
 </resources>

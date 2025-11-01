@@ -21,6 +21,7 @@
         <item>Türkçe</item>
         <item>Русский</item>
         <item>Español</item>
+        <item>Ελληνικά</item>
     </string-array>
 
     <string-array name="language_values" translatable="false">
@@ -33,6 +34,7 @@
         <item>tr</item>
         <item>ru</item>
         <item>es</item>
+        <item>el</item>
     </string-array>
 
     <string-array name="bytes_per_row_entries">

@@ -1,4 +1,5 @@
 0.2.10
+- Added Greek translation
 
 0.2.9 (2025-10-29)
 - Added edit selection dialog
