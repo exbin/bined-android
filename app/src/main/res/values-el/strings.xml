@@ -1,0 +1,131 @@
+<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="en">
+    <string name="app_name">BinEd</string>
+    <string name="app_about">Όνομα: BinEd - Binary/Hex Editor\nΈκδοση: %1$s\nΠρομηθευτής: &lt;a href="%2$s"&gt;ExBin Project&lt;/a&gt;\nΆδεια: &lt;a href="%3$s"&gt;Apache License, Version 2.0&lt;/a&gt;\nΑρχική Σελίδα: &lt;a href="%4$s"&gt;%4$s&lt;/a&gt;\n\nΣυνεισφέροντες:</string>
+    <string name="bined_logo_description">BinEd Logo</string>
+
+    <!-- Actions & menu -->
+
+    <string name="title_activity_settings">Ρυθμίσεις</string>
+
+    <string name="action_new">Νέο</string>
+    <string name="action_open">Άνοιγμα</string>
+    <string name="action_save">Αποθήκευση</string>
+    <string name="action_save_as">Αποθήκευση Ως</string>
+    <string name="action_settings">Ρυθμίσεις</string>
+    <string name="action_about">Σχετικά</string>
+    <string name="action_search">Αναζήτηση</string>
+    <string name="action_undo">Αναίρεση</string>
+    <string name="action_redo">Επανάληψη</string>
+    <string name="action_selection_start">Έναρξη Επιλογής</string>
+    <string name="action_selection_end">Τέλος Επιλογής</string>
+    <string name="action_clear_selection">Εκκαθάριση Επιλογής</string>
+    <string name="action_cut">Αποκοπή</string>
+    <string name="action_copy">Αντιγραφή</string>
+    <string name="action_copy_as_code">Αντιγραφή Ως Κώδικα</string>
+    <string name="action_paste">Επικόλληση</string>
+    <string name="action_paste_from_code">Επικόλληση Από Κώδικα</string>
+    <string name="action_delete">Διαγραφή</string>
+    <string name="action_select_all">Επιλογή Όλων</string>
+    <string name="action_exit">Έξοδος</string>
+    <string name="action_open_main_menu">Κύριο Μενού</string>
+    <string name="action_go_to_side_panel">Πλαϊνό Πάνελ</string>
+    <string name="action_show_keyboard">Εμφάνιση Πληκτρολογίου</string>
+    <string name="action_open_table_file" translatable="false">Open Table File</string>
+
+    <string name="view_menu">Προβολή</string>
+    <string name="visual_theme">Οπτικό Θέμα</string>
+    <string name="language">Γλώσσα</string>
+    <string name="view_mode">Λειτουργία Προβολής</string>
+    <string name="code_type">Τύπος Κώδικα</string>
+    <string name="hex_characters_case">Διάκριση Χαρακτήρων Hex</string>
+    <string name="encoding">Κωδικοποίηση</string>
+    <string name="code_colorization">Χρωματισμός Κώδικα</string>
+    <string name="file_handling_mode">Λειτουργία Χειρισμού Αρχείων</string>
+    <string name="keys_panel_mode">Πίνακας Πλήκτρων</string>
+    <string name="data_inspector_mode">Λειτουργία Επιθεώρησης Δεδομένων</string>
+    <string name="nonprintable_characters">Μη Εκτυπώσιμοι Χαρακτήρες</string>
+    <string name="go_to_position">Μετάβαση Στη Θέση</string>
+    <string name="edit_selection">Επεξεργασία Επιλογής</string>
+    <string name="insert_data">Εισαγωγή Δεδομένων</string>
+    <string name="convert_data">Μετατροπή Δεδομένων</string>
+    <string name="edit_menu">Επεξεργασία</string>
+    <string name="font">Γραμματοσειρά</string>
+    <string name="bytes_per_row">Bytes Ανά Σειρά</string>
+    <string name="bytes_per_row_fill">Γέμισμα Οθόνης</string>
+    <string name="bytes_per_row_4">4 Bytes</string>
+    <string name="bytes_per_row_8">8 Bytes</string>
+    <string name="bytes_per_row_12">12 Bytes</string>
+    <string name="bytes_per_row_16">16 Bytes</string>
+    <string name="bytes_per_row_custom">Προσαρμοσμένο</string>
+    <string name="tools_menu">Εργαλεία</string>
+
+    <string name="application_about">Σχετικά Με Την Εφαρμογή</string>
+    <string name="select_file">Επιλογή ενός αρχείου</string>
+    <string name="save_as_file">Αποθήκευση ως αρχείο</string>
+    <string name="file_modified">Το αρχείο τροποποιήθηκε</string>
+    <string name="confirm_exit">Πατήστε ξανά για έξοδο</string>
+    <string name="confirm_discard">Πατήστε ξανά για να απορρίψετε τις αλλαγές</string>
+    <string name="storage_permission_is_not_granted">Δεν έχει χορηγηθεί άδεια αποθήκευσης</string>
+    <string name="storage_permission_request">Απαιτείται ενεργοποίηση αδειών αποθήκευσης</string>
+
+    <string name="button_ok">OK</string>
+    <string name="button_close">Κλείσιμο</string>
+    <string name="button_donate">Δωρεά</string>
+    <string name="button_cancel">Ακύρωση</string>
+    <string name="button_set">Ορισμός</string>
+    <string name="button_go_to">Μετάβαση Σε</string>
+    <string name="button_save">Αποθήκευση</string>
+    <string name="button_discard">Απόρριψη</string>
+    <string name="button_request">Αίτημα</string>
+    <string name="button_search">Αναζήτηση</string>
+
+    <string name="value_label_binary">Δυαδικός</string>
+    <string name="value_label_byte">Byte</string>
+    <string name="value_label_word">Λέξη</string>
+    <string name="value_label_integer">Ακέραιος</string>
+    <string name="value_label_long">Μακρύς</string>
+    <string name="value_label_float">Πλωτός</string>
+    <string name="value_label_double">Διπλός</string>
+    <string name="value_label_character">Χαρακτήρας</string>
+    <string name="value_label_string">Συμβολοσειρά</string>
+    <string name="big_endian_radio_button">BE</string>
+    <string name="little_endian_radio_button">LE</string>
+    <string name="signed_radio_button">Sign</string>
+    <string name="unsigned_radio_button">Uns</string>
+    <string name="error_invalid_input">Μη Έγκυρη Εισαγωγή</string>
+    <string name="error_exception">Μη Αναμενόμενο Σφάλμα</string>
+
+    <!-- Preference Titles -->
+
+    <string name="pref_header_appearance">Εμφάνιση</string>
+    <string name="pref_view_header">Προβολή</string>
+
+    <string name="search_title">Αναζήτηση</string>
+    <string name="search_text">Κείμενο</string>
+    <string name="search_binary">Δυαδικό</string>
+    <string name="search_from_cursor">Αναζήτηση από τον κέρσορα</string>
+    <string name="search_match_case">Ταίριασμα περίπτωσης</string>
+    <string name="search_show_multiple_matches">Εμφάνιση πολλαπλών αντιστοιχίσεων</string>
+    <string name="search_backward_direction">Αναζήτηση προς τα πίσω</string>
+    <string name="search_in_progress">Αναζήτηση…</string>
+    <string name="search_match_none">Δεν βρέθηκαν αντιστοιχίσεις.</string>
+    <string name="search_match_single">Βρέθηκε μία αντιστοιχία.</string>
+    <string name="search_match_found">"Εμφάνιση %1$d από %2$d αντιστοιχίσεις που βρέθηκαν.</string>
+
+    <string name="go_to_dialog_current_position">Τρέχουσα Θέση</string>
+    <string name="go_to_dialog_target_position">Στόχος Θέση</string>
+    <string name="go_to_dialog_go_to_position">Μετάβαση Στη Θέση</string>
+    <string name="go_to_dialog_position">Θέση</string>
+    <string name="go_to_dialog_from_start">Θέση από την αρχή</string>
+    <string name="go_to_dialog_from_end">Θέση από το τέλος</string>
+    <string name="go_to_dialog_relative_to_cursor">Θέση σχετική με τον κέρσορα</string>
+
+    <string name="edit_selection_dialog_current_position">Τρέχουσα Θέση</string>
+    <string name="edit_selection_dialog_position">Θέση</string>
+    <string name="edit_selection_dialog_start_position">Θέση Έναρξης</string>
+    <string name="edit_selection_dialog_end_position">Θέση Τέλους</string>
+    <string name="edit_selection_dialog_selection_length">Μήκος Επιλογής</string>
+    <string name="edit_selection_dialog_from_start">Θέση από την αρχή</string>
+    <string name="edit_selection_dialog_from_end">Θέση από το τέλος</string>
+    <string name="edit_selection_dialog_relative_to_cursor">Θέση σχετική με τον κέρσορα</string>
+</resources>
