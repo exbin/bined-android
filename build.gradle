@@ -1,12 +1,10 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
-// Temporary restrict default version to 8.11.1 for F-droid build server issue
-// https://gitlab.com/fdroid/admin/-/issues/593
 buildscript {
     ext {
         // playstore = hasProperty('playstore')
         playstore = false
-        agpVersion = playstore ? '8.13.0' : '8.11.1'
+        agpVersion = '8.13.2'
     }
 }
 

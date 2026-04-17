@@ -1,5 +1,5 @@
 /*
- * Copyright (C) ExBin Project
+ * Copyright (C) ExBin Project, https://exbin.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,6 @@ import javax.annotation.Nullable;
 /**
  * Exception for overflow situation where more data is inserted/added than it is
  * allowed to handle.
- *
- * @author ExBin Project (https://exbin.org)
  */
 public class DataOverflowException extends RuntimeException {
 

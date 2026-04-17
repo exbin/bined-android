@@ -1,5 +1,5 @@
 /*
- * Copyright (C) ExBin Project
+ * Copyright (C) ExBin Project, https://exbin.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,6 @@ package org.exbin.auxiliary.binary_data;
  * <p>
  * Expected use is to either check presence per position or segments or to read
  * data and handle presence only when {@link DataNotPresentException} is thrown.
- *
- * @author ExBin Project (https://exbin.org)
  */
 public interface SparseBinaryData {
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) ExBin Project
+ * Copyright (C) ExBin Project, https://exbin.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,6 @@ import javax.annotation.concurrent.Immutable;
 /**
  * Selection range is selection between two positions where begin represents
  * origin point and end of the selection can be before or after begin.
- *
- * @author ExBin Project (https://exbin.org)
  */
 @Immutable
 public class SelectionRange {

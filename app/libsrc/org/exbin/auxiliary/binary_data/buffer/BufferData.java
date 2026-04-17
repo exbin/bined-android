@@ -1,5 +1,5 @@
 /*
- * Copyright (C) ExBin Project
+ * Copyright (C) ExBin Project, https://exbin.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,8 +32,6 @@ import org.exbin.auxiliary.binary_data.OutOfBoundsException;
  * <p>
  * To allow parallel reading, read operations must be synchronized due to split
  * nature of the ByteBuffer position and depending operation.
- *
- * @author ExBin Project (https://exbin.org)
  */
 @ParametersAreNonnullByDefault
 public class BufferData implements BinaryData {
