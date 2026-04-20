@@ -17,8 +17,8 @@ package org.exbin.bined.editor.android.options.impl;
 
 import org.exbin.bined.editor.android.options.StatusOptions;
 import org.exbin.bined.editor.android.preference.StatusPreferences;
-import org.exbin.framework.bined.StatusCursorPositionFormat;
-import org.exbin.framework.bined.StatusDocumentSizeFormat;
+import org.exbin.bined.component.StatusCursorPositionFormat;
+import org.exbin.bined.component.StatusDocumentSizeFormat;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;

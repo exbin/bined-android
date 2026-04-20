@@ -15,13 +15,8 @@
  */
 package org.exbin.bined.editor.android.preference;
 
-import androidx.annotation.Nullable;
-
 import org.exbin.bined.editor.android.options.TextFontOptions;
 
-import java.util.Optional;
-
-import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 /**

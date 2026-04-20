@@ -462,11 +462,12 @@ public class BufferPagedData implements PagedData {
                     int offset = (int) (targetPosition % pageSize);
 
                     BufferData sourcePage = ((BufferPagedData) replacingData).getPage((int) (startFrom / ((BufferPagedData) replacingData).getPageSize()));
+                    int sourcePageSize = (int) sourcePage.getDataSize();
                     int sourceOffset = (int) (startFrom % ((BufferPagedData) replacingData).getPageSize());
 
                     int copySize = pageSize - offset;
-                    if (copySize > ((BufferPagedData) replacingData).getPageSize() - sourceOffset) {
-                        copySize = ((BufferPagedData) replacingData).getPageSize() - sourceOffset;
+                    if (copySize > sourcePageSize - sourceOffset) {
+                        copySize = sourcePageSize - sourceOffset;
                     }
                     if (copySize > length) {
                         copySize = (int) length;

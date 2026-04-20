@@ -17,7 +17,7 @@ package org.exbin.bined.editor.android.options;
 
 import org.exbin.bined.basic.EnterKeyHandlingMode;
 import org.exbin.bined.basic.TabKeyHandlingMode;
-import org.exbin.framework.bined.FileHandlingMode;
+import org.exbin.bined.component.FileProcessingMode;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -29,7 +29,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public interface EditorOptions {
 
     @Nonnull
-    FileHandlingMode getFileHandlingMode();
+    FileProcessingMode getFileHandlingMode();
 
     @Nonnull
     KeysPanelMode getKeysPanelMode();
@@ -43,7 +43,7 @@ public interface EditorOptions {
     @Nonnull
     DataInspectorMode getDataInspectorMode();
 
-    void setFileHandlingMode(FileHandlingMode fileHandlingMode);
+    void setFileHandlingMode(FileProcessingMode fileProcessingMode);
 
     void setKeysPanelMode(KeysPanelMode keysPanelMode);
 

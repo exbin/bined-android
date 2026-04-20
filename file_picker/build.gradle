@@ -22,12 +22,11 @@ android {
             minSdk 14
         }
 
-        targetSdk 35
     }
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
     compileOptions {
@@ -39,6 +38,10 @@ android {
     }
     lint {
         checkReleaseBuilds false
+        targetSdk 35
+    }
+    testOptions {
+        targetSdk 35
     }
 }
 

@@ -36,7 +36,7 @@ import org.exbin.bined.editor.android.preference.BinaryEditorPreferences;
 import org.exbin.bined.editor.android.preference.EditorPreferences;
 import org.exbin.bined.editor.android.preference.HeaderFragment;
 import org.exbin.bined.editor.android.preference.PreferencesWrapper;
-import org.exbin.framework.bined.FileHandlingMode;
+import org.exbin.bined.component.FileProcessingMode;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -151,7 +151,7 @@ public class SettingsActivity extends AppCompatActivity implements
         HeaderFragment fragment = (HeaderFragment) getSupportFragmentManager().findFragmentByTag("header_fragment");
         // Save to preferences
         EditorPreferences editorPreferences = getAppPreferences().getEditorPreferences();
-        editorPreferences.setFileHandlingMode(FileHandlingMode.valueOf(((ListPreference) fragment.findPreference(HeaderFragment.FILE_HANDLING_MODE)).getValue().toUpperCase()));
+        editorPreferences.setFileHandlingMode(FileProcessingMode.valueOf(((ListPreference) fragment.findPreference(HeaderFragment.FILE_HANDLING_MODE)).getValue().toUpperCase()));
         editorPreferences.setKeysPanelMode(KeysPanelMode.valueOf(((ListPreference) fragment.findPreference(HeaderFragment.KEYS_PANEL_MODE)).getValue().toUpperCase()));
         editorPreferences.setDataInspectorMode(DataInspectorMode.valueOf(((ListPreference) fragment.findPreference(HeaderFragment.DATA_INSPECTOR_MODE)).getValue().toUpperCase()));
 

@@ -18,8 +18,8 @@ package org.exbin.bined.editor.android.preference;
 import org.exbin.bined.PositionCodeType;
 import org.exbin.bined.editor.android.options.StatusOptions;
 import org.exbin.bined.editor.android.options.impl.StatusOptionsImpl;
-import org.exbin.framework.bined.StatusCursorPositionFormat;
-import org.exbin.framework.bined.StatusDocumentSizeFormat;
+import org.exbin.bined.component.StatusCursorPositionFormat;
+import org.exbin.bined.component.StatusDocumentSizeFormat;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;

@@ -105,8 +105,8 @@ import org.exbin.bined.highlight.android.SearchCodeAreaColorAssessor;
 import org.exbin.bined.highlight.android.SearchMatch;
 import org.exbin.bined.operation.BinaryDataUndoRedoChangeListener;
 import org.exbin.bined.operation.android.CodeAreaOperationCommandHandler;
-import org.exbin.framework.bined.BinEdCodeAreaAssessor;
-import org.exbin.framework.bined.BinaryStatusApi;
+import org.exbin.bined.component.BinEdCodeAreaAssessor;
+import org.exbin.bined.component.BinaryStatusApi;
 
 import java.io.File;
 import java.lang.reflect.Method;

@@ -22,9 +22,11 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Output stream for binary data.
+ * <p>
+ * Data are expanded as needed.
  */
 @ParametersAreNonnullByDefault
-public class BinaryDataOutputStream extends OutputStream implements SeekableStream, FinishableStream {
+public class BinaryDataOutputStream extends OutputStream implements SeekableStream {
 
     @Nonnull
     protected final EditableBinaryData data;
@@ -39,8 +41,9 @@ public class BinaryDataOutputStream extends OutputStream implements SeekableStre
         long dataSize = data.getDataSize();
         if (position == dataSize) {
             dataSize++;
-            data.setDataSize(dataSize);
+            data.insertUninitialized(position, 1);
         }
+
         data.setByte(position++, (byte) value);
     }
 
@@ -52,7 +55,8 @@ public class BinaryDataOutputStream extends OutputStream implements SeekableStre
 
         long dataSize = data.getDataSize();
         if (position + len > dataSize) {
-            data.setDataSize(position + len);
+            long expand = position + len - dataSize;
+            data.insertUninitialized(position, expand);
         }
 
         data.replace(position, input, off, len);
@@ -61,27 +65,28 @@ public class BinaryDataOutputStream extends OutputStream implements SeekableStre
 
     @Override
     public void seek(long position) throws IOException {
+        if (position < 0) {
+            throw new OutOfBoundsException("Position is outside of available range");
+        }
+
+        if (position > data.getDataSize()) {
+            data.setDataSize(position);
+        }
+
         this.position = position;
     }
 
     @Override
     public long getStreamSize() {
-        return data.getDataSize();
+        return -1;
     }
 
-    @Override
     public long getProcessedSize() {
         return position;
     }
 
     @Override
     public void close() throws IOException {
-        finish();
-    }
-
-    @Override
-    public long finish() throws IOException {
         position = data.getDataSize();
-        return position;
     }
 }

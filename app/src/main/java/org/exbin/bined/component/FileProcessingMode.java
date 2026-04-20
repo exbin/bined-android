@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.framework.bined;
+package org.exbin.bined.component;
 
 /**
- * File handling mode.
+ * File processing mode.
  */
-public enum FileHandlingMode {
+public enum FileProcessingMode {
     /**
      * Direct access to stream of externally handled file.
      */

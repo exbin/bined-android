@@ -88,52 +88,52 @@ public class DeltaDocument implements EditableBinaryData {
     }
 
     @Override
-    public boolean isEmpty() {
+    public synchronized boolean isEmpty() {
         return dataLength == 0;
     }
 
     @Override
-    public long getDataSize() {
+    public synchronized long getDataSize() {
         return dataLength;
     }
 
     @Override
-    public byte getByte(long position) {
+    public synchronized byte getByte(long position) {
         return pointerWindow.getByte(position);
     }
 
     @Override
-    public void setByte(long position, byte value) {
+    public synchronized void setByte(long position, byte value) {
         pointerWindow.setByte(position, value);
     }
 
     @Override
-    public void insertUninitialized(long startFrom, long length) {
+    public synchronized void insertUninitialized(long startFrom, long length) {
         pointerWindow.insertUninitialized(startFrom, length);
     }
 
     @Override
-    public void insert(long startFrom, long length) {
+    public synchronized void insert(long startFrom, long length) {
         pointerWindow.insert(startFrom, length);
     }
 
     @Override
-    public void insert(long startFrom, byte[] insertedData) {
+    public synchronized void insert(long startFrom, byte[] insertedData) {
         pointerWindow.insert(startFrom, insertedData);
     }
 
     @Override
-    public void insert(long startFrom, byte[] insertedData, int insertedDataOffset, int insertedDataLength) {
+    public synchronized void insert(long startFrom, byte[] insertedData, int insertedDataOffset, int insertedDataLength) {
         pointerWindow.insert(startFrom, insertedData, insertedDataOffset, insertedDataLength);
     }
 
     @Override
-    public void insert(long startFrom, BinaryData insertedData) {
+    public synchronized void insert(long startFrom, BinaryData insertedData) {
         pointerWindow.insert(startFrom, insertedData);
     }
 
     @Override
-    public void insert(long startFrom, BinaryData insertedData, long insertedDataOffset, long insertedDataLength) {
+    public synchronized void insert(long startFrom, BinaryData insertedData, long insertedDataOffset, long insertedDataLength) {
         pointerWindow.insert(startFrom, insertedData, insertedDataOffset, insertedDataLength);
     }
 
@@ -143,12 +143,12 @@ public class DeltaDocument implements EditableBinaryData {
      * @param startFrom start position
      * @param segment inserted segment
      */
-    public void insertSegment(long startFrom, DataSegment segment) {
+    public synchronized void insertSegment(long startFrom, DataSegment segment) {
         pointerWindow.insertSegment(startFrom, segment);
     }
 
     @Override
-    public long insert(long startFrom, InputStream inputStream, long maximumDataSize) throws IOException {
+    public synchronized long insert(long startFrom, InputStream inputStream, long maximumDataSize) throws IOException {
         // TODO optimization later
         long processed = 0;
         byte[] buffer = new byte[BUFFER_SIZE];
@@ -173,25 +173,25 @@ public class DeltaDocument implements EditableBinaryData {
     }
 
     @Override
-    public void replace(long targetPosition, BinaryData replacingData) {
+    public synchronized void replace(long targetPosition, BinaryData replacingData) {
         remove(targetPosition, replacingData.getDataSize());
         insert(targetPosition, replacingData);
     }
 
     @Override
-    public void replace(long targetPosition, BinaryData replacingData, long startFrom, long length) {
+    public synchronized void replace(long targetPosition, BinaryData replacingData, long startFrom, long length) {
         remove(targetPosition, length);
         insert(targetPosition, replacingData, startFrom, length);
     }
 
     @Override
-    public void replace(long targetPosition, byte[] replacingData) {
+    public synchronized void replace(long targetPosition, byte[] replacingData) {
         remove(targetPosition, replacingData.length);
         insert(targetPosition, replacingData);
     }
 
     @Override
-    public void replace(long targetPosition, byte[] replacingData, int replacingDataOffset, int length) {
+    public synchronized void replace(long targetPosition, byte[] replacingData, int replacingDataOffset, int length) {
         remove(targetPosition, length);
         insert(targetPosition, replacingData, replacingDataOffset, length);
     }
@@ -202,40 +202,40 @@ public class DeltaDocument implements EditableBinaryData {
      * @param targetPosition target position
      * @param segment inserted segment
      */
-    public void replaceSegment(long targetPosition, DataSegment segment) {
+    public synchronized void replaceSegment(long targetPosition, DataSegment segment) {
         remove(targetPosition, segment.getLength());
         insertSegment(targetPosition, segment);
     }
 
     @Override
-    public void fillData(long startFrom, long length) {
+    public synchronized void fillData(long startFrom, long length) {
         fillData(startFrom, length, (byte) 0);
     }
 
     @Override
-    public void fillData(long startFrom, long length, byte fill) {
+    public synchronized void fillData(long startFrom, long length, byte fill) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public void remove(long startFrom, long length) {
+    public synchronized void remove(long startFrom, long length) {
         pointerWindow.remove(startFrom, length);
     }
 
     @Override
-    public void clear() {
+    public synchronized void clear() {
         dataLength = 0;
         segments.clear();
         pointerWindow.reset();
     }
 
     @Override
-    public void dispose() {
+    public synchronized void dispose() {
         repository.dropDocument(this);
     }
 
     @Override
-    public void loadFromStream(InputStream stream) throws IOException {
+    public synchronized void loadFromStream(InputStream stream) throws IOException {
         clear();
         DeltaDocumentWindow documentWindow = new DeltaDocumentWindow(this);
         byte[] buffer = new byte[BUFFER_SIZE];
@@ -252,7 +252,7 @@ public class DeltaDocument implements EditableBinaryData {
     }
 
     @Override
-    public void saveToStream(OutputStream stream) throws IOException {
+    public synchronized void saveToStream(OutputStream stream) throws IOException {
         DeltaDocumentWindow documentWindow = new DeltaDocumentWindow(this);
         byte[] buffer = new byte[BUFFER_SIZE];
 
@@ -269,18 +269,18 @@ public class DeltaDocument implements EditableBinaryData {
 
     @Nonnull
     @Override
-    public BinaryData copy() {
+    public synchronized BinaryData copy() {
         return pointerWindow.copy();
     }
 
     @Nonnull
     @Override
-    public BinaryData copy(long startFrom, long length) {
+    public synchronized BinaryData copy(long startFrom, long length) {
         return pointerWindow.copy(startFrom, length);
     }
 
     @Override
-    public void copyToArray(long startFrom, byte[] target, int offset, int length) {
+    public synchronized void copyToArray(long startFrom, byte[] target, int offset, int length) {
         // TODO optimization later
         for (int i = 0; i < length; i++) {
             target[offset + i] = getByte(startFrom + i);
@@ -289,18 +289,18 @@ public class DeltaDocument implements EditableBinaryData {
 
     @Nonnull
     @Override
-    public OutputStream getDataOutputStream() {
+    public synchronized OutputStream getDataOutputStream() {
         return new DeltaDocumentOutputStream(this);
     }
 
     @Nonnull
     @Override
-    public InputStream getDataInputStream() {
+    public synchronized InputStream getDataInputStream() {
         return new DeltaDocumentInputStream(this);
     }
 
     @Override
-    public void setDataSize(long dataSize) {
+    public synchronized void setDataSize(long dataSize) {
         if (dataSize < dataLength) {
             remove(dataSize, dataLength - dataSize);
         } else if (dataSize > dataLength) {
@@ -313,14 +313,14 @@ public class DeltaDocument implements EditableBinaryData {
      *
      * @throws java.io.IOException on input/output error
      */
-    public void save() throws IOException {
+    public synchronized void save() throws IOException {
         repository.saveDocument(this);
     }
 
     /**
      * Resets cached state - needed after change.
      */
-    public void clearCache() {
+    public synchronized void clearCache() {
         pointerWindow.reset();
     }
 
@@ -337,7 +337,7 @@ public class DeltaDocument implements EditableBinaryData {
      * @return data segment
      */
     @Nullable
-    public DataSegment getPartCopy(long position, long length) {
+    public synchronized DataSegment getPartCopy(long position, long length) {
         return pointerWindow.getPartCopy(position, length);
     }
 

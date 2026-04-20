@@ -24,8 +24,8 @@ import java.io.IOException;
 public interface FinishableStream {
 
     /**
-     * Reads remaining data and returns size of all data processed by this
-     * stream.
+     * Reads or writes remaining data and returns size of all data processed by
+     * this stream.
      *
      * @return size of data in bytes
      * @throws IOException if input/output error occurs

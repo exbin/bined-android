@@ -32,8 +32,8 @@ import org.exbin.bined.android.capability.CharAssessorPainterCapable;
 import org.exbin.bined.android.capability.ColorAssessorPainterCapable;
 import org.exbin.bined.operation.android.CodeAreaOperationCommandHandler;
 import org.exbin.bined.operation.android.CodeAreaUndoRedo;
-import org.exbin.framework.bined.BinEdCodeAreaAssessor;
-import org.exbin.framework.bined.FileHandlingMode;
+import org.exbin.bined.component.BinEdCodeAreaAssessor;
+import org.exbin.bined.component.FileProcessingMode;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -97,8 +97,8 @@ public class BinEdFileHandler {
         return codeAreaTableMapAssessor;
     }
 
-    public void setNewData(FileHandlingMode fileHandlingMode) {
-        if (fileHandlingMode == FileHandlingMode.DELTA) {
+    public void setNewData(FileProcessingMode fileProcessingMode) {
+        if (fileProcessingMode == FileProcessingMode.DELTA) {
             codeArea.setContentData(segmentsRepository.createDocument());
         } else {
             codeArea.setContentData(new JnaBufferPagedData());
@@ -110,10 +110,10 @@ public class BinEdFileHandler {
         documentOriginalSize = 0;
     }
 
-    public void openFile(ContentResolver contentResolver, Uri fileUri, FileHandlingMode fileHandlingMode) {
+    public void openFile(ContentResolver contentResolver, Uri fileUri, FileProcessingMode fileProcessingMode) {
         BinaryData oldData = codeArea.getContentData();
         try {
-            if (fileHandlingMode == FileHandlingMode.DELTA) {
+            if (fileProcessingMode == FileProcessingMode.DELTA) {
                 ContentDataSource dataSource = new ContentDataSource(contentResolver, fileUri);
                 segmentsRepository.addDataSource(dataSource);
                 DeltaDocument document = segmentsRepository.createDocument(dataSource);
@@ -205,8 +205,8 @@ public class BinEdFileHandler {
     }
 
     @Nonnull
-    public FileHandlingMode getFileHandlingMode() {
-        return getCodeArea().getContentData() instanceof DeltaDocument ? FileHandlingMode.DELTA : FileHandlingMode.MEMORY;
+    public FileProcessingMode getFileHandlingMode() {
+        return getCodeArea().getContentData() instanceof DeltaDocument ? FileProcessingMode.DELTA : FileProcessingMode.MEMORY;
     }
 
     public void setSegmentsRepository(SegmentsRepository segmentsRepository) {

@@ -19,14 +19,16 @@ import java.io.IOException;
 import java.io.OutputStream;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
-import org.exbin.auxiliary.binary_data.FinishableStream;
+import org.exbin.auxiliary.binary_data.OutOfBoundsException;
 import org.exbin.auxiliary.binary_data.SeekableStream;
 
 /**
  * Delta document output stream.
+ * <p>
+ * Data are expanded as needed.
  */
 @ParametersAreNonnullByDefault
-public class DeltaDocumentOutputStream extends OutputStream implements SeekableStream, FinishableStream {
+public class DeltaDocumentOutputStream extends OutputStream implements SeekableStream {
 
     @Nonnull
     private final DeltaDocumentWindow data;
@@ -43,6 +45,7 @@ public class DeltaDocumentOutputStream extends OutputStream implements SeekableS
             dataSize++;
             data.setDataSize(dataSize);
         }
+
         data.setByte(position++, (byte) value);
     }
 
@@ -58,27 +61,28 @@ public class DeltaDocumentOutputStream extends OutputStream implements SeekableS
 
     @Override
     public void seek(long position) throws IOException {
+        if (position < 0) {
+            throw new OutOfBoundsException("Position is outside of available range");
+        }
+
+        if (position > data.getDataSize()) {
+            data.setDataSize(position);
+        }
+
         this.position = position;
     }
 
     @Override
     public long getStreamSize() {
-        return data.getDataSize();
+        return -1;
     }
 
-    @Override
     public long getProcessedSize() {
         return position;
     }
 
     @Override
     public void close() throws IOException {
-        finish();
-    }
-
-    @Override
-    public long finish() throws IOException {
         position = data.getDataSize();
-        return position;
     }
 }

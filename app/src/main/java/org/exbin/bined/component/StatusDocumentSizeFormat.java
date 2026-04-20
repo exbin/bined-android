@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.framework.bined;
+package org.exbin.bined.component;
 
 import java.util.Objects;
 import javax.annotation.Nonnull;

@@ -25,10 +25,9 @@ import org.exbin.bined.EditMode;
 import org.exbin.bined.EditOperation;
 import org.exbin.bined.PositionCodeType;
 import org.exbin.bined.SelectionRange;
-import org.exbin.bined.editor.android.R;
-import org.exbin.framework.bined.StatusCursorPositionFormat;
-import org.exbin.framework.bined.StatusDocumentSizeFormat;
-import org.exbin.framework.bined.BinaryStatusApi;
+import org.exbin.bined.component.StatusCursorPositionFormat;
+import org.exbin.bined.component.StatusDocumentSizeFormat;
+import org.exbin.bined.component.BinaryStatusApi;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;

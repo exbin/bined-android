@@ -25,6 +25,10 @@ android {
         } else {
             minSdk 14
             multiDexEnabled true
+
+//            sourceSets {
+//                main.java.srcDirs += 'src/legacy'
+//            }
         }
 
         targetSdk 35
@@ -38,7 +42,7 @@ android {
         release {
             minifyEnabled true
 //            shrinkResources false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 

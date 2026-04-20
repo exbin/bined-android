@@ -44,7 +44,7 @@ public interface BinaryData {
     long getDataSize();
 
     /**
-     * Returns particular byte from data.
+     * Returns byte data on the given position.
      *
      * @param position position
      * @return byte on requested position

@@ -48,7 +48,6 @@ import org.exbin.bined.android.CodeAreaCore;
 import org.exbin.bined.android.CodeAreaPainter;
 import org.exbin.bined.android.basic.color.BasicCodeAreaColorsProfile;
 import org.exbin.bined.android.basic.color.BasicColorsCapableCodeAreaPainter;
-import org.exbin.bined.android.capability.FontCapable;
 import org.exbin.bined.basic.BasicBackgroundPaintMode;
 import org.exbin.bined.basic.CodeAreaScrollPosition;
 import org.exbin.bined.basic.HorizontalScrollUnit;

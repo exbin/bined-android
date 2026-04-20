@@ -23,7 +23,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import org.exbin.bined.CodeAreaSection;
 import org.exbin.bined.android.CodeAreaColorAssessor;
 import org.exbin.bined.android.CodeAreaPaintState;
-import org.exbin.framework.bined.BinEdCodeAreaAssessor;
 
 import java.util.Optional;
 

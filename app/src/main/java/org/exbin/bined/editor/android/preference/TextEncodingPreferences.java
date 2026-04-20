@@ -16,7 +16,6 @@
 package org.exbin.bined.editor.android.preference;
 
 import org.exbin.bined.editor.android.options.TextEncodingOptions;
-import org.exbin.bined.editor.android.options.TextFontOptions;
 
 import java.util.ArrayList;
 import java.util.List;

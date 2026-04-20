@@ -20,7 +20,7 @@ import org.exbin.bined.basic.TabKeyHandlingMode;
 import org.exbin.bined.editor.android.options.DataInspectorMode;
 import org.exbin.bined.editor.android.options.EditorOptions;
 import org.exbin.bined.editor.android.options.KeysPanelMode;
-import org.exbin.framework.bined.FileHandlingMode;
+import org.exbin.bined.component.FileProcessingMode;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,13 +48,13 @@ public class EditorPreferences implements EditorOptions {
 
     @Nonnull
     @Override
-    public FileHandlingMode getFileHandlingMode() {
-        FileHandlingMode defaultFileHandlingMode = FileHandlingMode.MEMORY;
+    public FileProcessingMode getFileHandlingMode() {
+        FileProcessingMode defaultFileProcessingMode = FileProcessingMode.MEMORY;
         try {
-            return FileHandlingMode.valueOf(preferences.get(PREFERENCES_FILE_HANDLING_MODE, defaultFileHandlingMode.name()).toUpperCase());
+            return FileProcessingMode.valueOf(preferences.get(PREFERENCES_FILE_HANDLING_MODE, defaultFileProcessingMode.name()).toUpperCase());
         } catch (IllegalArgumentException ex) {
             Logger.getLogger(EditorPreferences.class.getName()).log(Level.SEVERE, null, ex);
-            return defaultFileHandlingMode;
+            return defaultFileProcessingMode;
         }
     }
 
@@ -76,8 +76,8 @@ public class EditorPreferences implements EditorOptions {
     }
 
     @Override
-    public void setFileHandlingMode(FileHandlingMode fileHandlingMode) {
-        preferences.put(PREFERENCES_FILE_HANDLING_MODE, fileHandlingMode.name());
+    public void setFileHandlingMode(FileProcessingMode fileProcessingMode) {
+        preferences.put(PREFERENCES_FILE_HANDLING_MODE, fileProcessingMode.name());
     }
 
     @Nonnull
