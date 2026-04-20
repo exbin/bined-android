@@ -16,9 +16,9 @@
     <string name="action_search">搜索</string>
     <string name="action_undo">撤销</string>
     <string name="action_redo">重做</string>
-    <string name="action_selection_start">设置此处为选区开始处</string>
-    <string name="action_selection_end">设置此处为选区开始处</string>
-    <string name="action_clear_selection">取消选择</string>
+    <string name="action_selection_start">设置此处为选区起始处</string>
+    <string name="action_selection_end">设置此处为选区结束处</string>
+    <string name="action_clear_selection">取消选区</string>
     <string name="action_cut">剪切</string>
     <string name="action_copy">复制</string>
     <string name="action_copy_as_code">以代码形式复制（Copy As Code）</string>
@@ -48,7 +48,7 @@
     <string name="insert_data">插入数据</string>
     <string name="convert_data">转换数据</string>
     <string name="edit_menu">编辑</string>
-    <string name="font">字体</string>
+    <string name="font">字体大小</string>
     <string name="bytes_per_row">单行数据量</string>
     <string name="bytes_per_row_fill">适应屏幕</string>
     <string name="bytes_per_row_4">4 Bytes</string>
@@ -105,11 +105,11 @@
     <string name="search_from_cursor">从光标处搜索</string>
     <string name="search_match_case">大小写匹配</string>
     <string name="search_show_multiple_matches">显示多个匹配项</string>
-    <string name="search_backward_direction">向后搜索</string>
+    <string name="search_backward_direction">向前搜索</string>
     <string name="search_in_progress">正在搜索…</string>
     <string name="search_match_none">未找到匹配项。</string>
     <string name="search_match_single">找到一个匹配项。</string>
-    <string name="search_match_found">显示 %1$d 个匹配项，共 %2$d 个。</string>
+    <string name="search_match_found">显示第 %1$d 个匹配项，共 %2$d 个。</string>
 
     <string name="go_to_dialog_current_position">当前位置</string>
     <string name="go_to_dialog_target_position">目标位置</string>
