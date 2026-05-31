@@ -1507,42 +1507,47 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
             recomputeCharPositions();
         }
 
-        Rect scrollPanelRect = dimensions.getScrollPanelRectangle();
+        final Rect scrollPanelRect = dimensions.getScrollPanelRectangle();
+        Activity activity = (Activity) codeArea.getContext();
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
 //        dataView.layout(scrollPanelRect.left, scrollPanelRect.top, scrollPanelRect.right, scrollPanelRect.bottom);
-        dataView.layout(0, 0, scrollPanelRect.width(), scrollPanelRect.height());
+                dataView.layout(0, 0, scrollPanelRect.width(), scrollPanelRect.height());
 
-        if (rowHeight > 0 && characterWidth > 0) {
-            scrolling.updateCache(codeArea, getHorizontalScrollBarSize(), getVerticalScrollBarSize());
-            scrolling.computeViewDimension(viewDimension, codeArea.getWidth(), codeArea.getHeight(), layout, structure, characterWidth, rowHeight);
-            dataView.setMinimumWidth(viewDimension.getWidth());
-            dataView.setMinimumHeight(viewDimension.getHeight());
+                if (rowHeight > 0 && characterWidth > 0) {
+                    scrolling.updateCache(codeArea, getHorizontalScrollBarSize(), getVerticalScrollBarSize());
+                    scrolling.computeViewDimension(viewDimension, codeArea.getWidth(), codeArea.getHeight(), layout, structure, characterWidth, rowHeight);
+                    dataView.setMinimumWidth(viewDimension.getWidth());
+                    dataView.setMinimumHeight(viewDimension.getHeight());
 
-            scrolling.updateCache(codeArea, getHorizontalScrollBarSize(), getVerticalScrollBarSize());
+                    scrolling.updateCache(codeArea, getHorizontalScrollBarSize(), getVerticalScrollBarSize());
 
-            int documentDataWidth = structure.getCharactersPerRow() * characterWidth;
-            long rowsPerData = (structure.getDataSize() / structure.getBytesPerRow()) + 1;
+                    int documentDataWidth = structure.getCharactersPerRow() * characterWidth;
+                    long rowsPerData = (structure.getDataSize() / structure.getBytesPerRow()) + 1;
 
-            int documentDataHeight;
-            if (rowsPerData > scrolling.getMaximumScrollBarHeight() / rowHeight) {
-                scrolling.setScrollBarVerticalScale(ScrollBarVerticalScale.SCALED);
-                documentDataHeight = scrolling.getMaximumScrollBarHeight();
-            } else {
-                scrolling.setScrollBarVerticalScale(ScrollBarVerticalScale.NORMAL);
-                documentDataHeight = (int) (rowsPerData * rowHeight);
+                    int documentDataHeight;
+                    if (rowsPerData > scrolling.getMaximumScrollBarHeight() / rowHeight) {
+                        scrolling.setScrollBarVerticalScale(ScrollBarVerticalScale.SCALED);
+                        documentDataHeight = scrolling.getMaximumScrollBarHeight();
+                    } else {
+                        scrolling.setScrollBarVerticalScale(ScrollBarVerticalScale.NORMAL);
+                        documentDataHeight = (int) (rowsPerData * rowHeight);
+                    }
+
+                    recomputeDimensions();
+                    // scrollPanelRect = dimensions.getScrollPanelRectangle();
+                    // dataView.layout(scrollPanelRect.left, scrollPanelRect.top, scrollPanelRect.right, scrollPanelRect.bottom);
+                    // dataView.layout(0, 0, scrollPanelRect.width(), scrollPanelRect.height());
+                    dataView.layout(0, 0, documentDataWidth, documentDataHeight);
+                    dataView.setMinimumWidth(documentDataWidth);
+                    dataView.setMinimumHeight(documentDataHeight);
+                }
             }
-
-            recomputeDimensions();
-            scrollPanelRect = dimensions.getScrollPanelRectangle();
-            // dataView.layout(scrollPanelRect.left, scrollPanelRect.top, scrollPanelRect.right, scrollPanelRect.bottom);
-            // dataView.layout(0, 0, scrollPanelRect.width(), scrollPanelRect.height());
-            dataView.layout(0, 0, documentDataWidth, documentDataHeight);
-            dataView.setMinimumWidth(documentDataWidth);
-            dataView.setMinimumHeight(documentDataHeight);
-        }
+        });
 
         // TODO on resize only
         final Rect scrollPanelRectangle = dimensions.getScrollPanelRectangle();
-        Activity activity = (Activity) codeArea.getContext();
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {

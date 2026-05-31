@@ -16,6 +16,7 @@
 package org.exbin.bined.editor.android.preference;
 
 import org.exbin.bined.PositionCodeType;
+import org.exbin.bined.component.StatusNumericGrouping;
 import org.exbin.bined.editor.android.options.StatusOptions;
 import org.exbin.bined.editor.android.options.impl.StatusOptionsImpl;
 import org.exbin.bined.component.StatusCursorPositionFormat;
@@ -119,7 +120,7 @@ public class StatusPreferences implements StatusOptions {
 
     @Override
     public int getOctalSpaceGroupSize() {
-        return preferences.getInt(PREFERENCES_OCTAL_SPACE_GROUP_SIZE, StatusOptionsImpl.DEFAULT_OCTAL_SPACE_GROUP_SIZE);
+        return preferences.getInt(PREFERENCES_OCTAL_SPACE_GROUP_SIZE, StatusNumericGrouping.DEFAULT_OCTAL_SPACE_GROUP_SIZE);
     }
 
     @Override
@@ -129,7 +130,7 @@ public class StatusPreferences implements StatusOptions {
 
     @Override
     public int getDecimalSpaceGroupSize() {
-        return preferences.getInt(PREFERENCES_DECIMAL_SPACE_GROUP_SIZE, StatusOptionsImpl.DEFAULT_DECIMAL_SPACE_GROUP_SIZE);
+        return preferences.getInt(PREFERENCES_DECIMAL_SPACE_GROUP_SIZE, StatusNumericGrouping.DEFAULT_DECIMAL_SPACE_GROUP_SIZE);
     }
 
     @Override
@@ -139,7 +140,7 @@ public class StatusPreferences implements StatusOptions {
 
     @Override
     public int getHexadecimalSpaceGroupSize() {
-        return preferences.getInt(PREFERENCES_HEXADECIMAL_SPACE_GROUP_SIZE, StatusOptionsImpl.DEFAULT_HEXADECIMAL_SPACE_GROUP_SIZE);
+        return preferences.getInt(PREFERENCES_HEXADECIMAL_SPACE_GROUP_SIZE, StatusNumericGrouping.DEFAULT_HEXADECIMAL_SPACE_GROUP_SIZE);
     }
 
     @Override

@@ -1,6 +1,6 @@
 0.2.10
-- Bug fixes
 - Added Greek translation
+- Bug fixes
 
 0.2.9 (2025-10-29)
 - Added edit selection dialog

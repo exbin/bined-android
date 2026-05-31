@@ -31,7 +31,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.appcompat.widget.SwitchCompat;
 
@@ -75,8 +74,8 @@ public class SearchDialog extends AppCompatDialogFragment {
             keyboardShown = showKeyboard;
             codeArea.requestFocus();
             codeArea.postDelayed(() -> {
-                InputMethodManager im = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (showKeyboard) {
+                InputMethodManager im = (InputMethodManager) codeArea.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+//                if (showKeyboard) {
                     // TODO im.setInputMethodAndSubtype();
                     im.showSoftInput(codeArea, InputMethodManager.SHOW_IMPLICIT);
 //                    if (CompatUtils.isAndroidTV(getContext())) {
@@ -86,9 +85,9 @@ public class SearchDialog extends AppCompatDialogFragment {
                     if (dialog != null) {
                         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
                     }
-                } else {
-                    im.hideSoftInputFromWindow(codeArea.getWindowToken(), 0);
-                }
+//                } else {
+//                    im.hideSoftInputFromWindow(codeArea.getWindowToken(), 0);
+//                }
             }, 100);
         }
     };
@@ -133,9 +132,6 @@ public class SearchDialog extends AppCompatDialogFragment {
             codeArea.setCodeCharactersCase(templateCodeArea.getCodeCharactersCase());
         }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle(getResources().getString(R.string.search_title));
-
         LayoutInflater inflater = activity.getLayoutInflater();
         searchView = inflater.inflate(R.layout.search_view, null);
 
@@ -163,6 +159,8 @@ public class SearchDialog extends AppCompatDialogFragment {
             }
         });
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle(getResources().getString(R.string.search_title));
         builder.setView(searchView);
         builder.setPositiveButton(R.string.button_search, (dialog, which) -> {
             saveSearchParameters();
@@ -237,7 +235,7 @@ public class SearchDialog extends AppCompatDialogFragment {
     }
 
     @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
+    public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         saveSearchParameters();
     }

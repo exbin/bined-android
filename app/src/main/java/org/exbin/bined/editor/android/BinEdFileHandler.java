@@ -79,7 +79,6 @@ public class BinEdFileHandler {
         long lPtr = Pointer.nativeValue(javaPointer);
         Native.free(lPtr); */
         codeArea.setContentData(new JnaBufferEditableData());
-        codeArea.setEditOperation(EditOperation.INSERT);
         undoRedo = new CodeAreaUndoRedo(codeArea);
 
         CodeAreaOperationCommandHandler commandHandler = new CodeAreaOperationCommandHandler(codeArea.getContext(), codeArea, undoRedo);

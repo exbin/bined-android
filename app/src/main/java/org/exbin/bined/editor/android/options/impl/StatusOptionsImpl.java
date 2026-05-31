@@ -15,6 +15,7 @@
  */
 package org.exbin.bined.editor.android.options.impl;
 
+import org.exbin.bined.component.StatusNumericGrouping;
 import org.exbin.bined.editor.android.options.StatusOptions;
 import org.exbin.bined.editor.android.preference.StatusPreferences;
 import org.exbin.bined.component.StatusCursorPositionFormat;
@@ -29,15 +30,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class StatusOptionsImpl implements StatusOptions {
 
-    public static int DEFAULT_OCTAL_SPACE_GROUP_SIZE = 4;
-    public static int DEFAULT_DECIMAL_SPACE_GROUP_SIZE = 3;
-    public static int DEFAULT_HEXADECIMAL_SPACE_GROUP_SIZE = 4;
-
     private StatusCursorPositionFormat cursorPositionFormat = new StatusCursorPositionFormat();
     private StatusDocumentSizeFormat documentSizeFormat = new StatusDocumentSizeFormat();
-    private int octalSpaceGroupSize = DEFAULT_OCTAL_SPACE_GROUP_SIZE;
-    private int decimalSpaceGroupSize = DEFAULT_DECIMAL_SPACE_GROUP_SIZE;
-    private int hexadecimalSpaceGroupSize = DEFAULT_HEXADECIMAL_SPACE_GROUP_SIZE;
+    private StatusNumericGrouping statusNumericGrouping = new StatusNumericGrouping();
 
     @Nonnull
     @Override
@@ -63,32 +58,32 @@ public class StatusOptionsImpl implements StatusOptions {
 
     @Override
     public int getOctalSpaceGroupSize() {
-        return octalSpaceGroupSize;
+        return statusNumericGrouping.getOctalSpaceGroupSize();
     }
 
     @Override
     public void setOctalSpaceGroupSize(int octalSpaceGroupSize) {
-        this.octalSpaceGroupSize = octalSpaceGroupSize;
+        statusNumericGrouping.setOctalSpaceGroupSize(octalSpaceGroupSize);
     }
 
     @Override
     public int getDecimalSpaceGroupSize() {
-        return decimalSpaceGroupSize;
+        return statusNumericGrouping.getDecimalSpaceGroupSize();
     }
 
     @Override
     public void setDecimalSpaceGroupSize(int decimalSpaceGroupSize) {
-        this.decimalSpaceGroupSize = decimalSpaceGroupSize;
+        statusNumericGrouping.setDecimalSpaceGroupSize(decimalSpaceGroupSize);
     }
 
     @Override
     public int getHexadecimalSpaceGroupSize() {
-        return hexadecimalSpaceGroupSize;
+        return statusNumericGrouping.getHexadecimalSpaceGroupSize();
     }
 
     @Override
     public void setHexadecimalSpaceGroupSize(int hexadecimalSpaceGroupSize) {
-        this.hexadecimalSpaceGroupSize = hexadecimalSpaceGroupSize;
+        statusNumericGrouping.setHexadecimalSpaceGroupSize(hexadecimalSpaceGroupSize);
     }
 
     public void loadFromPreferences(StatusPreferences preferences) {
@@ -96,9 +91,9 @@ public class StatusOptionsImpl implements StatusOptions {
         cursorPositionFormat.setShowOffset(preferences.isCursorShowOffset());
         documentSizeFormat.setCodeType(preferences.getDocumentSizeCodeType());
         documentSizeFormat.setShowRelative(preferences.isDocumentSizeShowRelative());
-        octalSpaceGroupSize = preferences.getOctalSpaceGroupSize();
-        decimalSpaceGroupSize = preferences.getDecimalSpaceGroupSize();
-        hexadecimalSpaceGroupSize = preferences.getHexadecimalSpaceGroupSize();
+        statusNumericGrouping.setOctalSpaceGroupSize(preferences.getOctalSpaceGroupSize());
+        statusNumericGrouping.setDecimalSpaceGroupSize(preferences.getDecimalSpaceGroupSize());
+        statusNumericGrouping.setHexadecimalSpaceGroupSize(preferences.getHexadecimalSpaceGroupSize());
     }
 
     public void saveToPreferences(StatusPreferences preferences) {
@@ -106,16 +101,14 @@ public class StatusOptionsImpl implements StatusOptions {
         preferences.setCursorShowOffset(cursorPositionFormat.isShowOffset());
         preferences.setDocumentSizeCodeType(documentSizeFormat.getCodeType());
         preferences.setDocumentSizeShowRelative(documentSizeFormat.isShowRelative());
-        preferences.setOctalSpaceGroupSize(octalSpaceGroupSize);
-        preferences.setDecimalSpaceGroupSize(decimalSpaceGroupSize);
-        preferences.setHexadecimalSpaceGroupSize(hexadecimalSpaceGroupSize);
+        preferences.setOctalSpaceGroupSize(statusNumericGrouping.getOctalSpaceGroupSize());
+        preferences.setDecimalSpaceGroupSize(statusNumericGrouping.getDecimalSpaceGroupSize());
+        preferences.setHexadecimalSpaceGroupSize(statusNumericGrouping.getHexadecimalSpaceGroupSize());
     }
 
     public void setOptions(StatusOptionsImpl statusOptions) {
         cursorPositionFormat = statusOptions.cursorPositionFormat;
         documentSizeFormat = statusOptions.documentSizeFormat;
-        octalSpaceGroupSize = statusOptions.octalSpaceGroupSize;
-        decimalSpaceGroupSize = statusOptions.decimalSpaceGroupSize;
-        hexadecimalSpaceGroupSize = statusOptions.hexadecimalSpaceGroupSize;
+        statusNumericGrouping = statusOptions.statusNumericGrouping;
     }
 }
