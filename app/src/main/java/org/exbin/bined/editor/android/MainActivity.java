@@ -54,7 +54,10 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
 import androidx.core.os.LocaleListCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.rustamg.filedialogs.FileDialog;
@@ -234,7 +237,20 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
             CompatUtils.enableEdgeToEdge(this);
-            getWindow().getDecorView().setPadding(0, 0, 0, getNavigationBarHeight());
+            ViewCompat.setOnApplyWindowInsetsListener(getWindow().getDecorView(), (view, windowInsets) -> {
+                // Get the navigation bar insets
+                Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.navigationBars());
+
+                // Apply the navigation bar height as bottom padding
+                view.setPadding(
+                        view.getPaddingLeft(),
+                        view.getPaddingTop(),
+                        view.getPaddingRight(),
+                        insets.bottom // Dynamic height in pixels
+                );
+
+                return windowInsets;
+            });
         }
 
         super.onCreate(savedInstanceState);
@@ -1677,14 +1693,5 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
     public enum FallbackFileType {
         FILE, TABLE_FILE
-    }
-
-    private int getNavigationBarHeight() {
-        Resources resources = getResources();
-        int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            return resources.getDimensionPixelSize(resourceId);
-        }
-        return 0;
     }
 }
