@@ -53,6 +53,7 @@ public class CodeAreaPreferences implements CodeAreaOptions {
     public static final String PREFERENCES_MAX_BYTES_PER_ROW = "maxBytesPerRow";
     public static final String PREFERENCES_MIN_ROW_POSITION_LENGTH = "minRowPositionLength";
     public static final String PREFERENCES_MAX_ROW_POSITION_LENGTH = "maxRowPositionLength";
+    public static final String PREFERENCES_SHOW_MIRROR_CURSOR = "showMirrorCursor";
 
     private final Preferences preferences;
 
@@ -209,6 +210,7 @@ public class CodeAreaPreferences implements CodeAreaOptions {
         codeArea.setCodeCharactersCase(getCodeCharactersCase());
         codeArea.setRowWrapping(getRowWrappingMode());
         codeArea.setMaxBytesPerRow(getMaxBytesPerRow());
+        codeArea.setShowMirrorCursor(true); // Ensure mirror cursor is always shown
         NonprintablesCodeAreaAssessor nonprintablesCodeAreaAssessor = CodeAreaAndroidUtils.findColorAssessor((ColorAssessorPainterCapable) codeArea.getPainter(), NonprintablesCodeAreaAssessor.class);
         if (nonprintablesCodeAreaAssessor != null) {
             nonprintablesCodeAreaAssessor.setShowNonprintables(isShowNonprintables());

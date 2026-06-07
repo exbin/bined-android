@@ -47,6 +47,17 @@ public class DefaultCodeAreaCharAssessor implements CodeAreaCharAssessor {
     private CharsetDecoder decoder;
     private ByteBuffer byteBuffer;
     private CharBuffer charBuffer = null;
+    
+    // 用于缓存已分析的行字符位置
+    private long lastRowDataPosition = -1;
+    private char[] rowCharacters = null;
+    
+    // UTF-8 字节序列分析
+    private static final int UTF8_CONTINUE_MASK = 0xC0;
+    private static final int UTF8_CONTINUE = 0x80;
+    
+    // 多字节编码检测阈值
+    private static final int HIGH_BYTE_THRESHOLD = 0x80;
 
     public DefaultCodeAreaCharAssessor() {
         parentAssessor = null;
@@ -71,37 +82,135 @@ public class DefaultCodeAreaCharAssessor implements CodeAreaCharAssessor {
             decoder.onMalformedInput(CodingErrorAction.REPLACE);
             byteBuffer = ByteBuffer.allocate(maxBytesPerChar);
             this.charset = painterCharset;
+            lastRowDataPosition = -1; // 字符集改变时清除缓存
         }
         rowData = codeAreaPainterState.getRowData();
     }
 
+    /**
+     * 预先分析一行数据，确定每个位置应该显示什么字符
+     */
+    private void analyzeRow(long rowDataPosition) {
+        if (rowCharacters == null || rowCharacters.length < rowData.length) {
+            rowCharacters = new char[rowData.length];
+        }
+        
+        // 初始化为空格
+        for (int i = 0; i < rowData.length; i++) {
+            rowCharacters[i] = ' ';
+        }
+        
+        String charsetName = charset.name();
+        int byteIndex = 0;
+        boolean isInDoubleByte = false; // 跟踪是否在双字节字符中
+        
+        while (byteIndex < rowData.length && rowDataPosition + byteIndex < dataSize) {
+            byte currentByte = rowData[byteIndex];
+            int unsignedByte = currentByte & 0xFF;
+            
+            boolean isStartByte = false;
+            
+            // UTF-8 处理
+            if (charsetName.equals("UTF-8")) {
+                if ((unsignedByte & UTF8_CONTINUE_MASK) != UTF8_CONTINUE) {
+                    isStartByte = true;
+                    isInDoubleByte = false;
+                } else {
+                    isStartByte = false;
+                }
+            }
+            // UTF-16LE 处理 - 固定2字节
+            else if (charsetName.equals("UTF-16LE")) {
+                if ((byteIndex & 1) == 0) {
+                    isStartByte = true;
+                    isInDoubleByte = false;
+                } else {
+                    isStartByte = false;
+                }
+            }
+            // UTF-16BE 处理 - 固定2字节
+            else if (charsetName.equals("UTF-16BE")) {
+                if ((byteIndex & 1) == 0) {
+                    isStartByte = true;
+                    isInDoubleByte = false;
+                } else {
+                    isStartByte = false;
+                }
+            }
+            // GBK/GB2312/GB18030 处理
+            else if (charsetName.startsWith("GB") || charsetName.equals("GB18030")) {
+                if (isInDoubleByte) {
+                    // 前一个字节是起始字节，这个是第二个字节
+                    isStartByte = false;
+                    isInDoubleByte = false;
+                } else if (unsignedByte >= 0x81 && unsignedByte <= 0xFE) {
+                    // GBK第一字节范围是0x81-0xFE
+                    isStartByte = true;
+                    isInDoubleByte = true;
+                } else {
+                    // ASCII单字节字符
+                    isStartByte = true;
+                    isInDoubleByte = false;
+                }
+            }
+            // Big5/Shift_JIS/EUC-KR等处理
+            else if (charsetName.equals("Big5") || charsetName.equals("Shift_JIS") || charsetName.equals("EUC-KR")) {
+                if (isInDoubleByte) {
+                    isStartByte = false;
+                    isInDoubleByte = false;
+                } else if (unsignedByte >= 0x80) {
+                    isStartByte = true;
+                    isInDoubleByte = true;
+                } else {
+                    isStartByte = true;
+                    isInDoubleByte = false;
+                }
+            }
+            // 默认处理
+            else {
+                isStartByte = true;
+                isInDoubleByte = false;
+            }
+            
+            if (isStartByte) {
+                decoder.reset();
+                
+                int availableBytes = Math.min(maxBytesPerChar, (int)(dataSize - (rowDataPosition + byteIndex)));
+                availableBytes = Math.min(availableBytes, rowData.length - byteIndex);
+                
+                byteBuffer.clear();
+                byteBuffer.put(rowData, byteIndex, availableBytes);
+                byteBuffer.rewind();
+                charBuffer.clear();
+                try {
+                    decoder.decode(byteBuffer, charBuffer, true);
+                    if (charBuffer.position() > 0) {
+                        charBuffer.rewind();
+                        rowCharacters[byteIndex] = charBuffer.get();
+                    }
+                } catch (CoderMalfunctionError | BufferUnderflowException ex) {
+                    // ignore
+                }
+            }
+            
+            byteIndex++;
+        }
+        
+        lastRowDataPosition = rowDataPosition;
+    }
+
     @Override
     public char getPreviewCharacter(long rowDataPosition, int byteOnRow, int charOnRow, CodeAreaSection section) {
-        if (byteOnRow > rowData.length - maxBytesPerChar || rowDataPosition >= dataSize) {
+        if (byteOnRow >= rowData.length || rowDataPosition + byteOnRow >= dataSize) {
             return ' ';
         }
 
         if (maxBytesPerChar > 1) {
-            decoder.reset();
-
-            if (rowDataPosition + maxBytesPerChar > dataSize) {
-                byteBuffer.clear();
-                byteBuffer.put(rowData, byteOnRow, (int) (dataSize - rowDataPosition));
-            } else {
-                byteBuffer.rewind();
-                byteBuffer.put(rowData, byteOnRow, maxBytesPerChar);
+            // 缓存优化：仅当行改变时重新分析
+            if (lastRowDataPosition != rowDataPosition) {
+                analyzeRow(rowDataPosition);
             }
-            byteBuffer.rewind();
-            charBuffer.clear();
-            try {
-                decoder.decode(byteBuffer, charBuffer, true);
-                if (charBuffer.position() > 0) {
-                    charBuffer.rewind();
-                    return charBuffer.get();
-                }
-            } catch (CoderMalfunctionError | BufferUnderflowException ex) {
-                // ignore
-            }
+            return rowCharacters[byteOnRow];
         } else {
             if (charMapping == null) {
                 buildCharMapping();
@@ -109,8 +218,6 @@ public class DefaultCodeAreaCharAssessor implements CodeAreaCharAssessor {
 
             return charMapping[rowData[byteOnRow] & 0xFF];
         }
-
-        return ' ';
     }
 
     @Override

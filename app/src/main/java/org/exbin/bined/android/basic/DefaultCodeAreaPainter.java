@@ -269,7 +269,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         structure.updateCache(codeArea, charactersPerPage);
         codeCharactersCase = ((CodeCharactersCaseCapable) codeArea).getCodeCharactersCase();
         backgroundPaintMode = ((BackgroundPaintCapable) codeArea).getBackgroundPaintMode();
-        showMirrorCursor = ((CaretCapable) codeArea).isShowMirrorCursor();
+        showMirrorCursor = true; // Always show mirror cursor regardless of settings
         minRowPositionLength = ((RowWrappingCapable) codeArea).getMinRowPositionLength();
         maxRowPositionLength = ((RowWrappingCapable) codeArea).getMaxRowPositionLength();
 
@@ -1048,53 +1048,54 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         }
 
         DefaultCodeAreaCaret caret = (DefaultCodeAreaCaret) ((CaretCapable) codeArea).getCodeAreaCaret();
+        
+        // Paint primary cursor
         Rect cursorRect = getPositionRect(caret.getDataPosition(), caret.getCodeOffset(), caret.getSection());
-        if (cursorRect == null) {
-            return;
-        }
+        if (cursorRect != null) {
+            Rect scrolledCursorRect = new Rect(cursorRect.left + dataViewOffsetX, cursorRect.top + dataViewOffsetY, cursorRect.right + dataViewOffsetX, cursorRect.bottom + dataViewOffsetY);
 
-        Rect scrolledCursorRect = new Rect(cursorRect.left + dataViewOffsetX, cursorRect.top + dataViewOffsetY, cursorRect.right + dataViewOffsetX, cursorRect.bottom + dataViewOffsetY);
+            g.save();
+            Rect clipBounds = g.getClipBounds();
+            Rect mainAreaRect = dimensions.getMainAreaRectangle();
+            Rect mainAreaRectAdj = new Rect(mainAreaRect.left + dataViewOffsetX, mainAreaRect.top + dataViewOffsetY, mainAreaRect.right + dataViewOffsetX, mainAreaRect.bottom + dataViewOffsetY);
 
-        g.save();
-        Rect clipBounds = g.getClipBounds();
-        Rect mainAreaRect = dimensions.getMainAreaRectangle();
-        Rect mainAreaRectAdj = new Rect(mainAreaRect.left + dataViewOffsetX, mainAreaRect.top + dataViewOffsetY, mainAreaRect.right + dataViewOffsetX, mainAreaRect.bottom + dataViewOffsetY);
+            Rect intersection = CodeAreaAndroidUtils.computeIntersection(mainAreaRectAdj, scrolledCursorRect);
+            boolean cursorVisible = caret.isCursorVisible() && (intersection == null || !intersection.isEmpty());
 
-        Rect intersection = CodeAreaAndroidUtils.computeIntersection(mainAreaRectAdj, scrolledCursorRect);
-        boolean cursorVisible = caret.isCursorVisible() && (intersection == null || !intersection.isEmpty());
-
-        if (cursorVisible) {
-            if (intersection == null) {
-                intersection = scrolledCursorRect;
-            }
-            g.clipRect(intersection);
-            DefaultCodeAreaCaret.CursorRenderingMode renderingMode = caret.getRenderingMode();
-            paint.setColor(colorsProfile.getCursorColor());
-            paintCursorRect(g, intersection, scrolledCursorRect, cursorRect, renderingMode, caret);
-        }
-
-        // Paint mirror cursor
-        if (viewMode == CodeAreaViewMode.DUAL && showMirrorCursor) {
-            updateMirrorCursorRect(caret.getDataPosition(), caret.getSection());
-            Rect mirrorCursorRect = cursorDataCache.mirrorCursorRect;
-            if (mirrorCursorRect != null) {
-                Rect mirrorCursorRectAdj = new Rect(mirrorCursorRect.left + dataViewOffsetX, mirrorCursorRect.top + dataViewOffsetY, mirrorCursorRect.right + dataViewOffsetX, mirrorCursorRect.bottom + dataViewOffsetY);
-                intersection = CodeAreaAndroidUtils.computeIntersection(mainAreaRectAdj, mirrorCursorRectAdj);
-                boolean mirrorCursorVisible = intersection != null && !intersection.isEmpty();
-                if (mirrorCursorVisible) {
-                    g.restore();
-                    g.save();
-                    g.clipRect(intersection);
-                    paint.setStyle(Paint.Style.STROKE);
-                    paint.setColor(colorsProfile.getCursorColor());
-                    paint.setPathEffect(cursorDataCache.dashedStroke);
-                    g.drawRect(mirrorCursorRectAdj.left, mirrorCursorRectAdj.top, mirrorCursorRectAdj.right - 1, mirrorCursorRectAdj.bottom - 1, paint);
-                    paint.setPathEffect(null);
-                    paint.setStyle(Paint.Style.FILL_AND_STROKE);
+            if (cursorVisible) {
+                if (intersection == null) {
+                    intersection = scrolledCursorRect;
                 }
+                g.clipRect(intersection);
+                DefaultCodeAreaCaret.CursorRenderingMode renderingMode = caret.getRenderingMode();
+                paint.setColor(colorsProfile.getCursorColor());
+                paintCursorRect(g, intersection, scrolledCursorRect, cursorRect, renderingMode, caret);
+            }
+            g.restore();
+        }
+
+        // Paint mirror cursor - always show it as a solid filled cursor when in dual view mode
+        if (viewMode == CodeAreaViewMode.DUAL) {
+            CodeAreaSection mirrorSection = caret.getSection() == BasicCodeAreaSection.CODE_MATRIX ? BasicCodeAreaSection.TEXT_PREVIEW : BasicCodeAreaSection.CODE_MATRIX;
+            Rect mirrorCursorRect = getPositionRect(caret.getDataPosition(), 0, mirrorSection);
+            if (mirrorCursorRect != null) {
+                g.save();
+                Rect mainAreaRect = dimensions.getMainAreaRectangle();
+                Rect mainAreaRectAdj = new Rect(mainAreaRect.left + dataViewOffsetX, mainAreaRect.top + dataViewOffsetY, mainAreaRect.right + dataViewOffsetX, mainAreaRect.bottom + dataViewOffsetY);
+                Rect mirrorCursorRectAdj = new Rect(mirrorCursorRect.left + dataViewOffsetX, mirrorCursorRect.top + dataViewOffsetY, mirrorCursorRect.right + dataViewOffsetX, mirrorCursorRect.bottom + dataViewOffsetY);
+                Rect intersection = CodeAreaAndroidUtils.computeIntersection(mainAreaRectAdj, mirrorCursorRectAdj);
+                boolean mirrorCursorVisible = caret.isCursorVisible() && (intersection == null || !intersection.isEmpty());
+                if (mirrorCursorVisible) {
+                    if (intersection == null) {
+                        intersection = mirrorCursorRectAdj;
+                    }
+                    g.clipRect(intersection);
+                    paint.setColor(colorsProfile.getCursorColor());
+                    g.drawRect(intersection, paint);
+                }
+                g.restore();
             }
         }
-        g.restore();
     }
 
     private void paintCursorRect(Canvas g, Rect intersection, Rect scrolledCursorRect, Rect cursorRect, DefaultCodeAreaCaret.CursorRenderingMode renderingMode, DefaultCodeAreaCaret caret) {
