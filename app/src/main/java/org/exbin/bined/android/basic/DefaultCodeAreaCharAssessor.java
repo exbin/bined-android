@@ -82,8 +82,9 @@ public class DefaultCodeAreaCharAssessor implements CodeAreaCharAssessor {
             decoder.onMalformedInput(CodingErrorAction.REPLACE);
             byteBuffer = ByteBuffer.allocate(maxBytesPerChar);
             this.charset = painterCharset;
-            lastRowDataPosition = -1; // 字符集改变时清除缓存
         }
+        // 每次绘制都清除缓存，确保数据修改后能刷新显示
+        lastRowDataPosition = -1;
         rowData = codeAreaPainterState.getRowData();
     }
 
