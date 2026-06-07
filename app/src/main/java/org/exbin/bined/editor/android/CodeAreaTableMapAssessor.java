@@ -61,15 +61,15 @@ public class CodeAreaTableMapAssessor implements CodeAreaCharAssessor {
     private ByteBuffer byteBuffer;
     private CharBuffer charBuffer = null;
     
-    // 用于缓存已分析的行字符位置
+    // Cache for analyzed row character positions
     private long lastRowDataPosition = -1;
     private char[] rowCharacters = null;
     
-    // UTF-8 字节序列分析
+    // UTF-8 byte sequence analysis
     private static final int UTF8_CONTINUE_MASK = 0xC0;
     private static final int UTF8_CONTINUE = 0x80;
     
-    // 多字节编码检测阈值
+    // Multi-byte encoding detection threshold
     private static final int HIGH_BYTE_THRESHOLD = 0x80;
 
     protected boolean useTable = false;
@@ -99,27 +99,27 @@ public class CodeAreaTableMapAssessor implements CodeAreaCharAssessor {
             byteBuffer = ByteBuffer.allocate(maxBytesPerChar);
             this.charset = painterCharset;
         }
-        // 每次绘制都清除缓存，确保数据修改后能刷新显示
+        // Clear cache on each paint to ensure refreshed display after data modification
         lastRowDataPosition = -1;
         rowData = codeAreaPainterState.getRowData();
     }
 
     /**
-     * 预先分析一行数据，确定每个位置应该显示什么字符
+     * Pre-analyze a row of data to determine what character to show at each position
      */
     private void analyzeRow(long rowDataPosition) {
         if (rowCharacters == null || rowCharacters.length < rowData.length) {
             rowCharacters = new char[rowData.length];
         }
         
-        // 初始化为空格
+        // Initialize with spaces
         for (int i = 0; i < rowData.length; i++) {
             rowCharacters[i] = ' ';
         }
         
         String charsetName = charset.name();
         int byteIndex = 0;
-        boolean isInDoubleByte = false; // 跟踪是否在双字节字符中
+        boolean isInDoubleByte = false; // Track if we're in a double-byte character
         
         while (byteIndex < rowData.length && rowDataPosition + byteIndex < dataSize) {
             byte currentByte = rowData[byteIndex];
@@ -127,7 +127,7 @@ public class CodeAreaTableMapAssessor implements CodeAreaCharAssessor {
             
             boolean isStartByte = false;
             
-            // UTF-8 处理
+            // UTF-8 handling
             if (charsetName.equals("UTF-8")) {
                 if ((unsignedByte & UTF8_CONTINUE_MASK) != UTF8_CONTINUE) {
                     isStartByte = true;
@@ -136,7 +136,7 @@ public class CodeAreaTableMapAssessor implements CodeAreaCharAssessor {
                     isStartByte = false;
                 }
             }
-            // UTF-16LE 处理 - 固定2字节
+            // UTF-16LE handling - fixed 2 bytes
             else if (charsetName.equals("UTF-16LE")) {
                 if ((byteIndex & 1) == 0) {
                     isStartByte = true;
@@ -145,7 +145,7 @@ public class CodeAreaTableMapAssessor implements CodeAreaCharAssessor {
                     isStartByte = false;
                 }
             }
-            // UTF-16BE 处理 - 固定2字节
+            // UTF-16BE handling - fixed 2 bytes
             else if (charsetName.equals("UTF-16BE")) {
                 if ((byteIndex & 1) == 0) {
                     isStartByte = true;
@@ -154,23 +154,23 @@ public class CodeAreaTableMapAssessor implements CodeAreaCharAssessor {
                     isStartByte = false;
                 }
             }
-            // GBK/GB2312/GB18030 处理
+            // GBK/GB2312/GB18030 handling
             else if (charsetName.startsWith("GB") || charsetName.equals("GB18030")) {
                 if (isInDoubleByte) {
-                    // 前一个字节是起始字节，这个是第二个字节
+                    // Previous byte was start byte, this is second byte
                     isStartByte = false;
                     isInDoubleByte = false;
                 } else if (unsignedByte >= 0x81 && unsignedByte <= 0xFE) {
-                    // GBK第一字节范围是0x81-0xFE
+                    // GBK first byte range is 0x81-0xFE
                     isStartByte = true;
                     isInDoubleByte = true;
                 } else {
-                    // ASCII单字节字符
+                    // ASCII single-byte character
                     isStartByte = true;
                     isInDoubleByte = false;
                 }
             }
-            // Big5/Shift_JIS/EUC-KR等处理
+            // Big5/Shift_JIS/EUC-KR etc. handling
             else if (charsetName.equals("Big5") || charsetName.equals("Shift_JIS") || charsetName.equals("EUC-KR")) {
                 if (isInDoubleByte) {
                     isStartByte = false;
@@ -183,7 +183,7 @@ public class CodeAreaTableMapAssessor implements CodeAreaCharAssessor {
                     isInDoubleByte = false;
                 }
             }
-            // 默认处理
+            // Default handling
             else {
                 isStartByte = true;
                 isInDoubleByte = false;
@@ -241,7 +241,7 @@ public class CodeAreaTableMapAssessor implements CodeAreaCharAssessor {
         }
 
         if (maxBytesPerChar > 1) {
-            // 缓存优化：仅当行改变时重新分析
+            // Cache optimization: only re-analyze when row changes
             if (lastRowDataPosition != rowDataPosition) {
                 analyzeRow(rowDataPosition);
             }
