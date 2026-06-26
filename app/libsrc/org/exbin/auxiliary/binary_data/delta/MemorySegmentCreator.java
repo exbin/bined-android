@@ -15,14 +15,13 @@
  */
 package org.exbin.auxiliary.binary_data.delta;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.auxiliary.binary_data.EditableBinaryData;
 
 /**
  * Memory segment creator.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface MemorySegmentCreator {
 
     /**
@@ -30,6 +29,5 @@ public interface MemorySegmentCreator {
      *
      * @return data page
      */
-    @Nonnull
     EditableBinaryData createSegment();
 }

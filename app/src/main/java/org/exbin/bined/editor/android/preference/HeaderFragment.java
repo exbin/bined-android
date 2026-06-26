@@ -23,12 +23,12 @@ import androidx.preference.PreferenceFragmentCompat;
 import org.exbin.bined.editor.android.R;
 import org.exbin.bined.editor.android.SettingsActivity;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * View preferences fragment.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class HeaderFragment extends PreferenceFragmentCompat {
 
     public static final String APPEARANCE_GROUP = "appearance_group";

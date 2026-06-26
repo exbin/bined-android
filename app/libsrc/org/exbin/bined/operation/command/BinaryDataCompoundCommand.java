@@ -17,13 +17,12 @@ package org.exbin.bined.operation.command;
 
 import java.util.Collection;
 import java.util.List;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Interface for compound command.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface BinaryDataCompoundCommand extends BinaryDataCommand {
 
     /**
@@ -45,7 +44,6 @@ public interface BinaryDataCompoundCommand extends BinaryDataCommand {
      *
      * @return list of commands
      */
-    @Nonnull
     List<BinaryDataCommand> getCommands();
 
     /**

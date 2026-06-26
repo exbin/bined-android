@@ -20,13 +20,12 @@ import android.view.KeyEvent;
 import org.exbin.bined.ScrollBarOrientation;
 import org.exbin.bined.basic.SelectingMode;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Interface for code area data manipulation.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface CodeAreaCommandHandler {
 
     /**
@@ -130,10 +129,9 @@ public interface CodeAreaCommandHandler {
      */
     boolean checkEditAllowed();
 
-    @ParametersAreNonnullByDefault
+    @NullMarked
     interface CodeAreaCommandHandlerFactory {
 
-        @Nonnull
         CodeAreaCommandHandler createCommandHandler(CodeAreaCore codeArea);
     }
 }

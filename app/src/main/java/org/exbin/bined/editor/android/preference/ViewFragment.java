@@ -30,12 +30,12 @@ import org.exbin.bined.editor.android.SettingsActivity;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * View preferences fragment.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class ViewFragment extends PreferenceFragmentCompat {
 
     public static final String FONT_KEY = "font";

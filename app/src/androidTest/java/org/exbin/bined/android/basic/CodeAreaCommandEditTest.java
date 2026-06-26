@@ -29,12 +29,12 @@ import org.exbin.bined.editor.android.R;
 import org.junit.Assert;
 import org.junit.Test;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Tests for CodeArea component.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class CodeAreaCommandEditTest extends CodeAreaComponentTest {
 
     public CodeAreaCommandEditTest() {

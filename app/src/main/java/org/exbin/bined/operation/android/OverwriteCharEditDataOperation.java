@@ -24,14 +24,13 @@ import org.exbin.bined.operation.BinaryDataUndoableOperation;
 
 import java.nio.charset.Charset;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Operation for editing data using overwrite mode.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class OverwriteCharEditDataOperation extends CharEditDataOperation {
 
     protected final long startPosition;
@@ -45,7 +44,6 @@ public class OverwriteCharEditDataOperation extends CharEditDataOperation {
         this.charset = charset;
     }
 
-    @Nonnull
     @Override
     public BasicBinaryDataOperationType getType() {
         return BasicBinaryDataOperationType.EDIT_DATA;
@@ -56,7 +54,6 @@ public class OverwriteCharEditDataOperation extends CharEditDataOperation {
         execute(contentData, false);
     }
 
-    @Nonnull
     @Override
     public BinaryDataUndoableOperation executeWithUndo(EditableBinaryData contentData) {
         return CodeAreaUtils.requireNonNull(execute(contentData, true));
@@ -106,7 +103,7 @@ public class OverwriteCharEditDataOperation extends CharEditDataOperation {
         return charLength;
     }
 
-    @ParametersAreNonnullByDefault
+    @NullMarked
     private static class UndoOperation implements BinaryDataUndoableOperation, BinaryDataAppendableOperation {
 
         private final long position;
@@ -119,7 +116,6 @@ public class OverwriteCharEditDataOperation extends CharEditDataOperation {
             this.removeLength = removeLength;
         }
 
-        @Nonnull
         @Override
         public BasicBinaryDataOperationType getType() {
             return BasicBinaryDataOperationType.MODIFY_DATA;
@@ -130,7 +126,6 @@ public class OverwriteCharEditDataOperation extends CharEditDataOperation {
             execute(contentData, false);
         }
 
-        @Nonnull
         @Override
         public BinaryDataUndoableOperation executeWithUndo(EditableBinaryData contentData) {
             return CodeAreaUtils.requireNonNull(execute(contentData, true));

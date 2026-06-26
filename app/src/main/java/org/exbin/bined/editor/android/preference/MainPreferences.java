@@ -19,13 +19,12 @@ import org.exbin.bined.editor.android.options.MainOptions;
 
 import java.util.Locale;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Application main preferences.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class MainPreferences implements MainOptions {
 
     public static final String PREFERENCES_THEME = "theme";
@@ -40,31 +39,26 @@ public class MainPreferences implements MainOptions {
         this.preferences = preferences;
     }
 
-    @Nonnull
     @Override
     public String getLocaleLanguage() {
         return preferences.get(PREFERENCES_LOCALE_LANGUAGE, "");
     }
 
-    @Nonnull
     @Override
     public String getLocaleCountry() {
         return preferences.get(PREFERENCES_LOCALE_COUNTRY, "");
     }
 
-    @Nonnull
     @Override
     public String getLocaleVariant() {
         return preferences.get(PREFERENCES_LOCALE_VARIANT, "");
     }
 
-    @Nonnull
     @Override
     public String getLocaleTag() {
         return preferences.get(PREFERENCES_LOCALE_TAG, "");
     }
 
-    @Nonnull
     public Locale getLocale() {
         String localeTag = getLocaleTag();
         if (!localeTag.trim().isEmpty()) {
@@ -87,7 +81,6 @@ public class MainPreferences implements MainOptions {
         return Locale.ROOT;
     }
 
-    @Nonnull
     @Override
     public String getTheme() {
         return preferences.get(PREFERENCES_THEME, "default");

@@ -22,13 +22,12 @@ import org.exbin.bined.android.CodeAreaCore;
 import org.exbin.bined.capability.CaretCapable;
 import org.exbin.bined.capability.EditModeCapable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Paste data command.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class PasteDataCommand extends CodeAreaCommand {
 
     protected CodeAreaCommand modifyCommand = null;
@@ -116,7 +115,6 @@ public class PasteDataCommand extends CodeAreaCommand {
         }
     }
 
-    @Nonnull
     @Override
     public CodeAreaCommandType getType() {
         return CodeAreaCommandType.COMPOUND;

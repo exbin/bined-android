@@ -15,9 +15,8 @@
  */
 package org.exbin.bined.component;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.bined.CodeAreaCaretPosition;
 import org.exbin.bined.EditMode;
 import org.exbin.bined.EditOperation;
@@ -26,7 +25,7 @@ import org.exbin.bined.SelectionRange;
 /**
  * Binary editor status interface.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface BinaryStatusApi {
 
     /**
@@ -66,7 +65,7 @@ public interface BinaryStatusApi {
      */
     void setMemoryMode(MemoryMode memoryMode);
 
-    @ParametersAreNonnullByDefault
+    @NullMarked
     public enum MemoryMode {
 
         READ_ONLY("R", "read_only"),
@@ -81,12 +80,10 @@ public interface BinaryStatusApi {
             this.value = preferencesValue;
         }
 
-        @Nonnull
         public String getDisplayChar() {
             return displayChar;
         }
 
-        @Nonnull
         public String getPreferencesValue() {
             return value;
         }

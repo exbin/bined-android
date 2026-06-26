@@ -16,14 +16,13 @@
 package org.exbin.bined.android.capability;
 
 import java.util.Optional;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.bined.android.basic.color.BasicCodeAreaColorsProfile;
 
 /**
  * Support for basic set of colors.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface BasicColorsCapable {
 
     /**
@@ -31,7 +30,6 @@ public interface BasicColorsCapable {
      *
      * @return colors profile
      */
-    @Nonnull
     Optional<BasicCodeAreaColorsProfile> getBasicColors();
 
     /**

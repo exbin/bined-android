@@ -16,14 +16,13 @@
 package org.exbin.bined.component;
 
 import java.util.Objects;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.bined.PositionCodeType;
 
 /**
  * Cursor position format for status.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class StatusCursorPositionFormat {
 
     private PositionCodeType positionCodeType = PositionCodeType.DECIMAL;
@@ -37,7 +36,6 @@ public class StatusCursorPositionFormat {
         this.showOffset = showOffset;
     }
 
-    @Nonnull
     public PositionCodeType getCodeType() {
         return positionCodeType;
     }

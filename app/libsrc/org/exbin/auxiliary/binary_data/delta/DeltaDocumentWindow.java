@@ -15,9 +15,8 @@
  */
 package org.exbin.auxiliary.binary_data.delta;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.auxiliary.binary_data.BinaryData;
 import org.exbin.auxiliary.binary_data.OutOfBoundsException;
 import org.exbin.auxiliary.binary_data.delta.list.DefaultDoublyLinkedList;
@@ -25,10 +24,9 @@ import org.exbin.auxiliary.binary_data.delta.list.DefaultDoublyLinkedList;
 /**
  * Access window for delta document.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class DeltaDocumentWindow {
 
-    @Nonnull
     private final DeltaDocument document;
 
     private final DataPointer pointer = new DataPointer();
@@ -445,7 +443,6 @@ public class DeltaDocumentWindow {
         document.setDataSize(dataSize);
     }
 
-    @Nonnull
     public BinaryData copy() {
         SegmentsRepository repository = document.getRepository();
         DefaultDoublyLinkedList<DataSegment> segments = document.getSegments();
@@ -457,7 +454,6 @@ public class DeltaDocumentWindow {
         return copy;
     }
 
-    @Nonnull
     public BinaryData copy(long startFrom, long length) {
         SegmentsRepository repository = document.getRepository();
         DeltaDocument copy = repository.createDocument();

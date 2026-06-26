@@ -18,8 +18,7 @@ package org.exbin.bined.operation.android;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.bined.operation.command.BinaryDataCommand;
 import org.exbin.bined.operation.command.BinaryDataAppendableCommand;
 import org.exbin.bined.operation.command.BinaryDataAppendableUndoRedo;
@@ -31,7 +30,7 @@ import org.exbin.bined.operation.command.BinaryDataUndoableCommand;
 /**
  * Undo handler for binary editor.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class CodeAreaUndoRedo implements BinaryDataUndoRedo, BinaryDataAppendableUndoRedo {
 
     protected int undoMaximumCount;
@@ -193,7 +192,6 @@ public class CodeAreaUndoRedo implements BinaryDataUndoRedo, BinaryDataAppendabl
         return commandPosition;
     }
 
-    @Nonnull
     @Override
     public Optional<BinaryDataCommand> getTopUndoCommand() {
         if (commandPosition >= 0) {
@@ -246,7 +244,6 @@ public class CodeAreaUndoRedo implements BinaryDataUndoRedo, BinaryDataAppendabl
         this.syncPosition = commandPosition;
     }
 
-    @Nonnull
     @Override
     public List<BinaryDataCommand> getCommandList() {
         return commands;

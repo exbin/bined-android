@@ -26,16 +26,14 @@ import org.exbin.bined.operation.command.BinaryDataAbstractCommand;
 
 import java.util.Optional;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Abstract class for command on code area component.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public abstract class CodeAreaCommand extends BinaryDataAbstractCommand {
 
-    @Nonnull
     protected final CodeAreaCore codeArea;
     protected CodeAreaState beforeState;
     protected CodeAreaState afterState;
@@ -80,17 +78,14 @@ public abstract class CodeAreaCommand extends BinaryDataAbstractCommand {
      */
     public abstract void performUndo();
 
-    @Nonnull
     public Optional<CodeAreaState> getBeforeState() {
         return Optional.ofNullable(beforeState);
     }
 
-    @Nonnull
     public Optional<CodeAreaState> getAfterState() {
         return Optional.ofNullable(afterState);
     }
 
-    @Nonnull
     public CodeAreaState fetchState() {
         DefaultCodeAreaCaretPosition caretPosition = new DefaultCodeAreaCaretPosition();
         caretPosition.setPosition(((CaretCapable) codeArea).getActiveCaretPosition());

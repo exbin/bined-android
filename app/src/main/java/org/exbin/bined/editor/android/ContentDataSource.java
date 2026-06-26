@@ -29,13 +29,12 @@ import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Data source using android data content.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class ContentDataSource implements DataSource {
 
     private final ContentResolver contentResolver;
@@ -43,7 +42,6 @@ public class ContentDataSource implements DataSource {
 
     private AssetFileDescriptor descriptor;
     private final ByteBuffer byteBuffer = ByteBuffer.allocate(1);
-    @Nonnull
     private final DeltaDataPageWindow window;
     private FileInputStream inputStream;
     private FileOutputStream outputStream;
@@ -63,17 +61,14 @@ public class ContentDataSource implements DataSource {
         window = new DeltaDataPageWindow(this);
     }
 
-    @Nonnull
     public ContentResolver getContentResolver() {
         return contentResolver;
     }
 
-    @Nonnull
     public FileInputStream getInputStream() {
         return inputStream;
     }
 
-    @Nonnull
     public Uri getFileUri() {
         return fileUri;
     }

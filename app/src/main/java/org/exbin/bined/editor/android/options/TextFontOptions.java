@@ -15,20 +15,18 @@
  */
 package org.exbin.bined.editor.android.options;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Text font options.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface TextFontOptions {
 
     int getFontSize();
 
     void setFontSize(int size);
 /*
-    @Nonnull
     Font getFont(Font initialFont);
 
     @Nullable

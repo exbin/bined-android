@@ -17,13 +17,12 @@ package org.exbin.bined.android.capability;
 
 import org.exbin.bined.android.Font;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Support for font capability.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface FontCapable {
 
     /**
@@ -31,7 +30,6 @@ public interface FontCapable {
      *
      * @return font
      */
-    @Nonnull
     Font getCodeFont();
 
     /**

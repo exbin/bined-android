@@ -16,12 +16,13 @@
 package org.exbin.bined;
 
 import java.util.Optional;
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Specifies caret position as combination of data position, section and code
  * offset of code representation.
  */
+@NullMarked
 public interface CodeAreaCaretPosition {
 
     /**
@@ -43,7 +44,6 @@ public interface CodeAreaCaretPosition {
      *
      * @return section
      */
-    @Nonnull
     Optional<CodeAreaSection> getSection();
 
     /**

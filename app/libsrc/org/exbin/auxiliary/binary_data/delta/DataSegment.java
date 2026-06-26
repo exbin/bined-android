@@ -15,15 +15,14 @@
  */
 package org.exbin.auxiliary.binary_data.delta;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.auxiliary.binary_data.delta.list.DoublyLinkedItem;
 
 /**
  * Abstract data segment of delta data source.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public abstract class DataSegment implements DoublyLinkedItem<DataSegment> {
 
     @Nullable
@@ -53,7 +52,6 @@ public abstract class DataSegment implements DoublyLinkedItem<DataSegment> {
      *
      * @return copy of this segment
      */
-    @Nonnull
     public abstract DataSegment copy();
 
     @Nullable

@@ -18,7 +18,6 @@ package org.exbin.bined.editor.android.preference;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.preference.EditTextPreference;
@@ -26,27 +25,27 @@ import androidx.preference.EditTextPreference;
 import org.exbin.bined.android.Font;
 import org.exbin.bined.editor.android.R;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Application font preferences.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class FontPreference extends EditTextPreference {
 
-    public FontPreference(@NonNull Context context) {
+    public FontPreference(Context context) {
         super(context);
     }
 
-    public FontPreference(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public FontPreference(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
-    public FontPreference(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public FontPreference(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
-    public FontPreference(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public FontPreference(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 

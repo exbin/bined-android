@@ -17,15 +17,14 @@ package org.exbin.auxiliary.binary_data.jna;
 
 import com.sun.jna.Memory;
 import java.nio.ByteBuffer;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.auxiliary.binary_data.buffer.BufferData;
 
 /**
  * Implementation of binary data interface using JNA byte buffer.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class JnaBufferData extends BufferData {
 
     public JnaBufferData() {
@@ -59,13 +58,11 @@ public class JnaBufferData extends BufferData {
         super(JnaBufferData.allocateBufferInt(dataSize));
     }
 
-    @Nonnull
     @Override
     protected ByteBuffer allocateBuffer(int capacity) {
         return JnaBufferData.allocateBufferInt(capacity);
     }
 
-    @Nonnull
     private static ByteBuffer allocateBufferInt(int capacity) {
         try {
             return new Memory(capacity).getByteBuffer(0, capacity);
@@ -75,7 +72,6 @@ public class JnaBufferData extends BufferData {
         }
     }
 
-    @Nonnull
     private static ByteBuffer allocateBufferInt(@Nullable byte[] data) {
         if (data == null) {
             return JnaBufferData.allocateBufferInt(0);

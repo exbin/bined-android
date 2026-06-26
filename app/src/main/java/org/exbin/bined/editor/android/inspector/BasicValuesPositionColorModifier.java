@@ -17,9 +17,8 @@ package org.exbin.bined.editor.android.inspector;
 
 import android.graphics.Color;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.bined.CodeAreaSection;
 import org.exbin.bined.android.CodeAreaColorAssessor;
 import org.exbin.bined.android.CodeAreaPaintState;
@@ -29,7 +28,7 @@ import java.util.Optional;
 /**
  * Basic values inspector position color modifier.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class BasicValuesPositionColorModifier implements CodeAreaColorAssessor {
 
     protected CodeAreaColorAssessor parentAssessor;
@@ -59,7 +58,6 @@ public class BasicValuesPositionColorModifier implements CodeAreaColorAssessor {
         return null;
     }
 
-    @Nonnull
     @Override
     public Optional<CodeAreaColorAssessor> getParentColorAssessor() {
         return Optional.ofNullable(parentAssessor);

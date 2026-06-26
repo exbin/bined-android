@@ -18,18 +18,16 @@ package org.exbin.auxiliary.binary_data.delta;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.auxiliary.binary_data.BinaryData;
 import org.exbin.auxiliary.binary_data.EditableBinaryData;
 
 /**
  * Data source for binary data stored in memory.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class MemoryDataSource implements EditableBinaryData {
 
-    @Nonnull
     private final EditableBinaryData data;
 
     public MemoryDataSource(EditableBinaryData data) {
@@ -86,13 +84,11 @@ public class MemoryDataSource implements EditableBinaryData {
         data.saveToStream(outputStream);
     }
 
-    @Nonnull
     @Override
     public BinaryData copy() {
         return data.copy();
     }
 
-    @Nonnull
     @Override
     public BinaryData copy(long startFrom, long length) {
         return data.copy(startFrom, length);
@@ -158,7 +154,6 @@ public class MemoryDataSource implements EditableBinaryData {
         data.loadFromStream(inputStream);
     }
 
-    @Nonnull
     @Override
     public OutputStream getDataOutputStream() {
         return data.getDataOutputStream();
@@ -169,7 +164,6 @@ public class MemoryDataSource implements EditableBinaryData {
         data.copyToArray(startFrom, target, offset, length);
     }
 
-    @Nonnull
     @Override
     public InputStream getDataInputStream() {
         return data.getDataInputStream();

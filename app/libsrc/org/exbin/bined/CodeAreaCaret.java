@@ -15,12 +15,13 @@
  */
 package org.exbin.bined;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Interface for code area caret.
  */
+@NullMarked
 public interface CodeAreaCaret {
 
     /**
@@ -30,7 +31,6 @@ public interface CodeAreaCaret {
      *
      * @return caret position
      */
-    @Nonnull
     CodeAreaCaretPosition getCaretPosition();
 
     /**
@@ -38,7 +38,6 @@ public interface CodeAreaCaret {
      *
      * @return section
      */
-    @Nonnull
     CodeAreaSection getSection();
 
     /**

@@ -15,12 +15,12 @@
  */
 package org.exbin.bined.operation;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Interface for appendable binary data operation.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface BinaryDataAppendableOperation {
 
     /**

@@ -15,11 +15,12 @@
  */
 package org.exbin.bined.operation.command;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Interface for code area command.
  */
+@NullMarked
 public interface BinaryDataCommand {
 
     /**
@@ -27,7 +28,6 @@ public interface BinaryDataCommand {
      *
      * @return command type
      */
-    @Nonnull
     BinaryDataCommandType getType();
 
     /**

@@ -15,8 +15,7 @@
  */
 package org.exbin.bined.capability;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.bined.ScrollBarVisibility;
 import org.exbin.bined.basic.HorizontalScrollUnit;
 import org.exbin.bined.basic.VerticalScrollUnit;
@@ -24,7 +23,7 @@ import org.exbin.bined.basic.VerticalScrollUnit;
 /**
  * Support for scrolling control.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface BasicScrollingCapable {
 
     /**
@@ -32,7 +31,6 @@ public interface BasicScrollingCapable {
      *
      * @return scrollbar visibility mode
      */
-    @Nonnull
     ScrollBarVisibility getVerticalScrollBarVisibility();
 
     /**
@@ -47,7 +45,6 @@ public interface BasicScrollingCapable {
      *
      * @return vertical scrolling unit
      */
-    @Nonnull
     VerticalScrollUnit getVerticalScrollUnit();
 
     /**
@@ -62,7 +59,6 @@ public interface BasicScrollingCapable {
      *
      * @return scrollbar visibility mode
      */
-    @Nonnull
     ScrollBarVisibility getHorizontalScrollBarVisibility();
 
     /**
@@ -77,7 +73,6 @@ public interface BasicScrollingCapable {
      *
      * @return horizontal scrolling unit
      */
-    @Nonnull
     HorizontalScrollUnit getHorizontalScrollUnit();
 
     /**

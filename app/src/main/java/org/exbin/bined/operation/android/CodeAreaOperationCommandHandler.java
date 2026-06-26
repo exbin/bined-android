@@ -72,13 +72,12 @@ import java.nio.charset.Charset;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Command handler for undo/redo aware binary editor editing.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
 
     protected static final char BACKSPACE_CHAR = '\b';
@@ -86,11 +85,8 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
 
     private final int metaMask = CodeAreaAndroidUtils.getMetaMaskDown();
 
-    @Nonnull
     protected final CodeAreaCore codeArea;
-    @Nonnull
     protected EnterKeyHandlingMode enterKeyHandlingMode = EnterKeyHandlingMode.PLATFORM_SPECIFIC;
-    @Nonnull
     protected TabKeyHandlingMode tabKeyHandlingMode = TabKeyHandlingMode.PLATFORM_SPECIFIC;
     protected final boolean codeTypeSupported;
     protected final boolean viewModeSupported;
@@ -144,12 +140,10 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
         } */
     }
 
-    @Nonnull
     public static CodeAreaCommandHandler.CodeAreaCommandHandlerFactory createDefaultCodeAreaCommandHandlerFactory(final Context context) {
         return (CodeAreaCore codeAreaCore) -> new CodeAreaOperationCommandHandler(context, codeAreaCore, new CodeAreaUndoRedo(codeAreaCore));
     }
 
-    @Nonnull
     public BinaryDataUndoRedo getUndoRedo() {
         return undoRedo;
     }
@@ -861,7 +855,6 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
         return false;
     }
 
-    @Nonnull
     public EnterKeyHandlingMode getEnterKeyHandlingMode() {
         return enterKeyHandlingMode;
     }
@@ -870,7 +863,6 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
         this.enterKeyHandlingMode = enterKeyHandlingMode;
     }
 
-    @Nonnull
     public TabKeyHandlingMode getTabKeyHandlingMode() {
         return tabKeyHandlingMode;
     }
@@ -883,7 +875,6 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
         return ((CharsetCapable) codeArea).getCharset().canEncode();
     }
 
-    @Nonnull
     private CodeType getCodeType() {
         if (codeTypeSupported) {
             return ((CodeTypeCapable) codeArea).getCodeType();
@@ -902,7 +893,6 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
         return codeArea.isEditable();
     }
 
-    @Nonnull
     private static SelectingMode isSelectingMode(KeyEvent keyEvent) {
         return (keyEvent.getModifiers() & KeyEvent.META_SHIFT_MASK) > 0 ? SelectingMode.SELECTING : SelectingMode.NONE;
     }

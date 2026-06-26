@@ -15,7 +15,6 @@
  */
 package org.exbin.auxiliary.binary_data.paged;
 
-import javax.annotation.Nonnull;
 import org.exbin.auxiliary.binary_data.EditableBinaryData;
 
 /**
@@ -29,6 +28,5 @@ public interface DataPageCreator {
      * @param dataSize data size
      * @return data page
      */
-    @Nonnull
     EditableBinaryData createPage(int dataSize);
 }

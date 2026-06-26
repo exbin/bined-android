@@ -15,14 +15,13 @@
  */
 package org.exbin.bined.capability;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.bined.RowWrappingMode;
 
 /**
  * Row wrapping capability interface.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface RowWrappingCapable {
 
     /**
@@ -30,7 +29,6 @@ public interface RowWrappingCapable {
      *
      * @return row wrapping mode
      */
-    @Nonnull
     RowWrappingMode getRowWrapping();
 
     /**

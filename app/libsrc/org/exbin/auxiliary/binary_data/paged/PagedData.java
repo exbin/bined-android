@@ -15,8 +15,7 @@
  */
 package org.exbin.auxiliary.binary_data.paged;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.auxiliary.binary_data.BinaryData;
 import org.exbin.auxiliary.binary_data.EditableBinaryData;
 
@@ -26,7 +25,7 @@ import org.exbin.auxiliary.binary_data.EditableBinaryData;
  * Data are stored using block of data of the same size. Last page might be
  * shorter than page size, but not empty.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface PagedData extends EditableBinaryData {
 
     /**
@@ -49,7 +48,6 @@ public interface PagedData extends EditableBinaryData {
      * @param pageIndex page index
      * @return data page
      */
-    @Nonnull
     BinaryData getPage(int pageIndex);
 
     /**

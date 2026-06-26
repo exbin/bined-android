@@ -15,13 +15,12 @@
  */
 package org.exbin.bined.basic;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Enumeration of modes for enter key handling.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public enum EnterKeyHandlingMode {
     /**
      * Handle enter using java platform detection (default).
@@ -50,7 +49,6 @@ public enum EnterKeyHandlingMode {
         this.sequence = sequence;
     }
 
-    @Nonnull
     public String getSequence() {
         if (this == PLATFORM_SPECIFIC) {
             return System.lineSeparator();

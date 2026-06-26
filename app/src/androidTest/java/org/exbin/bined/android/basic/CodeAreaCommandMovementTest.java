@@ -17,7 +17,7 @@ package org.exbin.bined.android.basic;
 
 import android.view.KeyEvent;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.bined.CodeAreaCaretPosition;
 import org.exbin.bined.CodeAreaTest;
 import org.exbin.bined.capability.CaretCapable;
@@ -29,7 +29,7 @@ import org.junit.Test;
 /**
  * Tests for CodeArea component.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class CodeAreaCommandMovementTest extends CodeAreaComponentTest {
 
     private static final char CHAR_UNDEFINED = ' ';

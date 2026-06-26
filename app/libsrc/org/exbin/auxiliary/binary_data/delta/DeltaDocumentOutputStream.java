@@ -17,8 +17,7 @@ package org.exbin.auxiliary.binary_data.delta;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.auxiliary.binary_data.OutOfBoundsException;
 import org.exbin.auxiliary.binary_data.SeekableStream;
 
@@ -27,10 +26,9 @@ import org.exbin.auxiliary.binary_data.SeekableStream;
  * <p>
  * Data are expanded as needed.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class DeltaDocumentOutputStream extends OutputStream implements SeekableStream {
 
-    @Nonnull
     private final DeltaDocumentWindow data;
     private long position = 0;
 

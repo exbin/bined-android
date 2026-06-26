@@ -15,13 +15,12 @@
  */
 package org.exbin.bined.editor.android.preference;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Binary editor preferences.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class BinaryEditorPreferences {
 
     public static final String ENCODING_UTF8 = "UTF-8";
@@ -73,53 +72,43 @@ public class BinaryEditorPreferences {
         }
     }
 
-    @Nonnull
     public Preferences getPreferences() {
         return preferences;
     }
 
-    @Nonnull
     public MainPreferences getMainPreferences() {
         return mainPreferences;
     }
 
-    @Nonnull
     public EditorPreferences getEditorPreferences() {
         return editorPreferences;
     }
 
-    @Nonnull
     public StatusPreferences getStatusPreferences() {
         return statusPreferences;
     }
 
-    @Nonnull
     public CodeAreaPreferences getCodeAreaPreferences() {
         return codeAreaPreferences;
     }
 
-    @Nonnull
     public TextEncodingPreferences getEncodingPreferences() {
         return encodingPreferences;
     }
 
-    @Nonnull
     public TextFontPreferences getFontPreferences() {
         return fontPreferences;
     }
 
 /*
-    @Nonnull
     public CodeAreaLayoutPreferences getLayoutPreferences() {
         return layoutPreferences;
     }
 
-    @Nonnull
     public CodeAreaThemePreferences getThemePreferences() {
         return themePreferences;
     }
 
-    @Nonnull
     public CodeAreaColorPreferences getColorPreferences() {
         return colorPreferences;
     } */

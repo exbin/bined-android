@@ -20,9 +20,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.auxiliary.binary_data.BinaryData;
 import org.exbin.auxiliary.binary_data.BinaryDataInputStream;
 import org.exbin.auxiliary.binary_data.OutOfBoundsException;
@@ -33,12 +32,11 @@ import org.exbin.auxiliary.binary_data.OutOfBoundsException;
  * To allow parallel reading, read operations must be synchronized due to split
  * nature of the ByteBuffer position and depending operation.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class BufferData implements BinaryData {
 
     protected static final int BUFFER_SIZE = 4096;
 
-    @Nonnull
     protected ByteBuffer data;
 
     public BufferData() {
@@ -83,7 +81,6 @@ public class BufferData implements BinaryData {
      *
      * @return byte array
      */
-    @Nonnull
     public ByteBuffer getData() {
         return data;
     }
@@ -107,7 +104,6 @@ public class BufferData implements BinaryData {
         }
     }
 
-    @Nonnull
     @Override
     public BufferData copy() {
         ByteBuffer copy = allocateBuffer(data.capacity());
@@ -118,7 +114,6 @@ public class BufferData implements BinaryData {
         return new BufferData(copy);
     }
 
-    @Nonnull
     @Override
     public BufferData copy(long startFrom, long length) {
         if (length > Integer.MAX_VALUE) {
@@ -165,7 +160,6 @@ public class BufferData implements BinaryData {
         }
     }
 
-    @Nonnull
     @Override
     public InputStream getDataInputStream() {
         return new BinaryDataInputStream(this);
@@ -232,7 +226,6 @@ public class BufferData implements BinaryData {
     public void dispose() {
     }
 
-    @Nonnull
     protected ByteBuffer allocateBuffer(int capacity) {
         return ByteBuffer.allocate(capacity);
     }

@@ -15,14 +15,13 @@
  */
 package org.exbin.bined.operation;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.auxiliary.binary_data.EditableBinaryData;
 
 /**
  * Interface for undoable binary data operation.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface BinaryDataUndoableOperation extends BinaryDataOperation {
 
     /**
@@ -31,6 +30,5 @@ public interface BinaryDataUndoableOperation extends BinaryDataOperation {
      * @param contentData content data
      * @return undo operation
      */
-    @Nonnull
     BinaryDataUndoableOperation executeWithUndo(EditableBinaryData contentData);
 }

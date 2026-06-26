@@ -19,28 +19,22 @@ import org.exbin.bined.basic.EnterKeyHandlingMode;
 import org.exbin.bined.basic.TabKeyHandlingMode;
 import org.exbin.bined.component.FileProcessingMode;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Binary editor preferences.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface EditorOptions {
 
-    @Nonnull
     FileProcessingMode getFileHandlingMode();
 
-    @Nonnull
     KeysPanelMode getKeysPanelMode();
 
-    @Nonnull
     EnterKeyHandlingMode getEnterKeyHandlingMode();
 
-    @Nonnull
     TabKeyHandlingMode getTabKeyHandlingMode();
 
-    @Nonnull
     DataInspectorMode getDataInspectorMode();
 
     void setFileHandlingMode(FileProcessingMode fileProcessingMode);

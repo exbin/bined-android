@@ -17,15 +17,14 @@ package org.exbin.bined.android.basic;
 
 import android.graphics.Rect;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 import org.exbin.bined.basic.BasicCodeAreaZone;
 
 /**
  * Basic code area component dimensions.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class BasicCodeAreaDimensions {
 
     protected int scrollPanelX;
@@ -98,7 +97,6 @@ public class BasicCodeAreaDimensions {
         modifyRect(dataViewInnerRectangle, 0, 0, Math.max(dataViewWidth, 0), Math.max(dataViewHeight, 0));
     }
 
-    @Nonnull
     public BasicCodeAreaZone getPositionZone(int positionX, int positionY) {
         if (positionY <= scrollPanelY) {
             if (positionX < rowPositionAreaWidth) {
@@ -215,37 +213,30 @@ public class BasicCodeAreaDimensions {
         return lastRowOffset;
     }
 
-    @Nonnull
     public Rect getComponentRectangle() {
         return componentRectangle;
     }
 
-    @Nonnull
     public Rect getMainAreaRectangle() {
         return mainAreaRectangle;
     }
 
-    @Nonnull
     public Rect getScrollPanelRectangle() {
         return scrollPanelRectangle;
     }
 
-    @Nonnull
     public Rect getDataViewRectangle() {
         return dataViewRectangle;
     }
 
-    @Nonnull
     public Rect getDataViewInnerRectangle() {
         return dataViewInnerRectangle;
     }
 
-    @Nonnull
     public Rect getHeaderAreaRectangle() {
         return headerAreaRectangle;
     }
 
-    @Nonnull
     public Rect getRowPositionAreaRectangle() {
         return rowPositionAreaRectangle;
     }

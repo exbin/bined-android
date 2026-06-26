@@ -15,28 +15,22 @@
  */
 package org.exbin.bined.editor.android.options;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Application preferences.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface MainOptions {
 
-    @Nonnull
     String getLocaleLanguage();
 
-    @Nonnull
     String getLocaleCountry();
 
-    @Nonnull
     String getLocaleVariant();
 
-    @Nonnull
     String getLocaleTag();
 
-    @Nonnull
     String getTheme();
 
     void setLocaleLanguage(String language);

@@ -15,7 +15,7 @@
  */
 package org.exbin.auxiliary.binary_data;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Exception for overflow situation where more data is inserted/added than it is

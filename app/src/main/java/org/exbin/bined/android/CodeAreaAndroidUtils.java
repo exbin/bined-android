@@ -28,8 +28,6 @@ import android.graphics.Rect;
 import android.net.Uri;
 import android.view.KeyEvent;
 
-import androidx.annotation.NonNull;
-
 import org.exbin.auxiliary.binary_data.BinaryData;
 import org.exbin.bined.CharsetStreamTranslator;
 import org.exbin.bined.CodeAreaUtils;
@@ -43,14 +41,13 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Hexadecimal editor component android utilities.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class CodeAreaAndroidUtils {
 
     public static final int MIN_MONOSPACE_CODE_POINT = 0x1F;
@@ -165,17 +162,15 @@ public class CodeAreaAndroidUtils {
         return KeyEvent.META_CTRL_MASK;
     }
 
-    @Nonnull
     public static ClipData createBinaryDataClipboardData(Context context, BinaryData data, ClipDescription binedDataFlavor) {
         return createBinaryDataClipboardData(context, data, binedDataFlavor, null, null);
     }
 
-    @Nonnull
     public static ClipData createBinaryDataClipboardData(Context context, BinaryData data, ClipDescription binedDataFlavor, @Nullable ClipDescription binaryDataFlavor, @Nullable Charset charset) {
 /*        ContentResolver contentResolver = new ContentResolver(context) {
             @androidx.annotation.Nullable
             @Override
-            public String[] getStreamTypes(@NonNull Uri url, @NonNull String mimeTypeFilter) {
+            public String[] getStreamTypes(Uri url, String mimeTypeFilter) {
                 return super.getStreamTypes(url, mimeTypeFilter);
             }
         };
@@ -194,12 +189,11 @@ public class CodeAreaAndroidUtils {
         return clipData;
     }
 
-    @Nonnull
     public static ClipData createCodeDataClipboardData(Context context, BinaryData data, ClipDescription binaryDataFlavor, CodeType codeType, CodeCharactersCase charactersCase) {
 /*        ContentResolver contentResolver = new ContentResolver(context) {
             @androidx.annotation.Nullable
             @Override
-            public String[] getStreamTypes(@NonNull Uri url, @NonNull String mimeTypeFilter) {
+            public String[] getStreamTypes(Uri url, String mimeTypeFilter) {
                 return super.getStreamTypes(url, mimeTypeFilter);
             }
         };

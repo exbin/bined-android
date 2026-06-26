@@ -18,12 +18,12 @@ package org.exbin.bined.android;
 import android.view.KeyEvent;
 import android.view.inputmethod.BaseInputConnection;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Binary viewer/editor component input connection.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class CodeAreaInputConnection extends BaseInputConnection {
 
     protected final CodeAreaCore codeArea;

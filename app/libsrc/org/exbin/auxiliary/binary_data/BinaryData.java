@@ -18,15 +18,14 @@ package org.exbin.auxiliary.binary_data;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Interface for binary data - readable sequence of bytes.
  * <p>
  * Provides methods to read whole or part of the data to array or stream.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface BinaryData {
 
     /**
@@ -56,7 +55,6 @@ public interface BinaryData {
      *
      * @return copy of data
      */
-    @Nonnull
     BinaryData copy();
 
     /**
@@ -66,7 +64,6 @@ public interface BinaryData {
      * @param length length of area
      * @return copy of data
      */
-    @Nonnull
     BinaryData copy(long startFrom, long length);
 
     /**
@@ -92,7 +89,6 @@ public interface BinaryData {
      *
      * @return new instance of input stream
      */
-    @Nonnull
     InputStream getDataInputStream();
 
     /**

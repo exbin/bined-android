@@ -16,19 +16,17 @@
 package org.exbin.bined.color;
 
 import java.util.Optional;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Enumeration of decoration color types.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public enum BasicCodeAreaDecorationColorType implements CodeAreaColorType {
 
     LINE("decoration.line", null);
 
-    @Nonnull
     private final String typeId;
     @Nullable
     private final CodeAreaColorGroup group;
@@ -38,13 +36,11 @@ public enum BasicCodeAreaDecorationColorType implements CodeAreaColorType {
         this.group = group;
     }
 
-    @Nonnull
     @Override
     public String getId() {
         return typeId;
     }
 
-    @Nonnull
     @Override
     public Optional<CodeAreaColorGroup> getGroup() {
         return Optional.ofNullable(group);

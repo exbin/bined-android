@@ -15,13 +15,12 @@
  */
 package org.exbin.bined.android.basic.color;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Capability of painter to handle basic colors setting.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface BasicColorsCapableCodeAreaPainter {
 
     /**
@@ -29,7 +28,6 @@ public interface BasicColorsCapableCodeAreaPainter {
      *
      * @return colors profile
      */
-    @Nonnull
     BasicCodeAreaColorsProfile getBasicColors();
 
     /**

@@ -15,8 +15,7 @@
  */
 package org.exbin.bined.capability;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.bined.CodeAreaSelection;
 import org.exbin.bined.SelectionChangedListener;
 import org.exbin.bined.SelectionRange;
@@ -24,7 +23,7 @@ import org.exbin.bined.SelectionRange;
 /**
  * Support for selection capability.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface SelectionCapable {
 
     /**
@@ -32,7 +31,6 @@ public interface SelectionCapable {
      *
      * @return selection range or empty selection range
      */
-    @Nonnull
     SelectionRange getSelection();
 
     /**
@@ -68,7 +66,6 @@ public interface SelectionCapable {
      *
      * @return code area selection handler
      */
-    @Nonnull
     CodeAreaSelection getSelectionHandler();
 
     /**

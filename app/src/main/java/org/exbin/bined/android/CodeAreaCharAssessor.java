@@ -16,14 +16,13 @@
 package org.exbin.bined.android;
 
 import java.util.Optional;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.bined.CodeAreaSection;
 
 /**
  * Code area character assessor.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface CodeAreaCharAssessor extends CodeAreaPaintAssessor {
 
     /**
@@ -55,6 +54,5 @@ public interface CodeAreaCharAssessor extends CodeAreaPaintAssessor {
      *
      * @return character assessor
      */
-    @Nonnull
     Optional<CodeAreaCharAssessor> getParentCharAssessor();
 }

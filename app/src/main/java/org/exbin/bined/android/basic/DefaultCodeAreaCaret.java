@@ -25,20 +25,18 @@ import org.exbin.bined.DefaultCodeAreaCaretPosition;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Default implementation of code area caret.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class DefaultCodeAreaCaret implements CodeAreaCaret {
 
     protected static final int DOUBLE_CURSOR_WIDTH = 2;
     protected static final int DEFAULT_BLINK_RATE = 450;
 
-    @Nonnull
     protected final CaretChangeListener changeListener;
     protected final DefaultCodeAreaCaretPosition caretPosition = new DefaultCodeAreaCaretPosition();
 
@@ -46,7 +44,6 @@ public class DefaultCodeAreaCaret implements CodeAreaCaret {
     protected Timer blinkTimer = null;
     protected boolean cursorVisible = true;
 
-    @Nonnull
     protected CursorRenderingMode renderingMode = CursorRenderingMode.NEGATIVE;
 
     public DefaultCodeAreaCaret(CaretChangeListener changeListener) {
@@ -68,7 +65,6 @@ public class DefaultCodeAreaCaret implements CodeAreaCaret {
         return -1;
     }
 
-    @Nonnull
     @Override
     public CodeAreaCaretPosition getCaretPosition() {
         return caretPosition;
@@ -140,7 +136,6 @@ public class DefaultCodeAreaCaret implements CodeAreaCaret {
         resetBlink();
     }
 
-    @Nonnull
     @Override
     public CodeAreaSection getSection() {
         return caretPosition.getSection().orElse(BasicCodeAreaSection.CODE_MATRIX);
@@ -163,7 +158,6 @@ public class DefaultCodeAreaCaret implements CodeAreaCaret {
         return cursorVisible;
     }
 
-    @Nonnull
     public CursorRenderingMode getRenderingMode() {
         return renderingMode;
     }

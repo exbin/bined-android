@@ -15,14 +15,13 @@
  */
 package org.exbin.bined.android.capability;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.bined.android.CodeAreaCharAssessor;
 
 /**
  * Painter support for character assessor capability.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface CharAssessorPainterCapable {
 
     /**
@@ -30,7 +29,6 @@ public interface CharAssessorPainterCapable {
      *
      * @return character assessor
      */
-    @Nonnull
     CodeAreaCharAssessor getCharAssessor();
 
     /**

@@ -70,7 +70,6 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 //    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
-    compileOnly group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
     implementation "com.google.android.material:material:${materialVersion}"
 //    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
     implementation 'androidx.preference:preference:1.2.1'
@@ -81,8 +80,10 @@ dependencies {
 //    implementation 'org.exbin.auxiliary:binary_data:0.2.1'
 //    implementation 'org.exbin.auxiliary:binary_data-array:0.2.1'
 //    implementation 'org.exbin.auxiliary:binary_data-delta:0.2.1'
+    compileOnly group: 'org.jspecify', name: 'jspecify', version: '1.0.0'
+    compileOnly group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
 
-    testCompileOnly group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
+    testCompileOnly group: 'org.jspecify', name: 'jspecify', version: '1.0.0'
     testImplementation 'junit:junit:4.13.2'
     testImplementation fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation 'androidx.test:core:1.7.0'

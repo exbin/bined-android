@@ -15,13 +15,12 @@
  */
 package org.exbin.bined.editor.android.search;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Parameters for action to search for occurrences of text or data.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class SearchParameters {
 
     private SearchCondition condition = new SearchCondition();
@@ -34,7 +33,6 @@ public class SearchParameters {
     public SearchParameters() {
     }
 
-    @Nonnull
     public SearchCondition getCondition() {
         return condition;
     }
@@ -67,7 +65,6 @@ public class SearchParameters {
         this.matchCase = matchCase;
     }
 
-    @Nonnull
     public MatchMode getMatchMode() {
         return matchMode;
     }
@@ -76,7 +73,6 @@ public class SearchParameters {
         this.matchMode = matchMode;
     }
 
-    @Nonnull
     public SearchDirection getSearchDirection() {
         return searchDirection;
     }
@@ -101,7 +97,6 @@ public class SearchParameters {
     public enum MatchMode {
         SINGLE, MULTIPLE;
 
-        @Nonnull
         public static MatchMode fromBoolean(boolean multipleMatches) {
             return multipleMatches ? MULTIPLE : SINGLE;
         }

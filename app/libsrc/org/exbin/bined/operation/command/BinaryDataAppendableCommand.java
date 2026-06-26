@@ -15,12 +15,12 @@
  */
 package org.exbin.bined.operation.command;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Interface for appendable binary data command.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface BinaryDataAppendableCommand extends BinaryDataUndoableCommand {
 
     /**

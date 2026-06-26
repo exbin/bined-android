@@ -15,14 +15,14 @@
  */
 package org.exbin.auxiliary.binary_data.delta.list;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Interface for item of doubly linked list.
  * @param <T> instance class
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface DoublyLinkedItem<T> {
 
     /**

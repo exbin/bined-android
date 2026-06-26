@@ -15,15 +15,14 @@
  */
 package org.exbin.bined;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Selection between two positions where begin represents origin point and end
  * of the selection can be before or after begin.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class CodeAreaSelection {
 
     private long start;
@@ -116,7 +115,6 @@ public class CodeAreaSelection {
      *
      * @return selection range
      */
-    @Nonnull
     public SelectionRange getRange() {
         return new SelectionRange(start, end);
     }

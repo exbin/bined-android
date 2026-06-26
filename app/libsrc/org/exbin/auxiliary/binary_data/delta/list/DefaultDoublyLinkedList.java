@@ -21,16 +21,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Objects;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.auxiliary.binary_data.OutOfBoundsException;
 
 /**
  * Default implementation of doubly linked list of items.
  * @param <T> doubly linked list item
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class DefaultDoublyLinkedList<T extends DoublyLinkedItem<T>> implements DoublyLinkedList<T> {
 
     private T first;
@@ -85,7 +84,6 @@ public class DefaultDoublyLinkedList<T extends DoublyLinkedItem<T>> implements D
         return item;
     }
 
-    @Nonnull
     @Override
     public T set(int index, T item) {
         T origItem = first;
@@ -136,7 +134,6 @@ public class DefaultDoublyLinkedList<T extends DoublyLinkedItem<T>> implements D
         return true;
     }
 
-    @Nonnull
     @Override
     public Iterator<T> iterator() {
         return new Iterator<T>() {
@@ -162,7 +159,6 @@ public class DefaultDoublyLinkedList<T extends DoublyLinkedItem<T>> implements D
         };
     }
 
-    @Nonnull
     @Override
     public Object[] toArray() {
         if (last == null) {
@@ -180,7 +176,6 @@ public class DefaultDoublyLinkedList<T extends DoublyLinkedItem<T>> implements D
         return result;
     }
 
-    @Nonnull
     @Override
     @SuppressWarnings("unchecked")
     public <X> X[] toArray(X[] template) {
@@ -426,19 +421,16 @@ public class DefaultDoublyLinkedList<T extends DoublyLinkedItem<T>> implements D
         return -1;
     }
 
-    @Nonnull
     @Override
     public ListIterator<T> listIterator() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Nonnull
     @Override
     public ListIterator<T> listIterator(int index) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Nonnull
     @Override
     public List<T> subList(int fromIndex, int toIndex) {
         throw new UnsupportedOperationException("Not supported yet.");

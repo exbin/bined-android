@@ -15,16 +15,14 @@
  */
 package org.exbin.auxiliary.binary_data.delta;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Data segment pointing to memory block.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class MemorySegment extends DataSegment {
 
-    @Nonnull
     private MemoryDataSource source;
     private long startPosition;
     private long length;
@@ -35,7 +33,6 @@ public class MemorySegment extends DataSegment {
         this.length = length;
     }
 
-    @Nonnull
     public MemoryDataSource getSource() {
         return source;
     }
@@ -66,7 +63,6 @@ public class MemorySegment extends DataSegment {
         return source.getByte(position);
     }
 
-    @Nonnull
     @Override
     public DataSegment copy() {
         return new MemorySegment(null, startPosition, length);

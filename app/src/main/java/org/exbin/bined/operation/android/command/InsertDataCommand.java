@@ -15,8 +15,7 @@
  */
 package org.exbin.bined.operation.android.command;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.auxiliary.binary_data.BinaryData;
 import org.exbin.bined.capability.CaretCapable;
 import org.exbin.bined.operation.android.InsertDataOperation;
@@ -25,7 +24,7 @@ import org.exbin.bined.android.CodeAreaCore;
 /**
  * Command for inserting data.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class InsertDataCommand extends OpCodeAreaCommand {
 
     protected final long position;
@@ -38,7 +37,6 @@ public class InsertDataCommand extends OpCodeAreaCommand {
         super.setOperation(new InsertDataOperation(position, codeOffset, data));
     }
 
-    @Nonnull
     @Override
     public CodeAreaCommandType getType() {
         return CodeAreaCommandType.DATA_INSERTED;

@@ -22,12 +22,12 @@ import org.exbin.bined.android.CodeAreaCore;
 import org.exbin.bined.basic.SelectingMode;
 import org.exbin.bined.capability.ScrollingCapable;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Component mouse listener for code area.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class DefaultCodeAreaMouseListener implements View.OnTouchListener, View.OnLongClickListener {
 
     public static final int MOUSE_SCROLL_LINES = 3;

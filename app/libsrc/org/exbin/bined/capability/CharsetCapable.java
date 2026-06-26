@@ -16,13 +16,12 @@
 package org.exbin.bined.capability;
 
 import java.nio.charset.Charset;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Support for charset capability.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface CharsetCapable {
 
     /**
@@ -30,7 +29,6 @@ public interface CharsetCapable {
      *
      * @return charset
      */
-    @Nonnull
     Charset getCharset();
 
     /**

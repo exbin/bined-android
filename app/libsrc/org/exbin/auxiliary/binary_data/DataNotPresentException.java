@@ -16,8 +16,7 @@
 package org.exbin.auxiliary.binary_data;
 
 import java.util.Optional;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Exception for data reading or writing when range of data is not present.
@@ -63,7 +62,6 @@ public class DataNotPresentException extends RuntimeException {
         dataRange = null;
     }
 
-    @Nonnull
     public Optional<DataRange> getDataRange() {
         return Optional.ofNullable(dataRange);
     }

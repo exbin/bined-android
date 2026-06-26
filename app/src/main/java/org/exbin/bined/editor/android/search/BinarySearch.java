@@ -15,14 +15,13 @@
  */
 package org.exbin.bined.editor.android.search;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Binary search.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class BinarySearch {
 
     private static final int DEFAULT_DELAY = 500;
@@ -59,7 +58,6 @@ public class BinarySearch {
 //        binarySearchPanel.setCodeAreaPopupMenuHandler(codeAreaPopupMenuHandler);
 //    }
 
-    @Nonnull
     public BinarySearchService.SearchStatusListener getSearchStatusListener() {
         return searchStatusListener;
     }

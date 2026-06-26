@@ -19,28 +19,24 @@ import androidx.annotation.Nullable;
 
 import java.util.Optional;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Preferences interface.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface Preferences {
 
     void flush();
 
     boolean exists(String key);
 
-    @Nonnull
     Optional<String> get(String key);
 
-    @Nonnull
     String get(String key, String def);
 
     boolean getBoolean(String key, boolean def);
 
-    @Nonnull
     byte[] getByteArray(String key, byte[] def);
 
     double getDouble(String key, double def);

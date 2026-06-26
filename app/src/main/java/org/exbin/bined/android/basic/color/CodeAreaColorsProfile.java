@@ -18,13 +18,13 @@ package org.exbin.bined.android.basic.color;
 import org.exbin.bined.color.CodeAreaBasicColors;
 import org.exbin.bined.color.CodeAreaColorType;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Colors profile.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface CodeAreaColorsProfile {
 
     /**

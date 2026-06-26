@@ -41,23 +41,19 @@ import org.exbin.bined.capability.SelectionCapable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Binary viewer/editor component.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl {
 
-    @Nonnull
     protected BinaryData contentData = EmptyBinaryData.getInstance();
 
-    @Nonnull
     protected final PrimaryView primaryView;
 
-    @Nonnull
     protected CodeAreaCommandHandler commandHandler;
 
     protected final List<DataChangedListener> dataChangedListeners = new ArrayList<>();
@@ -77,7 +73,7 @@ public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl 
      *
      * @param commandHandlerFactory command handler or null for default handler
      */
-    public CodeAreaCore(Context context, AttributeSet attrs, @Nullable CodeAreaCommandHandler.CodeAreaCommandHandlerFactory commandHandlerFactory) {
+    public CodeAreaCore(Context context, AttributeSet attrs, CodeAreaCommandHandler.@Nullable CodeAreaCommandHandlerFactory commandHandlerFactory) {
         super(context, attrs);
         this.commandHandler = commandHandlerFactory == null ? new DefaultCodeAreaCommandHandler(context, this) : createCommandHandler(commandHandlerFactory);
         init();
@@ -100,12 +96,10 @@ public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl 
 //        setFocusTraversalKeysEnabled(false);
     }
 
-    @Nonnull
     private CodeAreaCommandHandler createCommandHandler(CodeAreaCommandHandler.CodeAreaCommandHandlerFactory commandHandlerFactory) {
         return commandHandlerFactory.createCommandHandler(this);
     }
 
-    @Nonnull
     public CodeAreaCommandHandler getCommandHandler() {
         return commandHandler;
     }
@@ -162,7 +156,6 @@ public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl 
         return false;
     }
 
-    @Nonnull
     @Override
     public BinaryData getContentData() {
         return contentData;
@@ -244,7 +237,7 @@ public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl 
         return touchPositionY;
     }
 
-    @ParametersAreNonnullByDefault
+    @NullMarked
     private class PrimaryView extends View {
 
         public PrimaryView(Context context, AttributeSet attrs) {
@@ -311,7 +304,6 @@ public abstract class CodeAreaCore extends ViewGroup implements CodeAreaControl 
         }
     }
 
-    @Nonnull
     @Override
     public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
         outAttrs.imeOptions = EditorInfo.IME_ACTION_DONE;

@@ -25,13 +25,12 @@ import org.exbin.bined.component.FileProcessingMode;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Binary editor preferences.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class EditorPreferences implements EditorOptions {
 
     public static final String PREFERENCES_FILE_HANDLING_MODE = "fileHandlingMode";
@@ -46,7 +45,6 @@ public class EditorPreferences implements EditorOptions {
         this.preferences = preferences;
     }
 
-    @Nonnull
     @Override
     public FileProcessingMode getFileHandlingMode() {
         FileProcessingMode defaultFileProcessingMode = FileProcessingMode.MEMORY;
@@ -63,7 +61,6 @@ public class EditorPreferences implements EditorOptions {
         preferences.put(PREFERENCES_KEYS_PANEL_MODE, keysPanelMode.name());
     }
 
-    @Nonnull
     @Override
     public KeysPanelMode getKeysPanelMode() {
         KeysPanelMode defaultKeysPanelMode = KeysPanelMode.SMALL;
@@ -80,7 +77,6 @@ public class EditorPreferences implements EditorOptions {
         preferences.put(PREFERENCES_FILE_HANDLING_MODE, fileProcessingMode.name());
     }
 
-    @Nonnull
     @Override
     public EnterKeyHandlingMode getEnterKeyHandlingMode() {
         EnterKeyHandlingMode defaultValue = EnterKeyHandlingMode.PLATFORM_SPECIFIC;
@@ -96,7 +92,6 @@ public class EditorPreferences implements EditorOptions {
         preferences.put(PREFERENCES_ENTER_KEY_HANDLING_MODE, enterKeyHandlingMode.name().toLowerCase());
     }
 
-    @Nonnull
     @Override
     public TabKeyHandlingMode getTabKeyHandlingMode() {
         TabKeyHandlingMode defaultValue = TabKeyHandlingMode.PLATFORM_SPECIFIC;
@@ -117,7 +112,6 @@ public class EditorPreferences implements EditorOptions {
         preferences.put(PREFERENCES_DATA_INSPECTOR_MODE, dataInspectorMode.name().toLowerCase());
     }
 
-    @Nonnull
     @Override
     public DataInspectorMode getDataInspectorMode() {
         DataInspectorMode defaultDataInspectorMode = DataInspectorMode.LANDSCAPE;

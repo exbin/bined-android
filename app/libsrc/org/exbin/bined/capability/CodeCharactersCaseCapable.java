@@ -15,14 +15,13 @@
  */
 package org.exbin.bined.capability;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.bined.CodeCharactersCase;
 
 /**
  * Support for characters case capability.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface CodeCharactersCaseCapable {
 
     /**
@@ -30,7 +29,6 @@ public interface CodeCharactersCaseCapable {
      *
      * @return code characters case
      */
-    @Nonnull
     CodeCharactersCase getCodeCharactersCase();
 
     /**

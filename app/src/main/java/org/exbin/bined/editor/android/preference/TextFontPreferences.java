@@ -17,12 +17,12 @@ package org.exbin.bined.editor.android.preference;
 
 import org.exbin.bined.editor.android.options.TextFontOptions;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Text font preferences.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class TextFontPreferences implements TextFontOptions {
 
     public static final String PREFERENCES_TEXT_FONT_PREFIX = "textFont.";

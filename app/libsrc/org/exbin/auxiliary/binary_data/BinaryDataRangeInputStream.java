@@ -17,16 +17,14 @@ package org.exbin.auxiliary.binary_data;
 
 import java.io.IOException;
 import java.io.InputStream;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Input stream for binary data range.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class BinaryDataRangeInputStream extends InputStream implements SeekableStream, FinishableStream {
 
-    @Nonnull
     protected final BinaryData data;
     protected final long startPosition;
     protected final long length;

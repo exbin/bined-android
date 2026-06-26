@@ -15,13 +15,12 @@
  */
 package org.exbin.auxiliary.binary_data.delta;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Space placeholder segment.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class SpaceSegment extends DataSegment {
 
     private long length;
@@ -52,7 +51,6 @@ public class SpaceSegment extends DataSegment {
         throw new IllegalStateException("Unable to read data from space placeholder segment");
     }
 
-    @Nonnull
     @Override
     public DataSegment copy() {
         return new SpaceSegment(length);

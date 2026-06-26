@@ -18,7 +18,6 @@ package org.exbin.bined.editor.android.preference;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.preference.EditTextPreference;
@@ -29,27 +28,27 @@ import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.SortedMap;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Application encoding preferences.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class EncodingPreference extends EditTextPreference {
 
-    public EncodingPreference(@NonNull Context context) {
+    public EncodingPreference(Context context) {
         super(context);
     }
 
-    public EncodingPreference(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public EncodingPreference(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
-    public EncodingPreference(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public EncodingPreference(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
-    public EncodingPreference(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public EncodingPreference(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 

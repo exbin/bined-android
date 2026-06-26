@@ -119,14 +119,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Main activity.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class MainActivity extends AppCompatActivity implements FileDialog.OnFileSelectedListener {
 
     private static final int DOUBLE_BACK_KEY_INTERVAL = 3000;
@@ -546,7 +545,6 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         }
     }
 
-    @Nonnull
     private LocaleListCompat getLanguageLocaleList() {
         String language = appPreferences.getMainPreferences().getLocaleTag();
 
@@ -1563,8 +1561,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         application.setSearchParameters(searchParameters);
     }
 
-    @Nullable
-    public BinarySearchService.SearchStatusListener getSearchStatusListener() {
+    public BinarySearchService.@Nullable SearchStatusListener getSearchStatusListener() {
         return searchStatusListener;
     }
 
@@ -1591,7 +1588,6 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         }
     }
 
-    @Nonnull
     public static LocaleListCompat getLanguageLocaleList(String language) {
         if (language.isEmpty()) {
             return LocaleListCompat.getEmptyLocaleList();
@@ -1600,7 +1596,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         return LocaleListCompat.forLanguageTags(language);
     }
 
-    @ParametersAreNonnullByDefault
+    @NullMarked
     private class CodeAreaKeyListener implements View.OnKeyListener {
 
         private final KeyListener keyListener = new TextKeyListener(TextKeyListener.Capitalize.NONE, false);

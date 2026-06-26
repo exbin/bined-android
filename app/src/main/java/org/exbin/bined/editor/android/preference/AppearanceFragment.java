@@ -30,12 +30,12 @@ import org.exbin.bined.editor.android.R;
 import org.exbin.bined.editor.android.SettingsActivity;
 import org.exbin.bined.editor.android.options.Theme;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Settings appearance fragment.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class AppearanceFragment extends PreferenceFragmentCompat {
 
     public static final String LANGUAGE_KEY = "language";

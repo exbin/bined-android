@@ -21,19 +21,16 @@ import org.exbin.bined.PositionCodeType;
 import org.exbin.bined.RowWrappingMode;
 import org.exbin.bined.basic.CodeAreaViewMode;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Code area options.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface CodeAreaOptions {
 
-    @Nonnull
     CodeCharactersCase getCodeCharactersCase();
 
-    @Nonnull
     CodeType getCodeType();
 
     int getMaxBytesPerRow();
@@ -42,13 +39,10 @@ public interface CodeAreaOptions {
 
     int getMinRowPositionLength();
 
-    @Nonnull
     PositionCodeType getPositionCodeType();
 
-    @Nonnull
     RowWrappingMode getRowWrappingMode();
 
-    @Nonnull
     CodeAreaViewMode getViewMode();
 
     boolean isCodeColorization();

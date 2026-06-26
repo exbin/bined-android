@@ -15,8 +15,7 @@
  */
 package org.exbin.bined.capability;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.bined.CodeAreaCaret;
 import org.exbin.bined.CodeAreaCaretPosition;
 import org.exbin.bined.CaretOverlapMode;
@@ -27,7 +26,7 @@ import org.exbin.bined.CodeAreaCaretListener;
 /**
  * Support for caret / cursor capability.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface CaretCapable {
 
     /**
@@ -35,7 +34,6 @@ public interface CaretCapable {
      *
      * @return caret position
      */
-    @Nonnull
     CodeAreaCaretPosition getActiveCaretPosition();
 
     /**
@@ -43,7 +41,6 @@ public interface CaretCapable {
      *
      * @return code area section
      */
-    @Nonnull
     CodeAreaSection getActiveSection();
 
     /**
@@ -87,7 +84,6 @@ public interface CaretCapable {
      *
      * @return caret handler
      */
-    @Nonnull
     CodeAreaCaret getCodeAreaCaret();
 
     /**
@@ -97,7 +93,6 @@ public interface CaretCapable {
      * @param direction movement direction
      * @return target position
      */
-    @Nonnull
     CodeAreaCaretPosition computeMovePosition(CodeAreaCaretPosition position, MovementDirection direction);
 
     /**
@@ -108,7 +103,6 @@ public interface CaretCapable {
      * @param overlapMode caret overlapping mode
      * @return mouse position
      */
-    @Nonnull
     CodeAreaCaretPosition mousePositionToClosestCaretPosition(int positionX, int positionY, CaretOverlapMode overlapMode);
 
     /**

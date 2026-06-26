@@ -47,13 +47,12 @@ import org.exbin.bined.editor.android.CompatUtils;
 import org.exbin.bined.editor.android.MainActivity;
 import org.exbin.bined.editor.android.R;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Search text or data dialog.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class SearchDialog extends AppCompatDialogFragment {
 
     private int lastTab = 0;
@@ -92,7 +91,6 @@ public class SearchDialog extends AppCompatDialogFragment {
         }
     };
 
-    @Nonnull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         MainActivity activity = (MainActivity) requireActivity();
@@ -240,7 +238,7 @@ public class SearchDialog extends AppCompatDialogFragment {
         saveSearchParameters();
     }
 
-    @ParametersAreNonnullByDefault
+    @NullMarked
     private class CodeAreaKeyListener implements View.OnKeyListener {
 
         private final KeyListener keyListener = new TextKeyListener(TextKeyListener.Capitalize.NONE, false);

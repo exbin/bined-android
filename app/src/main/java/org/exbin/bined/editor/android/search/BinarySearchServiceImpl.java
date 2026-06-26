@@ -32,13 +32,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Binary search service.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class BinarySearchServiceImpl implements BinarySearchService {
 
     private static final int MAX_MATCHES_COUNT = 100;
@@ -356,7 +355,6 @@ public class BinarySearchServiceImpl implements BinarySearchService {
         }
     }
 
-    @Nonnull
     @Override
     public SearchParameters getLastSearchParameters() {
         return lastSearchParameters;

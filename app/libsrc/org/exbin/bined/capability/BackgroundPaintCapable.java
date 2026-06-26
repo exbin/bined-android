@@ -15,14 +15,13 @@
  */
 package org.exbin.bined.capability;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.bined.basic.BasicBackgroundPaintMode;
 
 /**
  * Support for background paint mode capability.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface BackgroundPaintCapable {
 
     /**
@@ -30,7 +29,6 @@ public interface BackgroundPaintCapable {
      *
      * @return background paint mode
      */
-    @Nonnull
     BasicBackgroundPaintMode getBackgroundPaintMode();
 
     /**

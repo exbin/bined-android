@@ -15,27 +15,24 @@
  */
 package org.exbin.bined.operation.android.command;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.bined.android.CodeAreaCore;
 
 /**
  * Command for editing data in text mode.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public abstract class EditDataCommand extends CodeAreaCommand {
 
     public EditDataCommand(CodeAreaCore codeArea) {
         super(codeArea);
     }
 
-    @Nonnull
     @Override
     public CodeAreaCommandType getType() {
         return CodeAreaCommandType.DATA_EDITED;
     }
 
-    @Nonnull
     public abstract EditOperationType getEditOperationType();
 
     public enum EditOperationType {

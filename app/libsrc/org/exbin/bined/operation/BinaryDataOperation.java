@@ -15,14 +15,13 @@
  */
 package org.exbin.bined.operation;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.auxiliary.binary_data.EditableBinaryData;
 
 /**
  * Interface for binary data operation.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface BinaryDataOperation {
 
     /**
@@ -30,7 +29,6 @@ public interface BinaryDataOperation {
      *
      * @return operation type
      */
-    @Nonnull
     BinaryDataOperationType getType();
 
     /**

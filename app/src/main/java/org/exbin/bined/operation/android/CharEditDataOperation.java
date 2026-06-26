@@ -15,13 +15,13 @@
  */
 package org.exbin.bined.operation.android;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.bined.operation.BinaryDataUndoableOperation;
 
 /**
  * Abstract operation for editing data.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public abstract class CharEditDataOperation implements BinaryDataUndoableOperation {
 
     public CharEditDataOperation() {

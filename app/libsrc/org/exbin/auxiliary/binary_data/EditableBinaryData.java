@@ -18,15 +18,14 @@ package org.exbin.auxiliary.binary_data;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Interface for editable binary data - sequence of bytes.
  * <p>
  * Provides methods to read/write whole or part of the data to array or stream.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface EditableBinaryData extends BinaryData {
 
     /**
@@ -208,6 +207,5 @@ public interface EditableBinaryData extends BinaryData {
      *
      * @return new instance of output stream
      */
-    @Nonnull
     OutputStream getDataOutputStream();
 }

@@ -18,16 +18,15 @@ package org.exbin.bined;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.Objects;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.auxiliary.binary_data.BinaryData;
 import org.exbin.auxiliary.binary_data.EditableBinaryData;
 
 /**
  * Binary editor utilities.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class CodeAreaUtils {
 
     public static final char[] UPPER_HEX_CODES = "0123456789ABCDEF".toCharArray();
@@ -49,7 +48,6 @@ public class CodeAreaUtils {
      * @param value byte value
      * @return sequence of two hexadecimal chars with upper case
      */
-    @Nonnull
     public static char[] byteToHexChars(byte value) {
         char[] result = new char[2];
         byteToHexChars(result, value);
@@ -75,7 +73,6 @@ public class CodeAreaUtils {
      * @param length length of the target sequence
      * @return hexadecimal characters
      */
-    @Nonnull
     public static char[] longToHexChars(long value, int length) {
         char[] result = new char[length];
         longToHexChars(result, value, length);
@@ -279,7 +276,6 @@ public class CodeAreaUtils {
      * @param charset charset
      * @return byte array
      */
-    @Nonnull
     public static byte[] characterToBytes(char value, Charset charset) {
         ByteBuffer buffer = charset.encode(Character.toString(value));
         byte[] bytes = new byte[buffer.remaining()];
@@ -452,12 +448,10 @@ public class CodeAreaUtils {
         return byteValue;
     }
 
-    @Nonnull
     public static <T> T requireNonNull(@Nullable T object) {
         return Objects.requireNonNull(object, NULL_FIELD_ERROR);
     }
 
-    @Nonnull
     public static <T> T requireNonNull(@Nullable T object, String message) {
         return Objects.requireNonNull(object, message);
     }
@@ -468,7 +462,6 @@ public class CodeAreaUtils {
         }
     }
 
-    @Nonnull
     public static <T> T requireNonNullContentData(@Nullable T object) {
         return Objects.requireNonNull(object, CONTENT_DATA_ERROR);
     }
@@ -477,7 +470,6 @@ public class CodeAreaUtils {
         throw getInvalidTypeException(enumObject);
     }
 
-    @Nonnull
     public static IllegalStateException getInvalidTypeException(Enum<?> enumObject) {
         return new IllegalStateException("Unexpected " + enumObject.getDeclaringClass().getName() + " value " + enumObject.name());
     }

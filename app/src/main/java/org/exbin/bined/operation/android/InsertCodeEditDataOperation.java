@@ -22,22 +22,20 @@ import org.exbin.bined.operation.BinaryDataAppendableOperation;
 import org.exbin.bined.operation.BinaryDataOperation;
 import org.exbin.bined.operation.BinaryDataUndoableOperation;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Operation for editing data using insert mode.
  * <p>
  * At zero offset byte is inserted, otherwise part of the value is overwritten.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class InsertCodeEditDataOperation extends CodeEditDataOperation {
 
     protected final long position;
     protected final int codeOffset;
     protected boolean trailing = false;
-    @Nonnull
     protected final CodeType codeType;
     protected byte value;
 
@@ -48,13 +46,11 @@ public class InsertCodeEditDataOperation extends CodeEditDataOperation {
         this.codeOffset = codeOffset;
     }
 
-    @Nonnull
     @Override
     public BasicBinaryDataOperationType getType() {
         return BasicBinaryDataOperationType.EDIT_DATA;
     }
 
-    @Nonnull
     @Override
     public CodeType getCodeType() {
         return codeType;
@@ -65,7 +61,6 @@ public class InsertCodeEditDataOperation extends CodeEditDataOperation {
         execute(contentData, false);
     }
 
-    @Nonnull
     @Override
     public BinaryDataUndoableOperation executeWithUndo(EditableBinaryData contentData) {
         return CodeAreaUtils.requireNonNull(execute(contentData, true));
@@ -150,7 +145,7 @@ public class InsertCodeEditDataOperation extends CodeEditDataOperation {
     /**
      * Appendable variant of RemoveDataOperation.
      */
-    @ParametersAreNonnullByDefault
+    @NullMarked
     private static class UndoOperation implements BinaryDataUndoableOperation, BinaryDataAppendableOperation {
 
         private final long position;
@@ -165,7 +160,6 @@ public class InsertCodeEditDataOperation extends CodeEditDataOperation {
             this.length = length;
         }
 
-        @Nonnull
         @Override
         public BasicBinaryDataOperationType getType() {
             return BasicBinaryDataOperationType.REMOVE_DATA;
@@ -190,7 +184,6 @@ public class InsertCodeEditDataOperation extends CodeEditDataOperation {
             execute(contentData, false);
         }
 
-        @Nonnull
         @Override
         public BinaryDataUndoableOperation executeWithUndo(EditableBinaryData contentData) {
             return CodeAreaUtils.requireNonNull(execute(contentData, true));

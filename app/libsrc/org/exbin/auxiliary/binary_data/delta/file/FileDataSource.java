@@ -21,21 +21,17 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.auxiliary.binary_data.delta.DataSource;
 
 /**
  * Data source for access to file resource locking it for exclusive access.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class FileDataSource implements DataSource {
 
-    @Nonnull
     private final File file;
-    @Nonnull
     private final RandomAccessFile accessFile;
-    @Nonnull
     private final DeltaDataPageWindow window;
     private boolean closed = false;
 
@@ -63,12 +59,10 @@ public class FileDataSource implements DataSource {
         accessFile.setLength(length);
     }
 
-    @Nonnull
     public File getFile() {
         return file;
     }
 
-    @Nonnull
     /* package */ RandomAccessFile getAccessFile() {
         checkClosed();
         return accessFile;
@@ -135,19 +129,16 @@ public class FileDataSource implements DataSource {
         void clearCache();
     }
 
-    @ParametersAreNonnullByDefault
     public static enum EditMode {
         READ_WRITE("rw"),
         READ_ONLY("r");
 
-        @Nonnull
         private final String fileAccessMode;
 
         private EditMode(String fileAccessMode) {
             this.fileAccessMode = fileAccessMode;
         }
 
-        @Nonnull
         public String getFileAccessMode() {
             return fileAccessMode;
         }

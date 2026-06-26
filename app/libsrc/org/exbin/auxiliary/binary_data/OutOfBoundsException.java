@@ -15,7 +15,7 @@
  */
 package org.exbin.auxiliary.binary_data;
 
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Exception for out of bounds issues with binary data manipulation operations.

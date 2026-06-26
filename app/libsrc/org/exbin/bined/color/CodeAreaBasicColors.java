@@ -16,14 +16,13 @@
 package org.exbin.bined.color;
 
 import java.util.Optional;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Enumeration of color types for main group.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public enum CodeAreaBasicColors implements CodeAreaColorType {
 
     TEXT_COLOR("textColor", BasicCodeAreaColorGroup.MAIN),
@@ -37,7 +36,6 @@ public enum CodeAreaBasicColors implements CodeAreaColorType {
     CURSOR_COLOR("cursorColor", null),
     CURSOR_NEGATIVE_COLOR("cursorNegativeColor", null);
 
-    @Nonnull
     private final String typeId;
     @Nullable
     private final BasicCodeAreaColorGroup group;
@@ -47,13 +45,11 @@ public enum CodeAreaBasicColors implements CodeAreaColorType {
         this.group = group;
     }
 
-    @Nonnull
     @Override
     public String getId() {
         return typeId;
     }
 
-    @Nonnull
     @Override
     public Optional<CodeAreaColorGroup> getGroup() {
         return Optional.ofNullable(group);

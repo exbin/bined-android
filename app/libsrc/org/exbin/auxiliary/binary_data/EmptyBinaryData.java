@@ -18,14 +18,13 @@ package org.exbin.auxiliary.binary_data;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import javax.annotation.concurrent.Immutable;
 
 /**
  * Empty read-only binary data.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 @Immutable
 public class EmptyBinaryData implements BinaryData {
 
@@ -34,7 +33,6 @@ public class EmptyBinaryData implements BinaryData {
         private static final EmptyBinaryData INSTANCE = new EmptyBinaryData();
     }
 
-    @Nonnull
     public static EmptyBinaryData getInstance() {
         return Singleton.INSTANCE;
     }
@@ -54,13 +52,11 @@ public class EmptyBinaryData implements BinaryData {
         throw new OutOfBoundsException();
     }
 
-    @Nonnull
     @Override
     public BinaryData copy() {
         return this;
     }
 
-    @Nonnull
     @Override
     public BinaryData copy(long startFrom, long length) {
         if (startFrom == 0 && length == 0) {
@@ -83,7 +79,6 @@ public class EmptyBinaryData implements BinaryData {
     public void saveToStream(OutputStream outputStream) throws IOException {
     }
 
-    @Nonnull
     @Override
     public InputStream getDataInputStream() {
         return new InputStream() {

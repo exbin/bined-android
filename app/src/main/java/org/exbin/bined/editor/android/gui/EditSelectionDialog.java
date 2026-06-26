@@ -42,14 +42,13 @@ import org.exbin.bined.editor.android.SwitchableBase;
 import java.util.Arrays;
 import java.util.Optional;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Edit selection dialog.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class EditSelectionDialog extends AppCompatDialogFragment {
 
     protected DialogInterface.OnClickListener positionListener;
@@ -70,7 +69,6 @@ public class EditSelectionDialog extends AppCompatDialogFragment {
         this.positionListener = positionListener;
     }
 
-    @Nonnull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         FragmentActivity activity = getActivity();
@@ -352,7 +350,6 @@ public class EditSelectionDialog extends AppCompatDialogFragment {
         startPositionText.selectAll();
     }
 
-    @Nonnull
     public Optional<SelectionRange> getSelectionRange() {
         return Optional.of(new SelectionRange(getStartTargetPosition(), getEndTargetPosition()));
     }

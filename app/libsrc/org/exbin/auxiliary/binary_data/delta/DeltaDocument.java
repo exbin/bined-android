@@ -20,9 +20,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.auxiliary.binary_data.BinaryData;
 import org.exbin.auxiliary.binary_data.EditableBinaryData;
 import org.exbin.auxiliary.binary_data.delta.list.DefaultDoublyLinkedList;
@@ -30,7 +29,7 @@ import org.exbin.auxiliary.binary_data.delta.list.DefaultDoublyLinkedList;
 /**
  * Delta document defined as a sequence of segments.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class DeltaDocument implements EditableBinaryData {
 
     private final SegmentsRepository repository;
@@ -69,7 +68,6 @@ public class DeltaDocument implements EditableBinaryData {
      *
      * @return segments
      */
-    @Nonnull
     public DefaultDoublyLinkedList<DataSegment> getSegments() {
         return segments;
     }
@@ -267,13 +265,11 @@ public class DeltaDocument implements EditableBinaryData {
         }
     }
 
-    @Nonnull
     @Override
     public synchronized BinaryData copy() {
         return pointerWindow.copy();
     }
 
-    @Nonnull
     @Override
     public synchronized BinaryData copy(long startFrom, long length) {
         return pointerWindow.copy(startFrom, length);
@@ -287,13 +283,11 @@ public class DeltaDocument implements EditableBinaryData {
         }
     }
 
-    @Nonnull
     @Override
     public synchronized OutputStream getDataOutputStream() {
         return new DeltaDocumentOutputStream(this);
     }
 
-    @Nonnull
     @Override
     public synchronized InputStream getDataInputStream() {
         return new DeltaDocumentInputStream(this);
@@ -350,7 +344,6 @@ public class DeltaDocument implements EditableBinaryData {
         this.dataSource = dataSource;
     }
 
-    @Nonnull
     public SegmentsRepository getRepository() {
         return repository;
     }

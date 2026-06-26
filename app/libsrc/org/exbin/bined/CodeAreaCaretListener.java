@@ -15,12 +15,12 @@
  */
 package org.exbin.bined;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Interface for code area caret change listener.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface CodeAreaCaretListener {
 
     /**

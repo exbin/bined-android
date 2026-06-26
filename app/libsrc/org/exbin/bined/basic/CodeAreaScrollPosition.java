@@ -16,13 +16,13 @@
 package org.exbin.bined.basic;
 
 import java.util.Objects;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Code area scrolling position.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class CodeAreaScrollPosition {
 
     /**

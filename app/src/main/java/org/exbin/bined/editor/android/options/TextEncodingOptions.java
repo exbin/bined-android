@@ -17,23 +17,19 @@ package org.exbin.bined.editor.android.options;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Text encoding options.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface TextEncodingOptions {
 
-    @Nonnull
     List<String> getEncodings();
 
-    @Nonnull
     String getSelectedEncoding();
 
     void setEncodings(List<String> encodings);
 
-    @Nonnull
     void setSelectedEncoding(String selectedEncoding);
 }

@@ -41,14 +41,13 @@ import java.io.OutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * File handler for binary editor.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class BinEdFileHandler {
 
     private SegmentsRepository segmentsRepository;
@@ -91,7 +90,6 @@ public class BinEdFileHandler {
         codeArea.setPainter(painter);
     }
 
-    @Nonnull
     public CodeAreaTableMapAssessor getCodeAreaTableMapAssessor() {
         return codeAreaTableMapAssessor;
     }
@@ -184,17 +182,14 @@ public class BinEdFileHandler {
         undoRedo.setSyncPosition();
     }
 
-    @Nonnull
     public CodeArea getCodeArea() {
         return codeArea;
     }
 
-    @Nonnull
     public CodeAreaUndoRedo getUndoRedo() {
         return undoRedo;
     }
 
-    @Nonnull
     public BinEdCodeAreaAssessor getCodeAreaAssessor() {
         return codeAreaAssessor;
     }
@@ -203,7 +198,6 @@ public class BinEdFileHandler {
         return documentOriginalSize;
     }
 
-    @Nonnull
     public FileProcessingMode getFileHandlingMode() {
         return getCodeArea().getContentData() instanceof DeltaDocument ? FileProcessingMode.DELTA : FileProcessingMode.MEMORY;
     }

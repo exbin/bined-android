@@ -15,12 +15,12 @@
  */
 package org.exbin.auxiliary.binary_data.delta;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Listener for delta document data changes.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface DeltaDocumentChangedListener {
 
     /**

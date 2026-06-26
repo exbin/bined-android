@@ -15,13 +15,12 @@
  */
 package org.exbin.bined.editor.android.search;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Binary search service.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface BinarySearchService {
 
     void performFind(SearchParameters dialogSearchParameters, SearchStatusListener searchStatusListener);
@@ -32,12 +31,11 @@ public interface BinarySearchService {
 
     void performReplace(SearchParameters searchParameters, ReplaceParameters replaceParameters);
 
-    @Nonnull
     SearchParameters getLastSearchParameters();
 
     void clearMatches();
 
-    @ParametersAreNonnullByDefault
+    @NullMarked
     public interface SearchStatusListener {
 
         void setStatus(FoundMatches foundMatches, SearchParameters.MatchMode matchMode);

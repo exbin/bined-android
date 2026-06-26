@@ -21,13 +21,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Text editor encodings preferences.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class TextEncodingPreferences implements TextEncodingOptions {
 
     public static final String PREFERENCES_TEXT_ENCODING_PREFIX = "textEncoding.";
@@ -40,7 +39,6 @@ public class TextEncodingPreferences implements TextEncodingOptions {
         this.preferences = preferences;
     }
 
-    @Nonnull
     public String getDefaultEncoding() {
         return preferences.get(PREFERENCES_TEXT_ENCODING_DEFAULT, BinaryEditorPreferences.ENCODING_UTF8);
     }
@@ -49,7 +47,6 @@ public class TextEncodingPreferences implements TextEncodingOptions {
         preferences.put(PREFERENCES_TEXT_ENCODING_DEFAULT, encodingName);
     }
 
-    @Nonnull
     @Override
     public String getSelectedEncoding() {
         return preferences.get(PREFERENCES_TEXT_ENCODING_SELECTED, BinaryEditorPreferences.ENCODING_UTF8);
@@ -60,7 +57,6 @@ public class TextEncodingPreferences implements TextEncodingOptions {
         preferences.put(PREFERENCES_TEXT_ENCODING_SELECTED, encodingName);
     }
 
-    @Nonnull
     @Override
     public List<String> getEncodings() {
         List<String> encodings = new ArrayList<>();

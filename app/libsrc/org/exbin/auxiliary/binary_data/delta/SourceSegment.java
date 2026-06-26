@@ -16,16 +16,14 @@
 package org.exbin.auxiliary.binary_data.delta;
 
 import java.io.IOException;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Data segment pointing to source data.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class SourceSegment extends DataSegment {
 
-    @Nonnull
     private final DataSource source;
     private long startPosition;
     private long length;
@@ -36,7 +34,6 @@ public class SourceSegment extends DataSegment {
         this.length = length;
     }
 
-    @Nonnull
     public DataSource getSource() {
         return source;
     }
@@ -67,7 +64,6 @@ public class SourceSegment extends DataSegment {
         }
     }
 
-    @Nonnull
     @Override
     public DataSegment copy() {
         return new SourceSegment(source, startPosition, length);

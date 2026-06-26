@@ -15,12 +15,13 @@
  */
 package org.exbin.bined;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.auxiliary.binary_data.BinaryData;
 
 /**
  * Data provider.
  */
+@NullMarked
 public interface DataProvider {
 
     /**
@@ -28,7 +29,6 @@ public interface DataProvider {
      *
      * @return binary data
      */
-    @Nonnull
     BinaryData getContentData();
 
     /**

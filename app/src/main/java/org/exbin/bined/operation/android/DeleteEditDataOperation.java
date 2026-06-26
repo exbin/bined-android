@@ -22,14 +22,13 @@ import org.exbin.bined.operation.BinaryDataAppendableOperation;
 import org.exbin.bined.operation.BinaryDataOperation;
 import org.exbin.bined.operation.BinaryDataUndoableOperation;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Operation for deleting data via delete or backspace.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class DeleteEditDataOperation extends CharEditDataOperation {
 
     public static final char BACKSPACE_CHAR = '\b';
@@ -43,7 +42,6 @@ public class DeleteEditDataOperation extends CharEditDataOperation {
         this.position = startPosition;
     }
 
-    @Nonnull
     @Override
     public BasicBinaryDataOperationType getType() {
         return BasicBinaryDataOperationType.EDIT_DATA;
@@ -54,7 +52,6 @@ public class DeleteEditDataOperation extends CharEditDataOperation {
         execute(contentData, false);
     }
 
-    @Nonnull
     @Override
     public BinaryDataUndoableOperation executeWithUndo(EditableBinaryData contentData) {
         return CodeAreaUtils.requireNonNull(execute(contentData, true));
@@ -104,7 +101,7 @@ public class DeleteEditDataOperation extends CharEditDataOperation {
      * Appendable variant to merge sequence of deletion sequence into single
      * undo step.
      */
-    @ParametersAreNonnullByDefault
+    @NullMarked
     private static class DeleteEditUndoOperation extends InsertDataOperation implements BinaryDataAppendableOperation {
 
         private char value;

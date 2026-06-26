@@ -15,7 +15,7 @@
  */
 package org.exbin.bined;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.auxiliary.binary_data.BinaryData;
 import org.exbin.auxiliary.binary_data.EditableBinaryData;
 import org.exbin.auxiliary.binary_data.jna.JnaBufferEditableData;
@@ -25,7 +25,7 @@ import org.junit.Test;
 /**
  * Test CodeAreaUtils class.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class CodeAreaUtilsTest {
 
     @Test

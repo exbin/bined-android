@@ -27,12 +27,12 @@ import org.exbin.bined.editor.android.R;
 import org.junit.Assert;
 import org.junit.Test;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Tests clipboard actions for CodeArea command component.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class CodeAreaCommandClipboardTest extends CodeAreaComponentTest {
 
     public CodeAreaCommandClipboardTest() {

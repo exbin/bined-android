@@ -16,8 +16,7 @@
 package org.exbin.auxiliary.binary_data.paged;
 
 import java.util.Optional;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Paged data with support for customizable page creator.
@@ -29,7 +28,6 @@ public interface CustomizablePagedData extends PagedData {
      *
      * @return data page creator
      */
-    @Nonnull
     Optional<DataPageCreator> getDataPageCreator();
 
     /**

@@ -23,9 +23,8 @@ import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.auxiliary.binary_data.BinaryData;
 import org.exbin.auxiliary.binary_data.BinaryDataInputStream;
 import org.exbin.auxiliary.binary_data.BinaryDataOutputStream;
@@ -40,14 +39,13 @@ import org.exbin.auxiliary.binary_data.paged.DataPageCreator;
 /**
  * Paged data stored using byte buffer.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class BufferPagedData implements PagedData {
 
     public static final int DEFAULT_PAGE_SIZE = 4096;
     public static final long MAX_DATA_SIZE = Long.MAX_VALUE;
 
     protected int pageSize = DEFAULT_PAGE_SIZE;
-    @Nonnull
     protected final List<BufferData> data = new ArrayList<>();
 
     @Nullable
@@ -331,7 +329,6 @@ public class BufferPagedData implements PagedData {
         }
     }
 
-    @Nonnull
     @Override
     public BufferPagedData copy() {
         BufferPagedData targetData = new BufferPagedData();
@@ -339,7 +336,6 @@ public class BufferPagedData implements PagedData {
         return targetData;
     }
 
-    @Nonnull
     @Override
     public BufferPagedData copy(long startFrom, long length) {
         BufferPagedData targetData = new BufferPagedData();
@@ -416,7 +412,6 @@ public class BufferPagedData implements PagedData {
      * @param pageIndex page index
      * @return data page
      */
-    @Nonnull
     @Override
     public BufferData getPage(int pageIndex) {
         try {
@@ -593,19 +588,16 @@ public class BufferPagedData implements PagedData {
         }
     }
 
-    @Nonnull
     @Override
     public OutputStream getDataOutputStream() {
         return new BinaryDataOutputStream(this);
     }
 
-    @Nonnull
     @Override
     public InputStream getDataInputStream() {
         return new BinaryDataInputStream(this);
     }
 
-    @Nonnull
     protected BufferData createNewPage(byte[] pageData) {
         if (dataPageCreator != null) {
             EditableBinaryData page = dataPageCreator.createPage(pageData.length);
@@ -616,7 +608,6 @@ public class BufferPagedData implements PagedData {
         return new BufferData(pageData);
     }
 
-    @Nonnull
     protected BufferData createNewPage(int pageDataSize) {
         if (dataPageCreator != null) {
             return (BufferData) dataPageCreator.createPage(pageDataSize);

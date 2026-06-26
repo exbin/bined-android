@@ -15,13 +15,12 @@
  */
 package org.exbin.bined.editor.android.search;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Parameters for action to replace for occurrences of text or data.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class ReplaceParameters {
 
     private SearchCondition condition = new SearchCondition();
@@ -31,7 +30,6 @@ public class ReplaceParameters {
     public ReplaceParameters() {
     }
 
-    @Nonnull
     public SearchCondition getCondition() {
         return condition;
     }

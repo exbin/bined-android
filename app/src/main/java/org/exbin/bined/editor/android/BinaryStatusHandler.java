@@ -29,13 +29,12 @@ import org.exbin.bined.component.StatusCursorPositionFormat;
 import org.exbin.bined.component.StatusDocumentSizeFormat;
 import org.exbin.bined.component.BinaryStatusApi;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Binary editor status handler.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class BinaryStatusHandler implements BinaryStatusApi {
 
     public static final String INSERT_EDIT_MODE_LABEL = "INS";
@@ -137,7 +136,6 @@ public class BinaryStatusHandler implements BinaryStatusApi {
         updateDocumentSizeToolTip();
     }
 
-//    @Nonnull
 //    @Override
 //    public String getEncoding() {
 //        return encodingLabel.getText();
@@ -302,7 +300,6 @@ public class BinaryStatusHandler implements BinaryStatusApi {
 //        documentSizeLabel.setToolTipText(builder.toString());
     }
 
-    @Nonnull
     private String numberToPosition(long value, PositionCodeType codeType) {
         if (value == 0) {
             return "0";

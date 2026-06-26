@@ -24,21 +24,18 @@ import java.nio.channels.FileChannel;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Data source using android data content.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class DeltaDataPageWindow {
 
     public static final int PAGE_SIZE = 1024;
 
-    @Nonnull
     private final ContentDataSource data;
     private FileChannel fileChannel;
-    @Nonnull
     private final DataPage[] dataPages = new DataPage[]{new DataPage(), new DataPage()};
     private int activeDataPage = 1;
 

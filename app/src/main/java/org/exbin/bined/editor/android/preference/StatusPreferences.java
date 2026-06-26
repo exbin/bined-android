@@ -18,20 +18,18 @@ package org.exbin.bined.editor.android.preference;
 import org.exbin.bined.PositionCodeType;
 import org.exbin.bined.component.StatusNumericGrouping;
 import org.exbin.bined.editor.android.options.StatusOptions;
-import org.exbin.bined.editor.android.options.impl.StatusOptionsImpl;
 import org.exbin.bined.component.StatusCursorPositionFormat;
 import org.exbin.bined.component.StatusDocumentSizeFormat;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Code area status panel preferences.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class StatusPreferences implements StatusOptions {
 
     public static final String PREFERENCES_CURSOR_POSITION_CODE_TYPE = "statusCursorPositionFormat";
@@ -48,7 +46,6 @@ public class StatusPreferences implements StatusOptions {
         this.preferences = preferences;
     }
 
-    @Nonnull
     public PositionCodeType getCursorPositionCodeType() {
         PositionCodeType defaultCodeType = PositionCodeType.DECIMAL;
         try {
@@ -71,7 +68,6 @@ public class StatusPreferences implements StatusOptions {
         preferences.putBoolean(PREFERENCES_CURSOR_POSITION_SHOW_OFFSET, statusCursorShowOffset);
     }
 
-    @Nonnull
     public PositionCodeType getDocumentSizeCodeType() {
         PositionCodeType defaultCodeType = PositionCodeType.DECIMAL;
         try {
@@ -94,13 +90,11 @@ public class StatusPreferences implements StatusOptions {
         preferences.putBoolean(PREFERENCES_DOCUMENT_SIZE_SHOW_RELATIVE, statusDocumentSizeShowRelative);
     }
 
-    @Nonnull
     @Override
     public StatusCursorPositionFormat getCursorPositionFormat() {
         return new StatusCursorPositionFormat(getCursorPositionCodeType(), isCursorShowOffset());
     }
 
-    @Nonnull
     @Override
     public StatusDocumentSizeFormat getDocumentSizeFormat() {
         return new StatusDocumentSizeFormat(getDocumentSizeCodeType(), isDocumentSizeShowRelative());

@@ -15,9 +15,8 @@
  */
 package org.exbin.bined.operation.android.command;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 import org.exbin.auxiliary.binary_data.EditableBinaryData;
 import org.exbin.bined.CodeAreaUtils;
@@ -28,12 +27,11 @@ import org.exbin.bined.android.CodeAreaCore;
 /**
  * Abstract class for operation on binary document.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public abstract class OpCodeAreaCommand extends CodeAreaCommand {
 
     @Nullable
     protected BinaryDataUndoableOperation operation;
-    @Nonnull
     protected BinaryDataCommandPhase phase = BinaryDataCommandPhase.CREATED;
 
     public OpCodeAreaCommand(CodeAreaCore codeArea) {

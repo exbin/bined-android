@@ -21,10 +21,9 @@ import org.exbin.bined.PositionCodeType;
 
 import java.util.Arrays;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
-@ParametersAreNonnullByDefault
+@NullMarked
 public class SwitchableBase {
 
     protected static final int LENGTH_LIMIT = 21;
@@ -32,7 +31,6 @@ public class SwitchableBase {
 
     protected PositionCodeType codeType = PositionCodeType.DECIMAL;
 
-    @Nonnull
     public PositionCodeType getCodeType() {
         return codeType;
     }
@@ -41,7 +39,6 @@ public class SwitchableBase {
         this.codeType = codeType;
     }
 
-    @Nonnull
     public String getPositionAsString(long position) {
         if (position < 0) {
             return "-" + getNonNegativePositionAsString(-position);
@@ -49,7 +46,6 @@ public class SwitchableBase {
         return getNonNegativePositionAsString(position);
     }
 
-    @Nonnull
     public String getNonNegativePositionAsString(long position) {
         Arrays.fill(cache, ' ');
         CodeAreaUtils.longToBaseCode(cache, 0, position, codeType.getBase(), LENGTH_LIMIT, false, CodeCharactersCase.LOWER);

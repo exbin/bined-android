@@ -15,12 +15,12 @@
  */
 package org.exbin.bined.component;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Numeric grouping for binary status.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class StatusNumericGrouping {
 
     public static final int DEFAULT_OCTAL_SPACE_GROUP_SIZE = 4;

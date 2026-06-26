@@ -18,13 +18,13 @@ package org.exbin.bined.android;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Font definition.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class Font {
 
     private Typeface typeface;

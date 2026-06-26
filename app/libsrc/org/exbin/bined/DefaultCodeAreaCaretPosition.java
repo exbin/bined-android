@@ -17,15 +17,14 @@ package org.exbin.bined;
 
 import java.util.Objects;
 import java.util.Optional;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Specifies caret position as combination of data position, section and code
  * offset of code representation.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class DefaultCodeAreaCaretPosition implements CodeAreaCaretPosition {
 
     private long dataPosition = 0;
@@ -60,7 +59,6 @@ public class DefaultCodeAreaCaretPosition implements CodeAreaCaretPosition {
         this.codeOffset = codeOffset;
     }
 
-    @Nonnull
     @Override
     public Optional<CodeAreaSection> getSection() {
         return Optional.ofNullable(section);

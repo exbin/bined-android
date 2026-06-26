@@ -15,26 +15,23 @@
  */
 package org.exbin.bined.highlight.android.color;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.bined.color.CodeAreaColorGroup;
 
 /**
  * Enumeration of color groups for nonprintable colors.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public enum NonprintableCodeAreaColorsGroup implements CodeAreaColorGroup {
 
     NONPRINTABLES("nonprintables");
 
-    @Nonnull
     private final String groupId;
 
     NonprintableCodeAreaColorsGroup(String groupId) {
         this.groupId = groupId;
     }
 
-    @Nonnull
     @Override
     public String getId() {
         return groupId;

@@ -20,9 +20,8 @@ import android.graphics.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.bined.basic.BasicCodeAreaSection;
 import org.exbin.bined.CodeAreaSection;
 import org.exbin.bined.highlight.android.color.CodeAreaMatchColorType;
@@ -33,7 +32,7 @@ import org.exbin.bined.android.basic.color.CodeAreaColorsProfile;
 /**
  * Code area search matches highlighting.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class SearchCodeAreaColorAssessor implements CodeAreaColorAssessor {
 
     private final CodeAreaColorAssessor parentAssessor;
@@ -185,7 +184,6 @@ public class SearchCodeAreaColorAssessor implements CodeAreaColorAssessor {
         return Optional.ofNullable(parentAssessor);
     }
 
-    @Nonnull
     public List<SearchMatch> getMatches() {
         return matches;
     }

@@ -23,9 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.auxiliary.binary_data.BinaryData;
 import org.exbin.auxiliary.binary_data.delta.list.DefaultDoublyLinkedList;
 import org.exbin.auxiliary.binary_data.delta.list.DoublyLinkedItem;
@@ -33,21 +32,17 @@ import org.exbin.auxiliary.binary_data.delta.list.DoublyLinkedItem;
 /**
  * Repository of delta segments.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class SegmentsRepository {
 
-    @Nonnull
     private final Map<DataSource, DataSegmentsMap> dataSources = new HashMap<>();
-    @Nonnull
     private final Map<MemoryDataSource, DataSegmentsMap> memorySources = new HashMap<>();
 
-    @Nonnull
     private final List<DeltaDocument> documents = new ArrayList<>();
     /**
      * Limit for save processing in bytes.
      */
     private static final int PROCESSING_LIMIT = 4096;
-    @Nonnull
     private final MemorySegmentCreator memorySegmentCreator;
 
     public SegmentsRepository(MemorySegmentCreator memorySegmentCreator) {
@@ -58,7 +53,6 @@ public class SegmentsRepository {
         dataSources.put(dataSource, new DataSegmentsMap());
     }
 
-    @Nonnull
     public MemoryDataSource openMemorySource() {
         MemoryDataSource memorySource = new MemoryDataSource(memorySegmentCreator.createSegment());
         memorySources.put(memorySource, new DataSegmentsMap());
@@ -75,7 +69,6 @@ public class SegmentsRepository {
      *
      * @return delta document
      */
-    @Nonnull
     public DeltaDocument createDocument() {
         DeltaDocument document = new DeltaDocument(this);
         documents.add(document);
@@ -89,7 +82,6 @@ public class SegmentsRepository {
      * @return delta document
      * @throws IOException if input/output error
      */
-    @Nonnull
     public DeltaDocument createDocument(DataSource dataSource) throws IOException {
         DeltaDocument document = new DeltaDocument(this, dataSource);
         documents.add(document);
@@ -428,7 +420,6 @@ public class SegmentsRepository {
         }
     }
 
-    @Nonnull
     private Map<DataSegment, Long> createSaveTransformation(DeltaDocument savedDocument) {
         Map<DataSegment, Long> transformation = new HashMap<>();
         DefaultDoublyLinkedList<DataSegment> segments = savedDocument.getSegments();
@@ -526,7 +517,6 @@ public class SegmentsRepository {
      * @param length length
      * @return file segment
      */
-    @Nonnull
     public SourceSegment createSourceSegment(DataSource dataSource, long startPosition, long length) {
         SourceSegment fileSegment = new SourceSegment(dataSource, startPosition, length);
         DataSegmentsMap segmentsMap = dataSources.get(dataSource);
@@ -539,7 +529,6 @@ public class SegmentsRepository {
         segmentsMap.remove(fileSegment);
     }
 
-    @Nonnull
     public MemorySegment createMemorySegment() {
         return createMemorySegment(openMemorySource(), 0, 0);
     }
@@ -552,7 +541,6 @@ public class SegmentsRepository {
      * @param length length
      * @return memory segment
      */
-    @Nonnull
     public MemorySegment createMemorySegment(MemoryDataSource memorySource, long startPosition, long length) {
         if (startPosition + length > memorySource.getDataSize()) {
             memorySource.setDataSize(startPosition + length);
@@ -769,7 +757,6 @@ public class SegmentsRepository {
      * @param segment original segment
      * @return copy of segment
      */
-    @Nonnull
     public DataSegment copySegment(DataSegment segment) {
         if (segment instanceof MemorySegment) {
             MemorySegment memorySegment = (MemorySegment) segment;
@@ -788,7 +775,6 @@ public class SegmentsRepository {
      * @param length segment area length
      * @return copy of segment
      */
-    @Nonnull
     public DataSegment copySegment(DataSegment segment, long offset, long length) {
         if (segment instanceof MemorySegment) {
             MemorySegment memorySegment = (MemorySegment) segment;
@@ -825,10 +811,9 @@ public class SegmentsRepository {
      * Segments are supposed to be kept ordered by start position and length
      * with max position computed.
      */
-    @ParametersAreNonnullByDefault
+    @NullMarked
     private class DataSegmentsMap {
 
-        @Nonnull
         private final DefaultDoublyLinkedList<SegmentRecord> records = new DefaultDoublyLinkedList<>();
         @Nullable
         private SegmentRecord pointerRecord = null;
@@ -1080,7 +1065,6 @@ public class SegmentsRepository {
         @Nullable
         SegmentRecord next = null;
 
-        @Nonnull
         DataSegment dataSegment;
         long maxPosition;
 

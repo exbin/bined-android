@@ -22,17 +22,15 @@ import org.exbin.auxiliary.binary_data.jna.JnaBufferEditableData;
 import org.exbin.bined.android.basic.CodeArea;
 import org.exbin.bined.editor.android.preference.BinaryEditorPreferences;
 import org.exbin.bined.editor.android.preference.PreferencesWrapper;
-import org.exbin.bined.editor.android.search.BinarySearch;
 import org.exbin.bined.editor.android.search.SearchParameters;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Application context.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class ApplicationContext extends Application {
 
     private BinaryEditorPreferences appPreferences;
@@ -49,7 +47,6 @@ public class ApplicationContext extends Application {
         appPreferences = new BinaryEditorPreferences(new PreferencesWrapper(getApplicationContext()));
     }
 
-    @Nonnull
     public BinaryEditorPreferences getAppPreferences() {
         return appPreferences;
     }
@@ -59,7 +56,6 @@ public class ApplicationContext extends Application {
         return fileHandler;
     }
 
-    @Nonnull
     public BinEdFileHandler createFileHandler(CodeArea codeArea) {
         fileHandler = new BinEdFileHandler(codeArea);
         fileHandler.setSegmentsRepository(segmentsRepository);

@@ -15,14 +15,13 @@
  */
 package org.exbin.bined.capability;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.bined.basic.CodeAreaViewMode;
 
 /**
  * Support for view mode capability.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface ViewModeCapable {
 
     /**
@@ -30,7 +29,6 @@ public interface ViewModeCapable {
      *
      * @return view mode
      */
-    @Nonnull
     CodeAreaViewMode getViewMode();
 
     /**

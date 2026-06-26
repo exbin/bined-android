@@ -15,15 +15,14 @@
  */
 package org.exbin.bined.operation.android.command;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.bined.operation.android.RemoveDataOperation;
 import org.exbin.bined.android.CodeAreaCore;
 
 /**
  * Command for deleting data.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class RemoveDataCommand extends OpCodeAreaCommand {
 
     public RemoveDataCommand(CodeAreaCore codeArea, long position, int codeOffset, long size) {
@@ -31,7 +30,6 @@ public class RemoveDataCommand extends OpCodeAreaCommand {
         super.setOperation(new RemoveDataOperation(position, codeOffset, size));
     }
 
-    @Nonnull
     @Override
     public CodeAreaCommandType getType() {
         return CodeAreaCommandType.DATA_REMOVED;

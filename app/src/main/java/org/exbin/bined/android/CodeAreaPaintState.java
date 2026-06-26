@@ -16,9 +16,8 @@
 package org.exbin.bined.android;
 
 import java.nio.charset.Charset;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.auxiliary.binary_data.BinaryData;
 import org.exbin.bined.CodeAreaSection;
 import org.exbin.bined.CodeAreaSelection;
@@ -27,19 +26,15 @@ import org.exbin.bined.android.basic.color.CodeAreaColorsProfile;
 /**
  * Code area paint state.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface CodeAreaPaintState {
 
-    @Nonnull
     CodeAreaSection getActiveSection();
 
-    @Nonnull
     CodeAreaColorsProfile getColorsProfile();
 
-    @Nonnull
     Charset getCharset();
 
-    @Nonnull
     byte[] getRowData();
 
     int getMaxBytesPerChar();
@@ -53,7 +48,6 @@ public interface CodeAreaPaintState {
     long getDataSize();
 
     // TODO: Replace with row data only?
-    @Nonnull
     BinaryData getContentData();
 
     @Nullable

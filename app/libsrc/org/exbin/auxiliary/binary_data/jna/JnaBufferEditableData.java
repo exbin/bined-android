@@ -17,15 +17,14 @@ package org.exbin.auxiliary.binary_data.jna;
 
 import com.sun.jna.Memory;
 import java.nio.ByteBuffer;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.auxiliary.binary_data.buffer.BufferEditableData;
 
 /**
  * Implementation of editable binary data interface using JNA byte buffer.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class JnaBufferEditableData extends BufferEditableData {
 
     public JnaBufferEditableData() {
@@ -59,13 +58,11 @@ public class JnaBufferEditableData extends BufferEditableData {
         super(JnaBufferEditableData.allocateBufferInt(dataSize));
     }
 
-    @Nonnull
     @Override
     protected ByteBuffer allocateBuffer(int capacity) {
         return JnaBufferEditableData.allocateBufferInt(capacity);
     }
 
-    @Nonnull
     private static ByteBuffer allocateBufferInt(int capacity) {
         try {
             return new Memory(capacity).getByteBuffer(0, capacity);
@@ -75,7 +72,6 @@ public class JnaBufferEditableData extends BufferEditableData {
         }
     }
 
-    @Nonnull
     private static ByteBuffer allocateBufferInt(@Nullable byte[] data) {
         if (data == null) {
             return JnaBufferEditableData.allocateBufferInt(0);

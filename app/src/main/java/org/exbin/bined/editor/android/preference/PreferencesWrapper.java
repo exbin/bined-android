@@ -23,13 +23,12 @@ import androidx.preference.PreferenceManager;
 
 import java.util.Optional;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Preferences wrapper.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class PreferencesWrapper implements Preferences {
 
     private SharedPreferences preferences;
@@ -47,13 +46,11 @@ public class PreferencesWrapper implements Preferences {
         return preferences.contains(key);
     }
 
-    @Nonnull
     @Override
     public Optional<String> get(String key) {
         return Optional.ofNullable(preferences.getString(key, null));
     }
 
-    @Nonnull
     @Override
     public String get(String key, String def) {
         return preferences.getString(key, def);
@@ -64,7 +61,6 @@ public class PreferencesWrapper implements Preferences {
         return preferences.getBoolean(key, def);
     }
 
-    @Nonnull
     @Override
     public byte[] getByteArray(String key, byte[] def) {
         throw new UnsupportedOperationException("Not supported yet.");

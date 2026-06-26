@@ -30,13 +30,12 @@ import org.exbin.bined.highlight.android.NonprintablesCodeAreaAssessor;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Code area preferences.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class CodeAreaPreferences implements CodeAreaOptions {
 
     public static final String PREFERENCES_CODE_TYPE = "codeType";
@@ -60,7 +59,6 @@ public class CodeAreaPreferences implements CodeAreaOptions {
         this.preferences = preferences;
     }
 
-    @Nonnull
     @Override
     public CodeType getCodeType() {
         CodeType defaultCodeType = CodeType.HEXADECIMAL;
@@ -87,7 +85,6 @@ public class CodeAreaPreferences implements CodeAreaOptions {
         preferences.putBoolean(PREFERENCES_SHOW_NONPRINTABLES, showNonprintables);
     }
 
-    @Nonnull
     @Override
     public CodeCharactersCase getCodeCharactersCase() {
         CodeCharactersCase defaultCharactersCase = CodeCharactersCase.UPPER;
@@ -104,7 +101,6 @@ public class CodeAreaPreferences implements CodeAreaOptions {
         preferences.put(PREFERENCES_HEX_CHARACTERS_CASE, codeCharactersCase.name());
     }
 
-    @Nonnull
     @Override
     public PositionCodeType getPositionCodeType() {
         PositionCodeType defaultCodeType = PositionCodeType.HEXADECIMAL;
@@ -121,7 +117,6 @@ public class CodeAreaPreferences implements CodeAreaOptions {
         preferences.put(PREFERENCES_POSITION_CODE_TYPE, positionCodeType.name());
     }
 
-    @Nonnull
     @Override
     public CodeAreaViewMode getViewMode() {
         CodeAreaViewMode defaultMode = CodeAreaViewMode.DUAL;
@@ -156,7 +151,6 @@ public class CodeAreaPreferences implements CodeAreaOptions {
         preferences.putBoolean(PREFERENCES_CODE_COLORIZATION, codeColorization);
     }
 
-    @Nonnull
     @Override
     public RowWrappingMode getRowWrappingMode() {
         RowWrappingMode defaultMode = RowWrappingMode.NO_WRAPPING;

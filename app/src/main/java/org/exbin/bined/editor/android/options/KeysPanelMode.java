@@ -15,12 +15,12 @@
  */
 package org.exbin.bined.editor.android.options;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Keys panel mode.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public enum KeysPanelMode {
     HIDE,
     SMALL,

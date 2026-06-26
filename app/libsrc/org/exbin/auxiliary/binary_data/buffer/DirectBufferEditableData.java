@@ -16,14 +16,13 @@
 package org.exbin.auxiliary.binary_data.buffer;
 
 import java.nio.ByteBuffer;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Implementation of editable binary data interface using direct byte buffer.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class DirectBufferEditableData extends BufferEditableData {
 
     public DirectBufferEditableData() {
@@ -57,18 +56,15 @@ public class DirectBufferEditableData extends BufferEditableData {
         super(DirectBufferEditableData.allocateBufferInt(dataSize));
     }
 
-    @Nonnull
     @Override
     protected ByteBuffer allocateBuffer(int capacity) {
         return DirectBufferEditableData.allocateBufferInt(capacity);
     }
 
-    @Nonnull
     private static ByteBuffer allocateBufferInt(int capacity) {
         return ByteBuffer.allocateDirect(capacity);
     }
 
-    @Nonnull
     private static ByteBuffer allocateBufferInt(@Nullable byte[] data) {
         if (data == null) {
             return DirectBufferEditableData.allocateBufferInt(0);

@@ -34,15 +34,15 @@ import org.exbin.bined.color.CodeAreaBasicColors;
 import org.exbin.bined.color.CodeAreaColorType;
 import org.exbin.bined.editor.android.R;
 
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Basic code area set of colors.
  *
  * @author ExBin Project (https://exbin.org)
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class BasicCodeAreaColorsProfile implements CodeAreaColorsProfile {
 
     @Nullable

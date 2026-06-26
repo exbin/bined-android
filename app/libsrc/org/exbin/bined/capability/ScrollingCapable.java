@@ -15,8 +15,7 @@
  */
 package org.exbin.bined.capability;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.bined.CodeAreaCaretPosition;
 import org.exbin.bined.ScrollingListener;
 import org.exbin.bined.basic.CodeAreaScrollPosition;
@@ -25,7 +24,7 @@ import org.exbin.bined.basic.ScrollingDirection;
 /**
  * Support for scrolling capability.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface ScrollingCapable {
 
     /**
@@ -33,7 +32,6 @@ public interface ScrollingCapable {
      *
      * @return scroll position
      */
-    @Nonnull
     CodeAreaScrollPosition getScrollPosition();
 
     /**
@@ -64,7 +62,6 @@ public interface ScrollingCapable {
      * @param direction scrolling direction
      * @return scrolling position
      */
-    @Nonnull
     CodeAreaScrollPosition computeScrolling(CodeAreaScrollPosition startPosition, ScrollingDirection direction);
 
     /**

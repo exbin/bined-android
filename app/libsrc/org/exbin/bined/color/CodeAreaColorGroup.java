@@ -15,11 +15,12 @@
  */
 package org.exbin.bined.color;
 
-import javax.annotation.Nonnull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Interface for code area color group.
  */
+@NullMarked
 public interface CodeAreaColorGroup {
 
     /**
@@ -30,6 +31,5 @@ public interface CodeAreaColorGroup {
      *
      * @return unique identification ID key
      */
-    @Nonnull
     String getId();
 }

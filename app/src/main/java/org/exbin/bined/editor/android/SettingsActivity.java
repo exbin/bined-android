@@ -38,13 +38,12 @@ import org.exbin.bined.editor.android.preference.HeaderFragment;
 import org.exbin.bined.editor.android.preference.PreferencesWrapper;
 import org.exbin.bined.component.FileProcessingMode;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Settings activity.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class SettingsActivity extends AppCompatActivity implements
         PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
 
@@ -95,7 +94,6 @@ public class SettingsActivity extends AppCompatActivity implements
         }
     }
 
-    @Nonnull
     public BinaryEditorPreferences getAppPreferences() {
         if (appPreferences == null) {
             return new BinaryEditorPreferences(new PreferencesWrapper(getApplicationContext()));
@@ -133,7 +131,7 @@ public class SettingsActivity extends AppCompatActivity implements
         fragment.setArguments(args);
         fragmentManager.setFragmentResultListener("requestKey", fragment, new FragmentResultListener() {
             @Override
-            public void onFragmentResult(@Nonnull String requestKey, @Nonnull Bundle result) {
+            public void onFragmentResult(String requestKey, Bundle result) {
                 caller.getParentFragmentManager().setFragmentResult(requestKey, result);
             }
         });

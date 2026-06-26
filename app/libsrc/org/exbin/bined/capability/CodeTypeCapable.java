@@ -15,14 +15,13 @@
  */
 package org.exbin.bined.capability;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.bined.CodeType;
 
 /**
  * Support for code type capability.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface CodeTypeCapable {
 
     /**
@@ -30,7 +29,6 @@ public interface CodeTypeCapable {
      *
      * @return code type
      */
-    @Nonnull
     CodeType getCodeType();
 
     /**

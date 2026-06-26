@@ -19,13 +19,12 @@ import org.exbin.auxiliary.binary_data.BinaryData;
 import org.exbin.bined.android.CodeAreaCore;
 import org.exbin.bined.operation.android.ModifyDataOperation;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Command for modifying data.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class ModifyDataCommand extends OpCodeAreaCommand {
 
     public ModifyDataCommand(CodeAreaCore codeArea, long position, BinaryData data) {
@@ -33,7 +32,6 @@ public class ModifyDataCommand extends OpCodeAreaCommand {
         super.setOperation(new ModifyDataOperation(position, data));
     }
 
-    @Nonnull
     @Override
     public CodeAreaCommandType getType() {
         return CodeAreaCommandType.DATA_MODIFIED;

@@ -16,12 +16,12 @@
 package org.exbin.auxiliary.binary_data.delta;
 
 import java.io.IOException;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Data source interface.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface DataSource {
 
     /**

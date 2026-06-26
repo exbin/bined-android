@@ -18,15 +18,14 @@ package org.exbin.bined;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.auxiliary.binary_data.BinaryData;
 import org.exbin.auxiliary.binary_data.jna.JnaBufferData;
 
 /**
  * Simulation of huge binary data source.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class HugeBinaryData implements BinaryData {
 
     @Override
@@ -44,13 +43,11 @@ public class HugeBinaryData implements BinaryData {
         return (byte) (longValue % 0xff);
     }
 
-    @Nonnull
     @Override
     public BinaryData copy() {
         return new HugeBinaryData();
     }
 
-    @Nonnull
     @Override
     public BinaryData copy(long startFrom, long length) {
         if (length > Integer.MAX_VALUE) {
@@ -73,7 +70,6 @@ public class HugeBinaryData implements BinaryData {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Nonnull
     @Override
     public InputStream getDataInputStream() {
         throw new UnsupportedOperationException("Not supported yet.");

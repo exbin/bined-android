@@ -17,8 +17,7 @@ package org.exbin.auxiliary.binary_data.delta;
 
 import java.io.IOException;
 import java.io.InputStream;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.auxiliary.binary_data.SeekableStream;
 
 /**
@@ -26,10 +25,9 @@ import org.exbin.auxiliary.binary_data.SeekableStream;
  * <p>
  * Can process expanding document.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class DeltaDocumentInputStream extends InputStream implements SeekableStream {
 
-    @Nonnull
     private final DeltaDocumentWindow data;
     private long position = 0;
     private long mark = 0;

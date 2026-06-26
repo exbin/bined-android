@@ -39,14 +39,13 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Table map character assessor.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class CodeAreaTableMapAssessor implements CodeAreaCharAssessor {
 
     protected final CodeAreaCharAssessor parentAssessor;
@@ -205,7 +204,6 @@ public class CodeAreaTableMapAssessor implements CodeAreaCharAssessor {
         return ' ';
     }
 
-    @Nonnull
     @Override
     public Optional<CodeAreaCharAssessor> getParentCharAssessor() {
         return Optional.ofNullable(parentAssessor);
@@ -264,7 +262,6 @@ public class CodeAreaTableMapAssessor implements CodeAreaCharAssessor {
         useTable = true;
     }
 
-    @Nonnull
     public Map<Integer, Character> getCharacterTable() {
         return characterTable;
     }

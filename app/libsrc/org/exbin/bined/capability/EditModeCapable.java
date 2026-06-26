@@ -15,8 +15,7 @@
  */
 package org.exbin.bined.capability;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.bined.EditMode;
 import org.exbin.bined.EditOperation;
 import org.exbin.bined.EditModeChangedListener;
@@ -24,7 +23,7 @@ import org.exbin.bined.EditModeChangedListener;
 /**
  * Support for edit mode capability.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface EditModeCapable {
 
     /**
@@ -32,7 +31,6 @@ public interface EditModeCapable {
      *
      * @return edit mode
      */
-    @Nonnull
     EditMode getEditMode();
 
     /**
@@ -48,7 +46,6 @@ public interface EditModeCapable {
      *
      * @return active edit operation
      */
-    @Nonnull
     EditOperation getActiveOperation();
 
     /**
@@ -56,7 +53,6 @@ public interface EditModeCapable {
      *
      * @return edit operation
      */
-    @Nonnull
     EditOperation getEditOperation();
 
     /**

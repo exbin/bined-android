@@ -15,8 +15,7 @@
  */
 package org.exbin.bined.operation.android;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import javax.annotation.concurrent.Immutable;
 import org.exbin.bined.CodeAreaCaretPosition;
 import org.exbin.bined.SelectionRange;
@@ -24,7 +23,7 @@ import org.exbin.bined.SelectionRange;
 /**
  * Code area state for operation purposes.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 @Immutable
 public class CodeAreaState {
 
@@ -36,12 +35,10 @@ public class CodeAreaState {
         this.selection = selection;
     }
 
-    @Nonnull
     public CodeAreaCaretPosition getCaretPosition() {
         return caretPosition;
     }
 
-    @Nonnull
     public SelectionRange getSelection() {
         return selection;
     }

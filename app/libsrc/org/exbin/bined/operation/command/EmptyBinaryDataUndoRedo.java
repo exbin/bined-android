@@ -18,14 +18,13 @@ package org.exbin.bined.operation.command;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.bined.operation.BinaryDataUndoRedoChangeListener;
 
 /**
  * Empty binary data undo.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class EmptyBinaryDataUndoRedo implements BinaryDataUndoRedo {
 
     @Override
@@ -52,13 +51,11 @@ public class EmptyBinaryDataUndoRedo implements BinaryDataUndoRedo {
         command.execute();
     }
 
-    @Nonnull
     @Override
     public List<BinaryDataCommand> getCommandList() {
         return Collections.emptyList();
     }
 
-    @Nonnull
     @Override
     public Optional<BinaryDataCommand> getTopUndoCommand() {
         return Optional.empty();

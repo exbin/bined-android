@@ -19,12 +19,12 @@ import android.graphics.Canvas;
 
 import org.exbin.bined.basic.CodeAreaScrollPosition;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Code area android control.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface CodeAreaAndroidControl {
 
     /**

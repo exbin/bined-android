@@ -17,8 +17,7 @@ package org.exbin.bined.operation.command;
 
 import java.util.List;
 import java.util.Optional;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.bined.operation.BinaryDataModifiedState;
 import org.exbin.bined.operation.BinaryDataUndoRedoChangeListener;
 import org.exbin.bined.operation.BinaryDataUndoRedoState;
@@ -26,7 +25,7 @@ import org.exbin.bined.operation.BinaryDataUndoRedoState;
 /**
  * Undoable command sequence.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface BinaryDataUndoRedo extends BinaryDataUndoRedoState, BinaryDataModifiedState {
 
     /**
@@ -42,7 +41,6 @@ public interface BinaryDataUndoRedo extends BinaryDataUndoRedoState, BinaryDataM
      *
      * @return top undo command if exists
      */
-    @Nonnull
     Optional<BinaryDataCommand> getTopUndoCommand();
 
     /**
@@ -50,7 +48,6 @@ public interface BinaryDataUndoRedo extends BinaryDataUndoRedoState, BinaryDataM
      *
      * @return list of commands
      */
-    @Nonnull
     List<BinaryDataCommand> getCommandList();
 
     /**

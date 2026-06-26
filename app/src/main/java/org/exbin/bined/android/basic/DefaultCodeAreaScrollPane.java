@@ -20,12 +20,12 @@ import android.util.AttributeSet;
 
 import com.example.customtouch.widget.TwoDimensionScrollView;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Default scroll pane for binary component.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class DefaultCodeAreaScrollPane extends TwoDimensionScrollView {
 
     protected volatile boolean scrollingByUser = false;

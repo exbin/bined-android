@@ -17,16 +17,14 @@ package org.exbin.auxiliary.binary_data;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Output stream for binary data.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class BinaryDataRengeOutputStream extends OutputStream implements SeekableStream, FinishableStream {
 
-    @Nonnull
     protected final EditableBinaryData data;
     protected final long startPosition;
     protected final long length;

@@ -32,13 +32,12 @@ import androidx.fragment.app.FragmentActivity;
 
 import org.exbin.bined.editor.android.R;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * About application dialog.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class AboutDialog extends AppCompatDialogFragment {
 
     private static final String DONATE_LINK = "https://bined.exbin.org/?p=donate";
@@ -49,7 +48,6 @@ public class AboutDialog extends AppCompatDialogFragment {
         this.appVersion = appVersion;
     }
 
-    @Nonnull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         FragmentActivity activity = getActivity();

@@ -19,15 +19,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.auxiliary.binary_data.EditableBinaryData;
 import org.exbin.auxiliary.binary_data.jna.JnaBufferEditableData;
 
 /**
  * Tests for codeArea component.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class CodeAreaTest {
 
     public static final String SAMPLE_FILES_PATH = "/org/exbin/bined/resources/test/";
@@ -38,7 +37,6 @@ public class CodeAreaTest {
     private CodeAreaTest() {
     }
 
-    @Nonnull
     public static EditableBinaryData getSampleData(String dataPath) {
         JnaBufferEditableData data = new JnaBufferEditableData();
         try (InputStream stream = CodeAreaTest.class.getResourceAsStream(dataPath)) {

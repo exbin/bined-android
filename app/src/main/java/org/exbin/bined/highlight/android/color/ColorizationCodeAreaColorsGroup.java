@@ -15,26 +15,23 @@
  */
 package org.exbin.bined.highlight.android.color;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.bined.color.CodeAreaColorGroup;
 
 /**
  * Enumeration of color groups for code area colorization.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public enum ColorizationCodeAreaColorsGroup implements CodeAreaColorGroup {
 
     COLORIZATION("colorization");
 
-    @Nonnull
     private final String groupId;
 
     private ColorizationCodeAreaColorsGroup(String groupId) {
         this.groupId = groupId;
     }
 
-    @Nonnull
     @Override
     public String getId() {
         return groupId;

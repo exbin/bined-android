@@ -15,26 +15,23 @@
  */
 package org.exbin.bined.color;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Enumeration of basic color groups.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public enum BasicCodeAreaColorGroup implements CodeAreaColorGroup {
 
     MAIN("main"),
     SELECTION("selection");
 
-    @Nonnull
     private final String groupId;
 
     BasicCodeAreaColorGroup(String groupId) {
         this.groupId = groupId;
     }
 
-    @Nonnull
     @Override
     public String getId() {
         return groupId;

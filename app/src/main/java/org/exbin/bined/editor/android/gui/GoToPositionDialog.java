@@ -40,13 +40,12 @@ import org.exbin.bined.editor.android.SwitchableBase;
 
 import java.util.Arrays;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Go to position dialog.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class GoToPositionDialog extends AppCompatDialogFragment {
 
     protected DialogInterface.OnClickListener positionListener;
@@ -63,7 +62,6 @@ public class GoToPositionDialog extends AppCompatDialogFragment {
         this.positionListener = positionListener;
     }
 
-    @Nonnull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         FragmentActivity activity = getActivity();

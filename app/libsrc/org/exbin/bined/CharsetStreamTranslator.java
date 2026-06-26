@@ -26,14 +26,13 @@ import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Input stream translation class which converts from input charset to target
  * charset.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class CharsetStreamTranslator extends InputStream {
 
     private static final String UNMAPPABLE_CHARACTER_ERROR = "Unmappable character should be handled automatically";
@@ -43,18 +42,12 @@ public class CharsetStreamTranslator extends InputStream {
     public static final int DEFAULT_MAX_BYTES_PER_CHAR = 8;
     public static final int BYTE_BUFFER_SIZE = 16;
 
-    @Nonnull
     protected final CharsetEncoder encoder;
-    @Nonnull
     protected final CharsetDecoder decoder;
-    @Nonnull
     protected final InputStream source;
 
-    @Nonnull
     protected final ByteBuffer inputBuffer;
-    @Nonnull
     protected final ByteBuffer outputBuffer;
-    @Nonnull
     protected final CharBuffer charBuffer;
     protected boolean endOfInput = false;
 

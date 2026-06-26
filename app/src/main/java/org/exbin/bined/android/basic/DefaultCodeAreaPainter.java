@@ -78,17 +78,15 @@ import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Optional;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Code area component default painter.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapableCodeAreaPainter, CodeAreaPaintState, ColorAssessorPainterCapable, CharAssessorPainterCapable {
 
-    @Nonnull
     protected final CodeAreaCore codeArea;
     protected volatile boolean initialized = false;
     protected volatile boolean adjusting = false;
@@ -100,11 +98,8 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
 
     @Nullable
     protected Paint paint = null;
-    @Nonnull
     protected final View dataView;
-    @Nonnull
     protected final DefaultCodeAreaScrollPane scrollPanel;
-    @Nonnull
     protected final DefaultCodeAreaMouseListener codeAreaMouseListener;
 
     protected int dataViewOffsetX = 0;
@@ -112,7 +107,6 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
     protected int scrollOffsetX = 0;
     protected int scrollOffsetY = 0;
 
-    @Nonnull
     protected final DataChangedListener codeAreaDataChangeListener;
 
     protected final BasicCodeAreaMetrics metrics = new BasicCodeAreaMetrics();
@@ -122,7 +116,6 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
     protected final BasicCodeAreaVisibility visibility = new BasicCodeAreaVisibility();
 
     protected final BasicCodeAreaLayout layout = new BasicCodeAreaLayout();
-    @Nonnull
     protected BasicCodeAreaColorsProfile colorsProfile = new BasicCodeAreaColorsProfile();
 
     @Nullable
@@ -140,11 +133,8 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
 
     @Nullable
     protected Font font;
-    @Nonnull
     protected Charset charset;
-    @Nonnull
     protected CodeAreaColorAssessor colorAssessor = null;
-    @Nonnull
     protected CodeAreaCharAssessor charAssessor = null;
 
     @Nullable
@@ -841,7 +831,6 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         }
     }
 
-    @Nonnull
     @Override
     public PositionScrollVisibility computePositionScrollVisibility(CodeAreaCaretPosition caretPosition) {
         int bytesPerRow = structure.getBytesPerRow();
@@ -867,7 +856,6 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         return scrolling.computePositionScrollVisibility(rowPosition, charPosition, bytesPerRow, rowsPerPage, charactersPerPage, dataViewWidth, dataViewHeight, characterWidth, rowHeight);
     }
 
-    @Nonnull
     @Override
     public Optional<CodeAreaScrollPosition> computeRevealScrollPosition(CodeAreaCaretPosition caretPosition) {
         int bytesPerRow = structure.getBytesPerRow();
@@ -893,7 +881,6 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         return scrolling.computeRevealScrollPosition(rowPosition, charPosition, bytesPerRow, rowsPerPage, charactersPerPage, dataViewWidth % characterWidth, dataViewHeight % rowHeight, characterWidth, rowHeight);
     }
 
-    @Nonnull
     @Override
     public Optional<CodeAreaScrollPosition> computeCenterOnScrollPosition(CodeAreaCaretPosition caretPosition) {
         int bytesPerRow = structure.getBytesPerRow();
@@ -998,7 +985,6 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         }
     }
 
-    @Nonnull
     @Override
     public CodeAreaColorAssessor getColorAssessor() {
         return colorAssessor;
@@ -1009,7 +995,6 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         this.colorAssessor = CodeAreaUtils.requireNonNull(colorAssessor);
     }
 
-    @Nonnull
     @Override
     public CodeAreaCharAssessor getCharAssessor() {
         return charAssessor;
@@ -1183,7 +1168,6 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         }
     }
 
-    @Nonnull
     @Override
     public CodeAreaCaretPosition mousePositionToClosestCaretPosition(int positionX, int positionY, CaretOverlapMode overflowMode) {
         DefaultCodeAreaCaretPosition caret = new DefaultCodeAreaCaretPosition();
@@ -1264,13 +1248,11 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         return caret;
     }
 
-    @Nonnull
     @Override
     public CodeAreaCaretPosition computeMovePosition(CodeAreaCaretPosition position, MovementDirection direction) {
         return structure.computeMovePosition(position, direction, dimensions.getRowsPerPage());
     }
 
-    @Nonnull
     @Override
     public CodeAreaScrollPosition computeScrolling(CodeAreaScrollPosition startPosition, ScrollingDirection direction) {
         int rowsPerPage = dimensions.getRowsPerPage();
@@ -1339,13 +1321,11 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         return 0; // Cursor.DEFAULT_CURSOR;
     }
 
-    @Nonnull
     @Override
     public BasicCodeAreaZone getPositionZone(int positionX, int positionY) {
         return dimensions.getPositionZone(positionX, positionY);
     }
 
-    @Nonnull
     @Override
     public BasicCodeAreaColorsProfile getBasicColors() {
         return colorsProfile;
@@ -1587,13 +1567,11 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         return structure.getBytesPerRow();
     }
 
-    @Nonnull
     @Override
     public CodeAreaSection getActiveSection() {
         return ((CaretCapable) codeArea).getActiveSection();
     }
 
-    @Nonnull
     @Override
     public Charset getCharset() {
         return charset;
@@ -1604,13 +1582,11 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         return metrics.getMaxBytesPerChar();
     }
 
-    @Nonnull
     @Override
     public CodeAreaColorsProfile getColorsProfile() {
         return colorsProfile;
     }
 
-    @Nonnull
     @Override
     public byte[] getRowData() {
         return rowDataCache.rowData;
@@ -1626,7 +1602,6 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
         return structure.getDataSize();
     }
 
-    @Nonnull
     @Override
     public BinaryData getContentData() {
         return codeArea.getContentData();

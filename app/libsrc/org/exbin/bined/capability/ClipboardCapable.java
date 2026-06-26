@@ -15,14 +15,13 @@
  */
 package org.exbin.bined.capability;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.bined.ClipboardHandlingMode;
 
 /**
  * Support for clipboard capability.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface ClipboardCapable {
 
     /**
@@ -30,7 +29,6 @@ public interface ClipboardCapable {
      *
      * @return clipboard handling mode
      */
-    @Nonnull
     ClipboardHandlingMode getClipboardHandlingMode();
 
     /**

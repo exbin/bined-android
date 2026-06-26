@@ -16,14 +16,13 @@
 package org.exbin.bined.component;
 
 import java.util.Objects;
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.bined.PositionCodeType;
 
 /**
  * Document size format for status.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class StatusDocumentSizeFormat {
 
     private PositionCodeType positionCodeType = PositionCodeType.DECIMAL;
@@ -38,7 +37,6 @@ public class StatusDocumentSizeFormat {
         this.showRelative = showRelative;
     }
 
-    @Nonnull
     public PositionCodeType getCodeType() {
         return positionCodeType;
     }

@@ -29,13 +29,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Objects;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Compatibility utilities.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class CompatUtils {
 
     private CompatUtils() {
@@ -55,7 +54,6 @@ public class CompatUtils {
         }
     }
 
-    @Nonnull
     public static LocaleListCompat getApplicationLocales(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             LocaleList localeList = context.getSystemService(LocaleManager.class).getApplicationLocales();

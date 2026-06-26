@@ -15,8 +15,7 @@
  */
 package org.exbin.bined.basic;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.bined.CodeAreaCaretPosition;
 import org.exbin.bined.CodeAreaSection;
 import org.exbin.bined.CodeAreaUtils;
@@ -27,7 +26,7 @@ import org.exbin.bined.RowWrappingMode;
 /**
  * Code area data representation structure for basic variant.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class BasicCodeAreaLayout {
 
     public BasicCodeAreaLayout() {
@@ -108,7 +107,6 @@ public class BasicCodeAreaLayout {
         return byteOffset * (codeType.getMaxDigitsForByte() + 1) + codeType.getMaxDigitsForByte() - 1;
     }
 
-    @Nonnull
     public CodeAreaCaretPosition computeMovePosition(BasicCodeAreaStructure structure, CodeAreaCaretPosition position, MovementDirection direction, int rowsPerPage) {
         CodeType codeType = structure.getCodeType();
         int bytesPerRow = structure.getBytesPerRow();

@@ -15,8 +15,7 @@
  */
 package org.exbin.bined.operation.android.command;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 import org.exbin.auxiliary.binary_data.EditableBinaryData;
 import org.exbin.bined.CodeAreaCaretPosition;
@@ -38,13 +37,11 @@ import org.exbin.bined.android.CodeAreaCore;
 /**
  * Command for editing data in code section.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class EditCodeDataCommand extends EditDataCommand implements BinaryDataAppendableCommand {
 
     protected final EditOperationType editOperationType;
-    @Nonnull
     protected BinaryDataCommandPhase phase = BinaryDataCommandPhase.CREATED;
-    @Nonnull
     protected BinaryDataUndoableOperation activeOperation;
     protected CodeAreaCaretPosition afterCaretPosition;
 
@@ -129,7 +126,6 @@ public class EditCodeDataCommand extends EditDataCommand implements BinaryDataAp
         phase = BinaryDataCommandPhase.REVERTED;
     }
 
-    @Nonnull
     @Override
     public CodeAreaCommandType getType() {
         return CodeAreaCommandType.DATA_EDITED;
@@ -155,7 +151,6 @@ public class EditCodeDataCommand extends EditDataCommand implements BinaryDataAp
         return false;
     }
 
-    @Nonnull
     @Override
     public EditOperationType getEditOperationType() {
         return editOperationType;

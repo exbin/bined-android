@@ -49,14 +49,13 @@ import java.nio.ByteOrder;
 import java.util.Arrays;
 import java.util.InputMismatchException;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Values side panel.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class BasicValuesInspector {
 
     public static final int UBYTE_MAX_VALUE = 255;
@@ -511,7 +510,6 @@ public class BasicValuesInspector {
         return codeArea.isEditable();
     }
 
-    @Nonnull
     private ByteOrder getByteOrder() {
         return ((RadioButton) view.findViewById(R.id.radioButtonLittleEndian)).isChecked() ? ByteOrder.LITTLE_ENDIAN : ByteOrder.BIG_ENDIAN;
     }
@@ -554,7 +552,7 @@ public class BasicValuesInspector {
         view.findViewById(R.id.editTextString).setOnFocusChangeListener(new ValueFocusListener(colorModifier, 1));
     }
 
-    @ParametersAreNonnullByDefault
+    @NullMarked
     private class ValuesUpdater {
 
         private boolean updateInProgress = false;
@@ -824,7 +822,7 @@ public class BasicValuesInspector {
         }
     }
 
-    @ParametersAreNonnullByDefault
+    @NullMarked
     private class ValueFocusListener implements View.OnFocusChangeListener {
 
         private BasicValuesPositionColorModifier colorModifier;

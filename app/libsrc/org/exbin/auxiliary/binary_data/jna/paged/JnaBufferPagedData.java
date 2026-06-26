@@ -15,9 +15,8 @@
  */
 package org.exbin.auxiliary.binary_data.jna.paged;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.auxiliary.binary_data.EditableBinaryData;
 import org.exbin.auxiliary.binary_data.jna.JnaBufferData;
 import org.exbin.auxiliary.binary_data.buffer.paged.BufferPagedData;
@@ -26,7 +25,7 @@ import org.exbin.auxiliary.binary_data.paged.DataPageCreator;
 /**
  * Paged data stored using JNA byte buffer.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class JnaBufferPagedData extends BufferPagedData {
 
     public JnaBufferPagedData() {
@@ -40,7 +39,6 @@ public class JnaBufferPagedData extends BufferPagedData {
         this.pageSize = pageSize;
     }
 
-    @Nonnull
     @Override
     protected JnaBufferData createNewPage(byte[] pageData) {
         if (dataPageCreator != null) {
@@ -52,7 +50,6 @@ public class JnaBufferPagedData extends BufferPagedData {
         return new JnaBufferData(pageData);
     }
 
-    @Nonnull
     @Override
     protected JnaBufferData createNewPage(int pageDataSize) {
         if (dataPageCreator != null) {

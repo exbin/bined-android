@@ -21,9 +21,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.security.InvalidParameterException;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.auxiliary.binary_data.BinaryData;
 import org.exbin.auxiliary.binary_data.BinaryDataOutputStream;
 import org.exbin.auxiliary.binary_data.DataOverflowException;
@@ -33,7 +32,7 @@ import org.exbin.auxiliary.binary_data.OutOfBoundsException;
 /**
  * Implementation of editable binary data interface using byte buffer.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class BufferEditableData extends BufferData implements EditableBinaryData {
 
     public static final int MAX_ARRAY_LENGTH = Integer.MAX_VALUE - 5;
@@ -302,7 +301,6 @@ public class BufferEditableData extends BufferData implements EditableBinaryData
         }
     }
 
-    @Nonnull
     @Override
     public BufferEditableData copy() {
         ByteBuffer copy = allocateBuffer(data.capacity());
@@ -313,7 +311,6 @@ public class BufferEditableData extends BufferData implements EditableBinaryData
         return new BufferEditableData(copy);
     }
 
-    @Nonnull
     @Override
     public BufferEditableData copy(long startFrom, long length) {
         if (startFrom + length > data.capacity()) {
@@ -349,7 +346,6 @@ public class BufferEditableData extends BufferData implements EditableBinaryData
         }
     }
 
-    @Nonnull
     @Override
     public OutputStream getDataOutputStream() {
         return new BinaryDataOutputStream(this);

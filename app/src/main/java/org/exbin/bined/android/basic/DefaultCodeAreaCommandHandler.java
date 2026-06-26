@@ -61,13 +61,12 @@ import org.exbin.auxiliary.binary_data.EditableBinaryData;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Default binary editor command handler.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
 
     public static final int LAST_CONTROL_CODE = 31;
@@ -75,11 +74,8 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
 
     private final int metaMask = KeyEvent.META_CTRL_MASK;
 
-    @Nonnull
     protected final CodeAreaCore codeArea;
-    @Nonnull
     protected EnterKeyHandlingMode enterKeyHandlingMode = EnterKeyHandlingMode.PLATFORM_SPECIFIC;
-    @Nonnull
     protected TabKeyHandlingMode tabKeyHandlingMode = TabKeyHandlingMode.PLATFORM_SPECIFIC;
     protected final boolean codeTypeSupported;
     protected final boolean viewModeSupported;
@@ -124,12 +120,10 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
 //        }
     }
 
-    @Nonnull
     public static CodeAreaCommandHandler.CodeAreaCommandHandlerFactory createDefaultCodeAreaCommandHandlerFactory(final Context context) {
         return new  CodeAreaCommandHandlerFactory() {
-            @Nonnull
             @Override
-            public CodeAreaCommandHandler createCommandHandler(@Nonnull CodeAreaCore codeArea) {
+            public CodeAreaCommandHandler createCommandHandler(CodeAreaCore codeArea) {
                 return new DefaultCodeAreaCommandHandler(context, codeArea);
             }
         };
@@ -780,7 +774,6 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
         return canPaste;
     }
 
-    @Nonnull
     public EnterKeyHandlingMode getEnterKeyHandlingMode() {
         return enterKeyHandlingMode;
     }
@@ -789,7 +782,6 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
         this.enterKeyHandlingMode = enterKeyHandlingMode;
     }
 
-    @Nonnull
     public TabKeyHandlingMode getTabKeyHandlingMode() {
         return tabKeyHandlingMode;
     }
@@ -934,7 +926,6 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
         return ((CharsetCapable) codeArea).getCharset().canEncode();
     }
 
-    @Nonnull
     public byte[] charToBytes(char value) {
         ByteBuffer buffer = ((CharsetCapable) codeArea).getCharset().encode(Character.toString(value));
         byte[] bytes = new byte[buffer.remaining()];
@@ -942,7 +933,6 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
         return bytes;
     }
 
-    @Nonnull
     protected CodeType getCodeType() {
         if (codeTypeSupported) {
             return ((CodeTypeCapable) codeArea).getCodeType();
@@ -961,7 +951,6 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
         return codeArea.isEditable();
     }
 
-    @Nonnull
     protected static SelectingMode isSelectingMode(KeyEvent keyEvent) {
         return (keyEvent.getModifiers() & KeyEvent.META_SHIFT_MASK) > 0 ? SelectingMode.SELECTING : SelectingMode.NONE;
     }

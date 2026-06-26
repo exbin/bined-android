@@ -21,13 +21,12 @@ import org.exbin.bined.capability.CaretCapable;
 import org.exbin.bined.capability.SelectionCapable;
 import org.exbin.bined.operation.android.RemoveDataOperation;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Delete selection command.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class DeleteSelectionCommand extends OpCodeAreaCommand {
 
     protected long position;
@@ -47,7 +46,6 @@ public class DeleteSelectionCommand extends OpCodeAreaCommand {
         ((SelectionCapable) codeArea).setSelection(position, position);
     }
 
-    @Nonnull
     @Override
     public CodeAreaCommandType getType() {
         return CodeAreaCommandType.DATA_REMOVED;

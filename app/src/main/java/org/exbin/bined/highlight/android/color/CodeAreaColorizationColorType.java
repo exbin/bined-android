@@ -16,16 +16,15 @@
 package org.exbin.bined.highlight.android.color;
 
 import java.util.Optional;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 import org.exbin.bined.color.CodeAreaColorGroup;
 import org.exbin.bined.color.CodeAreaColorType;
 
 /**
  * Enumeration of unprintable color types.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public enum CodeAreaColorizationColorType implements CodeAreaColorType {
 
     CONTROL_CODES_COLOR("controlCodesColor", ColorizationCodeAreaColorsGroup.COLORIZATION),
@@ -33,7 +32,6 @@ public enum CodeAreaColorizationColorType implements CodeAreaColorType {
     UPPER_CODES_COLOR("upperCodesColor", ColorizationCodeAreaColorsGroup.COLORIZATION),
     UPPER_CODES_BACKGROUND("upperCodesBackground", ColorizationCodeAreaColorsGroup.COLORIZATION);
 
-    @Nonnull
     private final String typeId;
     @Nullable
     private final CodeAreaColorGroup group;
@@ -43,13 +41,11 @@ public enum CodeAreaColorizationColorType implements CodeAreaColorType {
         this.group = group;
     }
 
-    @Nonnull
     @Override
     public String getId() {
         return typeId;
     }
 
-    @Nonnull
     @Override
     public Optional<CodeAreaColorGroup> getGroup() {
         return Optional.ofNullable(group);

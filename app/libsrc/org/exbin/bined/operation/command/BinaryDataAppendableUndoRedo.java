@@ -15,12 +15,12 @@
  */
 package org.exbin.bined.operation.command;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Undoable command sequence with support for appendable commands.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public interface BinaryDataAppendableUndoRedo extends BinaryDataUndoRedo {
 
     /**

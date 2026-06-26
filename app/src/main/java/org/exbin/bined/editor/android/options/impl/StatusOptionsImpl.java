@@ -21,20 +21,18 @@ import org.exbin.bined.editor.android.preference.StatusPreferences;
 import org.exbin.bined.component.StatusCursorPositionFormat;
 import org.exbin.bined.component.StatusDocumentSizeFormat;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Status panel options.
  */
-@ParametersAreNonnullByDefault
+@NullMarked
 public class StatusOptionsImpl implements StatusOptions {
 
     private StatusCursorPositionFormat cursorPositionFormat = new StatusCursorPositionFormat();
     private StatusDocumentSizeFormat documentSizeFormat = new StatusDocumentSizeFormat();
     private StatusNumericGrouping statusNumericGrouping = new StatusNumericGrouping();
 
-    @Nonnull
     @Override
     public StatusCursorPositionFormat getCursorPositionFormat() {
         return cursorPositionFormat;
@@ -45,7 +43,6 @@ public class StatusOptionsImpl implements StatusOptions {
         this.cursorPositionFormat = cursorPositionFormat;
     }
 
-    @Nonnull
     @Override
     public StatusDocumentSizeFormat getDocumentSizeFormat() {
         return documentSizeFormat;
