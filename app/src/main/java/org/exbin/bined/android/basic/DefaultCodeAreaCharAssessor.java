@@ -35,17 +35,17 @@ import org.exbin.bined.android.CodeAreaPaintState;
 @NullMarked
 public class DefaultCodeAreaCharAssessor implements CodeAreaCharAssessor {
 
-    protected final CodeAreaCharAssessor parentAssessor;
+    protected final @Nullable CodeAreaCharAssessor parentAssessor;
 
-    protected char[] charMapping = null;
+    protected char @Nullable [] charMapping = null;
 
     protected long dataSize;
     protected int maxBytesPerChar;
-    protected byte[] rowData;
-    protected Charset charset;
-    private CharsetDecoder decoder;
-    private ByteBuffer byteBuffer;
-    private CharBuffer charBuffer = null;
+    protected byte @Nullable [] rowData;
+    protected @Nullable Charset charset;
+    private @Nullable CharsetDecoder decoder;
+    private @Nullable ByteBuffer byteBuffer;
+    private @Nullable CharBuffer charBuffer = null;
 
     public DefaultCodeAreaCharAssessor() {
         parentAssessor = null;

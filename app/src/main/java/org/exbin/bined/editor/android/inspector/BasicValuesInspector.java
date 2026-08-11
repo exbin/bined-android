@@ -70,11 +70,11 @@ public class BasicValuesInspector {
 
     private View view;
     private CodeArea codeArea;
-    private BinaryDataUndoRedo undoRedo;
+    private @Nullable BinaryDataUndoRedo undoRedo;
     private long dataPosition;
-    private DataChangedListener dataChangedListener;
-    private CodeAreaCaretListener caretMovedListener;
-    private BinaryDataUndoRedoChangeListener undoRedoChangeListener;
+    private @Nullable DataChangedListener dataChangedListener;
+    private @Nullable CodeAreaCaretListener caretMovedListener;
+    private @Nullable BinaryDataUndoRedoChangeListener undoRedoChangeListener;
 
     private final byte[] valuesCache = new byte[CACHE_SIZE];
     private final ByteBuffer byteBuffer = ByteBuffer.wrap(valuesCache);

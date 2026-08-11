@@ -41,7 +41,7 @@ public class DefaultCodeAreaCaret implements CodeAreaCaret {
     protected final DefaultCodeAreaCaretPosition caretPosition = new DefaultCodeAreaCaretPosition();
 
     protected int blinkRate = 0;
-    protected Timer blinkTimer = null;
+    protected @Nullable Timer blinkTimer = null;
     protected boolean cursorVisible = true;
 
     protected CursorRenderingMode renderingMode = CursorRenderingMode.NEGATIVE;

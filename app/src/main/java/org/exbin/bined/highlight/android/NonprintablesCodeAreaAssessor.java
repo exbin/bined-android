@@ -37,17 +37,14 @@ import org.exbin.bined.android.basic.color.CodeAreaColorsProfile;
 @NullMarked
 public class NonprintablesCodeAreaAssessor implements CodeAreaColorAssessor, CodeAreaCharAssessor {
 
-    protected final CodeAreaColorAssessor parentColorAssessor;
-    protected final CodeAreaCharAssessor parentCharAssessor;
+    protected final @Nullable CodeAreaColorAssessor parentColorAssessor;
+    protected final @Nullable CodeAreaCharAssessor parentCharAssessor;
 
-    @Nullable
-    protected Map<Character, Character> nonprintableCharactersMapping = null;
+    protected @Nullable Map<Character, Character> nonprintableCharactersMapping = null;
     protected boolean showNonprintables = true;
 
-    @Nullable
-    protected Integer nonprintablesColor;
-    @Nullable
-    protected Integer nonprintablesBackground;
+    protected @Nullable Integer nonprintablesColor;
+    protected @Nullable Integer nonprintablesBackground;
 
     public NonprintablesCodeAreaAssessor(@Nullable CodeAreaColorAssessor parentColorAssessor, @Nullable CodeAreaCharAssessor parentCharAssessor) {
         this.parentColorAssessor = parentColorAssessor;

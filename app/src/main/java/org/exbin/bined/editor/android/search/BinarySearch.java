@@ -26,8 +26,8 @@ public class BinarySearch {
 
     private static final int DEFAULT_DELAY = 500;
 
-    private InvokeSearchThread invokeSearchThread;
-    private SearchThread searchThread;
+    private @Nullable InvokeSearchThread invokeSearchThread;
+    private @Nullable SearchThread searchThread;
 
     private SearchOperation currentSearchOperation = SearchOperation.FIND;
     private SearchParameters.SearchDirection currentSearchDirection = SearchParameters.SearchDirection.FORWARD;
@@ -38,9 +38,9 @@ public class BinarySearch {
 //    private final List<SearchCondition> replaceHistory = new ArrayList<>();
 
 //    private CodeAreaPopupMenuHandler codeAreaPopupMenuHandler;
-    private PanelClosingListener panelClosingListener = null;
-    private BinarySearchService binarySearchService;
-    private BinarySearchService.SearchStatusListener searchStatusListener;
+    private @Nullable PanelClosingListener panelClosingListener = null;
+    private @Nullable BinarySearchService binarySearchService;
+    private BinarySearchService.@Nullable SearchStatusListener searchStatusListener;
 
     public BinarySearch() {
     }

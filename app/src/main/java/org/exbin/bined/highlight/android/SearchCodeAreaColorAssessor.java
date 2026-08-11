@@ -35,7 +35,7 @@ import org.exbin.bined.android.basic.color.CodeAreaColorsProfile;
 @NullMarked
 public class SearchCodeAreaColorAssessor implements CodeAreaColorAssessor {
 
-    private final CodeAreaColorAssessor parentAssessor;
+    private final @Nullable CodeAreaColorAssessor parentAssessor;
 
     /**
      * Matches must be ordered by position.
@@ -45,14 +45,10 @@ public class SearchCodeAreaColorAssessor implements CodeAreaColorAssessor {
     private int matchIndex = 0;
     private long matchPosition = -1;
 
-    @Nullable
-    private Integer foundMatchesColor;
-    @Nullable
-    private Integer foundMatchesBackground;
-    @Nullable
-    private Integer currentMatchColor;
-    @Nullable
-    private Integer currentMatchBackground;
+    private @Nullable Integer foundMatchesColor;
+    private @Nullable Integer foundMatchesBackground;
+    private @Nullable Integer currentMatchColor;
+    private @Nullable Integer currentMatchBackground;
     private int charactersPerRow = 1;
 
     public SearchCodeAreaColorAssessor(@Nullable CodeAreaColorAssessor parentAssessor) {

@@ -31,6 +31,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /**
  * View preferences fragment.
@@ -48,7 +49,7 @@ public class ViewFragment extends PreferenceFragmentCompat {
     public static final String NONPRINTABLE_CHARACTERS = "nonprintable_characters";
 
     @Override
-    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+    public void onCreatePreferences(@Nullable Bundle savedInstanceState, @Nullable String rootKey) {
         setPreferencesFromResource(R.xml.view_preferences, rootKey);
 
         // Load from preferences

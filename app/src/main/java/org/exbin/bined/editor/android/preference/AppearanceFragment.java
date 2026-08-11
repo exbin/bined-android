@@ -31,6 +31,7 @@ import org.exbin.bined.editor.android.SettingsActivity;
 import org.exbin.bined.editor.android.options.Theme;
 
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Settings appearance fragment.
@@ -42,7 +43,7 @@ public class AppearanceFragment extends PreferenceFragmentCompat {
     public static final String THEME_KEY = "theme";
 
     @Override
-    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+    public void onCreatePreferences(@Nullable Bundle savedInstanceState, @Nullable String rootKey) {
         setPreferencesFromResource(R.xml.main_preferences, rootKey);
 
         // Load from preferences

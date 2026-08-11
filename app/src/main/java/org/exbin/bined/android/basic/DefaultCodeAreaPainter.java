@@ -96,8 +96,7 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
     protected volatile boolean resetColors = true;
     protected volatile boolean caretChanged = true;
 
-    @Nullable
-    protected Paint paint = null;
+    protected @Nullable Paint paint = null;
     protected final View dataView;
     protected final DefaultCodeAreaScrollPane scrollPanel;
     protected final DefaultCodeAreaMouseListener codeAreaMouseListener;
@@ -118,12 +117,9 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
     protected final BasicCodeAreaLayout layout = new BasicCodeAreaLayout();
     protected BasicCodeAreaColorsProfile colorsProfile = new BasicCodeAreaColorsProfile();
 
-    @Nullable
-    protected CodeCharactersCase codeCharactersCase;
-    @Nullable
-    protected EditOperation editOperation;
-    @Nullable
-    protected BasicBackgroundPaintMode backgroundPaintMode;
+    protected @Nullable CodeCharactersCase codeCharactersCase;
+    protected @Nullable EditOperation editOperation;
+    protected @Nullable BasicBackgroundPaintMode backgroundPaintMode;
     protected final ScrollViewDimension viewDimension = new ScrollViewDimension();
     protected boolean showMirrorCursor;
 
@@ -131,16 +127,13 @@ public class DefaultCodeAreaPainter implements CodeAreaPainter, BasicColorsCapab
     protected int minRowPositionLength;
     protected int maxRowPositionLength;
 
-    @Nullable
-    protected Font font;
-    protected Charset charset;
-    protected CodeAreaColorAssessor colorAssessor = null;
-    protected CodeAreaCharAssessor charAssessor = null;
+    protected @Nullable Font font;
+    protected @Nullable Charset charset;
+    protected @Nullable CodeAreaColorAssessor colorAssessor = null;
+    protected @Nullable CodeAreaCharAssessor charAssessor = null;
 
-    @Nullable
-    protected RowDataCache rowDataCache = null;
-    @Nullable
-    protected CursorDataCache cursorDataCache = null;
+    protected @Nullable RowDataCache rowDataCache = null;
+    protected @Nullable CursorDataCache cursorDataCache = null;
 
     public DefaultCodeAreaPainter(final CodeAreaCore codeArea) {
         this.codeArea = codeArea;

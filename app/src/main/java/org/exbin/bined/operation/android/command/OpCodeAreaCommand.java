@@ -30,8 +30,7 @@ import org.exbin.bined.android.CodeAreaCore;
 @NullMarked
 public abstract class OpCodeAreaCommand extends CodeAreaCommand {
 
-    @Nullable
-    protected BinaryDataUndoableOperation operation;
+    protected @Nullable BinaryDataUndoableOperation operation;
     protected BinaryDataCommandPhase phase = BinaryDataCommandPhase.CREATED;
 
     public OpCodeAreaCommand(CodeAreaCore codeArea) {

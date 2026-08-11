@@ -27,7 +27,7 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class Font {
 
-    private Typeface typeface;
+    private @Nullable Typeface typeface;
     private int size = 30;
     private int fontFlags;
 

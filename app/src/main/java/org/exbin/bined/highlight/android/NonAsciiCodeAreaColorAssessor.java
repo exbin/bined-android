@@ -35,7 +35,7 @@ import org.exbin.bined.android.CodeAreaColorAssessor;
 @NullMarked
 public class NonAsciiCodeAreaColorAssessor implements CodeAreaColorAssessor {
 
-    protected final CodeAreaColorAssessor parentAssessor;
+    protected final @Nullable CodeAreaColorAssessor parentAssessor;
 
     @Nullable
     protected Integer controlCodesColor;

@@ -31,14 +31,14 @@ import org.exbin.bined.android.basic.color.CodeAreaColorsProfile;
 @NullMarked
 public class DefaultCodeAreaColorAssessor implements CodeAreaColorAssessor {
 
-    protected final CodeAreaColorAssessor parentColorAssessor;
+    protected final @Nullable CodeAreaColorAssessor parentColorAssessor;
 
-    protected CodeAreaSection activeSection = null;
+    protected @Nullable CodeAreaSection activeSection = null;
     protected int codeLastCharPos;
-    protected Integer selectionColor;
-    protected Integer selectionMirrorColor;
-    protected Integer selectionBackground;
-    protected Integer selectionMirrorBackground;
+    protected @Nullable Integer selectionColor;
+    protected @Nullable Integer selectionMirrorColor;
+    protected @Nullable Integer selectionBackground;
+    protected @Nullable Integer selectionMirrorBackground;
 
     public DefaultCodeAreaColorAssessor() {
         parentColorAssessor = null;

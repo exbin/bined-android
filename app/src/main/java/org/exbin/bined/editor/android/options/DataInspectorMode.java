@@ -15,12 +15,9 @@
  */
 package org.exbin.bined.editor.android.options;
 
-import org.jspecify.annotations.NullMarked;
-
 /**
  * Data inspector panel mode.
  */
-@NullMarked
 public enum DataInspectorMode {
     HIDE,
     SHOW,

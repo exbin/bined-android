@@ -27,6 +27,7 @@ import org.exbin.bined.operation.command.BinaryDataAbstractCommand;
 import java.util.Optional;
 
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Abstract class for command on code area component.
@@ -35,8 +36,8 @@ import org.jspecify.annotations.NullMarked;
 public abstract class CodeAreaCommand extends BinaryDataAbstractCommand {
 
     protected final CodeAreaCore codeArea;
-    protected CodeAreaState beforeState;
-    protected CodeAreaState afterState;
+    protected @Nullable CodeAreaState beforeState;
+    protected @Nullable CodeAreaState afterState;
 
     public CodeAreaCommand(CodeAreaCore codeArea) {
         this.codeArea = codeArea;

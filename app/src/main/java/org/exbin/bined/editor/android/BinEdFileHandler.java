@@ -58,8 +58,8 @@ public class BinEdFileHandler {
     private CodeAreaTableMapAssessor codeAreaTableMapAssessor = new CodeAreaTableMapAssessor();
 
     private long documentOriginalSize = 0;
-    private Uri currentFileUri = null;
-    private Uri pickerInitialUri = null;
+    private @Nullable Uri currentFileUri = null;
+    private @Nullable Uri pickerInitialUri = null;
 
     public BinEdFileHandler(CodeArea codeArea) {
         // ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)

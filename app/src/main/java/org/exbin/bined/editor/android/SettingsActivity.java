@@ -39,6 +39,7 @@ import org.exbin.bined.editor.android.preference.PreferencesWrapper;
 import org.exbin.bined.component.FileProcessingMode;
 
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Settings activity.
@@ -52,7 +53,7 @@ public class SettingsActivity extends AppCompatActivity implements
     private BinaryEditorPreferences appPreferences;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
             CompatUtils.enableEdgeToEdge(this);
             getWindow().getDecorView().setPadding(0, 0, 0, getNavigationBarHeight());

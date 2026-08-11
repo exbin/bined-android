@@ -31,7 +31,7 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class PreferencesWrapper implements Preferences {
 
-    private SharedPreferences preferences;
+    protected final SharedPreferences preferences;
 
     public PreferencesWrapper(Context context) {
         preferences = PreferenceManager.getDefaultSharedPreferences(context);

@@ -33,6 +33,7 @@ import androidx.fragment.app.FragmentActivity;
 import org.exbin.bined.editor.android.R;
 
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /**
  * About application dialog.
@@ -40,16 +41,16 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class AboutDialog extends AppCompatDialogFragment {
 
-    private static final String DONATE_LINK = "https://bined.exbin.org/?p=donate";
+    protected static final String DONATE_LINK = "https://bined.exbin.org/?p=donate";
 
-    private String appVersion;
+    protected @Nullable String appVersion;
 
     public void setAppVersion(String appVersion) {
         this.appVersion = appVersion;
     }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         FragmentActivity activity = getActivity();
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle(getResources().getString(R.string.application_about));

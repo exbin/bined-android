@@ -15,12 +15,9 @@
  */
 package org.exbin.bined.editor.android.options;
 
-import org.jspecify.annotations.NullMarked;
-
 /**
  * Keys panel mode.
  */
-@NullMarked
 public enum KeysPanelMode {
     HIDE,
     SMALL,

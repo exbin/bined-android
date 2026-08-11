@@ -51,7 +51,7 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class EditSelectionDialog extends AppCompatDialogFragment {
 
-    protected DialogInterface.OnClickListener positionListener;
+    protected DialogInterface.@Nullable OnClickListener positionListener;
     protected View editSelectionView;
 
     protected volatile boolean activeUpdate = false;
@@ -70,7 +70,7 @@ public class EditSelectionDialog extends AppCompatDialogFragment {
     }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         FragmentActivity activity = getActivity();
         codeArea = activity.findViewById(R.id.codeArea);
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);

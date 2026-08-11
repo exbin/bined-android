@@ -33,12 +33,12 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class ApplicationContext extends Application {
 
-    private BinaryEditorPreferences appPreferences;
+    private @Nullable BinaryEditorPreferences appPreferences;
     private final SegmentsRepository segmentsRepository = new SegmentsRepository(() -> new JnaBufferEditableData());
 
-    private BinEdFileHandler fileHandler = null;
+    private @Nullable BinEdFileHandler fileHandler = null;
     private boolean searchActive = false;
-    private SearchParameters searchParameters = null;
+    private @Nullable SearchParameters searchParameters = null;
 
     @Override
     public void onCreate() {

@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     private final BinaryStatusHandler binaryStatus = new BinaryStatusHandler(this);
     private BinarySearch binarySearch;
     private View searchStatusPanel;
-    private Runnable postSaveAsAction = null;
+    private @Nullable Runnable postSaveAsAction = null;
     private boolean keyboardShown = false;
     private boolean dataInspectorShown = true;
     private long lastBackKeyPressTime = -1;

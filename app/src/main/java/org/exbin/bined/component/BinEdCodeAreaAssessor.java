@@ -37,8 +37,8 @@ public class BinEdCodeAreaAssessor implements CodeAreaColorAssessor, CodeAreaCha
     protected final List<CodeAreaColorAssessor> priorityColorModifiers = new ArrayList<>();
     protected final List<CodeAreaColorAssessor> colorModifiers = new ArrayList<>();
 
-    protected final CodeAreaColorAssessor parentColorAssessor;
-    protected final CodeAreaCharAssessor parentCharAssessor;
+    protected final @Nullable CodeAreaColorAssessor parentColorAssessor;
+    protected final @Nullable CodeAreaCharAssessor parentCharAssessor;
 
     public BinEdCodeAreaAssessor(@Nullable CodeAreaColorAssessor parentColorAssessor, @Nullable CodeAreaCharAssessor parentCharAssessor) {
         NonAsciiCodeAreaColorAssessor nonAsciiCodeAreaColorAssessor = new NonAsciiCodeAreaColorAssessor(parentColorAssessor);

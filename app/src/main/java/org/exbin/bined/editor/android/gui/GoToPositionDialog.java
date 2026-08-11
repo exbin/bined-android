@@ -41,6 +41,7 @@ import org.exbin.bined.editor.android.SwitchableBase;
 import java.util.Arrays;
 
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Go to position dialog.
@@ -48,7 +49,7 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class GoToPositionDialog extends AppCompatDialogFragment {
 
-    protected DialogInterface.OnClickListener positionListener;
+    protected DialogInterface.@Nullable OnClickListener positionListener;
     protected View goToPositionView;
 
     protected long cursorPosition;
@@ -71,7 +72,7 @@ public class GoToPositionDialog extends AppCompatDialogFragment {
         // Get the layout inflater
         LayoutInflater inflater = activity.getLayoutInflater();
         // Inflate and set the layout for the dialog
-        // Pass null as the parent view because its going in the
+        // Pass null as the parent view because it's going in the
         // dialog layout
         goToPositionView = inflater.inflate(R.layout.go_to_position_view, null);
 

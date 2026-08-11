@@ -32,8 +32,8 @@ import org.jspecify.annotations.NullMarked;
 public class SearchCondition {
 
     private SearchMode searchMode = SearchMode.TEXT;
-    private String searchText = "";
-    private EditableBinaryData binaryData;
+    private @Nullable String searchText = "";
+    private @Nullable EditableBinaryData binaryData;
 
     public SearchCondition() {
     }

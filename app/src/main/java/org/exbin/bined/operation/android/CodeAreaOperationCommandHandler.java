@@ -73,6 +73,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Command handler for undo/redo aware binary editor editing.
@@ -96,11 +97,11 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
     protected boolean canPaste = false;
     private ClipDescription binedDataFlavor;
     private ClipDescription binaryDataFlavor;
-    private ClipData currentClipboardData = null;
+    private @Nullable ClipData currentClipboardData = null;
 
     protected final BinaryDataUndoRedo undoRedo;
-    protected CodeAreaCommand editCommand = null;
-    private CodeAreaTableMapAssessor codeAreaTableMapAssessor = null;
+    protected @Nullable CodeAreaCommand editCommand = null;
+    private @Nullable CodeAreaTableMapAssessor codeAreaTableMapAssessor = null;
 
     public CodeAreaOperationCommandHandler(Context context, CodeAreaCore codeArea, BinaryDataUndoRedo undoRedo) {
         this.context = context;

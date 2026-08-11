@@ -15,12 +15,9 @@
  */
 package org.exbin.bined.editor.android.options;
 
-import org.jspecify.annotations.NullMarked;
-
 /**
- * Themes.
+ * Theme variants.
  */
-@NullMarked
 public enum Theme {
     DEFAULT,
     LIGHT,

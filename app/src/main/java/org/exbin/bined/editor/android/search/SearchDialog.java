@@ -48,6 +48,7 @@ import org.exbin.bined.editor.android.MainActivity;
 import org.exbin.bined.editor.android.R;
 
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Search text or data dialog.
@@ -92,7 +93,7 @@ public class SearchDialog extends AppCompatDialogFragment {
     };
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         MainActivity activity = (MainActivity) requireActivity();
         binarySearch = activity.getBinarySearch();
         templateCodeArea = activity.getCodeArea();
