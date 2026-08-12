@@ -21,11 +21,11 @@ package org.exbin.bined;
 public enum ScrollBarVisibility {
 
     /**
-     * Never show scrollbars even when area is bigger then available space.
+     * Never show scrollbars even when area is bigger than available space.
      */
     NEVER,
     /**
-     * Show scrollbars only if area is bigger then available space.
+     * Show scrollbars only if area is bigger than available space.
      */
     IF_NEEDED,
     /**

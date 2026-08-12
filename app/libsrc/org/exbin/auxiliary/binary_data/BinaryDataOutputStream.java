@@ -38,7 +38,6 @@ public class BinaryDataOutputStream extends OutputStream implements SeekableStre
     public void write(int value) throws IOException {
         long dataSize = data.getDataSize();
         if (position == dataSize) {
-            dataSize++;
             data.insertUninitialized(position, 1);
         }
 

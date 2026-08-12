@@ -137,7 +137,7 @@ public class BinaryDataRangeInputStream extends InputStream implements SeekableS
     }
 
     @Override
-    public synchronized void mark(int readlimit) {
+    public synchronized void mark(int readLimit) {
         mark = position;
     }
 

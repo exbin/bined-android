@@ -16,11 +16,13 @@
 package org.exbin.auxiliary.binary_data.paged;
 
 import java.util.Optional;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 /**
  * Paged data with support for customizable page creator.
  */
+@NullMarked
 public interface CustomizablePagedData extends PagedData {
 
     /**

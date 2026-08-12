@@ -43,7 +43,7 @@ public class DirectBufferEditableData extends BufferEditableData {
      *
      * @param data byte array
      */
-    public DirectBufferEditableData(@Nullable byte[] data) {
+    public DirectBufferEditableData(byte @Nullable [] data) {
         super(DirectBufferEditableData.allocateBufferInt(data));
     }
 
@@ -65,7 +65,7 @@ public class DirectBufferEditableData extends BufferEditableData {
         return ByteBuffer.allocateDirect(capacity);
     }
 
-    private static ByteBuffer allocateBufferInt(@Nullable byte[] data) {
+    private static ByteBuffer allocateBufferInt(byte @Nullable [] data) {
         if (data == null) {
             return DirectBufferEditableData.allocateBufferInt(0);
         } else {

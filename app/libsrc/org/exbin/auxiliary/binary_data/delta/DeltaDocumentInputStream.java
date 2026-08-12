@@ -104,7 +104,7 @@ public class DeltaDocumentInputStream extends InputStream implements SeekableStr
     }
 
     @Override
-    public synchronized void mark(int readlimit) {
+    public synchronized void mark(int readLimit) {
         mark = position;
     }
 

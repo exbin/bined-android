@@ -25,6 +25,9 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public enum BasicCodeAreaDecorationColorType implements CodeAreaColorType {
 
+    /**
+     * Decoration line.
+     */
     LINE("decoration.line", null);
 
     private final String typeId;

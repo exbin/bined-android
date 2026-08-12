@@ -27,7 +27,7 @@ public interface BinaryDataAppendableOperation {
      * Attempts to append an operation.
      *
      * @param operation operation
-     * @return true if sucessfully appended
+     * @return true if successfully appended
      */
     boolean appendOperation(BinaryDataOperation operation);
 }

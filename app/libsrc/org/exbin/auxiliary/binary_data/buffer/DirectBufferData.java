@@ -43,7 +43,7 @@ public class DirectBufferData extends BufferData {
      *
      * @param data byte array
      */
-    public DirectBufferData(@Nullable byte[] data) {
+    public DirectBufferData(byte @Nullable [] data) {
         super(DirectBufferData.allocateBufferInt(data));
     }
 
@@ -65,7 +65,7 @@ public class DirectBufferData extends BufferData {
         return ByteBuffer.allocateDirect(capacity);
     }
 
-    private static ByteBuffer allocateBufferInt(@Nullable byte[] data) {
+    private static ByteBuffer allocateBufferInt(byte @Nullable [] data) {
         if (data == null) {
             return DirectBufferData.allocateBufferInt(0);
         } else {

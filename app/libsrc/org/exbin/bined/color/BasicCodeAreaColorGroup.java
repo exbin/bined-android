@@ -23,7 +23,13 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public enum BasicCodeAreaColorGroup implements CodeAreaColorGroup {
 
+    /**
+     * Main area.
+     */
     MAIN("main"),
+    /**
+     * Selection area.
+     */
     SELECTION("selection");
 
     private final String groupId;

@@ -45,7 +45,7 @@ public class JnaBufferData extends BufferData {
      *
      * @param data byte array
      */
-    public JnaBufferData(@Nullable byte[] data) {
+    public JnaBufferData(byte @Nullable [] data) {
         super(JnaBufferData.allocateBufferInt(data));
     }
 
@@ -72,7 +72,7 @@ public class JnaBufferData extends BufferData {
         }
     }
 
-    private static ByteBuffer allocateBufferInt(@Nullable byte[] data) {
+    private static ByteBuffer allocateBufferInt(byte @Nullable [] data) {
         if (data == null) {
             return JnaBufferData.allocateBufferInt(0);
         } else {

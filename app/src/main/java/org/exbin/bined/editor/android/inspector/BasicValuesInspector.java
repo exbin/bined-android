@@ -621,39 +621,57 @@ public class BasicValuesInspector {
         private void updateField(ValuesPanelField valuesPanelField) {
             switch (valuesPanelField) {
                 case BINARY0: {
-                    ((CheckBox) view.findViewById(R.id.checkBoxBit0)).setChecked((values[0] & 0x80) > 0);
+                    CheckBox checkBox = view.findViewById(R.id.checkBoxBit0);
+                    checkBox.setChecked((values[0] & 0x80) > 0);
+                    checkBox.jumpDrawablesToCurrentState();
                     break;
                 }
                 case BINARY1: {
-                    ((CheckBox) view.findViewById(R.id.checkBoxBit1)).setChecked((values[0] & 0x40) > 0);
+                    CheckBox checkBox = view.findViewById(R.id.checkBoxBit1);
+                    checkBox.setChecked((values[0] & 0x40) > 0);
+                    checkBox.jumpDrawablesToCurrentState();
                     break;
                 }
                 case BINARY2: {
-                    ((CheckBox) view.findViewById(R.id.checkBoxBit2)).setChecked((values[0] & 0x20) > 0);
+                    CheckBox checkBox = view.findViewById(R.id.checkBoxBit2);
+                    checkBox.setChecked((values[0] & 0x20) > 0);
+                    checkBox.jumpDrawablesToCurrentState();
                     break;
                 }
                 case BINARY3: {
-                    ((CheckBox) view.findViewById(R.id.checkBoxBit3)).setChecked((values[0] & 0x10) > 0);
+                    CheckBox checkBox = view.findViewById(R.id.checkBoxBit3);
+                    checkBox.setChecked((values[0] & 0x10) > 0);
+                    checkBox.jumpDrawablesToCurrentState();
                     break;
                 }
                 case BINARY4: {
-                    ((CheckBox) view.findViewById(R.id.checkBoxBit4)).setChecked((values[0] & 0x8) > 0);
+                    CheckBox checkBox = view.findViewById(R.id.checkBoxBit4);
+                    checkBox.setChecked((values[0] & 0x8) > 0);
+                    checkBox.jumpDrawablesToCurrentState();
                     break;
                 }
                 case BINARY5: {
-                    ((CheckBox) view.findViewById(R.id.checkBoxBit5)).setChecked((values[0] & 0x4) > 0);
+                    CheckBox checkBox = view.findViewById(R.id.checkBoxBit5);
+                    checkBox.setChecked((values[0] & 0x4) > 0);
+                    checkBox.jumpDrawablesToCurrentState();
                     break;
                 }
                 case BINARY6: {
-                    ((CheckBox) view.findViewById(R.id.checkBoxBit6)).setChecked((values[0] & 0x2) > 0);
+                    CheckBox checkBox = view.findViewById(R.id.checkBoxBit6);
+                    checkBox.setChecked((values[0] & 0x2) > 0);
+                    checkBox.jumpDrawablesToCurrentState();
                     break;
                 }
                 case BINARY7: {
-                    ((CheckBox) view.findViewById(R.id.checkBoxBit7)).setChecked((values[0] & 0x1) > 0);
+                    CheckBox checkBox = view.findViewById(R.id.checkBoxBit7);
+                    checkBox.setChecked((values[0] & 0x1) > 0);
+                    checkBox.jumpDrawablesToCurrentState();
                     break;
                 }
                 case BYTE: {
-                    ((EditText) view.findViewById(R.id.editTextByte)).setText(String.valueOf(signed ? values[0] : values[0] & 0xff));
+                    EditText editText = view.findViewById(R.id.editTextByte);
+                    editText.setText(String.valueOf(signed ? values[0] : values[0] & 0xff));
+                    editText.jumpDrawablesToCurrentState();
                     break;
                 }
                 case WORD: {
@@ -664,7 +682,9 @@ public class BasicValuesInspector {
                             : (byteOrder == ByteOrder.LITTLE_ENDIAN
                             ? (values[0] & 0xff) | ((values[1] & 0xff) << 8)
                             : (values[1] & 0xff) | ((values[0] & 0xff) << 8));
-                    ((EditText) view.findViewById(R.id.editTextWord)).setText(String.valueOf(wordValue));
+                    EditText editText = view.findViewById(R.id.editTextWord);
+                    editText.setText(String.valueOf(wordValue));
+                    editText.jumpDrawablesToCurrentState();
                     break;
                 }
                 case INTEGER: {
@@ -675,7 +695,9 @@ public class BasicValuesInspector {
                             : (byteOrder == ByteOrder.LITTLE_ENDIAN
                             ? (values[0] & 0xffL) | ((values[1] & 0xffL) << 8) | ((values[2] & 0xffL) << 16) | ((values[3] & 0xffL) << 24)
                             : (values[3] & 0xffL) | ((values[2] & 0xffL) << 8) | ((values[1] & 0xffL) << 16) | ((values[0] & 0xffL) << 24));
-                    ((EditText) view.findViewById(R.id.editTextInteger)).setText(String.valueOf(intValue));
+                    EditText editText = view.findViewById(R.id.editTextInteger);
+                    editText.setText(String.valueOf(intValue));
+                    editText.jumpDrawablesToCurrentState();
                     break;
                 }
                 case LONG: {
@@ -695,7 +717,9 @@ public class BasicValuesInspector {
                         BigInteger bigInt1 = BigInteger.valueOf(values[byteOrder == ByteOrder.LITTLE_ENDIAN ? 7 : 0] & 0xffL);
                         BigInteger bigInt2 = bigInt1.shiftLeft(56);
                         BigInteger bigInt3 = bigInt2.add(BigInteger.valueOf(longValue));
-                        ((EditText) view.findViewById(R.id.editTextLong)).setText(bigInt3.toString());
+                        EditText editText = view.findViewById(R.id.editTextLong);
+                        editText.setText(bigInt3.toString());
+                        editText.jumpDrawablesToCurrentState();
                     }
                     break;
                 }
@@ -705,7 +729,9 @@ public class BasicValuesInspector {
                         byteBuffer.order(byteOrder);
                     }
 
-                    ((EditText) view.findViewById(R.id.editTextFloat)).setText(String.valueOf(byteBuffer.getFloat()));
+                    EditText editText = view.findViewById(R.id.editTextFloat);
+                    editText.setText(String.valueOf(byteBuffer.getFloat()));
+                    editText.jumpDrawablesToCurrentState();
                     break;
                 }
                 case DOUBLE: {
@@ -714,16 +740,20 @@ public class BasicValuesInspector {
                         byteBuffer.order(byteOrder);
                     }
 
-                    ((EditText) view.findViewById(R.id.editTextDouble)).setText(String.valueOf(byteBuffer.getDouble()));
+                    EditText editText = view.findViewById(R.id.editTextDouble);
+                    editText.setText(String.valueOf(byteBuffer.getDouble()));
+                    editText.jumpDrawablesToCurrentState();
                     break;
                 }
                 case CHARACTER: {
                     String strValue = new String(values, codeArea.getCharset());
+                    EditText editText = view.findViewById(R.id.editTextCharacter);
                     if (!strValue.isEmpty()) {
-                        ((EditText) view.findViewById(R.id.editTextCharacter)).setText(strValue.substring(0, 1));
+                        editText.setText(strValue.substring(0, 1));
                     } else {
-                        ((EditText) view.findViewById(R.id.editTextCharacter)).setText("");
+                        editText.setText("");
                     }
+                    editText.jumpDrawablesToCurrentState();
                     break;
                 }
                 case STRING: {
@@ -735,7 +765,9 @@ public class BasicValuesInspector {
                             break;
                         }
                     }
-                    ((EditText) view.findViewById(R.id.editTextString)).setText(strValue);
+                    EditText editText = view.findViewById(R.id.editTextString);
+                    editText.setText(strValue);
+                    editText.jumpDrawablesToCurrentState();
                     // TODO ((EditText) view.findViewById(R.id.editTextString)).setCaretPosition(0);
                     break;
                 }
@@ -745,67 +777,99 @@ public class BasicValuesInspector {
         private void clearField(ValuesPanelField valuesPanelField) {
             switch (valuesPanelField) {
                 case BINARY0: {
-                    ((CheckBox) view.findViewById(R.id.checkBoxBit0)).setChecked(false);
+                    CheckBox checkBox = view.findViewById(R.id.checkBoxBit0);
+                    checkBox.setChecked(false);
+                    checkBox.jumpDrawablesToCurrentState();
                     break;
                 }
                 case BINARY1: {
-                    ((CheckBox) view.findViewById(R.id.checkBoxBit1)).setChecked(false);
+                    CheckBox checkBox = view.findViewById(R.id.checkBoxBit1);
+                    checkBox.setChecked(false);
+                    checkBox.jumpDrawablesToCurrentState();
                     break;
                 }
                 case BINARY2: {
-                    ((CheckBox) view.findViewById(R.id.checkBoxBit2)).setChecked(false);
+                    CheckBox checkBox = view.findViewById(R.id.checkBoxBit2);
+                    checkBox.setChecked(false);
+                    checkBox.jumpDrawablesToCurrentState();
                     break;
                 }
                 case BINARY3: {
-                    ((CheckBox) view.findViewById(R.id.checkBoxBit3)).setChecked(false);
+                    CheckBox checkBox = view.findViewById(R.id.checkBoxBit3);
+                    checkBox.setChecked(false);
+                    checkBox.jumpDrawablesToCurrentState();
                     break;
                 }
                 case BINARY4: {
-                    ((CheckBox) view.findViewById(R.id.checkBoxBit4)).setChecked(false);
+                    CheckBox checkBox = view.findViewById(R.id.checkBoxBit4);
+                    checkBox.setChecked(false);
+                    checkBox.jumpDrawablesToCurrentState();
                     break;
                 }
                 case BINARY5: {
-                    ((CheckBox) view.findViewById(R.id.checkBoxBit5)).setChecked(false);
+                    CheckBox checkBox = view.findViewById(R.id.checkBoxBit5);
+                    checkBox.setChecked(false);
+                    checkBox.jumpDrawablesToCurrentState();
                     break;
                 }
                 case BINARY6: {
-                    ((CheckBox) view.findViewById(R.id.checkBoxBit6)).setChecked(false);
+                    CheckBox checkBox = view.findViewById(R.id.checkBoxBit6);
+                    checkBox.setChecked(false);
+                    checkBox.jumpDrawablesToCurrentState();
                     break;
                 }
                 case BINARY7: {
-                    ((CheckBox) view.findViewById(R.id.checkBoxBit7)).setChecked(false);
+                    CheckBox checkBox = view.findViewById(R.id.checkBoxBit7);
+                    checkBox.setChecked(false);
+                    checkBox.jumpDrawablesToCurrentState();
                     break;
                 }
                 case BYTE: {
-                    ((EditText) view.findViewById(R.id.editTextByte)).setText("");
+                    EditText editText = view.findViewById(R.id.editTextByte);
+                    editText.setText("");
+                    editText.jumpDrawablesToCurrentState();
                     break;
                 }
                 case WORD: {
-                    ((EditText) view.findViewById(R.id.editTextWord)).setText("");
+                    EditText editText = view.findViewById(R.id.editTextWord);
+                    editText.setText("");
+                    editText.jumpDrawablesToCurrentState();
                     break;
                 }
                 case INTEGER: {
-                    ((EditText) view.findViewById(R.id.editTextInteger)).setText("");
+                    EditText editText = view.findViewById(R.id.editTextInteger);
+                    editText.setText("");
+                    editText.jumpDrawablesToCurrentState();
                     break;
                 }
                 case LONG: {
-                    ((EditText) view.findViewById(R.id.editTextLong)).setText("");
+                    EditText editText = view.findViewById(R.id.editTextLong);
+                    editText.setText("");
+                    editText.jumpDrawablesToCurrentState();
                     break;
                 }
                 case FLOAT: {
-                    ((EditText) view.findViewById(R.id.editTextFloat)).setText("");
+                    EditText editText = view.findViewById(R.id.editTextFloat);
+                    editText.setText("");
+                    editText.jumpDrawablesToCurrentState();
                     break;
                 }
                 case DOUBLE: {
-                    ((EditText) view.findViewById(R.id.editTextDouble)).setText("");
+                    EditText editText = view.findViewById(R.id.editTextDouble);
+                    editText.setText("");
+                    editText.jumpDrawablesToCurrentState();
                     break;
                 }
                 case CHARACTER: {
-                    ((EditText) view.findViewById(R.id.editTextCharacter)).setText("");
+                    EditText editText = view.findViewById(R.id.editTextCharacter);
+                    editText.setText("");
+                    editText.jumpDrawablesToCurrentState();
                     break;
                 }
                 case STRING: {
-                    ((EditText) view.findViewById(R.id.editTextString)).setText("");
+                    EditText editText = view.findViewById(R.id.editTextString);
+                    editText.setText("");
+                    editText.jumpDrawablesToCurrentState();
                     break;
                 }
             }

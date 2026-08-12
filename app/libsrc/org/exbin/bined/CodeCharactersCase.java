@@ -21,11 +21,11 @@ package org.exbin.bined;
 public enum CodeCharactersCase {
 
     /**
-     * Lower case, eg. a, b, c, d, e, f.
+     * Lower case, e.g. a, b, c, d, e, f.
      */
     LOWER,
     /**
-     * Upper case, eg. A, B, C, D, E, F.
+     * Upper case, e.g. A, B, C, D, E, F.
      */
     UPPER
 }

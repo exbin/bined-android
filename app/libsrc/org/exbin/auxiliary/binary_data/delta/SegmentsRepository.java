@@ -89,7 +89,7 @@ public class SegmentsRepository {
     }
 
     /**
-     * Saves document to it's source file and update all documents.
+     * Saves document to its source file and update all documents.
      *
      * @param savedDocument document to save
      * @throws java.io.IOException if input/output error

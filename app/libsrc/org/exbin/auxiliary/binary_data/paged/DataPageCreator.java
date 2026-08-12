@@ -16,10 +16,12 @@
 package org.exbin.auxiliary.binary_data.paged;
 
 import org.exbin.auxiliary.binary_data.EditableBinaryData;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Data page creator.
  */
+@NullMarked
 public interface DataPageCreator {
 
     /**

@@ -45,7 +45,7 @@ public class JnaBufferEditableData extends BufferEditableData {
      *
      * @param data byte array
      */
-    public JnaBufferEditableData(@Nullable byte[] data) {
+    public JnaBufferEditableData(byte @Nullable [] data) {
         super(JnaBufferEditableData.allocateBufferInt(data));
     }
 
@@ -72,7 +72,7 @@ public class JnaBufferEditableData extends BufferEditableData {
         }
     }
 
-    private static ByteBuffer allocateBufferInt(@Nullable byte[] data) {
+    private static ByteBuffer allocateBufferInt(byte @Nullable [] data) {
         if (data == null) {
             return JnaBufferEditableData.allocateBufferInt(0);
         } else {

@@ -16,6 +16,7 @@
 package org.exbin.auxiliary.binary_data;
 
 import java.util.Optional;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -24,6 +25,7 @@ import org.jspecify.annotations.Nullable;
  * Exception can optionally provide information about range of data which are
  * not present, but it doesn't have to be full segment.
  */
+@NullMarked
 public class DataNotPresentException extends RuntimeException {
 
     @Nullable

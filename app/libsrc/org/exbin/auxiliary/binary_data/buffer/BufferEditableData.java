@@ -53,7 +53,7 @@ public class BufferEditableData extends BufferData implements EditableBinaryData
         super(data);
     }
 
-    public BufferEditableData(@Nullable byte[] data) {
+    public BufferEditableData(byte @Nullable [] data) {
         super(data);
     }
 

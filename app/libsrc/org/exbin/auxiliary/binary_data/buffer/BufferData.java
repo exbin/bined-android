@@ -30,7 +30,7 @@ import org.exbin.auxiliary.binary_data.OutOfBoundsException;
  * Implementation of binary data interface using byte buffer.
  * <p>
  * To allow parallel reading, read operations must be synchronized due to split
- * nature of the ByteBuffer position and depending operation.
+ * nature of the ByteBuffer position and depending on operation.
  */
 @NullMarked
 public class BufferData implements BinaryData {
@@ -57,7 +57,7 @@ public class BufferData implements BinaryData {
      *
      * @param data byte array
      */
-    public BufferData(@Nullable byte[] data) {
+    public BufferData(byte @Nullable [] data) {
         if (data == null) {
             this.data = BufferData.this.allocateBuffer(0);
         } else {
