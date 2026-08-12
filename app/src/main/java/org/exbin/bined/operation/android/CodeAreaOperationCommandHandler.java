@@ -23,8 +23,8 @@ import android.view.KeyEvent;
 
 import org.exbin.auxiliary.binary_data.BinaryData;
 import org.exbin.auxiliary.binary_data.EditableBinaryData;
-import org.exbin.auxiliary.binary_data.jna.JnaBufferData;
-import org.exbin.auxiliary.binary_data.jna.JnaBufferEditableData;
+import org.exbin.auxiliary.binary_data.android_jna.JnaBufferData;
+import org.exbin.auxiliary.binary_data.android_jna.JnaBufferEditableData;
 import org.exbin.bined.CaretOverlapMode;
 import org.exbin.bined.ClipboardHandlingMode;
 import org.exbin.bined.CodeAreaCaretPosition;

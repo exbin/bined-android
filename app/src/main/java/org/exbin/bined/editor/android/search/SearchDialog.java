@@ -37,7 +37,7 @@ import androidx.appcompat.widget.SwitchCompat;
 import com.google.android.material.tabs.TabLayout;
 
 import org.exbin.auxiliary.binary_data.EditableBinaryData;
-import org.exbin.auxiliary.binary_data.jna.JnaBufferEditableData;
+import org.exbin.auxiliary.binary_data.android_jna.JnaBufferEditableData;
 import org.exbin.bined.CodeAreaCaretListener;
 import org.exbin.bined.EditOperation;
 import org.exbin.bined.RowWrappingMode;

@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.auxiliary.binary_data.jna;
+package org.exbin.auxiliary.binary_data.android_jna;
 
-import com.sun.jna.Memory;
-import java.nio.ByteBuffer;
-import org.jspecify.annotations.Nullable;
-import org.jspecify.annotations.NullMarked;
 import org.exbin.auxiliary.binary_data.buffer.BufferEditableData;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
+import java.nio.ByteBuffer;
 
 /**
  * Implementation of editable binary data interface using JNA byte buffer.
@@ -37,7 +37,7 @@ public class JnaBufferEditableData extends BufferEditableData {
      * @param data byte buffer
      */
     public JnaBufferEditableData(@Nullable ByteBuffer data) {
-        super(data != null ? data : JnaBufferEditableData.allocateBufferInt(0));
+        super(data != null ? data : JnaBuffer.allocateBufferInt(0));
     }
 
     /**
@@ -46,7 +46,7 @@ public class JnaBufferEditableData extends BufferEditableData {
      * @param data byte array
      */
     public JnaBufferEditableData(byte @Nullable [] data) {
-        super(JnaBufferEditableData.allocateBufferInt(data));
+        super(JnaBuffer.allocateBufferInt(data));
     }
 
     /**
@@ -55,31 +55,11 @@ public class JnaBufferEditableData extends BufferEditableData {
      * @param dataSize data size
      */
     public JnaBufferEditableData(int dataSize) {
-        super(JnaBufferEditableData.allocateBufferInt(dataSize));
+        super(JnaBuffer.allocateBufferInt(dataSize));
     }
 
     @Override
     protected ByteBuffer allocateBuffer(int capacity) {
-        return JnaBufferEditableData.allocateBufferInt(capacity);
-    }
-
-    private static ByteBuffer allocateBufferInt(int capacity) {
-        try {
-            return new Memory(capacity).getByteBuffer(0, capacity);
-        } catch (Throwable tw) {
-            // Fallback to regular byte buffer
-            return ByteBuffer.allocateDirect(capacity);
-        }
-    }
-
-    private static ByteBuffer allocateBufferInt(byte @Nullable [] data) {
-        if (data == null) {
-            return JnaBufferEditableData.allocateBufferInt(0);
-        } else {
-            ByteBuffer buffer = JnaBufferEditableData.allocateBufferInt(data.length);
-            buffer.put(data);
-            buffer.clear();
-            return buffer;
-        }
+        return JnaBuffer.allocateBufferInt(capacity);
     }
 }

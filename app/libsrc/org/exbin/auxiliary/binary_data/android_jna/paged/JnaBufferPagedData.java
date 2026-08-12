@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.exbin.auxiliary.binary_data.jna.paged;
+package org.exbin.auxiliary.binary_data.android_jna.paged;
 
 import org.jspecify.annotations.Nullable;
 import org.jspecify.annotations.NullMarked;
 import org.exbin.auxiliary.binary_data.EditableBinaryData;
-import org.exbin.auxiliary.binary_data.jna.JnaBufferData;
+import org.exbin.auxiliary.binary_data.android_jna.JnaBufferData;
 import org.exbin.auxiliary.binary_data.buffer.paged.BufferPagedData;
 import org.exbin.auxiliary.binary_data.paged.DataPageCreator;
 

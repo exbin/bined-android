@@ -18,7 +18,7 @@ package org.exbin.bined;
 import org.jspecify.annotations.NullMarked;
 import org.exbin.auxiliary.binary_data.BinaryData;
 import org.exbin.auxiliary.binary_data.EditableBinaryData;
-import org.exbin.auxiliary.binary_data.jna.JnaBufferEditableData;
+import org.exbin.auxiliary.binary_data.android_jna.JnaBufferEditableData;
 import org.junit.Assert;
 import org.junit.Test;
 

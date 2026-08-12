@@ -32,15 +32,15 @@ import org.exbin.auxiliary.binary_data.delta.list.DefaultDoublyLinkedList;
 @NullMarked
 public class DeltaDocument implements EditableBinaryData {
 
-    private final SegmentsRepository repository;
-    private DataSource dataSource;
-    private final DefaultDoublyLinkedList<DataSegment> segments = new DefaultDoublyLinkedList<>();
+    protected final SegmentsRepository repository;
+    protected @Nullable DataSource dataSource;
+    protected final DefaultDoublyLinkedList<DataSegment> segments = new DefaultDoublyLinkedList<>();
 
-    private long dataLength = 0;
-    private final DeltaDocumentWindow pointerWindow;
-    private final List<DeltaDocumentChangedListener> changeListeners = new ArrayList<>();
+    protected long dataLength = 0;
+    protected final DeltaDocumentWindow pointerWindow;
+    protected final List<DeltaDocumentChangedListener> changeListeners = new ArrayList<>();
 
-    private static final int BUFFER_SIZE = 4096;
+    protected static final int BUFFER_SIZE = 4096;
 
     public DeltaDocument(SegmentsRepository repository, DataSource dataSource) throws IOException {
         this.repository = repository;

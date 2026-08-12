@@ -21,7 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.jspecify.annotations.NullMarked;
 import org.exbin.auxiliary.binary_data.EditableBinaryData;
-import org.exbin.auxiliary.binary_data.jna.JnaBufferEditableData;
+import org.exbin.auxiliary.binary_data.android_jna.JnaBufferEditableData;
 
 /**
  * Tests for codeArea component.

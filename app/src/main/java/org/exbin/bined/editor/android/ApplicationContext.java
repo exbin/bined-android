@@ -15,17 +15,18 @@
  */
 package org.exbin.bined.editor.android;
 
+import android.app.ActivityManager;
 import android.app.Application;
 
+import org.exbin.auxiliary.binary_data.android_jna.JnaBuffer;
+import org.exbin.auxiliary.binary_data.android_jna.JnaBufferEditableData;
 import org.exbin.auxiliary.binary_data.delta.SegmentsRepository;
-import org.exbin.auxiliary.binary_data.jna.JnaBufferEditableData;
 import org.exbin.bined.android.basic.CodeArea;
 import org.exbin.bined.editor.android.preference.BinaryEditorPreferences;
 import org.exbin.bined.editor.android.preference.PreferencesWrapper;
 import org.exbin.bined.editor.android.search.SearchParameters;
-
-import org.jspecify.annotations.Nullable;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Application context.
@@ -44,6 +45,8 @@ public class ApplicationContext extends Application {
     public void onCreate() {
         super.onCreate();
 
+        // Pass activity manager for memory checking
+        JnaBuffer.setActivityManager((ActivityManager) getSystemService(ACTIVITY_SERVICE));
         appPreferences = new BinaryEditorPreferences(new PreferencesWrapper(getApplicationContext()));
     }
 

@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     private Toolbar toolbar;
     private View keyPanel;
     private View basicValuesInspectorView;
-    private Menu menu;
+    private @Nullable Menu menu;
     private final BinaryStatusHandler binaryStatus = new BinaryStatusHandler(this);
     private BinarySearch binarySearch;
     private View searchStatusPanel;
@@ -224,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         }
     };
     private final View.OnKeyListener codeAreaOnKeyListener = new CodeAreaKeyListener();
-    private Object codeAreaOnUnhandledKeyListener = null;
+    private @Nullable Object codeAreaOnUnhandledKeyListener = null;
     private final EditModeChangedListener codeAreaEditModeChangedListener = binaryStatus::setEditMode;
 
     private final ActivityResultLauncher<Intent> openFileLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), this::openFileResultCallback);
@@ -1681,7 +1681,11 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     private void reportException(Throwable exception) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.error_exception);
-        builder.setMessage(exception.getLocalizedMessage());
+        if (exception instanceof OutOfMemoryError) {
+            builder.setMessage("OutOfMemoryError: " + exception.getLocalizedMessage());
+        } else {
+            builder.setMessage(exception.getLocalizedMessage());
+        }
         builder.setNegativeButton(R.string.button_close, null);
         AlertDialog alertDialog = builder.create();
         alertDialog.show();

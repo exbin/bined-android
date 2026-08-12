@@ -17,7 +17,7 @@ package org.exbin.bined.editor.android.search;
 
 import org.exbin.auxiliary.binary_data.BinaryData;
 import org.exbin.auxiliary.binary_data.EditableBinaryData;
-import org.exbin.auxiliary.binary_data.jna.JnaBufferEditableData;
+import org.exbin.auxiliary.binary_data.android_jna.JnaBufferEditableData;
 import org.exbin.bined.CodeAreaUtils;
 
 import java.util.Objects;

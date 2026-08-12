@@ -20,7 +20,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import org.jspecify.annotations.NullMarked;
 import org.exbin.auxiliary.binary_data.BinaryData;
-import org.exbin.auxiliary.binary_data.jna.JnaBufferData;
+import org.exbin.auxiliary.binary_data.android_jna.JnaBufferData;
 
 /**
  * Simulation of huge binary data source.
