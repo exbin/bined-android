@@ -62,8 +62,9 @@ import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
-/**
+    /**
  * Default binary editor command handler.
  */
 @NullMarked
@@ -71,8 +72,6 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
 
     public static final int LAST_CONTROL_CODE = 31;
     private static final char DELETE_CHAR = (char) 0x7f;
-
-    private final int metaMask = KeyEvent.META_CTRL_MASK;
 
     protected final CodeAreaCore codeArea;
     protected EnterKeyHandlingMode enterKeyHandlingMode = EnterKeyHandlingMode.PLATFORM_SPECIFIC;
@@ -82,10 +81,10 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
 
     protected Context context;
     protected ClipboardManager clipboard;
-    protected boolean canPaste = true;
+    protected boolean canPaste = false;
     protected ClipDescription binedDataFlavor;
     protected ClipDescription binaryDataFlavor;
-    protected ClipData currentClipboardData = null;
+    protected @Nullable ClipData currentClipboardData = null;
     protected ClipboardManager.OnPrimaryClipChangedListener clipChangedListener;
 
     public DefaultCodeAreaCommandHandler(Context context, CodeAreaCore codeArea) {
@@ -177,6 +176,7 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
                 break;
             }
             case KeyEvent.KEYCODE_MOVE_HOME: {
+                int metaMask = CodeAreaAndroidUtils.getMetaMaskDown();
                 if ((keyEvent.getModifiers() & metaMask) > 0) {
                     move(isSelectingMode(keyEvent), MovementDirection.DOC_START);
                 } else {
@@ -188,6 +188,7 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
                 break;
             }
             case KeyEvent.KEYCODE_MOVE_END: {
+                int metaMask = CodeAreaAndroidUtils.getMetaMaskDown();
                 if ((keyEvent.getModifiers() & metaMask) > 0) {
                     move(isSelectingMode(keyEvent), MovementDirection.DOC_END);
                 } else {
@@ -249,6 +250,7 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
             }
             default: {
                 if (((ClipboardCapable) codeArea).getClipboardHandlingMode() == ClipboardHandlingMode.PROCESS) {
+                    int metaMask = CodeAreaAndroidUtils.getMetaMaskDown();
                     if ((keyEvent.getModifiers() & metaMask) > 0 && keyEvent.getKeyCode() == KeyEvent.KEYCODE_C) {
                         copy();
 //                        keyEvent.consume();
@@ -274,7 +276,7 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
     @Override
     public void keyTyped(int keyCode, KeyEvent keyEvent) {
         char keyValue = (char) keyCode;
-        // TODO Add support for high unicode codes
+        // TODO Add support for high Unicode codes
         if (keyValue == KeyEvent.KEYCODE_UNKNOWN) {
             return;
         }

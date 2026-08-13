@@ -25,6 +25,8 @@ import org.exbin.auxiliary.binary_data.delta.SegmentsRepository;
 import org.exbin.auxiliary.binary_data.android_jna.JnaBufferEditableData;
 import org.exbin.auxiliary.binary_data.android_jna.paged.JnaBufferPagedData;
 import org.exbin.auxiliary.binary_data.paged.PagedData;
+import org.exbin.bined.CodeAreaCaretPosition;
+import org.exbin.bined.SelectionRange;
 import org.exbin.bined.android.CodeAreaPainter;
 import org.exbin.bined.android.basic.CodeArea;
 import org.exbin.bined.android.basic.DefaultCodeAreaCommandHandler;
@@ -60,23 +62,13 @@ public class BinEdFileHandler {
     private long documentOriginalSize = 0;
     private @Nullable Uri currentFileUri = null;
     private @Nullable Uri pickerInitialUri = null;
+    private long selectionStart = -1;
+    private long selectionEnd = -1;
 
     public BinEdFileHandler(CodeArea codeArea) {
         // ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         this.codeArea = codeArea;
 
-        // TODO Check for memory limit:
-        // https://stackoverflow.com/questions/2298208/how-do-i-discover-memory-usage-of-my-application-in-android
-        // possibly? long nativeHeapFreeSize = Debug.getNativeHeapFreeSize();
-        /* long lPtr = Native.malloc(capacity);
-        if (lPtr == 0)
-            throw new Error("Failed to allocate direct byte buffer memory");
-        return Memory.getByteBuffer(lPtr, capacity);
-
-        buffer.clear();
-        Pointer javaPointer = Native.getDirectBufferPointer(buffer);
-        long lPtr = Pointer.nativeValue(javaPointer);
-        Native.free(lPtr); */
         codeArea.setContentData(new JnaBufferEditableData());
         undoRedo = new CodeAreaUndoRedo(codeArea);
 
@@ -200,7 +192,7 @@ public class BinEdFileHandler {
         return documentOriginalSize;
     }
 
-    public FileProcessingMode getFileHandlingMode() {
+    public FileProcessingMode getFileProcessingMode() {
         return getCodeArea().getContentData() instanceof DeltaDocument ? FileProcessingMode.DELTA : FileProcessingMode.MEMORY;
     }
 
@@ -225,5 +217,35 @@ public class BinEdFileHandler {
 
     public boolean isModified() {
         return undoRedo.isModified();
+    }
+
+    public void selectionByStart(CodeAreaCaretPosition caretPosition) {
+        selectionStart = caretPosition.getDataPosition();
+        SelectionRange selection = codeArea.getSelection();
+        if (selection.isEmpty()) {
+            if (selectionEnd >= 0) {
+                codeArea.setSelection(selectionStart, selectionEnd);
+            }
+        } else {
+            codeArea.setSelection(selectionStart, selection.getEnd());
+        }
+    }
+
+    public void selectionByEnd(CodeAreaCaretPosition caretPosition) {
+        selectionEnd = caretPosition.getDataPosition();
+        SelectionRange selection = codeArea.getSelection();
+        if (selection.isEmpty()) {
+            if (selectionStart >= 0) {
+                codeArea.setSelection(selectionStart, selectionEnd);
+            }
+        } else {
+            codeArea.setSelection(selection.getStart(), selectionEnd);
+        }
+    }
+
+    public void clearSelectionPoints() {
+        selectionStart = -1;
+        selectionEnd = -1;
+        codeArea.clearSelection();
     }
 }

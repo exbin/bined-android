@@ -36,6 +36,19 @@ public class JnaBuffer {
 
     private JnaBuffer() {
         // Utility class, don't create instances
+
+        // TODO Alternative check for memory limit:
+        // https://stackoverflow.com/questions/2298208/how-do-i-discover-memory-usage-of-my-application-in-android
+        // possibly? long nativeHeapFreeSize = Debug.getNativeHeapFreeSize();
+        /* long lPtr = Native.malloc(capacity);
+        if (lPtr == 0)
+            throw new Error("Failed to allocate direct byte buffer memory");
+        return Memory.getByteBuffer(lPtr, capacity);
+
+        buffer.clear();
+        Pointer javaPointer = Native.getDirectBufferPointer(buffer);
+        long lPtr = Pointer.nativeValue(javaPointer);
+        Native.free(lPtr); */
     }
 
     public static ByteBuffer allocateBufferInt(int capacity) {

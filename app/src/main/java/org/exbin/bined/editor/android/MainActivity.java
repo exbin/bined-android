@@ -713,27 +713,15 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
                 break;
             }
             case SELECTION_START_POPUP_ID: {
-                SelectionRange selection = codeArea.getSelection();
-                CodeAreaCaretPosition touchCaretPosition = codeArea.mousePositionToClosestCaretPosition((int) codeArea.getTouchPositionX(), (int) codeArea.getTouchPositionY(), CaretOverlapMode.PARTIAL_OVERLAP);
-                if (selection.isEmpty()) {
-                    codeArea.setSelection(touchCaretPosition.getDataPosition(), codeArea.getDataPosition());
-                } else {
-                    codeArea.setSelection(touchCaretPosition.getDataPosition(), selection.getEnd());
-                }
+                fileHandler.selectionByStart(codeArea.mousePositionToClosestCaretPosition((int) codeArea.getTouchPositionX(), (int) codeArea.getTouchPositionY(), CaretOverlapMode.PARTIAL_OVERLAP));
                 break;
             }
             case SELECTION_END_POPUP_ID: {
-                SelectionRange selection = codeArea.getSelection();
-                CodeAreaCaretPosition touchCaretPosition = codeArea.mousePositionToClosestCaretPosition((int) codeArea.getTouchPositionX(), (int) codeArea.getTouchPositionY(), CaretOverlapMode.PARTIAL_OVERLAP);
-                if (selection.isEmpty()) {
-                    codeArea.setSelection(codeArea.getDataPosition(), touchCaretPosition.getDataPosition());
-                } else {
-                    codeArea.setSelection(selection.getStart(), touchCaretPosition.getDataPosition());
-                }
+                fileHandler.selectionByEnd(codeArea.mousePositionToClosestCaretPosition((int) codeArea.getTouchPositionX(), (int) codeArea.getTouchPositionY(), CaretOverlapMode.PARTIAL_OVERLAP));
                 break;
             }
             case CLEAR_SELECTION_POPUP_ID: {
-                codeArea.clearSelection();
+                fileHandler.clearSelectionPoints();
                 break;
             }
             case CUT_ACTION_POPUP_ID: {

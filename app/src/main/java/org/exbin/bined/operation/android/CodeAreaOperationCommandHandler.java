@@ -84,8 +84,6 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
     protected static final char BACKSPACE_CHAR = '\b';
     protected static final char DELETE_CHAR = (char) 0x7f;
 
-    private final int metaMask = CodeAreaAndroidUtils.getMetaMaskDown();
-
     protected final CodeAreaCore codeArea;
     protected EnterKeyHandlingMode enterKeyHandlingMode = EnterKeyHandlingMode.PLATFORM_SPECIFIC;
     protected TabKeyHandlingMode tabKeyHandlingMode = TabKeyHandlingMode.PLATFORM_SPECIFIC;
@@ -94,14 +92,15 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
 
     protected Context context;
     protected ClipboardManager clipboard;
-    protected boolean canPaste = true;
-    private ClipDescription binedDataFlavor;
-    private ClipDescription binaryDataFlavor;
-    private @Nullable ClipData currentClipboardData = null;
+    protected boolean canPaste = false;
+    protected ClipDescription binedDataFlavor;
+    protected ClipDescription binaryDataFlavor;
+    protected @Nullable ClipData currentClipboardData = null;
 
     protected final BinaryDataUndoRedo undoRedo;
     protected @Nullable CodeAreaCommand editCommand = null;
-    private @Nullable CodeAreaTableMapAssessor codeAreaTableMapAssessor = null;
+    protected @Nullable CodeAreaTableMapAssessor codeAreaTableMapAssessor = null;
+    protected ClipboardManager.OnPrimaryClipChangedListener clipChangedListener;
 
     public CodeAreaOperationCommandHandler(Context context, CodeAreaCore codeArea, BinaryDataUndoRedo undoRedo) {
         this.context = context;
@@ -112,12 +111,13 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
         viewModeSupported = codeArea instanceof ViewModeCapable;
 
         clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-        clipboard.addPrimaryClipChangedListener(new ClipboardManager.OnPrimaryClipChangedListener() {
+        clipChangedListener = new ClipboardManager.OnPrimaryClipChangedListener() {
             @Override
             public void onPrimaryClipChanged() {
                 updateCanPaste();
             }
-        });
+        };
+        clipboard.addPrimaryClipChangedListener(clipChangedListener);
         updateCanPaste();
 
         binedDataFlavor = new ClipDescription("BinEd Data", new String[] { CodeAreaUtils.BINED_CLIPBOARD_MIME });
@@ -140,6 +140,10 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
         } catch (java.awt.HeadlessException ex) {
             Logger.getLogger(CodeAreaOperationCommandHandler.class.getName()).log(Level.SEVERE, null, ex);
         } */
+    }
+
+    public void detach() {
+        clipboard.removePrimaryClipChangedListener(clipChangedListener);
     }
 
     public static CodeAreaCommandHandler.CodeAreaCommandHandlerFactory createDefaultCodeAreaCommandHandlerFactory(final Context context) {
@@ -195,6 +199,7 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
                 break;
             }
             case KeyEvent.KEYCODE_MOVE_HOME: {
+                int metaMask = CodeAreaAndroidUtils.getMetaMaskDown();
                 if ((keyEvent.getModifiers() & metaMask) > 0) {
                     move(isSelectingMode(keyEvent), MovementDirection.DOC_START);
                 } else {
@@ -206,6 +211,7 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
                 break;
             }
             case KeyEvent.KEYCODE_MOVE_END: {
+                int metaMask = CodeAreaAndroidUtils.getMetaMaskDown();
                 if ((keyEvent.getModifiers() & metaMask) > 0) {
                     move(isSelectingMode(keyEvent), MovementDirection.DOC_END);
                 } else {
@@ -262,6 +268,7 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
             }
             default: {
                 if (((ClipboardCapable) codeArea).getClipboardHandlingMode() == ClipboardHandlingMode.PROCESS) {
+                    int metaMask = CodeAreaAndroidUtils.getMetaMaskDown();
                     if ((keyEvent.getModifiers() & metaMask) > 0 && keyEvent.getKeyCode() == KeyEvent.KEYCODE_C) {
                         copy();
 //                        keyEvent.consume();
@@ -287,7 +294,7 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
     @Override
     public void keyTyped(int keyCode, KeyEvent keyEvent) {
         char keyValue = (char) keyCode;
-        // TODO Add support for high unicode codes
+        // TODO Add support for high Unicode codes
         if (keyValue == KeyEvent.KEYCODE_UNKNOWN) {
             return;
         }
