@@ -24,23 +24,23 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public class BinarySearch {
 
-    private static final int DEFAULT_DELAY = 500;
+    protected static final int DEFAULT_DELAY = 500;
 
-    private @Nullable InvokeSearchThread invokeSearchThread;
-    private @Nullable SearchThread searchThread;
+    protected @Nullable InvokeSearchThread invokeSearchThread;
+    protected @Nullable SearchThread searchThread;
 
-    private SearchOperation currentSearchOperation = SearchOperation.FIND;
-    private SearchParameters.SearchDirection currentSearchDirection = SearchParameters.SearchDirection.FORWARD;
-    private final SearchParameters currentSearchParameters = new SearchParameters();
-    private final ReplaceParameters currentReplaceParameters = new ReplaceParameters();
+    protected SearchOperation currentSearchOperation = SearchOperation.FIND;
+    protected SearchParameters.SearchDirection currentSearchDirection = SearchParameters.SearchDirection.FORWARD;
+    protected final SearchParameters currentSearchParameters = new SearchParameters();
+    protected final ReplaceParameters currentReplaceParameters = new ReplaceParameters();
 
-//    private final List<SearchCondition> searchHistory = new ArrayList<>();
-//    private final List<SearchCondition> replaceHistory = new ArrayList<>();
+//    protected final List<SearchCondition> searchHistory = new ArrayList<>();
+//    protected final List<SearchCondition> replaceHistory = new ArrayList<>();
 
-//    private CodeAreaPopupMenuHandler codeAreaPopupMenuHandler;
-    private @Nullable PanelClosingListener panelClosingListener = null;
-    private @Nullable BinarySearchService binarySearchService;
-    private BinarySearchService.@Nullable SearchStatusListener searchStatusListener;
+//    protected CodeAreaPopupMenuHandler codeAreaPopupMenuHandler;
+    protected @Nullable PanelClosingListener panelClosingListener = null;
+    protected @Nullable BinarySearchService binarySearchService;
+    protected BinarySearchService.@Nullable SearchStatusListener searchStatusListener;
 
     public BinarySearch() {
     }

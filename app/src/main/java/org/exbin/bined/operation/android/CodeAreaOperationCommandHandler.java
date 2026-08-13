@@ -94,7 +94,7 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
 
     protected Context context;
     protected ClipboardManager clipboard;
-    protected boolean canPaste = false;
+    protected boolean canPaste = true;
     private ClipDescription binedDataFlavor;
     private ClipDescription binaryDataFlavor;
     private @Nullable ClipData currentClipboardData = null;
@@ -118,6 +118,7 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
                 updateCanPaste();
             }
         });
+        updateCanPaste();
 
         binedDataFlavor = new ClipDescription("BinEd Data", new String[] { CodeAreaUtils.BINED_CLIPBOARD_MIME });
         binaryDataFlavor = new ClipDescription("Binary Data", new String[] { CodeAreaUtils.MIME_CLIPBOARD_BINARY });
@@ -149,7 +150,7 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
         return undoRedo;
     }
 
-    private void updateCanPaste() {
+    public void updateCanPaste() {
         canPaste = clipboard.hasPrimaryClip();  // canPaste = CodeAreaSwingUtils.canPaste(clipboard, binedDataFlavor) || CodeAreaSwingUtils.canPaste(clipboard, DataFlavor.stringFlavor);
     }
 
@@ -660,7 +661,7 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
         try {
             ClipDescription description = primaryClip.getDescription();
             try {
-                if (!description.hasMimeType(CodeAreaUtils.BINED_CLIPBOARD_MIME) && !description.hasMimeType(CodeAreaUtils.MIME_CLIPBOARD_BINARY) && !description.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
+                if (!description.hasMimeType(CodeAreaUtils.BINED_CLIPBOARD_MIME) && !description.hasMimeType(CodeAreaUtils.MIME_CLIPBOARD_BINARY) && !description.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN) && !description.hasMimeType(ClipDescription.MIMETYPE_TEXT_HTML)) {
                     return;
                 }
             } catch (IllegalStateException ex) {
@@ -678,7 +679,7 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
 //                InputStream clipboardData = (InputStream) clipboard.getData(binaryDataFlavor);
 //                pastedData.insert(0, clipboardData, -1);
 //                pasteBinaryData(pastedData);
-            } else if (description.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
+            } else if (description.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN) || description.hasMimeType(ClipDescription.MIMETYPE_TEXT_HTML)) {
                 CharSequence clipboardData = clipItem.getText();
                 if (clipboardData != null) {
                     byte[] bytes = clipboardData.toString().getBytes(Charset.forName(CodeAreaAndroidUtils.DEFAULT_ENCODING));

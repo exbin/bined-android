@@ -24,6 +24,7 @@ import org.exbin.bined.editor.android.R;
 import org.exbin.bined.editor.android.SettingsActivity;
 
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /**
  * View preferences fragment.
@@ -38,7 +39,7 @@ public class HeaderFragment extends PreferenceFragmentCompat {
     public static final String DATA_INSPECTOR_MODE = "data_inspector_mode";
 
     @Override
-    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+    public void onCreatePreferences(@Nullable Bundle savedInstanceState, @Nullable String rootKey) {
         setPreferencesFromResource(R.xml.header_preferences, rootKey);
 
         SettingsActivity activity = (SettingsActivity) requireActivity();

@@ -1,4 +1,6 @@
 0.2.11
+- Fix for some clipboard handling
+- Bug fixes
 
 0.2.10 (2026-06-01)
 - Added Greek translation
@@ -48,7 +50,7 @@
 0.2.1 (2024-09-27)
 - Basic support for selection / clipboard
 - Changed file dialog
-- Added settings and preferences
+- Added settings and optionsStorage
 - Added dark theme and language switching
 - Added menu icons
 

@@ -36,20 +36,20 @@ public class TextFontPreferences implements TextFontOptions {
     public static final String PREFERENCES_TEXT_FONT_SUBSCRIPT = PREFERENCES_TEXT_FONT_PREFIX + "subscript";
     public static final String PREFERENCES_TEXT_FONT_SUPERSCRIPT = PREFERENCES_TEXT_FONT_PREFIX + "superscript";
 
-    private final Preferences preferences;
+    private final OptionsStorage optionsStorage;
 
-    public TextFontPreferences(Preferences preferences) {
-        this.preferences = preferences;
+    public TextFontPreferences(OptionsStorage optionsStorage) {
+        this.optionsStorage = optionsStorage;
     }
 
     @Override
     public int getFontSize() {
-        return preferences.getInt(PREFERENCES_TEXT_FONT_SIZE, 30);
+        return optionsStorage.getInt(PREFERENCES_TEXT_FONT_SIZE, 30);
     }
 
     @Override
     public void setFontSize(int size) {
-        preferences.putInt(PREFERENCES_TEXT_FONT_SIZE, size);
+        optionsStorage.putInt(PREFERENCES_TEXT_FONT_SIZE, size);
     }
 
 /*

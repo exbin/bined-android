@@ -22,13 +22,22 @@ import java.util.Optional;
 import org.jspecify.annotations.NullMarked;
 
 /**
- * Preferences interface.
+ * Options storage interface.
  */
 @NullMarked
-public interface Preferences {
+public interface OptionsStorage {
 
+    /**
+     * Makes any changes permanent (stores cached changes to permanent storage).
+     */
     void flush();
 
+    /**
+     * Checks whether specific key exists.
+     *
+     * @param key options key
+     * @return true if exists
+     */
     boolean exists(String key);
 
     Optional<String> get(String key);
@@ -61,7 +70,15 @@ public interface Preferences {
 
     void putLong(String key, long value);
 
+    /**
+     * Removes options key.
+     *
+     * @param key options key
+     */
     void remove(String key);
 
+    /**
+     * Forces reloading of cache from permanent storage.
+     */
     void sync();
 }

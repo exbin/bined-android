@@ -53,17 +53,17 @@ public class CodeAreaPreferences implements CodeAreaOptions {
     public static final String PREFERENCES_MIN_ROW_POSITION_LENGTH = "minRowPositionLength";
     public static final String PREFERENCES_MAX_ROW_POSITION_LENGTH = "maxRowPositionLength";
 
-    private final Preferences preferences;
+    private final OptionsStorage optionsStorage;
 
-    public CodeAreaPreferences(Preferences preferences) {
-        this.preferences = preferences;
+    public CodeAreaPreferences(OptionsStorage optionsStorage) {
+        this.optionsStorage = optionsStorage;
     }
 
     @Override
     public CodeType getCodeType() {
         CodeType defaultCodeType = CodeType.HEXADECIMAL;
         try {
-            return CodeType.valueOf(preferences.get(PREFERENCES_CODE_TYPE, defaultCodeType.name()));
+            return CodeType.valueOf(optionsStorage.get(PREFERENCES_CODE_TYPE, defaultCodeType.name()));
         } catch (IllegalArgumentException ex) {
             Logger.getLogger(CodeAreaPreferences.class.getName()).log(Level.SEVERE, null, ex);
             return defaultCodeType;
@@ -72,24 +72,24 @@ public class CodeAreaPreferences implements CodeAreaOptions {
 
     @Override
     public void setCodeType(CodeType codeType) {
-        preferences.put(PREFERENCES_CODE_TYPE, codeType.name());
+        optionsStorage.put(PREFERENCES_CODE_TYPE, codeType.name());
     }
 
     @Override
     public boolean isShowNonprintables() {
-        return preferences.getBoolean(PREFERENCES_SHOW_NONPRINTABLES, true);
+        return optionsStorage.getBoolean(PREFERENCES_SHOW_NONPRINTABLES, true);
     }
 
     @Override
     public void setShowNonprintables(boolean showNonprintables) {
-        preferences.putBoolean(PREFERENCES_SHOW_NONPRINTABLES, showNonprintables);
+        optionsStorage.putBoolean(PREFERENCES_SHOW_NONPRINTABLES, showNonprintables);
     }
 
     @Override
     public CodeCharactersCase getCodeCharactersCase() {
         CodeCharactersCase defaultCharactersCase = CodeCharactersCase.UPPER;
         try {
-            return CodeCharactersCase.valueOf(preferences.get(PREFERENCES_HEX_CHARACTERS_CASE, defaultCharactersCase.name()));
+            return CodeCharactersCase.valueOf(optionsStorage.get(PREFERENCES_HEX_CHARACTERS_CASE, defaultCharactersCase.name()));
         } catch (IllegalArgumentException ex) {
             Logger.getLogger(CodeAreaPreferences.class.getName()).log(Level.SEVERE, null, ex);
             return defaultCharactersCase;
@@ -98,14 +98,14 @@ public class CodeAreaPreferences implements CodeAreaOptions {
 
     @Override
     public void setCodeCharactersCase(CodeCharactersCase codeCharactersCase) {
-        preferences.put(PREFERENCES_HEX_CHARACTERS_CASE, codeCharactersCase.name());
+        optionsStorage.put(PREFERENCES_HEX_CHARACTERS_CASE, codeCharactersCase.name());
     }
 
     @Override
     public PositionCodeType getPositionCodeType() {
         PositionCodeType defaultCodeType = PositionCodeType.HEXADECIMAL;
         try {
-            return PositionCodeType.valueOf(preferences.get(PREFERENCES_POSITION_CODE_TYPE, defaultCodeType.name()));
+            return PositionCodeType.valueOf(optionsStorage.get(PREFERENCES_POSITION_CODE_TYPE, defaultCodeType.name()));
         } catch (IllegalArgumentException ex) {
             Logger.getLogger(CodeAreaPreferences.class.getName()).log(Level.SEVERE, null, ex);
             return defaultCodeType;
@@ -114,14 +114,14 @@ public class CodeAreaPreferences implements CodeAreaOptions {
 
     @Override
     public void setPositionCodeType(PositionCodeType positionCodeType) {
-        preferences.put(PREFERENCES_POSITION_CODE_TYPE, positionCodeType.name());
+        optionsStorage.put(PREFERENCES_POSITION_CODE_TYPE, positionCodeType.name());
     }
 
     @Override
     public CodeAreaViewMode getViewMode() {
         CodeAreaViewMode defaultMode = CodeAreaViewMode.DUAL;
         try {
-            return CodeAreaViewMode.valueOf(preferences.get(PREFERENCES_VIEW_MODE, defaultMode.name()));
+            return CodeAreaViewMode.valueOf(optionsStorage.get(PREFERENCES_VIEW_MODE, defaultMode.name()));
         } catch (IllegalArgumentException ex) {
             Logger.getLogger(CodeAreaPreferences.class.getName()).log(Level.SEVERE, null, ex);
             return defaultMode;
@@ -130,32 +130,32 @@ public class CodeAreaPreferences implements CodeAreaOptions {
 
     @Override
     public void setViewMode(CodeAreaViewMode viewMode) {
-        preferences.put(PREFERENCES_VIEW_MODE, viewMode.name());
+        optionsStorage.put(PREFERENCES_VIEW_MODE, viewMode.name());
     }
 
     public boolean isPaintRowPosBackground() {
-        return preferences.getBoolean(PREFERENCES_PAINT_LINE_NUMBERS_BACKGROUND, true);
+        return optionsStorage.getBoolean(PREFERENCES_PAINT_LINE_NUMBERS_BACKGROUND, true);
     }
 
     public void setPaintRowPosBackground(boolean paintRowPosBackground) {
-        preferences.putBoolean(PREFERENCES_PAINT_LINE_NUMBERS_BACKGROUND, paintRowPosBackground);
+        optionsStorage.putBoolean(PREFERENCES_PAINT_LINE_NUMBERS_BACKGROUND, paintRowPosBackground);
     }
 
     @Override
     public boolean isCodeColorization() {
-        return preferences.getBoolean(PREFERENCES_CODE_COLORIZATION, true);
+        return optionsStorage.getBoolean(PREFERENCES_CODE_COLORIZATION, true);
     }
 
     @Override
     public void setCodeColorization(boolean codeColorization) {
-        preferences.putBoolean(PREFERENCES_CODE_COLORIZATION, codeColorization);
+        optionsStorage.putBoolean(PREFERENCES_CODE_COLORIZATION, codeColorization);
     }
 
     @Override
     public RowWrappingMode getRowWrappingMode() {
         RowWrappingMode defaultMode = RowWrappingMode.NO_WRAPPING;
         try {
-            return RowWrappingMode.valueOf(preferences.get(PREFERENCES_ROW_WRAPPING_MODE, defaultMode.name()));
+            return RowWrappingMode.valueOf(optionsStorage.get(PREFERENCES_ROW_WRAPPING_MODE, defaultMode.name()));
         } catch (Exception ex) {
             Logger.getLogger(CodeAreaPreferences.class.getName()).log(Level.SEVERE, null, ex);
             return defaultMode;
@@ -164,37 +164,37 @@ public class CodeAreaPreferences implements CodeAreaOptions {
 
     @Override
     public void setRowWrappingMode(RowWrappingMode rowWrappingMode) {
-        preferences.put(PREFERENCES_ROW_WRAPPING_MODE, rowWrappingMode.name());
+        optionsStorage.put(PREFERENCES_ROW_WRAPPING_MODE, rowWrappingMode.name());
     }
 
     @Override
     public int getMaxBytesPerRow() {
-        return preferences.getInt(PREFERENCES_MAX_BYTES_PER_ROW, 16);
+        return optionsStorage.getInt(PREFERENCES_MAX_BYTES_PER_ROW, 16);
     }
 
     @Override
     public void setMaxBytesPerRow(int maxBytesPerRow) {
-        preferences.putInt(PREFERENCES_MAX_BYTES_PER_ROW, maxBytesPerRow);
+        optionsStorage.putInt(PREFERENCES_MAX_BYTES_PER_ROW, maxBytesPerRow);
     }
 
     @Override
     public int getMinRowPositionLength() {
-        return preferences.getInt(PREFERENCES_MIN_ROW_POSITION_LENGTH, 0);
+        return optionsStorage.getInt(PREFERENCES_MIN_ROW_POSITION_LENGTH, 0);
     }
 
     @Override
     public void setMinRowPositionLength(int minRowPositionLength) {
-        preferences.putInt(PREFERENCES_MIN_ROW_POSITION_LENGTH, minRowPositionLength);
+        optionsStorage.putInt(PREFERENCES_MIN_ROW_POSITION_LENGTH, minRowPositionLength);
     }
 
     @Override
     public int getMaxRowPositionLength() {
-        return preferences.getInt(PREFERENCES_MAX_ROW_POSITION_LENGTH, 0);
+        return optionsStorage.getInt(PREFERENCES_MAX_ROW_POSITION_LENGTH, 0);
     }
 
     @Override
     public void setMaxRowPositionLength(int maxRowPositionLength) {
-        preferences.putInt(PREFERENCES_MAX_ROW_POSITION_LENGTH, maxRowPositionLength);
+        optionsStorage.putInt(PREFERENCES_MAX_ROW_POSITION_LENGTH, maxRowPositionLength);
     }
 
     public void applyPreferences(CodeArea codeArea) {

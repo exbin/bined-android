@@ -27,7 +27,7 @@ public class BinaryEditorPreferences {
     private final static String PREFERENCES_VERSION = "version";
     private final static String PREFERENCES_VERSION_VALUE = "0.2.1";
 
-    private final Preferences preferences;
+    private final OptionsStorage optionsStorage;
 
     private final MainPreferences mainPreferences;
     private final EditorPreferences editorPreferences;
@@ -39,15 +39,15 @@ public class BinaryEditorPreferences {
 //    private final CodeAreaThemePreferences themePreferences;
 //    private final CodeAreaColorPreferences colorPreferences;
 
-    public BinaryEditorPreferences(Preferences preferences) {
-        this.preferences = preferences;
+    public BinaryEditorPreferences(OptionsStorage optionsStorage) {
+        this.optionsStorage = optionsStorage;
 
-        mainPreferences = new MainPreferences(preferences);
-        editorPreferences = new EditorPreferences(preferences);
-        statusPreferences = new StatusPreferences(preferences);
-        codeAreaPreferences = new CodeAreaPreferences(preferences);
-        encodingPreferences = new TextEncodingPreferences(preferences);
-        fontPreferences = new TextFontPreferences(preferences);
+        mainPreferences = new MainPreferences(optionsStorage);
+        editorPreferences = new EditorPreferences(optionsStorage);
+        statusPreferences = new StatusPreferences(optionsStorage);
+        codeAreaPreferences = new CodeAreaPreferences(optionsStorage);
+        encodingPreferences = new TextEncodingPreferences(optionsStorage);
+        fontPreferences = new TextFontPreferences(optionsStorage);
 //        layoutPreferences = new CodeAreaLayoutPreferences(preferences);
 //        themePreferences = new CodeAreaThemePreferences(preferences);
 //        colorPreferences = new CodeAreaColorPreferences(preferences);
@@ -57,7 +57,7 @@ public class BinaryEditorPreferences {
 
     private void convertOlderPreferences() {
         final String legacyDef = "LEGACY";
-        String storedVersion = preferences.get(PREFERENCES_VERSION, legacyDef);
+        String storedVersion = optionsStorage.get(PREFERENCES_VERSION, legacyDef);
         if (PREFERENCES_VERSION_VALUE.equals(storedVersion)) {
             return;
         }
@@ -66,14 +66,14 @@ public class BinaryEditorPreferences {
 //            try {
 //                importLegacyPreferences();
 //            } finally {
-                preferences.put(PREFERENCES_VERSION, PREFERENCES_VERSION_VALUE);
-                preferences.flush();
+                optionsStorage.put(PREFERENCES_VERSION, PREFERENCES_VERSION_VALUE);
+                optionsStorage.flush();
 //            }
         }
     }
 
-    public Preferences getPreferences() {
-        return preferences;
+    public OptionsStorage getPreferences() {
+        return optionsStorage;
     }
 
     public MainPreferences getMainPreferences() {

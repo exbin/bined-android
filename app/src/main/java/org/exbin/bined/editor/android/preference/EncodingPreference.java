@@ -57,7 +57,6 @@ public class EncodingPreference extends EditTextPreference {
         EncodingPreference.showEncodingSelectionDialog(getContext(), getText(), this::setText);
     }
 
-    @Nullable
     public static void showEncodingSelectionDialog(Context context, @Nullable String currentCharset, EncodingSelectionListener resultListener) {
         // TODO Rework to list with cycle ability
         AlertDialog.Builder builder = new AlertDialog.Builder(context);

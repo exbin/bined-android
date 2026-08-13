@@ -33,28 +33,28 @@ public class TextEncodingPreferences implements TextEncodingOptions {
     public static final String PREFERENCES_TEXT_ENCODING_DEFAULT = PREFERENCES_TEXT_ENCODING_PREFIX + "default";
     public static final String PREFERENCES_TEXT_ENCODING_SELECTED = "selectedEncoding";
 
-    private final Preferences preferences;
+    private final OptionsStorage optionsStorage;
 
-    public TextEncodingPreferences(Preferences preferences) {
-        this.preferences = preferences;
+    public TextEncodingPreferences(OptionsStorage optionsStorage) {
+        this.optionsStorage = optionsStorage;
     }
 
     public String getDefaultEncoding() {
-        return preferences.get(PREFERENCES_TEXT_ENCODING_DEFAULT, BinaryEditorPreferences.ENCODING_UTF8);
+        return optionsStorage.get(PREFERENCES_TEXT_ENCODING_DEFAULT, BinaryEditorPreferences.ENCODING_UTF8);
     }
 
     public void setDefaultEncoding(String encodingName) {
-        preferences.put(PREFERENCES_TEXT_ENCODING_DEFAULT, encodingName);
+        optionsStorage.put(PREFERENCES_TEXT_ENCODING_DEFAULT, encodingName);
     }
 
     @Override
     public String getSelectedEncoding() {
-        return preferences.get(PREFERENCES_TEXT_ENCODING_SELECTED, BinaryEditorPreferences.ENCODING_UTF8);
+        return optionsStorage.get(PREFERENCES_TEXT_ENCODING_SELECTED, BinaryEditorPreferences.ENCODING_UTF8);
     }
 
     @Override
     public void setSelectedEncoding(String encodingName) {
-        preferences.put(PREFERENCES_TEXT_ENCODING_SELECTED, encodingName);
+        optionsStorage.put(PREFERENCES_TEXT_ENCODING_SELECTED, encodingName);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class TextEncodingPreferences implements TextEncodingOptions {
         Optional<String> value;
         int i = 0;
         do {
-            value = preferences.get(PREFERENCES_TEXT_ENCODING_PREFIX + Integer.toString(i));
+            value = optionsStorage.get(PREFERENCES_TEXT_ENCODING_PREFIX + Integer.toString(i));
             if (value.isPresent()) {
                 encodings.add(value.get());
                 i++;
@@ -76,8 +76,8 @@ public class TextEncodingPreferences implements TextEncodingOptions {
     @Override
     public void setEncodings(List<String> encodings) {
         for (int i = 0; i < encodings.size(); i++) {
-            preferences.put(PREFERENCES_TEXT_ENCODING_PREFIX + Integer.toString(i), encodings.get(i));
+            optionsStorage.put(PREFERENCES_TEXT_ENCODING_PREFIX + Integer.toString(i), encodings.get(i));
         }
-        preferences.remove(PREFERENCES_TEXT_ENCODING_PREFIX + Integer.toString(encodings.size()));
+        optionsStorage.remove(PREFERENCES_TEXT_ENCODING_PREFIX + Integer.toString(encodings.size()));
     }
 }

@@ -33,30 +33,30 @@ public class MainPreferences implements MainOptions {
     public static final String PREFERENCES_LOCALE_VARIANT = "locale.variant";
     public static final String PREFERENCES_LOCALE_TAG = "locale.tag";
 
-    private final Preferences preferences;
+    private final OptionsStorage optionsStorage;
 
-    public MainPreferences(Preferences preferences) {
-        this.preferences = preferences;
+    public MainPreferences(OptionsStorage optionsStorage) {
+        this.optionsStorage = optionsStorage;
     }
 
     @Override
     public String getLocaleLanguage() {
-        return preferences.get(PREFERENCES_LOCALE_LANGUAGE, "");
+        return optionsStorage.get(PREFERENCES_LOCALE_LANGUAGE, "");
     }
 
     @Override
     public String getLocaleCountry() {
-        return preferences.get(PREFERENCES_LOCALE_COUNTRY, "");
+        return optionsStorage.get(PREFERENCES_LOCALE_COUNTRY, "");
     }
 
     @Override
     public String getLocaleVariant() {
-        return preferences.get(PREFERENCES_LOCALE_VARIANT, "");
+        return optionsStorage.get(PREFERENCES_LOCALE_VARIANT, "");
     }
 
     @Override
     public String getLocaleTag() {
-        return preferences.get(PREFERENCES_LOCALE_TAG, "");
+        return optionsStorage.get(PREFERENCES_LOCALE_TAG, "");
     }
 
     public Locale getLocale() {
@@ -83,27 +83,27 @@ public class MainPreferences implements MainOptions {
 
     @Override
     public String getTheme() {
-        return preferences.get(PREFERENCES_THEME, "default");
+        return optionsStorage.get(PREFERENCES_THEME, "default");
     }
 
     @Override
     public void setLocaleLanguage(String language) {
-        preferences.put(PREFERENCES_LOCALE_LANGUAGE, language);
+        optionsStorage.put(PREFERENCES_LOCALE_LANGUAGE, language);
     }
 
     @Override
     public void setLocaleCountry(String country) {
-        preferences.put(PREFERENCES_LOCALE_COUNTRY, country);
+        optionsStorage.put(PREFERENCES_LOCALE_COUNTRY, country);
     }
 
     @Override
     public void setLocaleVariant(String variant) {
-        preferences.put(PREFERENCES_LOCALE_VARIANT, variant);
+        optionsStorage.put(PREFERENCES_LOCALE_VARIANT, variant);
     }
 
     @Override
     public void setLocaleTag(String variant) {
-        preferences.put(PREFERENCES_LOCALE_TAG, variant);
+        optionsStorage.put(PREFERENCES_LOCALE_TAG, variant);
     }
 
     public void setLocale(Locale locale) {
@@ -115,6 +115,6 @@ public class MainPreferences implements MainOptions {
 
     @Override
     public void setTheme(String theme) {
-        preferences.put(PREFERENCES_THEME, theme);
+        optionsStorage.put(PREFERENCES_THEME, theme);
     }
 }

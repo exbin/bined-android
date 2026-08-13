@@ -40,16 +40,16 @@ public class StatusPreferences implements StatusOptions {
     public static final String PREFERENCES_DECIMAL_SPACE_GROUP_SIZE = "statusDecimalSpaceGroupSize";
     public static final String PREFERENCES_HEXADECIMAL_SPACE_GROUP_SIZE = "statusHexadecimalSpaceGroupSize";
 
-    private final Preferences preferences;
+    private final OptionsStorage optionsStorage;
 
-    public StatusPreferences(Preferences preferences) {
-        this.preferences = preferences;
+    public StatusPreferences(OptionsStorage optionsStorage) {
+        this.optionsStorage = optionsStorage;
     }
 
     public PositionCodeType getCursorPositionCodeType() {
         PositionCodeType defaultCodeType = PositionCodeType.DECIMAL;
         try {
-            return PositionCodeType.valueOf(preferences.get(PREFERENCES_CURSOR_POSITION_CODE_TYPE, defaultCodeType.name()));
+            return PositionCodeType.valueOf(optionsStorage.get(PREFERENCES_CURSOR_POSITION_CODE_TYPE, defaultCodeType.name()));
         } catch (Exception ex) {
             Logger.getLogger(StatusPreferences.class.getName()).log(Level.SEVERE, null, ex);
             return defaultCodeType;
@@ -57,21 +57,21 @@ public class StatusPreferences implements StatusOptions {
     }
 
     public void setCursorPositionCodeType(PositionCodeType statusCursorPositionCodeType) {
-        preferences.put(PREFERENCES_CURSOR_POSITION_CODE_TYPE, statusCursorPositionCodeType.name());
+        optionsStorage.put(PREFERENCES_CURSOR_POSITION_CODE_TYPE, statusCursorPositionCodeType.name());
     }
 
     public boolean isCursorShowOffset() {
-        return preferences.getBoolean(PREFERENCES_CURSOR_POSITION_SHOW_OFFSET, true);
+        return optionsStorage.getBoolean(PREFERENCES_CURSOR_POSITION_SHOW_OFFSET, true);
     }
 
     public void setCursorShowOffset(boolean statusCursorShowOffset) {
-        preferences.putBoolean(PREFERENCES_CURSOR_POSITION_SHOW_OFFSET, statusCursorShowOffset);
+        optionsStorage.putBoolean(PREFERENCES_CURSOR_POSITION_SHOW_OFFSET, statusCursorShowOffset);
     }
 
     public PositionCodeType getDocumentSizeCodeType() {
         PositionCodeType defaultCodeType = PositionCodeType.DECIMAL;
         try {
-            return PositionCodeType.valueOf(preferences.get(PREFERENCES_DOCUMENT_SIZE_CODE_TYPE, defaultCodeType.name()));
+            return PositionCodeType.valueOf(optionsStorage.get(PREFERENCES_DOCUMENT_SIZE_CODE_TYPE, defaultCodeType.name()));
         } catch (Exception ex) {
             Logger.getLogger(StatusPreferences.class.getName()).log(Level.SEVERE, null, ex);
             return defaultCodeType;
@@ -79,15 +79,15 @@ public class StatusPreferences implements StatusOptions {
     }
 
     public void setDocumentSizeCodeType(PositionCodeType statusDocumentSizeCodeType) {
-        preferences.put(PREFERENCES_DOCUMENT_SIZE_CODE_TYPE, statusDocumentSizeCodeType.name());
+        optionsStorage.put(PREFERENCES_DOCUMENT_SIZE_CODE_TYPE, statusDocumentSizeCodeType.name());
     }
 
     public boolean isDocumentSizeShowRelative() {
-        return preferences.getBoolean(PREFERENCES_DOCUMENT_SIZE_SHOW_RELATIVE, true);
+        return optionsStorage.getBoolean(PREFERENCES_DOCUMENT_SIZE_SHOW_RELATIVE, true);
     }
 
     public void setDocumentSizeShowRelative(boolean statusDocumentSizeShowRelative) {
-        preferences.putBoolean(PREFERENCES_DOCUMENT_SIZE_SHOW_RELATIVE, statusDocumentSizeShowRelative);
+        optionsStorage.putBoolean(PREFERENCES_DOCUMENT_SIZE_SHOW_RELATIVE, statusDocumentSizeShowRelative);
     }
 
     @Override
@@ -114,31 +114,31 @@ public class StatusPreferences implements StatusOptions {
 
     @Override
     public int getOctalSpaceGroupSize() {
-        return preferences.getInt(PREFERENCES_OCTAL_SPACE_GROUP_SIZE, StatusNumericGrouping.DEFAULT_OCTAL_SPACE_GROUP_SIZE);
+        return optionsStorage.getInt(PREFERENCES_OCTAL_SPACE_GROUP_SIZE, StatusNumericGrouping.DEFAULT_OCTAL_SPACE_GROUP_SIZE);
     }
 
     @Override
     public void setOctalSpaceGroupSize(int octalSpaceSize) {
-        preferences.putInt(PREFERENCES_OCTAL_SPACE_GROUP_SIZE, octalSpaceSize);
+        optionsStorage.putInt(PREFERENCES_OCTAL_SPACE_GROUP_SIZE, octalSpaceSize);
     }
 
     @Override
     public int getDecimalSpaceGroupSize() {
-        return preferences.getInt(PREFERENCES_DECIMAL_SPACE_GROUP_SIZE, StatusNumericGrouping.DEFAULT_DECIMAL_SPACE_GROUP_SIZE);
+        return optionsStorage.getInt(PREFERENCES_DECIMAL_SPACE_GROUP_SIZE, StatusNumericGrouping.DEFAULT_DECIMAL_SPACE_GROUP_SIZE);
     }
 
     @Override
     public void setDecimalSpaceGroupSize(int decimalSpaceSize) {
-        preferences.putInt(PREFERENCES_DECIMAL_SPACE_GROUP_SIZE, decimalSpaceSize);
+        optionsStorage.putInt(PREFERENCES_DECIMAL_SPACE_GROUP_SIZE, decimalSpaceSize);
     }
 
     @Override
     public int getHexadecimalSpaceGroupSize() {
-        return preferences.getInt(PREFERENCES_HEXADECIMAL_SPACE_GROUP_SIZE, StatusNumericGrouping.DEFAULT_HEXADECIMAL_SPACE_GROUP_SIZE);
+        return optionsStorage.getInt(PREFERENCES_HEXADECIMAL_SPACE_GROUP_SIZE, StatusNumericGrouping.DEFAULT_HEXADECIMAL_SPACE_GROUP_SIZE);
     }
 
     @Override
     public void setHexadecimalSpaceGroupSize(int hexadecimalSpaceSize) {
-        preferences.putInt(PREFERENCES_HEXADECIMAL_SPACE_GROUP_SIZE, hexadecimalSpaceSize);
+        optionsStorage.putInt(PREFERENCES_HEXADECIMAL_SPACE_GROUP_SIZE, hexadecimalSpaceSize);
     }
 }

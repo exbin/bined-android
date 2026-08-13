@@ -29,7 +29,7 @@ import org.jspecify.annotations.NullMarked;
  * Preferences wrapper.
  */
 @NullMarked
-public class PreferencesWrapper implements Preferences {
+public class PreferencesWrapper implements OptionsStorage {
 
     protected final SharedPreferences preferences;
 

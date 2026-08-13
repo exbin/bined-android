@@ -27,6 +27,7 @@ import org.exbin.auxiliary.binary_data.android_jna.paged.JnaBufferPagedData;
 import org.exbin.auxiliary.binary_data.paged.PagedData;
 import org.exbin.bined.android.CodeAreaPainter;
 import org.exbin.bined.android.basic.CodeArea;
+import org.exbin.bined.android.basic.DefaultCodeAreaCommandHandler;
 import org.exbin.bined.android.capability.CharAssessorPainterCapable;
 import org.exbin.bined.android.capability.ColorAssessorPainterCapable;
 import org.exbin.bined.operation.android.CodeAreaOperationCommandHandler;
@@ -79,6 +80,8 @@ public class BinEdFileHandler {
         codeArea.setContentData(new JnaBufferEditableData());
         undoRedo = new CodeAreaUndoRedo(codeArea);
 
+        DefaultCodeAreaCommandHandler defCommandHandler = (DefaultCodeAreaCommandHandler) codeArea.getCommandHandler();
+        defCommandHandler.detach();
         CodeAreaOperationCommandHandler commandHandler = new CodeAreaOperationCommandHandler(codeArea.getContext(), codeArea, undoRedo);
         commandHandler.setCodeAreaTableMapAssessor(codeAreaTableMapAssessor);
         codeArea.setCommandHandler(commandHandler);

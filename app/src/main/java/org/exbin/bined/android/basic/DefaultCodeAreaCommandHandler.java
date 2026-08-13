@@ -82,10 +82,11 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
 
     protected Context context;
     protected ClipboardManager clipboard;
-    protected boolean canPaste = false;
+    protected boolean canPaste = true;
     protected ClipDescription binedDataFlavor;
     protected ClipDescription binaryDataFlavor;
     protected ClipData currentClipboardData = null;
+    protected ClipboardManager.OnPrimaryClipChangedListener clipChangedListener;
 
     public DefaultCodeAreaCommandHandler(Context context, CodeAreaCore codeArea) {
         this.context = context;
@@ -94,12 +95,14 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
         viewModeSupported = codeArea instanceof ViewModeCapable;
 
         clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-        clipboard.addPrimaryClipChangedListener(new ClipboardManager.OnPrimaryClipChangedListener() {
+        clipChangedListener = new ClipboardManager.OnPrimaryClipChangedListener() {
             @Override
             public void onPrimaryClipChanged() {
                 updateCanPaste();
             }
-        });
+        };
+        clipboard.addPrimaryClipChangedListener(clipChangedListener);
+        updateCanPaste();
 
         binedDataFlavor = new ClipDescription("BinEd Data", new String[] { CodeAreaUtils.BINED_CLIPBOARD_MIME });
         binaryDataFlavor = new ClipDescription("Binary Data", new String[] { CodeAreaUtils.MIME_CLIPBOARD_BINARY });
@@ -118,6 +121,10 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
 //        } catch (java.awt.HeadlessException ex) {
 //            Logger.getLogger(DefaultCodeAreaCommandHandler.class.getName()).log(Level.SEVERE, null, ex);
 //        }
+    }
+
+    public void detach() {
+        clipboard.removePrimaryClipChangedListener(clipChangedListener);
     }
 
     public static CodeAreaCommandHandler.CodeAreaCommandHandlerFactory createDefaultCodeAreaCommandHandlerFactory(final Context context) {
@@ -617,7 +624,7 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
 
             ClipDescription description = primaryClip.getDescription();
             try {
-                if (!description.hasMimeType(CodeAreaUtils.BINED_CLIPBOARD_MIME) && !description.hasMimeType(CodeAreaUtils.MIME_CLIPBOARD_BINARY) && !description.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
+                if (!description.hasMimeType(CodeAreaUtils.BINED_CLIPBOARD_MIME) && !description.hasMimeType(CodeAreaUtils.MIME_CLIPBOARD_BINARY) && !description.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN) && !description.hasMimeType(ClipDescription.MIMETYPE_TEXT_HTML)) {
                     return;
                 }
             } catch (IllegalStateException ex) {
@@ -641,7 +648,7 @@ public class DefaultCodeAreaCommandHandler implements CodeAreaCommandHandler {
 //                    pastedData.insert(0, (InputStream) clipboardData, -1);
 //                    pasteBinaryData((BinaryData) pastedData);
 //                }
-            } else if (description.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
+            } else if (description.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN) || description.hasMimeType(ClipDescription.MIMETYPE_TEXT_HTML)) {
                 CharSequence clipboardData = clipItem.getText();
                 if (clipboardData != null) {
                     byte[] bytes = clipboardData.toString().getBytes(Charset.forName(CodeAreaAndroidUtils.DEFAULT_ENCODING));

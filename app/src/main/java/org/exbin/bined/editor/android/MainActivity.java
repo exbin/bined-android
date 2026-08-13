@@ -333,6 +333,16 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         codeArea.post(() -> codeArea.requestFocus());
     }
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+
+        // Since Android Q clipboard content is accessible only after focus is gained
+        boolean isAndroid10Plus = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q);
+        if (!isAndroid10Plus) return;
+        ((CodeAreaOperationCommandHandler) codeArea.getCommandHandler()).updateCanPaste();
+    }
+
     private void setupKeyPanel(KeysPanelMode keysPanelMode) {
         LinearLayout mainView = findViewById(R.id.main);
         int keyPanelIndex = mainView.indexOfChild(keyPanel);
