@@ -74,6 +74,7 @@ import org.exbin.bined.DataChangedListener;
 import org.exbin.bined.DefaultCodeAreaCaretPosition;
 import org.exbin.bined.EditMode;
 import org.exbin.bined.EditModeChangedListener;
+import org.exbin.bined.EditOperation;
 import org.exbin.bined.RowWrappingMode;
 import org.exbin.bined.SelectionChangedListener;
 import org.exbin.bined.SelectionRange;
@@ -142,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     private static final int GO_TO_SIDE_PANEL_POPUP_ID = 11;
     private static final int OPEN_MAIN_MENU_POPUP_ID = 12;
     private static final int SHOW_KEYBOARD_MENU_POPUP_ID = 13;
+    private static final int SWITCH_EDIT_MODE_MENU_POPUP_ID = 14;
 
     private static final int STORAGE_PERMISSION_CODE = 1;
 
@@ -456,12 +458,6 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         Button buttonBk = findViewById(R.id.buttonBk);
         buttonBk.setMinWidth(buttonWidth);
         buttonBk.setMinHeight(buttonHeight);
-        Button buttonInsert = findViewById(R.id.buttonInsert);
-        buttonInsert.setMinWidth(buttonWidth);
-        buttonInsert.setMinHeight(buttonHeight);
-        Button buttonTab = findViewById(R.id.buttonTab);
-        buttonTab.setMinWidth(buttonWidth);
-        buttonTab.setMinHeight(buttonHeight);
     }
 
     private void showSearchStatusPanel() {
@@ -672,6 +668,10 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         MenuItem deleteMenuItem = menu.add(1, DELETE_ACTION_POPUP_ID, order + 8, resources.getString(R.string.action_delete));
         deleteMenuItem.setEnabled(codeArea.isEditable() && codeArea.hasSelection());
         menu.add(1, SELECT_ALL_ACTION_POPUP_ID, order + 9, resources.getString(R.string.action_select_all));
+        MenuItem switchEditModeMenuItem = menu.add(0, SWITCH_EDIT_MODE_MENU_POPUP_ID, order + 10,
+                resources.getString(codeArea.getEditOperation() == EditOperation.INSERT ? R.string.action_overwrite_edit_mode : R.string.action_insert_edit_mode)
+        );
+        switchEditModeMenuItem.setEnabled(codeArea.isEditable());
     }
 
     @Override
@@ -770,6 +770,10 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
                 } catch (Throwable tw) {
                     reportException(tw);
                 }
+                break;
+            }
+            case SWITCH_EDIT_MODE_MENU_POPUP_ID: {
+                cycleEditMode();
                 break;
             }
 
@@ -1499,10 +1503,6 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         codeArea.getCommandHandler().keyPressed(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MOVE_END));
     }
 
-    public void buttonActionInsert(View view) {
-        codeArea.getCommandHandler().keyPressed(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_INSERT));
-    }
-
     public void buttonActionDelete(View view) {
         codeArea.getCommandHandler().keyPressed(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_FORWARD_DEL));
     }
@@ -1541,6 +1541,14 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         binarySearch.cancelSearch();
         binarySearch.clearSearch();
         hideSearchStatusPanel();
+    }
+
+    public void cycleEditMode() {
+        codeArea.getCommandHandler().keyPressed(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_INSERT));
+    }
+
+    public void cycleEditMode(View view) {
+        cycleEditMode();
     }
 
     @Nullable

@@ -30,6 +30,8 @@
     <string name="action_go_to_side_panel">Painel lateral</string>
     <string name="action_show_keyboard">Mostrar teclado</string>
     <string name="action_open_table_file">Abrir arquivo de tabela (.tbl)</string>
+    <string name="action_insert_edit_mode">Modo de Inserção</string>
+    <string name="action_overwrite_edit_mode">Modo de Sobrescrita</string>
 
     <string name="view_menu">Visualização</string>
     <string name="visual_theme">Tema Visual</string>

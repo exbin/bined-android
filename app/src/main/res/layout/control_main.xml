@@ -14,7 +14,8 @@
     <TableLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="5dp">
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp">
 
         <TableRow
             android:layout_width="match_parent"
@@ -229,14 +230,6 @@
             android:layout_height="match_parent">
 
             <Button
-                android:id="@+id/buttonDelete"
-                style="@style/MyButtonSmallStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="buttonActionDelete"
-                android:text="DEL" />
-
-            <Button
                 android:id="@+id/buttonBk"
                 style="@style/MyButtonSmallStyle"
                 android:layout_width="wrap_content"
@@ -250,20 +243,12 @@
             android:layout_height="wrap_content">
 
             <Button
-                android:id="@+id/buttonInsert"
+                android:id="@+id/buttonDelete"
                 style="@style/MyButtonSmallStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="buttonActionInsert"
-                android:text="INS" />
-
-            <Button
-                android:id="@+id/buttonTab"
-                style="@style/MyButtonSmallStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="buttonActionTab"
-                android:text="↹" />
+                android:onClick="buttonActionDelete"
+                android:text="DEL" />
         </TableRow>
 
     </TableLayout>

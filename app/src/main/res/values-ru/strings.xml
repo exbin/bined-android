@@ -32,6 +32,8 @@
     <string name="action_go_to_side_panel">Боковая панель</string>
     <string name="action_show_keyboard">Показать клавиатуру</string>
     <string name="action_open_table_file" translatable="false">Открыть файл таблицы</string>
+    <string name="action_insert_edit_mode">Режим редактирования вставки</string>
+    <string name="action_overwrite_edit_mode">Режим редактирования перезаписи</string>
 
     <string name="view_menu">Вид</string>
     <string name="visual_theme">Визуальный Тема</string>

@@ -32,6 +32,8 @@
     <string name="action_go_to_side_panel">Panel lateral</string>
     <string name="action_show_keyboard">Mostrar teclado</string>
     <string name="action_open_table_file" translatable="false">Abrir archivo de tabla</string>
+    <string name="action_insert_edit_mode">Insertar modo de edición</string>
+    <string name="action_overwrite_edit_mode">Sobrescribir modo de edición</string>
 
     <string name="view_menu">Ver</string>
     <string name="visual_theme">Tema visual</string>

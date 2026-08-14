@@ -31,6 +31,8 @@
     <string name="action_go_to_side_panel">Side Panel</string>
     <string name="action_show_keyboard">Show Keyboard</string>
     <string name="action_open_table_file" translatable="false">Open Table File</string>
+    <string name="action_insert_edit_mode">Insert Edit Mode</string>
+    <string name="action_overwrite_edit_mode">Overwrite Edit Mode</string>
 
     <string name="view_menu">View</string>
     <string name="visual_theme">Visual Theme</string>

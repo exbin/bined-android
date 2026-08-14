@@ -50,6 +50,8 @@
             android:id="@+id/editModeLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:longClickable="true"
+            android:onClick="cycleEditMode"
             android:ems="3"
             android:text="\?"
             tools:ignore="HardcodedText" />

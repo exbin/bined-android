@@ -28,6 +28,8 @@
     <string name="action_open_main_menu">Hlavní menu</string>
     <string name="action_go_to_side_panel">Boční panel</string>
     <string name="action_show_keyboard">Zobrazit klávesnici</string>
+    <string name="action_insert_edit_mode">Režim úprav vkládání</string>
+    <string name="action_overwrite_edit_mode">Režim úprav přepis</string>
 
     <string name="view_menu">Zobrazit</string>
     <string name="visual_theme">Vizuální motiv</string>
