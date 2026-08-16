@@ -32,8 +32,8 @@ android {
         }
 
         targetSdk 36
-        versionCode 20
-        versionName "0.2.11"
+        versionCode 21
+        versionName "0.2.12-SNAPSHOT"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         vectorDrawables.generatedDensities = []
     }
