@@ -1,0 +1,2 @@
+- Fix for some clipboard handling
+- Bug fixes

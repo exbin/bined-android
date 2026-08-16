@@ -23,7 +23,7 @@
     </style>
 
     <style name="MyButtonSmallStyle" parent="android:Widget.Button.Small">
-        <item name="android:minHeight">20dp</item>
-        <item name="android:minWidth">30dp</item>
+        <item name="android:minHeight">22dp</item>
+        <item name="android:minWidth">32dp</item>
     </style>
 </resources>

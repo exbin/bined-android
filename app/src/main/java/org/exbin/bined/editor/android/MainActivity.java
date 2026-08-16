@@ -372,11 +372,11 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
                 break;
             }
             case MEDIUM: {
-                setupKeyPanelSize(90, 60);
+                setupKeyPanelSize(95, 65);
                 break;
             }
             case BIG: {
-                setupKeyPanelSize(120, 80);
+                setupKeyPanelSize(130, 90);
                 break;
             }
         }
@@ -1007,40 +1007,10 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
             codeArea.selectAll();
             return true;
         } else if (id == R.id.go_to_position) {
-            GoToPositionDialog goToPositionDialog = new GoToPositionDialog();
-            goToPositionDialog.setPositiveListener((dialog, which) -> {
-                try {
-                    DefaultCodeAreaCaretPosition caretPosition = new DefaultCodeAreaCaretPosition();
-                    caretPosition.setCodeOffset(0);
-                    caretPosition.setPosition(codeArea.getActiveCaretPosition());
-                    caretPosition.setDataPosition(Math.min(goToPositionDialog.getTargetPosition(), codeArea.getDataSize()));
-                    codeArea.setActiveCaretPosition(caretPosition);
-                    codeArea.validateCaret();
-                    codeArea.centerOnCursor();
-                } catch (NumberFormatException ex) {
-                    reportException(ex);
-                }
-            });
-            goToPositionDialog.show(getSupportFragmentManager(), "goToPositionDialog");
-
+            goToPosition(codeArea);
             return true;
         } else if (id == R.id.edit_selection) {
-            EditSelectionDialog editSelectionDialog = new EditSelectionDialog();
-            editSelectionDialog.setPositiveListener((dialog, which) -> {
-                try {
-                    Optional<SelectionRange> selectionRange = editSelectionDialog.getSelectionRange();
-                    if (selectionRange.isPresent()) {
-                        codeArea.setSelection(selectionRange.get());
-                    } else {
-                        codeArea.clearSelection();
-                    }
-                    codeArea.revealCursor();
-                } catch (NumberFormatException ex) {
-                    reportException(ex);
-                }
-            });
-            editSelectionDialog.show(getSupportFragmentManager(), "editSelectionDialog");
-
+            editSelection(codeArea);
             return true;
         }
 
@@ -1307,7 +1277,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     private void updateUndoState() {
         MenuItem saveMenuItem = menu.findItem(R.id.action_save);
         Uri currentFileUri = fileHandler.getCurrentFileUri();
-        saveMenuItem.setEnabled(currentFileUri == null || fileHandler.getUndoRedo().isModified());
+        saveMenuItem.setEnabled(currentFileUri == null);
 
         boolean canUndo = fileHandler.getUndoRedo().canUndo();
         MenuItem undoMenuItem = menu.findItem(R.id.action_undo);
@@ -1549,6 +1519,42 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
     public void cycleEditMode(View view) {
         cycleEditMode();
+    }
+
+    public void goToPosition(View view) {
+        GoToPositionDialog goToPositionDialog = new GoToPositionDialog();
+        goToPositionDialog.setPositiveListener((dialog, which) -> {
+            try {
+                DefaultCodeAreaCaretPosition caretPosition = new DefaultCodeAreaCaretPosition();
+                caretPosition.setCodeOffset(0);
+                caretPosition.setPosition(codeArea.getActiveCaretPosition());
+                caretPosition.setDataPosition(Math.min(goToPositionDialog.getTargetPosition(), codeArea.getDataSize()));
+                codeArea.setActiveCaretPosition(caretPosition);
+                codeArea.validateCaret();
+                codeArea.centerOnCursor();
+            } catch (NumberFormatException ex) {
+                reportException(ex);
+            }
+        });
+        goToPositionDialog.show(getSupportFragmentManager(), "goToPositionDialog");
+    }
+
+    public void editSelection(View view) {
+        EditSelectionDialog editSelectionDialog = new EditSelectionDialog();
+        editSelectionDialog.setPositiveListener((dialog, which) -> {
+            try {
+                Optional<SelectionRange> selectionRange = editSelectionDialog.getSelectionRange();
+                if (selectionRange.isPresent()) {
+                    codeArea.setSelection(selectionRange.get());
+                } else {
+                    codeArea.clearSelection();
+                }
+                codeArea.revealCursor();
+            } catch (NumberFormatException ex) {
+                reportException(ex);
+            }
+        });
+        editSelectionDialog.show(getSupportFragmentManager(), "editSelectionDialog");
     }
 
     @Nullable

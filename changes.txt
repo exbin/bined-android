@@ -1,4 +1,4 @@
-0.2.11
+0.2.11 (2026-08-16)
 - Fix for some clipboard handling
 - Bug fixes
 
@@ -50,7 +50,7 @@
 0.2.1 (2024-09-27)
 - Basic support for selection / clipboard
 - Changed file dialog
-- Added settings and optionsStorage
+- Added settings and preferences
 - Added dark theme and language switching
 - Added menu icons
 

@@ -10,10 +10,10 @@ android {
     namespace 'org.exbin.bined.editor.android'
     if (playstore) {
         compileSdk {
-            version = release(35)
+            version = release(36)
         }
     } else {
-        compileSdk 35
+        compileSdk 36
     }
 
     defaultConfig {
@@ -31,9 +31,9 @@ android {
 //            }
         }
 
-        targetSdk 35
+        targetSdk 36
         versionCode 20
-        versionName "0.2.11-SNAPSHOT"
+        versionName "0.2.11"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         vectorDrawables.generatedDensities = []
     }
@@ -80,7 +80,8 @@ dependencies {
 //    implementation 'org.exbin.auxiliary:binary_data:0.2.1'
 //    implementation 'org.exbin.auxiliary:binary_data-array:0.2.1'
 //    implementation 'org.exbin.auxiliary:binary_data-delta:0.2.1'
-    compileOnly "org.jspecify:jspecify:1.0.1"
+    // TODO Version 1.0.1 collides with current material library
+    compileOnly "org.jspecify:jspecify:1.0.0"
     compileOnly "com.google.code.findbugs:jsr305:3.0.2"
 
     testCompileOnly "org.jspecify:jspecify:1.0.1"

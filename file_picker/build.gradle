@@ -7,7 +7,7 @@ android {
     namespace = 'com.rustamg.filedialogs'
     if (playstore) {
         compileSdk {
-            version = release(35)
+            version = release(36)
         }
     } else {
         compileSdk 35
@@ -38,10 +38,10 @@ android {
     }
     lint {
         checkReleaseBuilds false
-        targetSdk 35
+        targetSdk 36
     }
     testOptions {
-        targetSdk 35
+        targetSdk 36
     }
 }
 
@@ -51,6 +51,6 @@ tasks.withType(JavaCompile).configureEach {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    compileOnly group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
+    compileOnly "com.google.code.findbugs:jsr305:3.0.2"
     implementation "com.google.android.material:material:${materialVersion}"
 }
