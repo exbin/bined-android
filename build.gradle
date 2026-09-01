@@ -4,7 +4,7 @@ buildscript {
     ext {
         // playstore = hasProperty('playstore')
         playstore = false
-        agpVersion = '9.3.1'
+        agpVersion = '9.4.0'
     }
 }
 
