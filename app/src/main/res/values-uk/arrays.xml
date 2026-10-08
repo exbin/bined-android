@@ -1,8 +1,8 @@
 <resources>
     <string-array name="theme_entries">
-        <item>Automatic (system)</item>
-        <item>Light</item>
-        <item>Dark</item>
+        <item>Автоматично (системна)</item>
+        <item>Світла</item>
+        <item>Темна</item>
     </string-array>
 
     <string-array name="theme_values" translatable="false">
@@ -40,12 +40,12 @@
     </string-array>
 
     <string-array name="bytes_per_row_entries">
-        <item>Fill Screen</item>
-        <item>4 Bytes</item>
-        <item>8 Bytes</item>
-        <item>12 Bytes</item>
-        <item>16 Bytes</item>
-        <item>Custom</item>
+        <item>Заповнювати екран</item>
+        <item>4 байти</item>
+        <item>8 байтів</item>
+        <item>12 байтів</item>
+        <item>16 байтів</item>
+        <item>Власне</item>
     </string-array>
 
     <string-array name="bytes_per_row_values" translatable="false">
@@ -58,9 +58,9 @@
     </string-array>
 
     <string-array name="view_mode_entries">
-        <item>Dual</item>
-        <item>Code Matrix</item>
-        <item>Text Preview</item>
+        <item>Обидва</item>
+        <item>Матриця коду</item>
+        <item>Текст</item>
     </string-array>
 
     <string-array name="view_mode_values" translatable="false">
@@ -70,17 +70,17 @@
     </string-array>
 
     <string-array name="code_type_entries">
-        <item>Binary</item>
-        <item>Octal</item>
-        <item>Decimal</item>
-        <item>Hexadecimal</item>
+        <item>Двійкова</item>
+        <item>Вісімкова</item>
+        <item>Десяткова</item>
+        <item>Шістнадцяткова</item>
     </string-array>
 
     <string-array name="code_type_short">
-        <item>BIN</item>
-        <item>OCT</item>
-        <item>DEC</item>
-        <item>HEX</item>
+        <item>БІН</item>
+        <item>ВІС</item>
+        <item>ДЕС</item>
+        <item>ШІС</item>
     </string-array>
 
     <string-array name="code_type_values" translatable="false">
@@ -91,8 +91,8 @@
     </string-array>
 
     <string-array name="hex_chars_case_entries">
-        <item>Lower Case</item>
-        <item>Upper Case</item>
+        <item>Малі</item>
+        <item>Великі</item>
     </string-array>
 
     <string-array name="hex_chars_case_values" translatable="false">
@@ -101,8 +101,8 @@
     </string-array>
 
     <string-array name="file_handling_mode_entries">
-        <item>Load full file</item>
-        <item>Changes only</item>
+        <item>Завантажити файл цілком</item>
+        <item>Тільки зміни</item>
     </string-array>
 
     <string-array name="file_handling_mode_values" translatable="false">
@@ -111,10 +111,10 @@
     </string-array>
 
     <string-array name="keys_panel_mode_entries">
-        <item>Hide</item>
-        <item>Small</item>
-        <item>Medium</item>
-        <item>Big</item>
+        <item>Немає</item>
+        <item>Малі</item>
+        <item>Середні</item>
+        <item>Великі</item>
     </string-array>
 
     <string-array name="keys_panel_mode_values" translatable="false">
@@ -125,9 +125,9 @@
     </string-array>
 
     <string-array name="data_inspector_mode_entries">
-        <item>Hide</item>
-        <item>Show</item>
-        <item>In Landscape Orientation</item>
+        <item>Сховати</item>
+        <item>Показати</item>
+        <item>В альбомній орієнтації</item>
     </string-array>
 
     <string-array name="data_inspector_mode_values" translatable="false">

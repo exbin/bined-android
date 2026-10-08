@@ -1,0 +1,133 @@
+<resources>
+    <string name="app_name">BinEd</string>
+    <string name="app_about">Назва: BinEd - Двійковий/шістнадцятковий редактор\nВерсія: %1$s\nПостачальник: &lt;a href="%2$s"&gt;ExBin Project&lt;/a&gt;\nЛіцензія: &lt;a href="%3$s"&gt;Apache License, Version 2.0&lt;/a&gt;\nВебсторінка: &lt;a href="%4$s"&gt;%4$s&lt;/a&gt;\n\nУчасники:</string>
+    <string name="bined_logo_description">Логотип BinEd</string>
+
+    <!-- Actions & menu -->
+
+    <string name="title_activity_settings">Налаштування</string>
+
+    <string name="action_new">Новий</string>
+    <string name="action_open">Відкрити</string>
+    <string name="action_save">Зберегти</string>
+    <string name="action_save_as">Зберегти як</string>
+    <string name="action_settings">Налаштування</string>
+    <string name="action_about">Про додаток</string>
+    <string name="action_search">Пошук</string>
+    <string name="action_undo">Скасувати</string>
+    <string name="action_redo">Відновити</string>
+    <string name="action_selection_start">Початок виділення</string>
+    <string name="action_selection_end">Кінець виділення</string>
+    <string name="action_clear_selection">Зняти виділення</string>
+    <string name="action_cut">Вирізати</string>
+    <string name="action_copy">Копіювати</string>
+    <string name="action_copy_as_code">Копіювати як код</string>
+    <string name="action_paste">Вставити</string>
+    <string name="action_paste_from_code">Вставити код</string>
+    <string name="action_delete">Видалити</string>
+    <string name="action_select_all">Вибрати всі</string>
+    <string name="action_exit">Вийти</string>
+    <string name="action_open_main_menu">Головне меню</string>
+    <string name="action_go_to_side_panel">Бічна панель</string>
+    <string name="action_show_keyboard">Показати клавіатуру</string>
+    <string name="action_open_table_file" translatable="false">Open Table File</string>
+    <string name="action_insert_edit_mode">Режим вставки</string>
+    <string name="action_overwrite_edit_mode">Режим перезапису</string>
+
+    <string name="view_menu">Вигляд</string>
+    <string name="visual_theme">Тема</string>
+    <string name="language">Мова</string>
+    <string name="view_mode">Відображення</string>
+    <string name="code_type">Система числення</string>
+    <string name="hex_characters_case">Шістнадцяткові букви</string>
+    <string name="encoding">Кодування</string>
+    <string name="code_colorization">Кольоровий код</string>
+    <string name="file_handling_mode">Робота з файлами</string>
+    <string name="keys_panel_mode">Клавіші</string>
+    <string name="data_inspector_mode">Інспектор даних</string>
+    <string name="nonprintable_characters">Контрольні символи</string>
+    <string name="go_to_position">Перейти до</string>
+    <string name="edit_selection">Редагувати виділення</string>
+    <string name="insert_data">Вставити дані</string>
+    <string name="convert_data">Перетворити дані</string>
+    <string name="edit_menu">Редагувати</string>
+    <string name="font">Шрифт</string>
+    <string name="bytes_per_row">Байтів у рядку</string>
+    <string name="bytes_per_row_fill">Заповнювати екран</string>
+    <string name="bytes_per_row_4">4 байти</string>
+    <string name="bytes_per_row_8">8 байтів</string>
+    <string name="bytes_per_row_12">12 байтів</string>
+    <string name="bytes_per_row_16">16 байтів</string>
+    <string name="bytes_per_row_custom">Власне</string>
+    <string name="tools_menu">Інструменти</string>
+
+    <string name="application_about">Про додаток</string>
+    <string name="select_file">Вибрати файл</string>
+    <string name="save_as_file">Зберегти як файл</string>
+    <string name="file_modified">Файл змінився</string>
+    <string name="confirm_exit">Натисніть знову, щоб вийти</string>
+    <string name="confirm_discard">Натисніть знову, щоб скасувати зміни</string>
+    <string name="storage_permission_is_not_granted">Не надано дозвіл на сховище</string>
+    <string name="storage_permission_request">Треба ввімкнути дозвіл на сховище</string>
+
+    <string name="button_ok">Добре</string>
+    <string name="button_close">Закрити</string>
+    <string name="button_donate">Пожертвувати</string>
+    <string name="button_cancel">Скасувати</string>
+    <string name="button_set">Установити</string>
+    <string name="button_go_to">Перейти</string>
+    <string name="button_save">Зберегти</string>
+    <string name="button_discard">Відхилити</string>
+    <string name="button_request">Запропонувати</string>
+    <string name="button_search">Шукати</string>
+
+    <string name="value_label_binary">Двійковий</string>
+    <string name="value_label_byte">Байт</string>
+    <string name="value_label_word">Слово</string>
+    <string name="value_label_integer">Ціле (int)</string>
+    <string name="value_label_long">Довге ціле (long)</string>
+    <string name="value_label_float">Дробове (float)</string>
+    <string name="value_label_double">Дробове подвійної точности (double)</string>
+    <string name="value_label_character">Символ</string>
+    <string name="value_label_string">Рядок</string>
+    <string name="big_endian_radio_button">В. енд.</string>
+    <string name="little_endian_radio_button">М. енд.</string>
+    <string name="signed_radio_button">Знакове</string>
+    <string name="unsigned_radio_button">Без зн.</string>
+    <string name="error_invalid_input">Неправильний ввід</string>
+    <string name="error_exception">Неочікувана помилка</string>
+
+    <!-- Preference Titles -->
+
+    <string name="pref_header_appearance">Вигляд</string>
+    <string name="pref_view_header">Інтерфейс</string>
+
+    <string name="search_title">Пошук</string>
+    <string name="search_text">Текст</string>
+    <string name="search_binary">Байти</string>
+    <string name="search_from_cursor">Шукати від вказівника</string>
+    <string name="search_match_case">Зважати на регістр</string>
+    <string name="search_show_multiple_matches">Показувати всі збіги</string>
+    <string name="search_backward_direction">Починати ззаду</string>
+    <string name="search_in_progress">Шукаємо…</string>
+    <string name="search_match_none">Збігів не знайдено.</string>
+    <string name="search_match_single">Знайдено один збіг.</string>
+    <string name="search_match_found">"Показуємо %1$d з %2$d знайдених збігів.</string>
+
+    <string name="go_to_dialog_current_position">Поточне місце</string>
+    <string name="go_to_dialog_target_position">Цільове місце</string>
+    <string name="go_to_dialog_go_to_position">Перейти до</string>
+    <string name="go_to_dialog_position">Місце</string>
+    <string name="go_to_dialog_from_start">Місце з початку</string>
+    <string name="go_to_dialog_from_end">Місце з кінця</string>
+    <string name="go_to_dialog_relative_to_cursor">Місце відносно вказівника</string>
+
+    <string name="edit_selection_dialog_current_position">Поточне розташування</string>
+    <string name="edit_selection_dialog_position">Місце</string>
+    <string name="edit_selection_dialog_start_position">Початкове розшташування</string>
+    <string name="edit_selection_dialog_end_position">Кінцеве розташування</string>
+    <string name="edit_selection_dialog_selection_length">Довжина виділення</string>
+    <string name="edit_selection_dialog_from_start">Місце з початку</string>
+    <string name="edit_selection_dialog_from_end">Місце з кінця</string>
+    <string name="edit_selection_dialog_relative_to_cursor">Місце відносно вказівника</string>
+</resources>
