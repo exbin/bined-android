@@ -15,10 +15,9 @@
  */
 package org.exbin.bined.editor.android.preference;
 
+import android.os.Build;
 import org.exbin.bined.editor.android.options.MainOptions;
-
 import java.util.Locale;
-
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -73,9 +72,17 @@ public class MainPreferences implements MainOptions {
         String localeCountry = getLocaleCountry();
         String localeVariant = getLocaleVariant();
         try {
-            return new Locale(localeLanguage, localeCountry, localeVariant);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                Locale.Builder builder = new Locale.Builder();
+                builder.setLanguage(localeLanguage);
+                builder.setRegion(localeCountry);
+                builder.setVariant(localeVariant);
+                return builder.build();
+            } else {
+                return new Locale(localeLanguage, localeCountry, localeVariant);
+            }
         } catch (SecurityException ex) {
-            // Ignore it in java webstart
+            // Ignore it in java WebStart
         }
 
         return Locale.ROOT;

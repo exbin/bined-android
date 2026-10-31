@@ -26,7 +26,6 @@ import android.text.method.TextKeyListener;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -56,18 +55,18 @@ import org.jspecify.annotations.Nullable;
 @NullMarked
 public class SearchDialog extends AppCompatDialogFragment {
 
-    private int lastTab = 0;
-    private EditText editText;
-    private CodeArea codeArea;
-    private CodeArea templateCodeArea = null;
-    private boolean keyboardShown = false;
+    protected int lastTab = 0;
+    protected @Nullable EditText editText;
+    protected @Nullable CodeArea codeArea;
+    protected @Nullable CodeArea templateCodeArea = null;
+    protected boolean keyboardShown = false;
 
-    private View searchView;
-    private SearchParameters searchParameters = null;
+    protected @Nullable View searchView;
+    protected @Nullable SearchParameters searchParameters = null;
 
-    private BinarySearch binarySearch;
-    private BinarySearchService.SearchStatusListener searchStatusListener;
-    private final CodeAreaCaretListener codeAreaCodeAreaCaretListener = caretPosition -> {
+    protected @Nullable BinarySearch binarySearch;
+    protected BinarySearchService.@Nullable SearchStatusListener searchStatusListener;
+    protected final CodeAreaCaretListener codeAreaCodeAreaCaretListener = caretPosition -> {
         boolean showKeyboard = true;
         if (showKeyboard != keyboardShown) {
 
@@ -81,10 +80,10 @@ public class SearchDialog extends AppCompatDialogFragment {
 //                    if (CompatUtils.isAndroidTV(getContext())) {
 //                        im.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
 //                    }
-                    Dialog dialog = SearchDialog.this.getDialog();
+                    /*Dialog dialog = SearchDialog.this.getDialog();
                     if (dialog != null) {
                         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-                    }
+                    } */
 //                } else {
 //                    im.hideSoftInputFromWindow(codeArea.getWindowToken(), 0);
 //                }
@@ -270,7 +269,7 @@ public class SearchDialog extends AppCompatDialogFragment {
                     if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_DPAD_CENTER) {
                         codeArea.postDelayed(() -> {
                             InputMethodManager im = (InputMethodManager) codeArea.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                            im.showSoftInput(codeArea, InputMethodManager.SHOW_IMPLICIT, null);
+                            im.showSoftInput(codeArea, InputMethodManager.SHOW_IMPLICIT);
 //                            im.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
                         }, 100);
 
