@@ -270,6 +270,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
         toolbar = findViewById(R.id.toolbar);
         keyPanel = findViewById(R.id.keyPanel);
+        initKeyPanel();
         LayoutInflater inflater = getLayoutInflater();
         searchStatusPanel = inflater.inflate(R.layout.search_panel, null);
         basicValuesInspectorView = findViewById(R.id.basic_values_inspector);
@@ -343,6 +344,59 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         boolean isAndroid10Plus = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q);
         if (!isAndroid10Plus) return;
         ((CodeAreaOperationCommandHandler) codeArea.getCommandHandler()).updateCanPaste();
+    }
+
+    private void initKeyPanel() {
+        Button button0 = findViewById(R.id.button0);
+        button0.setOnTouchListener(new RepeatListener(this::buttonAction0));
+        Button button1 = findViewById(R.id.button1);
+        button1.setOnTouchListener(new RepeatListener(this::buttonAction1));
+        Button button2 = findViewById(R.id.button2);
+        button2.setOnTouchListener(new RepeatListener(this::buttonAction2));
+        Button button3 = findViewById(R.id.button3);
+        button3.setOnTouchListener(new RepeatListener(this::buttonAction3));
+        Button button4 = findViewById(R.id.button4);
+        button4.setOnTouchListener(new RepeatListener(this::buttonAction4));
+        Button button5 = findViewById(R.id.button5);
+        button5.setOnTouchListener(new RepeatListener(this::buttonAction5));
+        Button button6 = findViewById(R.id.button6);
+        button6.setOnTouchListener(new RepeatListener(this::buttonAction6));
+        Button button7 = findViewById(R.id.button7);
+        button7.setOnTouchListener(new RepeatListener(this::buttonAction7));
+        Button button8 = findViewById(R.id.button8);
+        button8.setOnTouchListener(new RepeatListener(this::buttonAction8));
+        Button button9 = findViewById(R.id.button9);
+        button9.setOnTouchListener(new RepeatListener(this::buttonAction9));
+        Button buttonA = findViewById(R.id.buttonA);
+        buttonA.setOnTouchListener(new RepeatListener(this::buttonActionA));
+        Button buttonB = findViewById(R.id.buttonB);
+        buttonB.setOnTouchListener(new RepeatListener(this::buttonActionB));
+        Button buttonC = findViewById(R.id.buttonC);
+        buttonC.setOnTouchListener(new RepeatListener(this::buttonActionC));
+        Button buttonD = findViewById(R.id.buttonD);
+        buttonD.setOnTouchListener(new RepeatListener(this::buttonActionD));
+        Button buttonE = findViewById(R.id.buttonE);
+        buttonE.setOnTouchListener(new RepeatListener(this::buttonActionE));
+        Button buttonF = findViewById(R.id.buttonF);
+        buttonF.setOnTouchListener(new RepeatListener(this::buttonActionF));
+
+        Button buttonHome = findViewById(R.id.buttonHome);
+        buttonHome.setOnTouchListener(new RepeatListener(this::buttonActionHome));
+        Button buttonEnd = findViewById(R.id.buttonEnd);
+        buttonEnd.setOnTouchListener(new RepeatListener(this::buttonActionEnd));
+        Button buttonLeft = findViewById(R.id.buttonLeft);
+        buttonLeft.setOnTouchListener(new RepeatListener(this::buttonActionLeft));
+        Button buttonRight = findViewById(R.id.buttonRight);
+        buttonRight.setOnTouchListener(new RepeatListener(this::buttonActionRight));
+        Button buttonUp = findViewById(R.id.buttonUp);
+        buttonUp.setOnTouchListener(new RepeatListener(this::buttonActionUp));
+        Button buttonDown = findViewById(R.id.buttonDown);
+        buttonDown.setOnTouchListener(new RepeatListener(this::buttonActionDown));
+
+        Button buttonDelete = findViewById(R.id.buttonDelete);
+        buttonDelete.setOnTouchListener(new RepeatListener(this::buttonActionDelete));
+        Button buttonBk = findViewById(R.id.buttonBk);
+        buttonBk.setOnTouchListener(new RepeatListener(this::buttonActionBk));
     }
 
     private void setupKeyPanel(KeysPanelMode keysPanelMode) {
