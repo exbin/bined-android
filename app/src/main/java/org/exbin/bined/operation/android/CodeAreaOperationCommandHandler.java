@@ -257,13 +257,19 @@ public class CodeAreaOperationCommandHandler implements CodeAreaCommandHandler {
                 break;
             }
             case KeyEvent.KEYCODE_FORWARD_DEL: {
-                deletePressed();
-//                keyEvent.consume();
+                EditMode editMode = ((EditModeCapable) codeArea).getEditMode();
+                if (editMode == EditMode.EXPANDING) {
+                    deletePressed();
+                    // keyEvent.consume();
+                }
                 break;
             }
             case KeyEvent.KEYCODE_DEL: {
-                backSpacePressed();
-//                keyEvent.consume();
+                EditMode editMode = ((EditModeCapable) codeArea).getEditMode();
+                if (editMode == EditMode.EXPANDING) {
+                    backSpacePressed();
+                    // keyEvent.consume();
+                }
                 break;
             }
             default: {

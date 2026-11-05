@@ -114,18 +114,22 @@ public class DeleteEditDataOperation extends CharEditDataOperation {
         @Override
         public boolean appendOperation(BinaryDataOperation operation) {
             if (operation instanceof DeleteEditUndoOperation) {
-                if (((DeleteEditUndoOperation) operation).position != position) {
-                    return false;
-                }
-
                 EditableBinaryData editableData = (EditableBinaryData) data;
                 switch (((DeleteEditUndoOperation) operation).value) {
                     case BACKSPACE_CHAR: {
+                        if (((DeleteEditUndoOperation) operation).position != position - 1) {
+                            return false;
+                        }
+
                         editableData.insert(0, ((DeleteEditUndoOperation) operation).getData());
                         position--;
                         break;
                     }
                     case DELETE_CHAR: {
+                        if (((DeleteEditUndoOperation) operation).position != position) {
+                            return false;
+                        }
+
                         editableData.insert(editableData.getDataSize(), ((DeleteEditUndoOperation) operation).getData());
                         break;
                     }
