@@ -32,8 +32,6 @@ import org.exbin.bined.android.capability.FontCapable;
 
 /**
  * Code area default component interface.
- *
- * @author ExBin Project (https://exbin.org)
  */
 public interface DefaultCodeArea extends SelectionCapable, CaretCapable, BasicScrollingCapable, ScrollingCapable, ViewModeCapable,
         CodeTypeCapable, EditModeCapable, CharsetCapable, CodeCharactersCaseCapable, FontCapable,

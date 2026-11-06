@@ -239,17 +239,8 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
             CompatUtils.enableEdgeToEdge(this);
             ViewCompat.setOnApplyWindowInsetsListener(getWindow().getDecorView(), (view, windowInsets) -> {
-                // Get the navigation bar insets
                 Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.navigationBars());
-
-                // Apply the navigation bar height as bottom padding
-                view.setPadding(
-                        view.getPaddingLeft(),
-                        view.getPaddingTop(),
-                        view.getPaddingRight(),
-                        insets.bottom // Dynamic height in pixels
-                );
-
+                view.setPadding(insets.left, insets.top, insets.right, insets.bottom);
                 return windowInsets;
             });
         }

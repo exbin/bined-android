@@ -64,7 +64,7 @@ import java.nio.charset.Charset;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-    /**
+/**
  * Default binary editor command handler.
  */
 @NullMarked

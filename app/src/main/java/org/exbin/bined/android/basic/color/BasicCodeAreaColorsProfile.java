@@ -22,25 +22,17 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.TypedValue;
 
-import androidx.appcompat.widget.ThemeUtils;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
-
-import com.google.android.material.color.MaterialColors;
 
 import org.exbin.bined.android.CodeAreaAndroidUtils;
 import org.exbin.bined.color.BasicCodeAreaDecorationColorType;
 import org.exbin.bined.color.CodeAreaBasicColors;
 import org.exbin.bined.color.CodeAreaColorType;
-import org.exbin.bined.editor.android.R;
-
-import org.jspecify.annotations.Nullable;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Basic code area set of colors.
- *
- * @author ExBin Project (https://exbin.org)
  */
 @NullMarked
 public class BasicCodeAreaColorsProfile implements CodeAreaColorsProfile {

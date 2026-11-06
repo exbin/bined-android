@@ -1,6 +1,7 @@
 0.2.12
 - Added Ukrainian translation
 - Holding key panel button repeats action
+- Bug fixes
 
 0.2.11 (2026-08-16)
 - Fix for some clipboard handling
