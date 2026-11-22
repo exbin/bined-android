@@ -1320,10 +1320,6 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     }
 
     private void updateUndoState() {
-        MenuItem saveMenuItem = menu.findItem(R.id.action_save);
-        Uri currentFileUri = fileHandler.getCurrentFileUri();
-        saveMenuItem.setEnabled(currentFileUri == null);
-
         boolean canUndo = fileHandler.getUndoRedo().canUndo();
         MenuItem undoMenuItem = menu.findItem(R.id.action_undo);
         undoMenuItem.setEnabled(canUndo);

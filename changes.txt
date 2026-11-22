@@ -1,6 +1,8 @@
 0.2.12
 - Added Ukrainian translation
 - Holding key panel button repeats action
+- Adjusted status panel (issue #37)
+- Fixed enablement of save action
 - Bug fixes
 
 0.2.11 (2026-08-16)
