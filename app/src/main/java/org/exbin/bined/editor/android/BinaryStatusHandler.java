@@ -30,6 +30,7 @@ import org.exbin.bined.component.StatusDocumentSizeFormat;
 import org.exbin.bined.component.BinaryStatusApi;
 
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Binary editor status handler.
@@ -60,7 +61,7 @@ public class BinaryStatusHandler implements BinaryStatusApi {
     private int hexadecimalSpaceGroupSize = DEFAULT_HEXADECIMAL_SPACE_GROUP_SIZE;
 
     private EditOperation editOperation;
-    private CodeAreaCaretPosition caretPosition;
+    private @Nullable CodeAreaCaretPosition caretPosition;
     private SelectionRange selectionRange;
     private long documentSize;
     private long initialDocumentSize;

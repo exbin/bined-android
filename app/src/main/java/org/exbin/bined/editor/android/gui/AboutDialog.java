@@ -57,7 +57,7 @@ public class AboutDialog extends AppCompatDialogFragment {
         // Get the layout inflater
         LayoutInflater inflater = activity.getLayoutInflater();
         // Inflate and set the layout for the dialog
-        // Pass null as the parent view because its going in the
+        // Pass null as the parent view because it's going in the
         // dialog layout
         View aboutView = inflater.inflate(R.layout.about_view, null);
         TextView textView = aboutView.findViewById(R.id.textView);

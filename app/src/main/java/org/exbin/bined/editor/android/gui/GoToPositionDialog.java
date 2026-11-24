@@ -57,8 +57,6 @@ public class GoToPositionDialog extends AppCompatDialogFragment {
     protected final SwitchableBase positionSwitchableBase = new SwitchableBase();
     protected RelativePositionMode relativePositionMode = RelativePositionMode.FROM_START;
 
-    protected CodeArea codeArea;
-
     public void setPositiveListener(DialogInterface.OnClickListener positionListener) {
         this.positionListener = positionListener;
     }
@@ -66,7 +64,7 @@ public class GoToPositionDialog extends AppCompatDialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         FragmentActivity activity = getActivity();
-        codeArea = activity.findViewById(R.id.codeArea);
+        CodeArea codeArea = activity.findViewById(R.id.codeArea);
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle(getResources().getString(R.string.go_to_position));
         // Get the layout inflater

@@ -120,6 +120,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.exbin.bined.operation.android.CodeAreaUndoRedo;
 import org.jspecify.annotations.Nullable;
 import org.jspecify.annotations.NullMarked;
 
@@ -147,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
 
     private static final int STORAGE_PERMISSION_CODE = 1;
 
-    private BinEdFileHandler fileHandler;
+    private @Nullable BinEdFileHandler fileHandler;
     private CodeArea codeArea;
     private BasicValuesInspector basicValuesInspector;
     private BinaryEditorPreferences appPreferences;
@@ -338,56 +339,36 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     }
 
     private void initKeyPanel() {
-        Button button0 = findViewById(R.id.button0);
-        button0.setOnTouchListener(new RepeatListener(this::buttonAction0));
-        Button button1 = findViewById(R.id.button1);
-        button1.setOnTouchListener(new RepeatListener(this::buttonAction1));
-        Button button2 = findViewById(R.id.button2);
-        button2.setOnTouchListener(new RepeatListener(this::buttonAction2));
-        Button button3 = findViewById(R.id.button3);
-        button3.setOnTouchListener(new RepeatListener(this::buttonAction3));
-        Button button4 = findViewById(R.id.button4);
-        button4.setOnTouchListener(new RepeatListener(this::buttonAction4));
-        Button button5 = findViewById(R.id.button5);
-        button5.setOnTouchListener(new RepeatListener(this::buttonAction5));
-        Button button6 = findViewById(R.id.button6);
-        button6.setOnTouchListener(new RepeatListener(this::buttonAction6));
-        Button button7 = findViewById(R.id.button7);
-        button7.setOnTouchListener(new RepeatListener(this::buttonAction7));
-        Button button8 = findViewById(R.id.button8);
-        button8.setOnTouchListener(new RepeatListener(this::buttonAction8));
-        Button button9 = findViewById(R.id.button9);
-        button9.setOnTouchListener(new RepeatListener(this::buttonAction9));
-        Button buttonA = findViewById(R.id.buttonA);
-        buttonA.setOnTouchListener(new RepeatListener(this::buttonActionA));
-        Button buttonB = findViewById(R.id.buttonB);
-        buttonB.setOnTouchListener(new RepeatListener(this::buttonActionB));
-        Button buttonC = findViewById(R.id.buttonC);
-        buttonC.setOnTouchListener(new RepeatListener(this::buttonActionC));
-        Button buttonD = findViewById(R.id.buttonD);
-        buttonD.setOnTouchListener(new RepeatListener(this::buttonActionD));
-        Button buttonE = findViewById(R.id.buttonE);
-        buttonE.setOnTouchListener(new RepeatListener(this::buttonActionE));
-        Button buttonF = findViewById(R.id.buttonF);
-        buttonF.setOnTouchListener(new RepeatListener(this::buttonActionF));
+        installButtonRepeat(R.id.button0, this::buttonAction0);
+        installButtonRepeat(R.id.button1, this::buttonAction1);
+        installButtonRepeat(R.id.button2, this::buttonAction2);
+        installButtonRepeat(R.id.button3, this::buttonAction3);
+        installButtonRepeat(R.id.button4, this::buttonAction4);
+        installButtonRepeat(R.id.button5, this::buttonAction5);
+        installButtonRepeat(R.id.button6, this::buttonAction6);
+        installButtonRepeat(R.id.button7, this::buttonAction7);
+        installButtonRepeat(R.id.button8, this::buttonAction8);
+        installButtonRepeat(R.id.button9, this::buttonAction9);
+        installButtonRepeat(R.id.buttonA, this::buttonActionA);
+        installButtonRepeat(R.id.buttonB, this::buttonActionB);
+        installButtonRepeat(R.id.buttonC, this::buttonActionC);
+        installButtonRepeat(R.id.buttonD, this::buttonActionD);
+        installButtonRepeat(R.id.buttonE, this::buttonActionE);
+        installButtonRepeat(R.id.buttonF, this::buttonActionF);
 
-        Button buttonHome = findViewById(R.id.buttonHome);
-        buttonHome.setOnTouchListener(new RepeatListener(this::buttonActionHome));
-        Button buttonEnd = findViewById(R.id.buttonEnd);
-        buttonEnd.setOnTouchListener(new RepeatListener(this::buttonActionEnd));
-        Button buttonLeft = findViewById(R.id.buttonLeft);
-        buttonLeft.setOnTouchListener(new RepeatListener(this::buttonActionLeft));
-        Button buttonRight = findViewById(R.id.buttonRight);
-        buttonRight.setOnTouchListener(new RepeatListener(this::buttonActionRight));
-        Button buttonUp = findViewById(R.id.buttonUp);
-        buttonUp.setOnTouchListener(new RepeatListener(this::buttonActionUp));
-        Button buttonDown = findViewById(R.id.buttonDown);
-        buttonDown.setOnTouchListener(new RepeatListener(this::buttonActionDown));
+        installButtonRepeat(R.id.buttonHome, this::buttonActionHome);
+        installButtonRepeat(R.id.buttonEnd, this::buttonActionEnd);
+        installButtonRepeat(R.id.buttonLeft, this::buttonActionLeft);
+        installButtonRepeat(R.id.buttonRight, this::buttonActionRight);
+        installButtonRepeat(R.id.buttonUp, this::buttonActionUp);
+        installButtonRepeat(R.id.buttonDown, this::buttonActionDown);
 
-        Button buttonDelete = findViewById(R.id.buttonDelete);
-        buttonDelete.setOnTouchListener(new RepeatListener(this::buttonActionDelete));
-        Button buttonBk = findViewById(R.id.buttonBk);
-        buttonBk.setOnTouchListener(new RepeatListener(this::buttonActionBk));
+        installButtonRepeat(R.id.buttonDelete, this::buttonActionDelete);
+        installButtonRepeat(R.id.buttonBk, this::buttonActionBk);
+    }
+
+    private void installButtonRepeat(int viewId, View.OnClickListener clickListener) {
+        findViewById(viewId).setOnTouchListener(new RepeatListener(clickListener));
     }
 
     private void setupKeyPanel(KeysPanelMode keysPanelMode) {
@@ -1320,13 +1301,17 @@ public class MainActivity extends AppCompatActivity implements FileDialog.OnFile
     }
 
     private void updateUndoState() {
-        boolean canUndo = fileHandler.getUndoRedo().canUndo();
-        MenuItem undoMenuItem = menu.findItem(R.id.action_undo);
-        undoMenuItem.setEnabled(canUndo);
+        CodeAreaUndoRedo undoRedo = fileHandler.getUndoRedo();
+        MenuItem saveMenuItem = menu.findItem(R.id.action_save);
+        Uri currentFileUri = fileHandler.getCurrentFileUri();
+        boolean modified = currentFileUri == null || undoRedo.isModified();
+        saveMenuItem.setIcon(modified ? R.drawable.ic_file_save_24 : R.drawable.ic_file_save_tt_24);
 
-        boolean canRedo = fileHandler.getUndoRedo().canRedo();
+        MenuItem undoMenuItem = menu.findItem(R.id.action_undo);
+        undoMenuItem.setEnabled(undoRedo.canUndo());
+
         MenuItem redoMenuItem = menu.findItem(R.id.action_redo);
-        redoMenuItem.setEnabled(canRedo);
+        redoMenuItem.setEnabled(undoRedo.canRedo());
     }
 
     private void openFileResultCallback(ActivityResult activityResult) {

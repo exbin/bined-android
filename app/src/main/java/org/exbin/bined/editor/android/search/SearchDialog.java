@@ -26,12 +26,15 @@ import android.text.method.TextKeyListener;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.google.android.material.tabs.TabLayout;
 
@@ -67,16 +70,35 @@ public class SearchDialog extends AppCompatDialogFragment {
     protected @Nullable BinarySearch binarySearch;
     protected BinarySearchService.@Nullable SearchStatusListener searchStatusListener;
     protected final CodeAreaCaretListener codeAreaCodeAreaCaretListener = caretPosition -> {
+        if (codeArea == null || codeArea.getParent() == null) {
+            return;
+        }
+
         boolean showKeyboard = true;
         if (showKeyboard != keyboardShown) {
 
             keyboardShown = showKeyboard;
             codeArea.requestFocus();
             codeArea.postDelayed(() -> {
-                InputMethodManager im = (InputMethodManager) codeArea.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (codeArea == null) {
+                    return;
+                }
+
+                Dialog dialog = getDialog();
+                if (dialog == null) {
+                    return;
+                }
+                Window window = dialog.getWindow();
+                if (window == null) {
+                    return;
+                }
+
+                //                InputMethodManager im = (InputMethodManager) codeArea.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
 //                if (showKeyboard) {
                     // TODO im.setInputMethodAndSubtype();
-                    im.showSoftInput(codeArea, InputMethodManager.SHOW_IMPLICIT);
+                    // WAS im.showSoftInput(codeArea, InputMethodManager.SHOW_IMPLICIT);
+                    new WindowInsetsControllerCompat(dialog.getWindow(), codeArea).show(WindowInsetsCompat.Type.ime());
+                    // im.showSoftInput(codeArea, InputMethodManager.SHOW_IMPLICIT);
 //                    if (CompatUtils.isAndroidTV(getContext())) {
 //                        im.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
 //                    }
@@ -98,9 +120,11 @@ public class SearchDialog extends AppCompatDialogFragment {
         templateCodeArea = activity.getCodeArea();
         searchParameters = activity.getSearchParameters();
         searchStatusListener = activity.getSearchStatusListener();
+        keyboardShown = false;
 
-        editText = new EditText(activity);
-        codeArea = new CodeArea(activity, null);
+        Context context = getContext();
+        editText = new EditText(context);
+        codeArea = new CodeArea(context, null);
         codeArea.setContentData(new JnaBufferEditableData());
         codeArea.setEditOperation(EditOperation.INSERT);
         codeArea.addCaretMovedListener(codeAreaCodeAreaCaretListener);
@@ -119,7 +143,7 @@ public class SearchDialog extends AppCompatDialogFragment {
         if (basicColors == null) {
             throw new IllegalStateException("Missing colors profile");
         }
-        basicColors.setContext(activity);
+        basicColors.setContext(context);
         basicColors.reinitialize();
         codeArea.resetColors();
         codeArea.setMinimumHeight(120);
@@ -136,6 +160,8 @@ public class SearchDialog extends AppCompatDialogFragment {
         FrameLayout frameLayout = searchView.findViewById(R.id.frameLayout);
         frameLayout.addView(editText);
         frameLayout.setNextFocusDownId(editText.getId());
+        codeArea.setVisibility(View.INVISIBLE);
+        frameLayout.addView(codeArea);
 
         if (searchParameters != null) {
             loadSearchParameters();
@@ -157,7 +183,7 @@ public class SearchDialog extends AppCompatDialogFragment {
             }
         });
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(getResources().getString(R.string.search_title));
         builder.setView(searchView);
         builder.setPositiveButton(R.string.button_search, (dialog, which) -> {
@@ -175,8 +201,17 @@ public class SearchDialog extends AppCompatDialogFragment {
         FrameLayout frameLayout = searchView.findViewById(R.id.frameLayout);
         int tabPos = tab.getPosition();
         if (tabPos != lastTab) {
-            frameLayout.removeView(lastTab == 0 ? editText : codeArea);
-            frameLayout.addView(tabPos == 0 ? editText : codeArea);
+            if (lastTab == 0) {
+                editText.clearFocus();
+                editText.setVisibility(View.INVISIBLE);
+                codeArea.setVisibility(View.VISIBLE);
+                codeArea.requestFocus();
+            } else {
+                codeArea.clearFocus();
+                editText.setVisibility(View.VISIBLE);
+                codeArea.setVisibility(View.INVISIBLE);
+                editText.requestFocus();
+            }
             frameLayout.setNextFocusDownId(tabPos == 0 ? editText.getId() : codeArea.getId());
             SwitchCompat matchCaseSwitch = searchView.findViewById(R.id.match_case);
             matchCaseSwitch.setEnabled(tabPos == 0);

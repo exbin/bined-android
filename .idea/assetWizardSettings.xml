@@ -334,7 +334,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:$USER_HOME$/Android/Sdk/icons/material/materialicons/exit_to_app/baseline_exit_to_app_24.xml" />
+                                      <entry key="url" value="jar:file:/home/hajdam/app/android-studio/plugins/android/lib/android.jar!/images/material/icons/materialiconstwotone/save/twotone_save_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -344,7 +344,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_exit_24" />
+                            <entry key="outputName" value="twotone_save_24" />
                           </map>
                         </option>
                       </PersistentState>

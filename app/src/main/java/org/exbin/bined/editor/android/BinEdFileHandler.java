@@ -95,8 +95,8 @@ public class BinEdFileHandler {
             codeArea.setContentData(new JnaBufferPagedData());
         }
 
-        undoRedo.clear();
         currentFileUri = null;
+        undoRedo.clear();
 
         documentOriginalSize = 0;
     }
@@ -125,9 +125,9 @@ public class BinEdFileHandler {
                 codeArea.setContentData(data);
             }
 
-            undoRedo.clear();
             currentFileUri = fileUri;
             pickerInitialUri = fileUri;
+            undoRedo.clear();
             fileSync();
         } catch (IOException ex) {
             Logger.getLogger(BinEdFileHandler.class.getName()).log(Level.SEVERE, null, ex);

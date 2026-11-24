@@ -242,6 +242,7 @@ public class CodeAreaUndoRedo implements BinaryDataUndoRedo, BinaryDataAppendabl
     @Override
     public void setSyncPosition() {
         this.syncPosition = commandPosition;
+        undoUpdated();
     }
 
     @Override

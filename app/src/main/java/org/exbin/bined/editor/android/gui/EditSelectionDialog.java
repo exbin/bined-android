@@ -63,8 +63,6 @@ public class EditSelectionDialog extends AppCompatDialogFragment {
     protected RelativePositionMode endPosMode = RelativePositionMode.FROM_START;
     protected final SwitchableBase lengthSwitchableBase = new SwitchableBase();
 
-    protected CodeArea codeArea;
-
     public void setPositiveListener(DialogInterface.OnClickListener positionListener) {
         this.positionListener = positionListener;
     }
@@ -72,7 +70,7 @@ public class EditSelectionDialog extends AppCompatDialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         FragmentActivity activity = getActivity();
-        codeArea = activity.findViewById(R.id.codeArea);
+        CodeArea codeArea = activity.findViewById(R.id.codeArea);
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle(getResources().getString(R.string.edit_selection));
         // Get the layout inflater
