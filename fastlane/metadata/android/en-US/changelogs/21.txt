@@ -1,0 +1,6 @@
+- Added Ukrainian translation
+- Holding key panel button repeats action
+- Adjusted status panel
+- Fix for save action enablement 
+- Fix for search panel IME
+- Bug fixes
